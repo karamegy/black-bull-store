@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Bull Store - متجر بلاك بول</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 12px; }
+        
+        /* هيدر تطبيق Black Bull */
+        .brand-header {
+            text-align: center;
+            padding: 15px;
+            background: #111111;
+            color: #f1c40f;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .brand-header h1 { margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 1px; }
+        .brand-header small { color: #aaaaaa; font-size: 12px; }
+
+        .card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        h2, h3 { color: #2c3e50; text-align: center; margin-top: 5px; }
+        .input-group { margin-bottom: 10px; }
+        .input-group label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: #4a5568; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; }
+        button { border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
+        .btn-green { background-color: #27ae60; color: white; }
+        .btn-blue { background-color: #3182ce; color: white; }
+        .btn-red { background-color: #e53e3e; color: white; }
+        .hidden { display: none; }
+        .nav-bar { display: flex; gap: 5px; margin-bottom: 15px; }
+        .nav-bar button { flex: 1; font-size: 12px; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 8px 0; }
+        .status-badge { background: #feebc8; color: #744210; padding: 3px 8px; border-radius: 6px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <!-- هيدر الشعار والاسم -->
+    <div class="brand-header">
+        <h1>BLACK BULL 🐂</h1>
+        <small>نظام المبيعات وإدارة المخزون</small>
+    </div>
+
+    <!-- شريط التنقل بين الأقسام -->
+    <div class="nav-bar">
+        <button class="btn-blue" onclick="switchTab('storeTab')">🏪 المتجر</button>
+        <button class="btn-blue" onclick="switchTab('ordersTab')">📦 الطلبات</button>
+        <button class="btn-blue" onclick="switchTab('inventoryTab')">🏬 المخزن</button>
+        <button class="btn-red" id="authBtn" onclick="toggleAuth()">تسجيل دخول</button>
+    </div>
+
+    <!-- قسم تسجيل الدخول / إنشاء حساب -->
+    <div id="authSection" class="card hidden">
+        <h3 id="authTitle">تسجيل الدخول - Black Bull</h3>
+        <div class="input-group">
+            <label>اسم المستخدم / البريد:</label>
+            <input type="text" id="username" placeholder="أدخل اسمك">
+        </div>
+        <div class="input-group">
+            <label>رقم الهاتف:</label>
+            <input type="tel" id="userPhone" placeholder="01xxxxxxxxx">
+        </div>
+        <button class="btn-green" onclick="login()">دخول / تسجيل</button>
+    </div>
+
+    <!-- قسم عرض المتجر (للعميل) -->
+    <div id="storeTab">
+        <div class="card">
+            <h3>🛍️ منتجات Black Bull المتاحة</h3>
+            <div id="storeProductsList"></div>
+        </div>
+        <div class="card">
+            <h3>🛒 سلة الشراء</h3>
+            <div id="cartItems">السلة فارغة</div>
+            <hr>
+            <p><b>الإجمالي: </b><span id="cartTotal">0</span> جنيه</p>
+            <button class="btn-green" onclick="placeOrder()">تأكيد وإرسال الطلب 🚀</button>
+        </div>
+    </div>
+
+    <!-- قسم متابعة الطلبات -->
+    <div id="ordersTab" class="hidden">
+        <div class="card">
+            <h3>📋 سجل الطلبات ومتابعتها</h3>
+            <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
+        </div>
+    </div>
+
+    <!-- قسم إدارة المخزن (للإدارة) -->
+    <div id="inventoryTab" class="hidden">
+        <div class="card">
+            <h3>➕ إضافة / تحديث مخزون Black Bull</h3>
+            <div class="input-group">
+                <label>اسم المنتج:</label>
+                <input type="text" id="invName" placeholder="مثال: منتج تجاري">
+            </div>
+            <div class="input-group">
+                <label>السعر (جنيه):</label>
+                <input type="number" id="invPrice" placeholder="500">
+            </div>
+            <div class="input-group">
+                <label>الكمية المتاحة في المخزن:</label>
+                <input type="number" id="invQty" placeholder="10">
+            </div>
+            <button class="btn-green" onclick="addInventoryItem()">حفظ في المخزن</button>
+        </div>
+
+        <div class="card">
+            <h3>📊 حالة المخزون الحالي</h3>
+            <div id="inventoryList"></div>
+        </div>
+    </div>
+
+    <script>
+        // قواعد البيانات المحلية (Local Storage DB)
+        let currentUser = JSON.parse(localStorage.getItem('app_user')) || null;
+        let inventory = JSON.parse(localStorage.getItem('app_inventory')) || [
+            { id: 1, name: 'منتج Black Bull 1', price: 150, qty: 15 },
+            { id: 2, name: 'منتج Black Bull 2', price: 250, qty: 8 }
+        ];
+        let orders = JSON.parse(localStorage.getItem('app_orders')) || [];
+        let cart = [];
+
+        window.onload = function() {
+            updateAuthUI();
+            renderInventory();
+            renderStore();
+            renderOrders();
+        };
+
+        // التنقل بين الشاشات
+        function switchTab(tabId) {
+            document.getElementById('storeTab').classList.add('hidden');
+            document.getElementById('ordersTab').classList.add('hidden');
+            document.getElementById('inventoryTab').classList.add('hidden');
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        // إدارات الحساب والتسجيل
+        function toggleAuth() {
+            if(currentUser) {
+                currentUser = null;
+                localStorage.removeItem('app_user');
+                alert('تم تسجيل الخروج');
+                updateAuthUI();
+            } else {
+                document.getElementById('authSection').classList.toggle('hidden');
+            }
+        }
+
+        function login() {
+            let name = document.getElementById('username').value;
+            let phone = document.getElementById('userPhone').value;
+            if(!name || !phone) return alert('برجاء ملء جميع البيانات');
+
+            currentUser = { name: name, phone: phone };
+            localStorage.setItem('app_user', JSON.stringify(currentUser));
+            document.getElementById('authSection').classList.add('hidden');
+            updateAuthUI();
+            alert('أهلاً بك في Black Bull يا ' + name);
+        }
+
+        function updateAuthUI() {
+            let btn = document.getElementById('authBtn');
+            if(currentUser) {
+                btn.innerText = 'خروج (' + currentUser.name + ')';
+                btn.className = 'btn-red';
+            } else {
+                btn.innerText = 'تسجيل دخول';
+                btn.className = 'btn-green';
+            }
+        }
+
+        // إدارة المخزن
+        function addInventoryItem() {
+            let name = document.getElementById('invName').value;
+            let price = parseFloat(document.getElementById('invPrice').value);
+            let qty = parseInt(document.getElementById('invQty').value);
+
+            if(!name || !price || !qty) return alert('أدخل بيانات المنتج كاملاً');
+
+            inventory.push({ id: Date.now(), name: name, price: price, qty: qty });
+            saveInventory();
+            renderInventory();
+            renderStore();
+
+            document.getElementById('invName').value = '';
+            document.getElementById('invPrice').value = '';
+            document.getElementById('invQty').value = '';
+        }
+
+        function saveInventory() {
+            localStorage.setItem('app_inventory', JSON.stringify(inventory));
+        }
+
+        function renderInventory() {
+            let container = document.getElementById('inventoryList');
+            container.innerHTML = '';
+            inventory.forEach(item => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div><b>${item.name}</b> - ${item.price} ج.م</div>
+                        <div>المتبقي: <b>${item.qty}</b> قطعة</div>
+                    </div>
+                `;
+            });
+        }
+
+        // عرض المتجر والشراء
+        function renderStore() {
+            let container = document.getElementById('storeProductsList');
+            container.innerHTML = '';
+            inventory.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div>
+                            <b>${item.name}</b><br>
+                            <small>السعر: ${item.price} ج.م | المتاح: ${item.qty}</small>
+                        </div>
+                        <button class="btn-blue" style="width:auto;" onclick="addToCart(${index})" ${item.qty <= 0 ? 'disabled' : ''}>
+                            ${item.qty > 0 ? 'إضافة للسلة' : 'نفذت الكمية'}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function addToCart(index) {
+            let item = inventory[index];
+            if(item.qty <= 0) return alert('المنتج غير متوفر بالمخزن');
+            
+            cart.push(item);
+            renderCart();
+        }
+
+        function renderCart() {
+            let container = document.getElementById('cartItems');
+            let total = 0;
+            if(cart.length === 0) {
+                container.innerHTML = 'السلة فارغة';
+                document.getElementById('cartTotal').innerText = '0';
+                return;
+            }
+            container.innerHTML = '';
+            cart.forEach(item => {
+                total += item.price;
+                container.innerHTML += `<div>• ${item.name} - ${item.price} جنيه</div>`;
+            });
+            document.getElementById('cartTotal').innerText = total;
+        }
+
+        // إرسال ومتابعة الطلبات
+        function placeOrder() {
+            if(!currentUser) return alert('يجب تسجيل الدخول أولاً لإرسال الطلب!');
+            if(cart.length === 0) return alert('السلة فارغة!');
+
+            // خصم الكميات من المخزن
+            cart.forEach(cartItem => {
+                let invItem = inventory.find(i => i.id === cartItem.id);
+                if(invItem && invItem.qty > 0) invItem.qty--;
+            });
+
+            let newOrder = {
+                id: 'BB-' + Math.floor(1000 + Math.random() * 9000),
+                customer: currentUser.name,
+                phone: currentUser.phone,
+                itemsCount: cart.length,
+                total: document.getElementById('cartTotal').innerText,
+                status: 'قيد المراجعة ⏳',
+                date: new Date().toLocaleTimeString('ar-EG')
+            };
+
+            orders.push(newOrder);
+            localStorage.setItem('app_orders', JSON.stringify(orders));
+            saveInventory();
+
+            cart = [];
+            renderCart();
+            renderInventory();
+            renderStore();
+            renderOrders();
+
+            alert('تم إرسال طلبك بنجاح لمتجر Black Bull! رقم الطلب: ' + newOrder.id);
+            switchTab('ordersTab');
+        }
+
+        function renderOrders() {
+            let container = document.getElementById('ordersList');
+            if(orders.length === 0) {
+                container.innerHTML = 'لا توجد طلبات مسجلة بعد.';
+                return;
+            }
+            container.innerHTML = '';
+            orders.forEach(order => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div>
+                            <b>${order.id}</b> - (${order.customer})<br>
+                            <small>المبلغ: ${order.total} ج.م | الوقت: ${order.date}</small>
+                        </div>
+                        <span class="status-badge">${order.status}</span>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
