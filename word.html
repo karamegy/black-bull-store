@@ -3,637 +3,1278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Plus+ Ultimate Enterprise OS - المنصة المتكاملة</title>
-    <!-- مكتبة الأيقونات FontAwesome -->
+    <title>Black Bull Store - منصة بلاك بول لتجارة وتصدير الملابس</title>
+    <!-- مكتبة لطباعة وتحويل الفواتير إلى PDF وصور مباشرة -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- مكتبة الأيقونات FontAwesome لدعم الأيقونات الجديدة -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gplus-red: #d34836;
-            --gplus-red-hover: #b53c2b;
-            --gplus-blue: #4285f4;
-            --gplus-yellow: #f4b400;
-            --gplus-green: #0f9d58;
-            --gplus-purple: #ab47bc;
-            --bg-color: #e9eaed;
-            --card-bg: #ffffff;
-            --text-main: #262626;
-            --text-muted: #777777;
-            --border-color: #e2e2e2;
-            --toolbar-bg: #f5f5f5;
+            --primary: #111111;
+            --accent: #d4af37;
+            --bg-color: #0f1115;
+            --card-bg: #1a1d24;
+            --text-main: #f7fafc;
+            --text-muted: #a0aec0;
+            --border-color: #2d3748;
         }
 
-        /* متغيرات الوضع الليلي (Dark Mode) */
-        body.dark-mode {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #e8eaed;
-            --text-muted: #9aa0a6;
-            --border-color: #3c4043;
-            --toolbar-bg: #2d2f31;
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
+
+        .brand-header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #111 0%, #222 100%);
+            color: var(--accent);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            border: 1px solid var(--accent);
+            position: relative;
+            overflow: hidden;
         }
 
-        body { font-family: Roboto, 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
-
-        /* شريط التنقل العلوي لجوجل بلس */
-        .gplus-topbar { background: var(--gplus-red); color: white; height: 50px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 1000; }
-        .gplus-brand { font-size: 20px; font-weight: 500; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
-        .gplus-brand span { font-size: 12px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 3px; }
-        
-        .top-controls { display: flex; align-items: center; gap: 10px; }
-        .top-controls button { background: transparent; border: none; color: white; cursor: pointer; padding: 8px 12px; border-radius: 4px; font-size: 14px; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
-        .top-controls button:hover { background: rgba(255,255,255,0.15); }
-
-        /* هيكل الصفحة الرئيسي بنظام أعمدة جوجل بلس (Google+ Grid Layout) */
-        .gplus-main-layout { max-width: 1150px; margin: 15px auto; display: grid; grid-template-columns: 240px 1fr; gap: 15px; padding: 0 10px; }
-        @media (max-width: 850px) {
-            .gplus-main-layout { grid-template-columns: 1fr; }
+        .bull-logo-3d {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, #bf953f, #fc6f6, #b38728, #fbf5b7, #aa771c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 10px 20px rgba(212,175,55,0.4), inset 0 2px 5px rgba(255,255,255,0.6);
+            animation: floatAndGlow 4s ease-in-out infinite, colorShift 8s linear infinite;
         }
 
-        /* العمود الجانبي الأيمن (القائمة الرئيسية للدوائر والأقسام) */
-        .gplus-sidebar { display: flex; flex-direction: column; gap: 5px; }
-        .sidebar-menu-item { background: var(--card-bg); border: 1px solid var(--border-color); padding: 10px 15px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; color: var(--text-main); transition: 0.2s; }
-        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: #f0f1f3; color: var(--gplus-red); border-right: 4px solid var(--gplus-red); }
-        body.dark-mode .sidebar-menu-item:hover, body.dark-mode .sidebar-menu-item.active { background: #2a2d2f; color: #ff8a80; }
+        @keyframes floatAndGlow {
+            0%, 100% { transform: translateY(0) rotateY(0deg); box-shadow: 0 5px 15px rgba(212,175,55,0.3); }
+            50% { transform: translateY(-8px) rotateY(15deg); box-shadow: 0 15px 30px rgba(212,175,55,0.6); }
+        }
 
-        /* منطقة المحتوى الرئيسية */
-        .gplus-content-area { display: flex; flex-direction: column; gap: 15px; }
-        
-        .card { background: var(--card-bg); border-radius: 4px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border-color); transition: background 0.3s, border 0.3s; }
-        
-        /* شريط البحث السريع */
-        .global-search-bar { display: flex; gap: 10px; background: var(--card-bg); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color); align-items: center; margin-bottom: 5px; }
-        .global-search-bar input { flex: 1; border: none; background: transparent; color: var(--text-main); font-family: inherit; font-size: 14px; outline: none; }
+        @keyframes colorShift {
+            0% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(50deg); }
+            100% { filter: hue-rotate(0deg); }
+        }
 
-        /* بروفايل جوجل بلس الكلاسيكي */
-        .gplus-profile-header { position: relative; margin-bottom: 50px; }
-        .gplus-cover { width: 100%; height: 200px; border-radius: 4px 4px 0 0; object-fit: cover; background: #ddd; }
-        .gplus-avatar-box { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--card-bg); position: absolute; bottom: -40px; right: 25px; overflow: hidden; background: #000; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .gplus-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
-        .gplus-profile-info { padding: 5px 20px 0 20px; }
-        .gplus-profile-info h1 { margin: 0; font-size: 22px; color: var(--text-main); }
-        .gplus-profile-info p { color: var(--text-muted); margin: 4px 0 10px 0; font-size: 13px; }
+        .brand-header h1 { margin: 0; font-size: 28px; font-weight: bold; letter-spacing: 2px; }
+        .brand-header small { color: var(--text-muted); font-size: 13px; }
+
+        .theme-selector { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .theme-btn { width: 25px; height: 25px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; transition: 0.2s; }
+        .theme-btn:hover { transform: scale(1.2); }
+
+        .card { background: var(--card-bg); padding: 15px; border-radius: 14px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
+        h2, h3 { color: var(--accent); text-align: center; margin-top: 5px; }
 
         .input-group { margin-bottom: 12px; }
-        .input-group label { display: block; font-weight: 500; margin-bottom: 4px; font-size: 12px; color: var(--text-muted); }
-        .input-group input, .input-group textarea, .input-group select { width: 100%; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; font-family: inherit; font-size: 13px; background: var(--bg-color); color: var(--text-main); }
-        
-        button.btn-action { background: var(--gplus-blue); color: white; border: none; padding: 8px 16px; border-radius: 3px; font-weight: 500; cursor: pointer; transition: 0.2s; font-size: 13px; }
-        button.btn-action:hover { opacity: 0.9; }
+        .input-group label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: var(--text-muted); }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; font-family: inherit; background: #111; color: #fff; }
+
+        button { border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; transition: 0.2s; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-green { background-color: #27ae60; color: white; }
+        .btn-blue { background-color: #3182ce; color: white; }
+        .btn-red { background-color: #e53e3e; color: white; }
+        .btn-gold { background-color: var(--accent); color: #111; }
+        .btn-purple { background-color: #805ad5; color: white; }
 
         .hidden { display: none !important; }
 
-        /* مشاركات وتنسيقات الستريم */
-        .stream-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; margin-bottom: 12px; }
-        .stream-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .stream-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+        .top-nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: var(--card-bg); padding: 10px 15px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .menu-toggle-btn { background: var(--accent); color: #111; padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; width: auto; margin:0; }
         
-        /* محرر مستندات Word المصغر */
-        .word-editor-toolbar { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; background: var(--toolbar-bg); padding: 6px; border-radius: 4px; border: 1px solid var(--border-color); }
-        .word-editor-toolbar button { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; }
-        .word-document-canvas { min-height: 220px; border: 1px solid var(--border-color); padding: 15px; border-radius: 4px; background: var(--card-bg); color: var(--text-main); outline: none; font-size: 14px; line-height: 1.5; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; transition: 0.3s; }
+        .sidebar-overlay.active { display: block; }
+        .side-drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: #15181e; z-index: 1000; box-shadow: -5px 0 25px rgba(0,0,0,0.8); transition: right 0.3s ease-in-out; padding: 20px; box-sizing: border-box; border-left: 2px solid var(--accent); overflow-y: auto; }
+        .side-drawer.open { right: 0; }
+        .side-drawer h3 { color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
+        .side-drawer button { background: #2d3748; color: #fff; text-align: right; padding: 12px; margin-bottom: 8px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 10px; }
+        .side-drawer button:hover { background: var(--accent); color: #111; }
+        .close-drawer { background: #e53e3e !important; color: white !important; text-align: center !important; justify-content: center; }
 
-        .circle-badge { display: inline-block; background: var(--toolbar-bg); color: var(--gplus-blue); border: 1px solid var(--border-color); padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; margin: 2px; }
+        /* شريط البروفايل الجانبي المحاكي لـ Google+ */
+        .gplus-profile-drawer { position: fixed; top: 0; left: -360px; width: 340px; height: 100%; background: #15181e; z-index: 1001; box-shadow: 5px 0 25px rgba(0,0,0,0.8); transition: left 0.3s ease-in-out; padding: 15px; box-sizing: border-box; border-right: 2px solid var(--accent); overflow-y: auto; }
+        .gplus-profile-drawer.open { left: 0; }
+        .gplus-header { text-align: center; position: relative; margin-bottom: 15px; }
+        .gplus-cover { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; border: 1px solid var(--accent); }
+        .gplus-avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); position: absolute; bottom: -35px; left: 50%; transform: translateX(-50%); object-fit: cover; background: #000; }
+        .gplus-stream-item { background: #111; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .gplus-stream-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+        .nav-bar { display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
+        .nav-bar button { flex: 1; font-size: 11px; padding: 8px 4px; min-width: 60px; background: #2d3748; color: #fff; }
+        .nav-bar button.active-nav { background: var(--accent); color: #111; font-weight: bold; }
+
+        .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; gap: 10px; }
+        .status-badge { background: rgba(212,175,55,0.15); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid var(--accent); }
+        .title-badge { background: #3182ce; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; margin-right: 5px; }
+
+        .categories-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; }
+        .cat-chip { background: #2d3748; color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; white-space: nowrap; font-weight: bold; }
+        .cat-chip.active { background: var(--accent); color: #111; }
+
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
+        .product-card { border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; background: #15181e; transition: 0.2s; }
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
+        .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
+
+        .chat-box { height: 260px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; overflow-y: auto; background: #111; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+        .chat-msg { padding: 8px 12px; border-radius: 8px; max-width: 75%; font-size: 13px; }
+        .msg-incoming { background: #2d3748; color: #fff; align-self: flex-start; }
+        .msg-outgoing { background: var(--accent); color: #111; font-weight: bold; align-self: flex-end; }
         
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-top: 10px; }
-        .feature-mini-card { background: var(--toolbar-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 12px; }
-        .feature-mini-card h4 { margin-top: 0; margin-bottom: 8px; color: var(--gplus-blue); display: flex; align-items: center; gap: 6px; font-size: 14px; }
-        
-        .stats-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .stat-box { flex: 1; min-width: 100px; background: var(--toolbar-bg); padding: 10px; border-radius: 4px; text-align: center; border: 1px solid var(--border-color); }
-        .stat-box h3 { margin: 0; color: var(--gplus-red); font-size: 18px; }
+        .sync-status { text-align: center; font-size: 11px; color: #48bb78; margin-bottom: 10px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 15px; }
+        .stat-card { background: #111; border: 1px solid var(--accent); padding: 12px; border-radius: 10px; text-align: center; }
+        .stat-card h4 { margin: 0; color: var(--text-muted); font-size: 12px; }
+        .stat-card p { margin: 5px 0 0; color: var(--accent); font-size: 18px; font-weight: bold; }
+
+        .invoice-box { background: #fff; color: #000; padding: 25px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .invoice-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #d4af37; padding-bottom: 15px; margin-bottom: 15px; }
+        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; text-align: right; font-size: 13px; }
+        .invoice-table th { background: #111; color: #d4af37; }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
-    <!-- شريط التنقل العلوي لجوجل بلس -->
-    <div class="gplus-topbar">
-        <div class="gplus-brand">
-            <i class="fa-solid fa-square-plus" style="color: white;"></i> <b>Google</b>+
-            <span>Enterprise OS</span>
+    <!-- القائمة الجانبية للأقسام -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="side-drawer" id="sideDrawer">
+        <h3>قائمة الأقسام 🐂 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
+        <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> المتجر الرئيسي</button>
+        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()"><i class="fa-solid fa-file-invoice-dollar"></i> قسم الفواتير والمخزن الشامل 🌟</button>
+        <button onclick="switchTab('exportTab'); toggleSidebar()"><i class="fa-solid fa-globe"></i> التصدير الدولي</button>
+        <button onclick="switchTab('localWholesaleTab'); toggleSidebar()"><i class="fa-solid fa-boxes-stacked"></i> جملة محلي</button>
+        <button onclick="switchTab('customOrderTab'); toggleSidebar()"><i class="fa-solid fa-scissors"></i> تفصيل خاص</button>
+        <button onclick="switchTab('trackingTab'); toggleSidebar()"><i class="fa-solid fa-ship"></i> تتبع الشحنات والملاحة</button>
+        <button onclick="switchTab('calcTab'); toggleSidebar()"><i class="fa-solid fa-calculator"></i> حاسبة الشحن والجمارك</button>
+        <button onclick="switchTab('auctionTab'); toggleSidebar()"><i class="fa-solid fa-tags"></i> مزاد الحاويات الكبرى</button>
+        <button onclick="switchTab('loyaltyTab'); toggleSidebar()"><i class="fa-solid fa-star"></i> برنامج الولاء والنقاط</button>
+        <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> مراقبة الطلبات</button>
+        <button onclick="switchTab('exportProfileTab'); toggleSidebar()"><i class="fa-solid fa-network-wired"></i> بروفايل التصدير الشامل</button>
+        <button onclick="checkProfileDrawerAccess(); toggleSidebar()"><i class="fa-solid fa-user"></i> بروفايل حسابي (Google+ Stream)</button>
+        <button onclick="openWordPage()"><i class="fa-solid fa-file-word" style="color: #3182ce;"></i> مستندات Word الاحترافي</button>
+        <button onclick="switchTab('backupTab'); toggleSidebar()"><i class="fa-solid fa-database" style="color: var(--accent);"></i> النسخ الاحتياطي والمزامنة 💾</button>
+        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني</button>
+        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة</button>
+        <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
+    </div>
+
+    <!-- الشريط الجانبي للبروفايل الحقيقي (Google+ Style & Stream) -->
+    <div class="gplus-profile-drawer" id="gplusProfileDrawer">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:12px;">
+            <h3 style="margin:0; color:var(--accent);">بروفايل Google+ 🐂</h3>
+            <span style="cursor:pointer; font-size:18px; color:#fff;" onclick="toggleGPlusDrawer()">✕</span>
         </div>
-        <div class="top-controls">
-            <button onclick="toggleDarkMode()" title="الوضع الليلي"><i class="fa-solid fa-moon"></i></button>
-            <button onclick="goBackToStore()" style="background: var(--gplus-green);"><i class="fa-solid fa-store"></i> المتجر</button>
+        <div class="gplus-header">
+            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/300x110/111/d4af37?text=Google+Plus+Cover" alt="Cover">
+            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/80/000/d4af37?text=User" alt="Avatar">
+        </div>
+        <div style="text-align:center; margin-top:40px;">
+            <h3 id="gpNameDisplay" style="margin:0;">اسم المستخدم</h3>
+            <span id="gpRoleBadge" class="title-badge" style="background:var(--accent); color:#111; font-weight:bold;">عضو موثق</span>
+            <p id="gpContactDisplay" style="color:var(--text-muted); font-size:12px; margin:5px 0;">الهاتف أو البريد</p>
+        </div>
+        <hr style="border-color:var(--border-color); margin:15px 0;">
+        <h4 style="color:var(--accent); margin-bottom:8px;">📢 الاستريم (Stream & Posts)</h4>
+        <div class="input-group">
+            <textarea id="gpNewPostText" placeholder="شارك أحدث منشوراتك أو منتجاتك..." style="height:60px; font-size:12px;"></textarea>
+            <button class="btn-gold" style="padding:6px; font-size:12px;" onclick="publishGPlusPost()">نشر في الاستريم 🚀</button>
+        </div>
+        <div id="gpStreamContainer" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- نافذة معاينة تفاصيل عنصر الاستريم المختار -->
+    <div id="streamDetailModal" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🔍 معاينة تفاصيل منشور الاستريم المختار</h2>
+        <div id="streamDetailContent" style="background:#111; padding:15px; border-radius:8px; margin-bottom:15px;"></div>
+        <button class="btn-red" onclick="closeStreamDetail()">إغلاق المعاينة</button>
+    </div>
+
+    <div class="theme-selector">
+        <span style="font-size:12px; align-self:center; color:var(--text-muted);">اختر ثيم المنصة:</span>
+        <div class="theme-btn" style="background: #d4af37;" onclick="setTheme('#111111', '#d4af37', '#0f1115', '#1a1d24')" title="أسود وذهبي فاخر"></div>
+        <div class="theme-btn" style="background: #3182ce;" onclick="setTheme('#1a202c', '#63b3ed', '#0f172a', '#1e293b')" title="كلاسيكي أزرق"></div>
+        <div class="theme-btn" style="background: #27ae60;" onclick="setTheme('#064e3b', '#34d399', '#022c22', '#065f46')" title="أخضر أعمال"></div>
+        <div class="theme-btn" style="background: #805ad5;" onclick="setTheme('#322659', '#b794f4', '#1a103c', '#2d1a4a')" title="ملكي بنفسجي"></div>
+    </div>
+
+    <div class="brand-header">
+        <div class="bull-logo-3d">🐂</div>
+        <h1>BLACK BULL STORE</h1>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.11)</small>
+    </div>
+
+    <!-- شريط علوي -->
+    <div class="top-nav-bar">
+        <div style="display:flex; gap:8px; align-items:center;">
+            <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ أقسام المنصة</button>
+            <button class="btn-gold" style="width:auto; padding:6px 12px; margin:0; font-size:12px;" onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle"></i> بروفايل Google+</button>
+        </div>
+        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">مرحباً بك زائرنا الكريم</div>
+        <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
+    </div>
+
+    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: متصل بالخادم السحبي والمحلي بكفاءة تامة</div>
+
+    <!-- شريط التنقل الرئيسي الأفقي -->
+    <div class="nav-bar" id="mainNavBar">
+        <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
+        <button onclick="switchTab('advancedInvoicesStoreTab', this)">🧾 الفواتير والمخزن</button>
+        <button onclick="switchTab('exportTab', this)">🌍 التصدير</button>
+        <button onclick="switchTab('trackingTab', this)">🚢 التتبع</button>
+        <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
+        <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
+        <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user"></i> بروفايل G+</button>
+        <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database"></i> النسخ الاحتياطي</button>
+        <button onclick="openWordPage()" style="background: #3182ce; color: white;"><i class="fa-solid fa-file-word"></i> محرر Word</button>
+    </div>
+
+    <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات ================= -->
+    <div id="authSection" class="card hidden">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <div class="bull-logo-3d" style="width: 110px; height: 110px; font-size: 50px;">🐂</div>
+            <h3 style="margin-bottom: 2px;">بوابة الدخول الموحدة (عملاء - مشرفين - مديرين)</h3>
+            <small style="color: var(--text-muted);">يرجى إدخال بيانات الاعتماد الخاصة بك للمتابعة</small>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-gold" id="tabBtnLogin" onclick="switchAuthMode('login')">تسجيل الدخول</button>
+            <button class="btn-blue" id="tabBtnRegister" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
+        </div>
+
+        <div id="loginFormContainer">
+            <div class="input-group">
+                <label>رقم الهاتف أو اسم المستخدم:</label>
+                <input type="text" id="loginContactOrName" placeholder="أدخل رقم الهاتف أو اسم المستخدم" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>كلمة المرور:</label>
+                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" autocomplete="new-password">
+            </div>
+            <button class="btn-green" onclick="performLogin()">تسجيل الدخول للمنصة 🚀</button>
+        </div>
+
+        <div id="registerFormContainer" class="hidden">
+            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName" placeholder="اكتب اسمك الكامل" autocomplete="off"></div>
+            <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="regPhone" placeholder="01xxxxxxxxx" autocomplete="off"></div>
+            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="regEmail" placeholder="name@domain.com" autocomplete="off"></div>
+            <div class="input-group"><label>نوع الحساب:</label>
+                <select id="regRole">
+                    <option value="عميل">عميل (Customer) 🛒</option>
+                    <option value="مشرف">مشرف (Supervisor) 🛡️</option>
+                    <option value="مدير">مدير (Manager) 🔐</option>
+                </select>
+            </div>
+            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية" autocomplete="new-password"></div>
+            <button class="btn-gold" onclick="performRegister()">إنشاء حساب جديد وتفعيل الحساب ✅</button>
         </div>
     </div>
 
-    <!-- التخطيط العام بنظام أعمدة جوجل بلس -->
-    <div class="gplus-main-layout">
+    <!-- ================= 2. قسم الفواتير والمخزن الشامل المتطور ================= -->
+    <div id="advancedInvoicesStoreTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🧾 قسم الفواتير وإدارة المخزن الشامل (الأرشفة، التصدير والواتساب)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">حفظ شامل لكافة الحركات، خصم تلقائي من المخزن، إصدار الفواتير الرسمية، معاينتها، تنزيلها صور/PDF، أو إرسالها للعميل عبر واتساب بضغطة زر.</p>
 
-        <!-- القائمة الجانبية اليمنى (نظام الدوائر والأقسام في Google+) -->
-        <div class="gplus-sidebar">
-            <div class="sidebar-menu-item active" onclick="switchTab('profileTab', this)"><i class="fa-solid fa-user" style="color:var(--gplus-red);"></i> البروفايل</div>
-            <div class="sidebar-menu-item" onclick="switchTab('streamTab', this)"><i class="fa-solid fa-stream" style="color:var(--gplus-blue);"></i> الستريم (Home)</div>
-            <div class="sidebar-menu-item" onclick="switchTab('wordDocTab', this)"><i class="fa-solid fa-file-word" style="color:var(--gplus-blue);"></i> مستند Word</div>
-            <div class="sidebar-menu-item" onclick="switchTab('circlesTab', this)"><i class="fa-solid fa-users" style="color:var(--gplus-green);"></i> الدوائر (Circles)</div>
-            <div class="sidebar-menu-item" onclick="switchTab('communitiesTab', this)"><i class="fa-solid fa-people-group" style="color:var(--gplus-yellow);"></i> المجتمعات</div>
-            <div class="sidebar-menu-item" onclick="switchTab('photosTab', this)"><i class="fa-solid fa-images" style="color:var(--gplus-purple);"></i> الصور والألبومات</div>
-            <div class="sidebar-menu-item" onclick="switchTab('eventsTab', this)"><i class="fa-solid fa-calendar-days" style="color:var(--gplus-red);"></i> المناسبات</div>
-            <div class="sidebar-menu-item" onclick="switchTab('hangoutsTab', this)"><i class="fa-solid fa-video" style="color:var(--gplus-green);"></i> Hangouts</div>
-            <div class="sidebar-menu-item" onclick="switchTab('collectionsTab', this)"><i class="fa-solid fa-layer-group" style="color:var(--gplus-blue);"></i> المجموعات</div>
-            <div class="sidebar-menu-item" onclick="switchTab('logisticsTab', this)"><i class="fa-solid fa-truck-fast" style="color:var(--gplus-yellow);"></i> تتبع الشحنات</div>
-            <div class="sidebar-menu-item" onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database" style="color:var(--text-muted);"></i> النسخ الاحتياطي</div>
-            <div class="sidebar-menu-item" onclick="switchTab('analyticsTab', this)"><i class="fa-solid fa-chart-line" style="color:var(--gplus-green);"></i> الإحصائيات</div>
-            <div class="sidebar-menu-item" onclick="switchTab('more100Tab', this)" style="background: #fefcbf; color: #744210;"><i class="fa-solid fa-star"></i> الـ 100 ميزة وقسم</div>
+        <div class="stats-grid">
+            <div class="stat-card"><h4>إجمالي أصناف المخزن</h4><p id="invCountDisplay">0</p></div>
+            <div class="stat-card"><h4>إجمالي الفواتير المحفوظة</h4><p id="invTotalInvoicesDisplay">0</p></div>
+            <div class="stat-card"><h4>إجمالي مبيعات الفواتير</h4><p id="invTotalSalesDisplay">0 ج.م</p></div>
         </div>
 
-        <!-- منطقة المحتوى الوسطى -->
-        <div class="gplus-content-area">
+        <div style="display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;">
+            <button class="btn-gold" onclick="switchInvSubTab('pos')" style="flex:1;">🛒 إنشاء فاتورة جديدة وبيع</button>
+            <button class="btn-blue" onclick="switchInvSubTab('archive')" style="flex:1;">🗂️ أرشيف الفواتير الشامل</button>
+            <button class="btn-purple" onclick="switchInvSubTab('warehouse')" style="flex:1;">📦 إدارة المخزن والأصناف</button>
+        </div>
 
-            <!-- شريط البحث الفوري -->
-            <div class="global-search-bar">
-                <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
-                <input type="text" id="globalSearchInput" onkeyup="globalSearchFilter()" placeholder="ابحث في المنصة، المشاركات، الدوائر، والمستندات...">
-            </div>
-
-            <!-- 1. صفحة البروفايل -->
-            <div id="profileTab" class="card" style="padding: 0; border: none; background: transparent;">
-                <div class="card" style="padding: 0; overflow: hidden;">
-                    <div class="gplus-profile-header">
-                        <img id="profileCoverView" class="gplus-cover" src="https://via.placeholder.com/1000x200/4285f4/ffffff?text=Google+Plus+Cover" alt="Cover">
-                        <div class="gplus-avatar-box">
-                            <img id="profileAvatarView" src="https://via.placeholder.com/100/202124/ffffff?text=User" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="gplus-profile-info">
-                        <h1 id="profileNameTitle">اسم المستخدم</h1>
-                        <p id="profileTagline">منصة تجارة، توثيق، ومستندات ذكية متكاملة.</p>
-                        <div style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
-                            <span class="circle-badge"><i class="fa-solid fa-check"></i> حساب موثق</span>
-                            <span class="circle-badge" style="background:#ceead6; color:#137333;"><i class="fa-solid fa-shield-halved"></i> آمن</span>
-                            <span class="circle-badge" style="background:#feefc3; color:#b06000;"><i class="fa-solid fa-star"></i> مميز</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card" style="margin-top: 15px;">
-                    <h3 style="margin-top:0; font-size:16px;">⚙️ إعدادات وتعديل البروفايل الشامل</h3>
-                    <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="inputProfileName"></div>
-                    <div class="input-group"><label>النبذة التعريفية (Tagline):</label><input type="text" id="inputProfileTagline"></div>
-                    <div class="input-group"><label>رابط الصورة الشخصية:</label><input type="text" id="inputProfileAvatar"></div>
-                    <div class="input-group"><label>رابط صورة الغلاف:</label><input type="text" id="inputProfileCover"></div>
-                    <button class="btn-action" onclick="saveProfileSettings()">حفظ وتحديث البروفايل فوراً ✅</button>
-                </div>
-            </div>
-
-            <!-- 2. المشاركات (Stream) -->
-            <div id="streamTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">💬 مشاركات جوجل بلس ونظام التدوينات</h3>
-                <div class="card" style="background: var(--toolbar-bg); margin-bottom: 15px;">
-                    <div class="input-group">
-                        <textarea id="streamPostText" rows="3" placeholder="مشاركة جديدة مع الدوائر والمجتمعات..."></textarea>
-                    </div>
-                    <button class="btn-action" onclick="publishStreamPost()">نشر في الستريم 📢</button>
-                </div>
-                <div id="streamPostsContainer"></div>
-            </div>
-
-            <!-- 3. مستندات Word -->
-            <div id="wordDocTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">📄 محرر مستندات Word الذكي المتطور</h3>
-                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 10px;">اكتب مستنداتك وتقاريرك التجارية واحتفظ بها محلياً وسحابياً.</p>
-                <div class="word-editor-toolbar">
-                    <button onclick="formatDoc('bold')" title="عريض"><i class="fa-solid fa-bold"></i></button>
-                    <button onclick="formatDoc('italic')" title="مائل"><i class="fa-solid fa-italic"></i></button>
-                    <button onclick="formatDoc('underline')" title="خط تحت النص"><i class="fa-solid fa-underline"></i></button>
-                    <button onclick="formatDoc('justifyRight')" title="يمين"><i class="fa-solid fa-align-right"></i></button>
-                    <button onclick="formatDoc('justifyCenter')" title="توسيط"><i class="fa-solid fa-align-center"></i></button>
-                    <button onclick="formatDoc('justifyLeft')" title="يسار"><i class="fa-solid fa-align-left"></i></button>
-                    <button onclick="saveWordDocumentLocally()" style="background: var(--gplus-green); color: white;"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
-                    <button onclick="window.print()" style="background: var(--gplus-blue); color: white;"><i class="fa-solid fa-print"></i> طباعة</button>
-                </div>
-                <div id="wordCanvas" class="word-document-canvas" contenteditable="true">
-                    أهلاً بك في مستند Word الذكي المرتبط بمنصة Google Plus Hub...
-                </div>
-            </div>
-
-            <!-- 4. الدوائر (Circles) -->
-            <div id="circlesTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">⭕ دوائر التواصل (Google Circles)</h3>
-                <p style="color:var(--text-muted); font-size:12px;">قسم جهات اتصالك بدقة تامة (عائلة، شركاء عمل، عملاء، أصدقاء).</p>
-                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
-                    <input type="text" id="newCircleName" placeholder="اسم الدائرة الجديدة (مثال: عملاء التصدير)">
-                    <button class="btn-action" onclick="addCircle()" style="width: auto;">إضافة دائرة</button>
-                </div>
-                <div id="circlesContainer">
-                    <span class="circle-badge">الأصدقاء المقربون (12)</span>
-                    <span class="circle-badge">شركاء التجارة والتصدير (8)</span>
-                    <span class="circle-badge">المتابعون والعملاء (142)</span>
-                </div>
-            </div>
-
-            <!-- 5. المجتمعات (Communities) -->
-            <div id="communitiesTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">👥 مجتمعات جوجل بلس (Google Communities)</h3>
-                <p style="color:var(--text-muted); font-size:12px;">انضم وأنشئ مجتمعات متخصصة للنقاش وتبادل الخبرات.</p>
-                <div class="features-grid">
-                    <div class="feature-mini-card">
-                        <h4><i class="fa-solid fa-globe"></i> مجتمع التجارة الدولية</h4>
-                        <p style="font-size: 12px; color:var(--text-muted);">نقاشات حول التصدير، الشحن، والاستيراد.</p>
-                        <button class="btn-action" style="padding: 4px 8px; font-size:11px;">انضمام</button>
-                    </div>
-                    <div class="feature-mini-card">
-                        <h4><i class="fa-solid fa-code"></i> مجتمع تطوير الويب و Acode</h4>
-                        <p style="font-size: 12px; color:var(--text-muted);">مشاركة الأكواد والحلول البرمجية الخفيفة.</p>
-                        <button class="btn-action" style="padding: 4px 8px; font-size:11px;">انضمام</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 6. الصور والألبومات (Photos) - معدل للرفع والحفظ الدائم -->
-            <div id="photosTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">📸 معرض الصور والألبومات الذكية (Google Photos)</h3>
-                <p style="color:var(--text-muted); font-size:12px;">اختر صوراً من جهازك أو هاتفك لرفعها وحفظها بشكل دائم وثابت داخل التطبيق.</p>
+        <div id="invSubPos">
+            <div class="card" style="background:#111;">
+                <h3>➕ إصدار فاتورة جديدة للعميل</h3>
+                <div class="input-group"><label>اسم العميل / جهة التصدير:</label><input type="text" id="posCustomerName" placeholder="مثال: شركة النور للتجارة"></div>
+                <div class="input-group"><label>رقم هاتف العميل (لواتساب):</label><input type="text" id="posCustomerPhone" placeholder="010xxxxxxxx"></div>
                 
-                <div class="input-group" style="background: var(--toolbar-bg); padding: 12px; border: 1px dashed var(--gplus-blue); border-radius: 4px; text-align: center;">
-                    <label style="cursor: pointer; font-size: 14px; color: var(--gplus-blue); font-weight: bold;">
-                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 20px; display: block; margin-bottom: 5px;"></i>
-                        اضغط لاختيار ورفع صور من جهازك (محفوظة دائماً)
-                        <input type="file" id="imageUploadInput" accept="image/*" multiple style="display: none;" onchange="handleImageUpload(event)">
-                    </label>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-                    <span style="font-size: 12px; color: var(--text-muted);">الصور المحفوظة في المعرض:</span>
-                    <button class="btn-action" onclick="clearAllPhotos()" style="background: var(--gplus-red); padding: 4px 8px; font-size: 11px;"><i class="fa-solid fa-trash"></i> تفريغ المعرض</button>
-                </div>
-
-                <div id="photosContainer" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-                    <!-- يتم عرض الصور المحفوظة هنا ديناميكياً -->
-                </div>
-            </div>
-
-            <!-- 7. المناسبات (Events) -->
-            <div id="eventsTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">📅 تقويم المناسبات والاجتماعات (Google Events)</h3>
-                <div class="input-group"><label>عنوان المناسبة:</label><input type="text" id="eventTitle" placeholder="مثال: اجتماع مع الموردين"></div>
-                <div class="input-group"><label>التاريخ والوقت:</label><input type="datetime-local" id="eventDate"></div>
-                <button class="btn-action" onclick="addEvent()">جدولة المناسبة ✅</button>
-                <div id="eventsList" style="margin-top: 12px;"></div>
-            </div>
-
-            <!-- 8. دردشة Hangouts -->
-            <div id="hangoutsTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">💬 دردشة Google Hangouts المباشرة</h3>
-                <div class="card" style="height: 180px; overflow-y: auto; background: var(--bg-color); margin-bottom: 10px;" id="chatBox">
-                    <p style="font-size: 13px;"><b>النظام:</b> مرحباً بك في دردشة هانج آوتس المشفرة والمباشرة.</p>
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="chatMsg" placeholder="اكتب رسالتك...">
-                    <button class="btn-action" onclick="sendChat()" style="width: auto;">إرسال</button>
-                </div>
-            </div>
-
-            <!-- 9. المجموعات (Collections) -->
-            <div id="collectionsTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">🗂️ مجموعات جوجل بلس (Google Collections)</h3>
-                <div class="features-grid">
-                    <div class="feature-mini-card">
-                        <h4>📂 مجموعة مشاريع الويب</h4>
-                        <p style="font-size:11px; color:var(--text-muted);">تضم 14 عنصراً محفوظاً.</p>
-                    </div>
-                    <div class="feature-mini-card">
-                        <h4>📂 صور المعالم التاريخية</h4>
-                        <p style="font-size:11px; color:var(--text-muted);">تضم 32 عنصراً محفوظاً.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 10. تتبع الشحنات والخدمات اللوجستية -->
-            <div id="logisticsTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">🚚 إدارة الشحنات والخطوط اللوجستية</h3>
-                <div class="input-group"><label>رقم أو كود الشحنة:</label><input type="text" id="shipmentCode" placeholder="مثال: EGY-9821"></div>
-                <div class="input-group"><label>وجهة الشحن / الوصف:</label><input type="text" id="shipmentDesc" placeholder="مثال: شحنة ملابس ومنتجات خشبية"></div>
                 <div class="input-group">
-                    <label>حالة الشحنة:</label>
-                    <select id="shipmentStatus">
-                        <option value="قيد التجهيز بالمستودع">قيد التجهيز بالمستودع</option>
-                        <option value="في الطريق (خط السير)">في الطريق (خط السير)</option>
-                        <option value="تم التسليم بنجاح">تم التسليم بنجاح</option>
-                    </select>
+                    <label>اختر المنتج من المخزن:</label>
+                    <select id="posSelectProduct" onchange="updatePosProductPrice()"></select>
                 </div>
-                <button class="btn-action" onclick="addShipment()">إضافة ومتابعة الشحنة 📦</button>
-                <div id="shipmentsList" style="margin-top: 12px;"></div>
-            </div>
+                <div class="input-group"><label>الكمية المطلوبة:</label><input type="number" id="posQuantity" value="1" min="1"></div>
+                <button class="btn-green" onclick="addPosItemToCart()">➕ إضافة الصنف لفاتورة الإصدار</button>
 
-            <!-- 11. النسخ الاحتياطي والاستعادة -->
-            <div id="backupTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">💾 النسخ الاحتياطي واستعادة البيانات</h3>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
-                    <button class="btn-action" onclick="exportAppData()"><i class="fa-solid fa-download"></i> تصدير نسخة JSON</button>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <input type="file" id="importFile" accept=".json" style="font-size:11px;">
-                        <button class="btn-action" onclick="importAppData()" style="background: var(--gplus-green);"><i class="fa-solid fa-upload"></i> استعادة</button>
-                    </div>
-                </div>
+                <hr style="border-color:var(--border-color); margin: 15px 0;">
+                <h4>محتويات الفاتورة الحالية:</h4>
+                <div id="posCartItemsList" style="margin-bottom: 10px;">لا توجد أصناف مضافة بالفاتورة بعد.</div>
+                <p><b>الإجمالي الكلي للفاتورة: <span id="posCartTotal" style="color:var(--accent);">0</span> جنيه</b></p>
+                <button class="btn-gold" onclick="finalizeAndSaveInvoice()">💾 حفظ الفاتورة، خصم المخزن وإصدار السند 🚀</button>
             </div>
-
-            <!-- 12. الإحصائيات -->
-            <div id="analyticsTab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">📊 إحصائيات التفاعل ونشاط المنصة</h3>
-                <div class="stats-row">
-                    <div class="stat-box"><h3 id="statViews">1,420</h3><p style="margin:4px 0 0; font-size:11px;">مشاهدات البروفايل</p></div>
-                    <div class="stat-box"><h3 id="statPosts">28</h3><p style="margin:4px 0 0; font-size:11px;">المشاركات</p></div>
-                    <div class="stat-box"><h3>157</h3><p style="margin:4px 0 0; font-size:11px;">الدوائر والاتصالات</p></div>
-                </div>
-            </div>
-
-            <!-- 13. تبويب الـ 100 ميزة -->
-            <div id="more100Tab" class="card hidden">
-                <h3 style="margin-top:0; font-size:16px;">⭐ أرشيف الـ 100 ميزة وقسم من Google Plus</h3>
-                <div class="features-grid" style="font-size: 12px;">
-                    <div class="feature-mini-card"><h4>1-10. الأساسيات</h4><p>1. البروفايل<br>2. الغلاف<br>3. الصورة<br>4. الستريم<br>5. الستريم المخصص<br>6. الدوائر<br>7. التعديل<br>8. الإشعارات<br>9. البحث<br>10. الأمان</p></div>
-                    <div class="feature-mini-card"><h4>11-20. التواصل</h4><p>11. Hangouts<br>12. مكالمات فيديو<br>13. الموقع<br>14. الإشارة<br>15. الردود<br>16. إعادة مشاركة<br>17. +1<br>18. بث مباشر<br>19. رسائل<br>20. دعوات</p></div>
-                    <div class="feature-mini-card"><h4>21-30. المجتمعات</h4><p>21. إنشاء مجتمع<br>22. مجتمعات سرية<br>23. المشرفون<br>24. الأقسام<br>25. التثبيت<br>26. الطلبات<br>27. استطلاعات<br>28. مشاركة ملفات<br>29. التقييم<br>30. الأرشيف</p></div>
-                    <div class="feature-mini-card"><h4>31-100. الخدمات والأقسام</h4><p>مجموعات متكاملة للمستندات، الألبومات، الشحنات اللوجستية، النسخ الاحتياطي، وإدارة الأعمال ضمن بيئة Google Plus OS.</p></div>
-                </div>
-            </div>
-
         </div>
 
+        <div id="invSubArchive" class="hidden">
+            <div class="card" style="background:#111;">
+                <h3>🗂️ أرشيف الفواتير المحفوظة (معاينة، تصدير، واتساب)</h3>
+                <div class="input-group">
+                    <input type="text" id="searchInvoiceInput" placeholder="بحث برقم الفاتورة أو اسم العميل..." oninput="renderInvoicesArchive()">
+                </div>
+                <div id="invoicesArchiveList">لا توجد فواتير محفوظة.</div>
+            </div>
+        </div>
+
+        <div id="invSubWarehouse" class="hidden">
+            <div class="card" style="background:#111;">
+                <h3>📦 إضافة منتج جديد للمخزن</h3>
+                <div class="input-group"><label>اسم المنتج:</label><input type="text" id="whName" placeholder="مثال: حاوية تيشرتات قطن"></div>
+                <div class="input-group"><label>الكمية المتاحة بالمخزن:</label><input type="number" id="whQty" placeholder="100"></div>
+                <div class="input-group"><label>سعر القطعة / الوحدة (ج.م):</label><input type="number" id="whPrice" placeholder="350"></div>
+                <div class="input-group"><label>رابط الصورة:</label><input type="text" id="whImg" placeholder="https://via.placeholder.com/150"></div>
+                <button class="btn-gold" onclick="addNewWarehouseItem()">حفظ وإضافة للمخزن ✅</button>
+            </div>
+            <div class="card" style="background:#111;">
+                <h3>📋 قائمة أصناف المخزن الحالية</h3>
+                <div id="warehouseItemsList">لا توجد أصناف.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة معاينة الفاتورة الرسمية -->
+    <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🧾 معاينة فاتورة البيع والتصدير الرسمية</h2>
+        <div id="printableInvoice" class="invoice-box">
+            <div class="invoice-header">
+                <div>
+                    <h2 style="margin:0; color:#111;">BLACK BULL STORE</h2>
+                    <small style="color:#555;">لتجارة وتصدير الملابس جملة - محلياً ودولياً</small>
+                </div>
+                <div style="text-align: left;">
+                    <b id="invModalId">رقم الفاتورة: #BB-INV-000</b><br>
+                    <small id="invModalDate">التاريخ: 2026/08/03</small>
+                </div>
+            </div>
+            <p><b>بيانات العميل والتوصيل:</b><br>
+               • اسم العميل: <span id="invModalClient">اسم العميل</span><br>
+               • هاتف التواصل: <span id="invModalPhone">الهاتف</span><br>
+               • حالة التوثيق: <span style="color:#27ae60; font-weight:bold;">معتمدة ومحفوظة بالمخزن السحابي ✔️</span>
+            </p>
+            <table class="invoice-table">
+                <thead><tr><th>المنتج / الصنف</th><th>الكمية</th><th>السعر الفردي</th><th>الإجمالي</th></tr></thead>
+                <tbody id="invModalItems"></tbody>
+            </table>
+            <h3 style="text-align: left; color:#111;">الإجمالي الكلي: <span id="invModalTotal" style="color:#d4af37;">0</span> جنيه</h3>
+        </div>
+        <div style="display: flex; gap: 5px; margin-top: 15px; flex-wrap: wrap;">
+            <button class="btn-green" onclick="downloadInvoiceImage()" style="flex:1;">📷 تحميل صوره (PNG)</button>
+            <button class="btn-purple" onclick="downloadInvoicePDF()" style="flex:1;">📄 فتح وطباعة PDF</button>
+            <button class="btn-gold" onclick="shareInvoiceWhatsAppDirect()" style="flex:1;">🔗 إرسال واتساب للعميل</button>
+            <button class="btn-red" onclick="closeInvoiceModal()" style="flex:1;">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- ================= 3. المتجر الرئيسي ================= -->
+    <div id="storeTab">
+        <div class="card">
+            <h3>📂 أقسام المنصة للتوسع والانتشار</h3>
+            <div class="categories-grid">
+                <div class="cat-chip active" onclick="filterCategory('all', this)">جميع الأقسام</div>
+                <div class="cat-chip" onclick="filterCategory('تصدير دولي', this)">تصدير دولي 🌍</div>
+                <div class="cat-chip" onclick="filterCategory('جملة محلي', this)">جملة محلي 📦</div>
+                <div class="cat-chip" onclick="filterCategory('ملابس رجالي', this)">ملابس رجالي 👔</div>
+                <div class="cat-chip" onclick="filterCategory('ملابس حريمي', this)">ملابس حريمي 👗</div>
+                <div class="cat-chip" onclick="filterCategory('أطفال ومواليد', this)">أطفال 🧒</div>
+                <div class="cat-chip" onclick="filterCategory('عروض الحاويات', this)">عروض الحاويات 🚢</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🛍️ المنتجات والعروض المتاحة</h3>
+            <div class="products-grid" id="storeProductsList"></div>
+        </div>
+
+        <div class="card">
+            <h3>🛒 سلة المشتريات والطلبات</h3>
+            <div id="cartItems">السلة فارغة</div>
+            <hr style="border-color:var(--border-color)">
+            <p><b>الإجمالي الكلي: </b><span id="cartTotal">0</span> جنيه</p>
+            <button class="btn-green" onclick="placeOrder()">إرسال الطلب وإصدار فاتورة رسمية 🚀</button>
+        </div>
+    </div>
+
+    <!-- ================= 4. التصدير الدولي ================= -->
+    <div id="exportTab" class="card hidden">
+        <h2>🌍 قسم التصدير الدولي والشحن للخارج</h2>
+        <div class="input-group"><label>الدولة المستهدفة للاستيراد:</label><input type="text" id="exportCountry" placeholder="مثال: السعودية، الإمارات، إيطاليا..."></div>
+        <div class="input-group"><label>نوع الملابس والكمية المطلوبة:</label><textarea id="exportDetails" placeholder="اكتب المواصفات والكميات..."></textarea></div>
+        <button class="btn-gold" onclick="submitExportInquiry()">إرسال طلب التصدير لمدير المكتب ✈️</button>
+    </div>
+
+    <!-- ================= تتبع الشحنات والملاحة ================= -->
+    <div id="trackingTab" class="card hidden">
+        <h2>🚢 قسم تتبع الشحنات الدولية والملاحة</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">ادخل رقم بوليصة الشحن أو الحاوية لتتبع خط سيرها اللحظي عبر موانئ العالم.</p>
+        <div class="input-group">
+            <label>رقم بوليصة الشحن أو الحاوية:</label>
+            <input type="text" id="trackInputCode" placeholder="مثال: EXP-901 أو BB-CONTAINER-55">
+        </div>
+        <button class="btn-gold" onclick="performTrackingSearch()">بحث وتتبع الشحنة 🔍</button>
+        <div id="trackingResultBox" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- ================= حاسبة الشحن والجمارك ================= -->
+    <div id="calcTab" class="card hidden">
+        <h2>🧮 حاسبة تكاليف الشحن والجمارك التلقائية</h2>
+        <div class="input-group">
+            <label>اختر دولة الوجهة:</label>
+            <select id="calcCountry">
+                <option value="السعودية">المملكة العربية السعودية 🇸🇦</option>
+                <option value="الإمارات">الإمارات العربية المتحدة 🇦🇪</option>
+                <option value="إيطاليا">إيطاليا 🇮🇹</option>
+                <option value="ألمانيا">ألمانيا 🇩🇪</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>حجم الحاوية / الشحنة:</label>
+            <select id="calcContainerSize">
+                <option value="20">حاوية 20 قدم (Standard 20ft)</option>
+                <option value="40">حاوية 40 قدم (High Cube 40ft)</option>
+                <option value="express">شحنة جوية سريعة (Express Air Cargo)</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>إجمالي قيمة البضاعة بالجنيه أو الدولار:</label>
+            <input type="number" id="calcGoodsValue" placeholder="مثال: 150000">
+        </div>
+        <button class="btn-blue" onclick="calculateShippingAndCustoms()">احسب التكلفة التقديرية فوراً 📊</button>
+        <div id="calcResultBox" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- ================= جملة محلي ================= -->
+    <div id="localWholesaleTab" class="card hidden">
+        <h2>📦 قسم الجملة المحلية وتجار المكاتب</h2>
+        <div id="localWholesaleProducts" class="products-grid"></div>
+    </div>
+
+    <!-- ================= تفصيل خاص ================= -->
+    <div id="customOrderTab" class="card hidden">
+        <h2>✂️ قسم التصنيع الخاص وتفصيل العلامات التجارية (Private Label)</h2>
+        <div class="input-group"><label>اسم العلامة التجارية (Brand Name):</label><input type="text" id="customBrandName" placeholder="Your Brand"></div>
+        <div class="input-group"><label>نوع المنتج:</label><input type="text" id="customProductType" placeholder="تيشرت أوبريزد"></div>
+        <div class="input-group"><label>الكمية المستهدفة:</label><input type="number" id="customQty" placeholder="500"></div>
+        <div class="input-group"><label>مواصفات إضافية:</label><textarea id="customSpecs" placeholder="تفاصيل الخامات..."></textarea></div>
+        <button class="btn-gold" onclick="submitCustomOrder()">إرسال طلب التصنيع 🏭</button>
+    </div>
+
+    <!-- ================= تفاصيل المنتج ================= -->
+    <div id="productDetailTab" class="card hidden">
+        <button class="btn-blue" style="width: auto; margin-bottom: 10px;" onclick="switchTab('storeTab')">⬅ عودة للمتجر</button>
+        <div id="productDetailContent" style="text-align: center;"></div>
+    </div>
+
+    <!-- ================= بروفايل التصدير الشامل ================= -->
+    <div id="exportProfileTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.4)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">مخصص بالكامل لشحنات الملابس المصدرة للخارج، استعراض الحاويات الدولية، وطلب بضائع التصدير مع تفعيل بوابات الدفع.</p>
+        <div class="stats-grid">
+            <div class="stat-card"><h4>الشحنات المصدرة</h4><p>142 حاوية</p></div>
+            <div class="stat-card"><h4>الدولة المستوردة</h4><p>28 دولة</p></div>
+            <div class="stat-card"><h4>معيار الجودة</h4><p>ISO 9001 / A+</p></div>
+        </div>
+    </div>
+
+    <!-- ================= قسم النسخ الاحتياطي والمزامنة (Backup) ================= -->
+    <div id="backupTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>💾 إدارة النسخ الاحتياطي والمزامنة الكاملة للمنصة</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">قم بتحميل نسخة احتياطية من كافة بيانات المنصة (الحسابات، الفواتير، المخزن، الطلبات) لملف خارجي، أو استعادة البيانات في أي وقت.</p>
+        
+        <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+            <button class="btn-green" onclick="exportSystemBackup()" style="flex:1;">📥 تنزيل نسخة احتياطية كاملة (JSON)</button>
+            <button class="btn-purple" onclick="document.getElementById('importBackupFile').click()" style="flex:1;">📤 استعادة بيانات من ملف نسخة احتياطية</button>
+        </div>
+        <input type="file" id="importBackupFile" class="hidden" accept=".json" onchange="importSystemBackup(event)">
+    </div>
+
+    <!-- ================= مراقبة الطلبات والفواتير ================= -->
+    <div id="ordersTab" class="card hidden">
+        <h2>📋 قسم مراقبة الطلبات وإصدار الفواتير وبيانات التوصيل</h2>
+        <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
+    </div>
+
+    <!-- ================= الدعم المباشر ================= -->
+    <div id="supportTab" class="card hidden">
+        <h2>💬 الدعم الفني والتواصل المباشر</h2>
+        <div class="chat-box" id="chatMessages">
+            <div class="chat-msg msg-incoming">أهلاً بك في دعم بلاك بول. نحن متصلون معك لمساعدتك في طلبات الجملة والتصدير والحاويات.</div>
+        </div>
+        <div class="input-group" style="display: flex; gap: 5px; margin: 0;">
+            <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." style="margin:0;">
+            <button class="btn-gold" style="width: 80px; margin:0;" onclick="sendChatMessage()">إرسال</button>
+        </div>
+    </div>
+
+    <!-- ================= لوحة الإدارة الشاملة ================= -->
+    <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات وصلاحيات الدخول</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">بصفتك (المدير)، يمكنك هنا التحكم في كلمات المرور لكافة مستخدمي المنصة وتعديلها أو حذف الحسابات.</p>
+        <div class="stats-grid">
+            <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
+            <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
+            <div class="stat-card"><h4>إجمالي الحسابات</h4><p id="statUsersCount">0</p></div>
+        </div>
+        <div id="adminAllUsersList" style="margin-top: 15px;"></div>
     </div>
 
     <script>
-        let gPlusUser = JSON.parse(localStorage.getItem('gplus_user_profile')) || {
-            name: 'مستخدم جوجل بلس الذكي',
-            tagline: 'منصة متكاملة لإدارة المستندات، البروفايل والتواصل.',
-            avatar: 'https://via.placeholder.com/100/202124/ffffff?text=User',
-            cover: 'https://via.placeholder.com/1000x200/4285f4/ffffff?text=Google+Plus+Cover'
-        };
-
-        let streamPosts = JSON.parse(localStorage.getItem('gplus_stream_posts')) || [
-            { author: 'إدارة المنصة', text: 'أهلاً بك في النسخة المصممة كلياً لتطابق واجهة وبنية Google Plus التقليدية!', date: 'منذ ساعة' }
+        let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
+            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/80/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/300x110/111/d4af37?text=Cover', approved: true }
         ];
-
-        let shipments = JSON.parse(localStorage.getItem('gplus_shipments')) || [];
-        
-        // مصفوفة الصور المخفوظة محلياً بشكل دائم
-        let savedPhotos = JSON.parse(localStorage.getItem('gplus_saved_photos')) || [
-            "https://via.placeholder.com/150/4285f4/ffffff?text=Photo+1",
-            "https://via.placeholder.com/150/db4437/ffffff?text=Photo+2"
+        let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
+        let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
+            { id: 1, name: 'جاكيت شتوي تصدير فاخر', category: 'تصدير دولي', price: 650, qty: 150, img: 'https://via.placeholder.com/150/111/d4af37?text=Export+Jacket' },
+            { id: 2, name: 'طقم بنطلون وتيشرت جملة', category: 'جملة محلي', price: 300, qty: 80, img: 'https://via.placeholder.com/150/222/d4af37?text=Local+Set' },
+            { id: 3, name: 'قميص رجالي كلاسيك قطن', category: 'ملابس رجالي', price: 250, qty: 50, img: 'https://via.placeholder.com/150/333/d4af37?text=Mens+Shirt' }
         ];
+        let savedInvoices = JSON.parse(localStorage.getItem('bb_cloud_invoices')) || [];
+        let orders = JSON.parse(localStorage.getItem('bb_cloud_orders')) || [];
+        let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [];
+        let gplusPosts = JSON.parse(localStorage.getItem('bb_cloud_gplus_posts')) || [
+            { id: 1, author: 'المدير العام', text: 'أهلاً بكم في استريم بروفايل بلاك بول عبر Google+! تابعوا أحدث حاويات الملابس الجاهزة للتصدير.', date: '2026/08/03' }
+        ];
+        let cart = [];
+        let posCart = [];
+        let currentFilter = 'all';
+        let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
+        let activeInvoiceForAction = null;
 
         window.onload = function() {
-            renderProfileData();
-            renderStreamPosts();
-            renderShipments();
-            renderPhotos();
-            let savedDoc = localStorage.getItem('gplus_word_doc_content');
-            if(savedDoc) {
-                document.getElementById('wordCanvas').innerHTML = savedDoc;
+            let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
+            if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '123'; adminUser.approved = true; }
+            
+            if(currentUser) {
+                let foundInList = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
+                if(foundInList) { currentUser = { ...foundInList }; }
             }
-            if(localStorage.getItem('gplus_dark_mode') === 'true') {
-                document.getElementById('mainBody').classList.add('dark-mode');
-            }
+
+            updateAuthUI();
+            renderInventory();
+            renderStore();
+            renderWarehouseManagement();
+            renderInvoicesArchive();
+            renderOrders();
+            renderChat();
+            renderLocalWholesale();
+            renderAdminUsersManagement();
+            renderGPlusStream();
+            updateAdminStats();
+            populatePosDropdown();
+            
+            switchTab(lastActiveTab, null, false);
         };
 
-        function switchTab(tabId, menuElement) {
-            ['profileTab', 'streamTab', 'wordDocTab', 'circlesTab', 'communitiesTab', 'photosTab', 'eventsTab', 'hangoutsTab', 'collectionsTab', 'logisticsTab', 'backupTab', 'analyticsTab', 'more100Tab'].forEach(id => {
+        function openWordPage() {
+            window.location.href = 'word.html';
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sideDrawer').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function toggleGPlusDrawer() {
+            document.getElementById('gplusProfileDrawer').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function checkProfileDrawerAccess() {
+            if (!currentUser) {
+                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض بروفايل Google+ والـ Stream الخاص بك!');
+                switchTab('authSection');
+            } else {
+                updateAuthUI();
+                renderGPlusStream();
+                toggleGPlusDrawer();
+            }
+        }
+
+        function setTheme(primary, accent, bg, card) {
+            document.documentElement.style.setProperty('--primary', primary);
+            document.documentElement.style.setProperty('--accent', accent);
+            document.documentElement.style.setProperty('--bg-color', bg);
+            document.documentElement.style.setProperty('--card-bg', card);
+            syncDataToCloud();
+        }
+
+        function syncDataToCloud() {
+            localStorage.setItem('bb_cloud_inventory', JSON.stringify(inventory));
+            localStorage.setItem('bb_cloud_invoices', JSON.stringify(savedInvoices));
+            localStorage.setItem('bb_cloud_orders', JSON.stringify(orders));
+            localStorage.setItem('bb_cloud_chats', JSON.stringify(chatLogs));
+            localStorage.setItem('bb_cloud_gplus_posts', JSON.stringify(gplusPosts));
+            
+            if(currentUser) {
+                let foundIndex = registeredUsers.findIndex(u => u.phone === currentUser.phone || u.name === currentUser.name);
+                if(foundIndex !== -1) {
+                    registeredUsers[foundIndex] = { ...currentUser };
+                } else {
+                    registeredUsers.push({ ...currentUser });
+                }
+                localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem('bb_cloud_user');
+            }
+            localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
+            
+            document.getElementById('syncStatus').innerText = '✅ تم حفظ ومزامنة كافة بيانات الحساب والمخزن سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
+            updateAdminStats();
+            renderAdminUsersManagement();
+        }
+
+        function exportSystemBackup() {
+            let backupData = {
+                users: registeredUsers,
+                currentUser: currentUser,
+                inventory: inventory,
+                invoices: savedInvoices,
+                orders: orders,
+                chats: chatLogs,
+                gplusPosts: gplusPosts,
+                exportDate: new Date().toLocaleString()
+            };
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+            let downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "BlackBull_Backup_" + new Date().toISOString().slice(0,10) + ".json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            alert('✅ تم تنزيل النسخة الاحتياطية بنجاح على جهازك!');
+        }
+
+        function importSystemBackup(event) {
+            let file = event.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let parsed = JSON.parse(e.target.result);
+                    if(parsed.users) registeredUsers = parsed.users;
+                    if(parsed.currentUser) currentUser = parsed.currentUser;
+                    if(parsed.inventory) inventory = parsed.inventory;
+                    if(parsed.invoices) savedInvoices = parsed.invoices;
+                    if(parsed.orders) orders = parsed.orders;
+                    if(parsed.chats) chatLogs = parsed.chats;
+                    if(parsed.gplusPosts) gplusPosts = parsed.gplusPosts;
+
+                    syncDataToCloud();
+                    updateAuthUI();
+                    renderInventory();
+                    renderStore();
+                    renderWarehouseManagement();
+                    renderInvoicesArchive();
+                    renderOrders();
+                    renderChat();
+                    renderLocalWholesale();
+                    renderGPlusStream();
+                    alert('✅ تم استعادة كافة البيانات والملفات والطلبات من النسخة الاحتياطية بنجاح تام!');
+                    switchTab('storeTab');
+                } catch(err) {
+                    alert('❌ ملف النسخة الاحتياطية غير صالح أو تالف!');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function switchTab(tabId, btnElement = null, saveState = true) {
+            ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'backupTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal', 'streamDetailModal'].forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.classList.add('hidden');
             });
             let target = document.getElementById(tabId);
             if(target) target.classList.remove('hidden');
-
-            if(menuElement) {
-                document.querySelectorAll('.gplus-sidebar .sidebar-menu-item').forEach(b => b.classList.remove('active'));
-                menuElement.classList.add('active');
+            
+            if(saveState) { 
+                lastActiveTab = tabId;
+                localStorage.setItem('bb_active_tab', tabId); 
+            }
+            if(btnElement && btnElement.tagName === 'BUTTON') {
+                document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
+                btnElement.classList.add('active-nav');
+            }
+            if(tabId === 'adminDashboardTab') {
+                renderAdminUsersManagement();
             }
         }
 
-        function toggleDarkMode() {
-            let body = document.getElementById('mainBody');
-            body.classList.toggle('dark-mode');
-            localStorage.setItem('gplus_dark_mode', body.classList.contains('dark-mode'));
-        }
-
-        function goBackToStore() {
-            window.location.href = 'index.html';
-        }
-
-        function renderProfileData() {
-            document.getElementById('profileNameTitle').innerText = gPlusUser.name;
-            document.getElementById('profileTagline').innerText = gPlusUser.tagline;
-            document.getElementById('profileAvatarView').src = gPlusUser.avatar;
-            document.getElementById('profileCoverView').src = gPlusUser.cover;
-
-            document.getElementById('inputProfileName').value = gPlusUser.name;
-            document.getElementById('inputProfileTagline').value = gPlusUser.tagline;
-            document.getElementById('inputProfileAvatar').value = gPlusUser.avatar;
-            document.getElementById('inputProfileCover').value = gPlusUser.cover;
-        }
-
-        function saveProfileSettings() {
-            gPlusUser.name = document.getElementById('inputProfileName').value.trim() || gPlusUser.name;
-            gPlusUser.tagline = document.getElementById('inputProfileTagline').value.trim() || gPlusUser.tagline;
-            gPlusUser.avatar = document.getElementById('inputProfileAvatar').value.trim() || gPlusUser.avatar;
-            gPlusUser.cover = document.getElementById('inputProfileCover').value.trim() || gPlusUser.cover;
-
-            localStorage.setItem('gplus_user_profile', JSON.stringify(gPlusUser));
-            renderProfileData();
-            alert('✅ تم تحديث بروفايل جوجل بلس وحفظه بشكل دائم!');
-        }
-
-        function formatDoc(command, value = null) {
-            document.execCommand(command, false, value);
-        }
-
-        function saveWordDocumentLocally() {
-            let content = document.getElementById('wordCanvas').innerHTML;
-            localStorage.setItem('gplus_word_doc_content', content);
-            alert('💾 تم حفظ مستند الوورد محلياً بنجاح تام!');
-        }
-
-        function publishStreamPost() {
-            let txt = document.getElementById('streamPostText').value.trim();
-            if(!txt) return;
-            streamPosts.unshift({ author: gPlusUser.name, text: txt, date: 'الآن' });
-            localStorage.setItem('gplus_stream_posts', JSON.stringify(streamPosts));
-            document.getElementById('streamPostText').value = '';
-            renderStreamPosts();
-        }
-
-        function renderStreamPosts() {
-            let container = document.getElementById('streamPostsContainer');
-            if(!container) return;
-            container.innerHTML = '';
-            streamPosts.forEach(p => {
-                container.innerHTML += `
-                    <div class="stream-box">
-                        <div class="stream-header">
-                            <img src="${gPlusUser.avatar}" class="stream-avatar">
-                            <div>
-                                <b>${p.author}</b><br>
-                                <small style="color:var(--text-muted);">${p.date}</small>
-                            </div>
-                        </div>
-                        <p style="font-size:14px; margin:5px 0 0 0;">${p.text}</p>
-                    </div>
-                `;
+        function switchInvSubTab(subId) {
+            ['invSubPos', 'invSubArchive', 'invSubWarehouse'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
             });
-            document.getElementById('statPosts').innerText = streamPosts.length;
+            document.getElementById('invSub' + (subId === 'pos' ? 'Pos' : subId === 'archive' ? 'Archive' : 'Warehouse')).classList.remove('hidden');
         }
 
-        function addCircle() {
-            let name = document.getElementById('newCircleName').value.trim();
-            if(!name) return;
-            let container = document.getElementById('circlesContainer');
-            container.innerHTML += `<span class="circle-badge">${name} (0)</span>`;
-            document.getElementById('newCircleName').value = '';
-            alert('✅ تمت إضافة الدائرة بنجاح!');
-        }
-
-        // دالة التعامل مع رفع الصور الحقيقية وحفظها بشكل دائم في localStorage
-        function handleImageUpload(event) {
-            let files = event.target.files;
-            if(!files || files.length === 0) return;
-
-            let loadedCount = 0;
-            Array.from(files).forEach(file => {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    savedPhotos.unshift(e.target.result); // إضافة الصورة الجديدة في المقدمة
-                    loadedCount++;
-                    if(loadedCount === files.length) {
-                        localStorage.setItem('gplus_saved_photos', JSON.stringify(savedPhotos));
-                        renderPhotos();
-                        alert('📸 تم رفع وحفظ الصور بنجاح ولن تختفي أبداً حتى لو قمت بتحديث الصفحة!');
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-            event.target.value = ''; // إعادة تعيين حقل الرفع
-        }
-
-        function renderPhotos() {
-            let container = document.getElementById('photosContainer');
-            if(!container) return;
-            container.innerHTML = '';
-            if(savedPhotos.length === 0) {
-                container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted);">لا توجد صور محفوظة حالياً.</p>`;
-                return;
-            }
-            savedPhotos.forEach((photoUrl, index) => {
-                container.innerHTML += `
-                    <div style="position: relative; display: inline-block;">
-                        <img src="${photoUrl}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-color);" alt="Saved Photo">
-                        <button onclick="deletePhoto(${index})" title="حذف الصورة" style="position: absolute; top: 2px; left: 2px; background: rgba(211,72,54,0.8); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                `;
-            });
-        }
-
-        function deletePhoto(index) {
-            savedPhotos.splice(index, 1);
-            localStorage.setItem('gplus_saved_photos', JSON.stringify(savedPhotos));
-            renderPhotos();
-        }
-
-        function clearAllPhotos() {
-            if(confirm('هل أنت متأكد من تفريغ كافة الصور المحفوظة؟')) {
-                savedPhotos = [];
-                localStorage.removeItem('gplus_saved_photos');
-                renderPhotos();
+        function switchAuthMode(mode) {
+            if(mode === 'login') {
+                document.getElementById('loginFormContainer').classList.remove('hidden');
+                document.getElementById('registerFormContainer').classList.add('hidden');
+                document.getElementById('tabBtnLogin').className = 'btn-gold';
+                document.getElementById('tabBtnRegister').className = 'btn-blue';
+            } else {
+                document.getElementById('loginFormContainer').classList.add('hidden');
+                document.getElementById('registerFormContainer').classList.remove('hidden');
+                document.getElementById('tabBtnLogin').className = 'btn-blue';
+                document.getElementById('tabBtnRegister').className = 'btn-gold';
             }
         }
 
-        function addEvent() {
-            let title = document.getElementById('eventTitle').value.trim();
-            let date = document.getElementById('eventDate').value;
-            if(!title || !date) return;
-            let list = document.getElementById('eventsList');
-            list.innerHTML += `<div style="background:var(--toolbar-bg); padding:10px; border-radius:4px; margin-bottom:8px; border:1px solid var(--border-color); font-size:13px;"><b>📅 ${title}</b> - موعدها: ${date}</div>`;
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            alert('📅 تم جدولة المناسبة بنجاح!');
-        }
-
-        function addShipment() {
-            let code = document.getElementById('shipmentCode').value.trim();
-            let desc = document.getElementById('shipmentDesc').value.trim();
-            let status = document.getElementById('shipmentStatus').value;
-            if(!code || !desc) return;
-            shipments.unshift({ code, desc, status });
-            localStorage.setItem('gplus_shipments', JSON.stringify(shipments));
-            document.getElementById('shipmentCode').value = '';
-            document.getElementById('shipmentDesc').value = '';
-            renderShipments();
-            alert('📦 تم تسجيل الشحنة وتتبعها بنجاح!');
-        }
-
-        function renderShipments() {
-            let list = document.getElementById('shipmentsList');
-            if(!list) return;
-            list.innerHTML = '';
-            shipments.forEach(s => {
-                list.innerHTML += `
-                    <div style="background:var(--toolbar-bg); padding:10px; border-radius:4px; margin-bottom:8px; border:1px solid var(--border-color); font-size:13px;">
-                        <b>📦 كود الشحنة: ${s.code}</b><br>
-                        <span style="color:var(--text-muted);">${s.desc}</span><br>
-                        <span class="circle-badge" style="margin-top:5px;">الحالة: ${s.status}</span>
-                    </div>
-                `;
-            });
-        }
-
-        function sendChat() {
-            let msg = document.getElementById('chatMsg').value.trim();
-            if(!msg) return;
-            let box = document.getElementById('chatBox');
-            box.innerHTML += `<p style="font-size:13px;"><b>أنت:</b> ${msg}</p>`;
-            document.getElementById('chatMsg').value = '';
-            box.scrollTop = box.scrollHeight;
-        }
-
-        function globalSearchFilter() {
-            let query = document.getElementById('globalSearchInput').value.toLowerCase();
-            if(!query) return;
-            if(query.includes('شحن') || query.includes('لوجستية')) switchTab('logisticsTab');
-            else if(query.includes('مستند') || query.includes('word')) switchTab('wordDocTab');
-            else if(query.includes('دائرة')) switchTab('circlesTab');
-            else if(query.includes('صور') || query.includes('معرض')) switchTab('photosTab');
-        }
-
-        function exportAppData() {
-            let backupData = {
-                profile: gPlusUser,
-                posts: streamPosts,
-                shipments: shipments,
-                photos: savedPhotos,
-                wordDoc: localStorage.getItem('gplus_word_doc_content')
-            };
-            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-            let downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "google_plus_os_backup.json");
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            alert('💾 تم تصدير النسخة الاحتياطية (متضمنة الصور) بنجاح!');
-        }
-
-        function importAppData() {
-            let fileInput = document.getElementById('importFile');
-            if(fileInput.files.length === 0) {
-                alert('الرجاء اختيار ملف JSON أولاً!');
-                return;
-            }
-            let file = fileInput.files[0];
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    let imported = JSON.parse(e.target.result);
-                    if(imported.profile) localStorage.setItem('gplus_user_profile', JSON.stringify(imported.profile));
-                    if(imported.posts) localStorage.setItem('gplus_stream_posts', JSON.stringify(imported.posts));
-                    if(imported.shipments) localStorage.setItem('gplus_shipments', JSON.stringify(imported.shipments));
-                    if(imported.photos) localStorage.setItem('gplus_saved_photos', JSON.stringify(imported.photos));
-                    if(imported.wordDoc) localStorage.setItem('gplus_word_doc_content', imported.wordDoc);
-                    alert('✅ تمت استعادة كافة البيانات والسيستم بالكامل! يتم إعادة التحميل...');
-                    location.reload();
-                } catch(err) {
-                    alert('❌ ملف النسخ الاحتياطي غير صالح!');
+        function toggleAuthModal() {
+            if(currentUser) {
+                if(confirm('هل تريد تسجيل الخروج؟')) {
+                    currentUser = null;
+                    localStorage.removeItem('bb_cloud_user');
+                    updateAuthUI();
+                    switchTab('storeTab');
                 }
+            } else {
+                switchTab('authSection');
+            }
+        }
+
+        function performRegister() {
+            let name = document.getElementById('regName').value.trim();
+            let phone = document.getElementById('regPhone').value.trim();
+            let email = document.getElementById('regEmail').value.trim();
+            let role = document.getElementById('regRole').value;
+            let password = document.getElementById('regPassword').value;
+
+            if(!name || !phone || !password) return alert('الرجاء إدخال كافة بيانات التسجيل الأساسية');
+            let exists = registeredUsers.find(u => u.phone === phone || u.name === name);
+            if(exists) return alert('رقم الهاتف أو اسم المستخدم مسجل مسبقاً!');
+
+            let newUser = {
+                name, phone, email: email || '', role, password,
+                title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عضو مسجل متصل 🛒',
+                avatar: 'https://via.placeholder.com/80/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
+                cover: 'https://via.placeholder.com/300x110/111/d4af37?text=Black+Bull+Store',
+                approved: true
             };
-            reader.readAsText(file);
+            registeredUsers.push(newUser);
+            currentUser = newUser;
+            syncDataToCloud();
+            updateAuthUI();
+            toggleGPlusDrawer();
+            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي وتفعيل بروفايل Google+ بنجاح!');
+        }
+
+        function performLogin() {
+            let contactOrName = document.getElementById('loginContactOrName').value.trim();
+            let password = document.getElementById('loginPassword').value;
+            let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName) && u.password === password);
+            if(!user) return alert('بيانات الدخول أو الرقم السري غير صحيح!');
+            currentUser = user;
+            syncDataToCloud();
+            updateAuthUI();
+            toggleGPlusDrawer();
+            alert('✅ مرحباً بك مجدداً، ' + currentUser.name);
+        }
+
+        function updateAuthUI() {
+            let btnTop = document.getElementById('authBtnTop');
+            let greet = document.getElementById('quickUserGreet');
+            if(currentUser) {
+                btnTop.innerText = 'خروج'; btnTop.className = 'btn-red';
+                greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
+                document.getElementById('gpNameDisplay').innerText = currentUser.name;
+                document.getElementById('gpRoleBadge').innerText = currentUser.title || currentUser.role;
+                document.getElementById('gpContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
+                document.getElementById('gpAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/80/000/d4af37?text=User';
+                document.getElementById('gpCoverImg').src = currentUser.cover || 'https://via.placeholder.com/300x110/111/d4af37?text=Cover';
+            } else {
+                btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
+                greet.innerText = 'مرحباً بك زائرنا الكريم';
+            }
+        }
+
+        function publishGPlusPost() {
+            if(!currentUser) return alert('يجب تسجيل الدخول أولاً للنشر في الاستريم!');
+            let text = document.getElementById('gpNewPostText').value.trim();
+            if(!text) return alert('اكتب نص المنشور أولاً');
+
+            gplusPosts.unshift({
+                id: Date.now(),
+                author: currentUser.name,
+                text: text,
+                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
+            });
+            document.getElementById('gpNewPostText').value = '';
+            syncDataToCloud();
+            renderGPlusStream();
+            alert('✅ تم نشر المنشور في استريم Google+ بنجاح!');
+        }
+
+        function renderGPlusStream() {
+            let container = document.getElementById('gpStreamContainer');
+            if(!container) return;
+            if(gplusPosts.length === 0) {
+                container.innerHTML = '<p style="font-size:12px; color:var(--text-muted); text-align:center;">لا توجد منشورات في الاستريم بعد.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            gplusPosts.forEach(post => {
+                container.innerHTML += `
+                    <div class="gplus-stream-item" onclick="openStreamDetail(${post.id})">
+                        <b>${post.author}</b> <span style="font-size:10px; color:var(--text-muted);">(${post.date})</span>
+                        <p style="margin:5px 0; font-size:12px;">${post.text.length > 70 ? post.text.substring(0,70) + '...' : post.text}</p>
+                        <small style="color:var(--accent);">انقر للعرض الكامل 🔍</small>
+                    </div>
+                `;
+            });
+        }
+
+        function openStreamDetail(postId) {
+            let post = gplusPosts.find(p => p.id === postId);
+            if(!post) return;
+            
+            document.getElementById('streamDetailContent').innerHTML = `
+                <h3 style="color:var(--accent); margin-top:0;">منشور بواسطة: ${post.author}</h3>
+                <small style="color:var(--text-muted);">التاريخ والوقت: ${post.date}</small>
+                <p style="font-size:14px; margin-top:10px; line-height:1.6; white-space:pre-wrap;">${post.text}</p>
+            `;
+            toggleGPlusDrawer();
+            switchTab('streamDetailModal');
+        }
+
+        function closeStreamDetail() {
+            switchTab('storeTab');
+        }
+
+        function renderAdminUsersManagement() {
+            let container = document.getElementById('adminAllUsersList');
+            if(!container) return;
+            let isManager = currentUser && currentUser.role === 'مدير';
+            
+            container.innerHTML = `<h3>👥 إدارة كافة حسابات المنصة والأرقام السرية</h3>`;
+            if(registeredUsers.length === 0) { container.innerHTML += `<p>لا توجد حسابات مسجلة.</p>`; return; }
+
+            registeredUsers.forEach((u, idx) => {
+                container.innerHTML += `
+                    <div class="item-row" style="flex-wrap:wrap;">
+                        <div style="flex:1; min-width:200px;">
+                            <b>الاسم: ${u.name}</b> (${u.role})<br>
+                            <small>الهاتف: ${u.phone} | الرقم السري: <b>${u.password}</b></small>
+                        </div>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            ${isManager ? `
+                                <input type="text" id="adminNewPass_${idx}" placeholder="الرقم السري الجديد" style="width:130px; padding:6px; font-size:11px; margin:0;">
+                                <button class="btn-blue" style="width:auto; padding:6px 10px; font-size:11px;" onclick="adminUpdateUserPassword(${idx})">تغيير السري</button>
+                                ${u.phone !== 'admin' ? `<button class="btn-red" style="width:auto; padding:6px 10px; font-size:11px;" onclick="adminDeleteUser(${idx})">حذف</button>` : ''}
+                            ` : `<span style="font-size:11px; color:var(--text-muted);">للمدير صلاحية التعديل</span>`}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function adminUpdateUserPassword(idx) {
+            if(!currentUser || currentUser.role !== 'مدير') return alert('للمدير فقط');
+            let newPassInput = document.getElementById('adminNewPass_' + idx);
+            let newPass = newPassInput ? newPassInput.value.trim() : '';
+            if(!newPass) return alert('الرجاء كتابة الرقم السري الجديد أولاً!');
+
+            registeredUsers[idx].password = newPass;
+            syncDataToCloud();
+            renderAdminUsersManagement();
+            alert('✅ تم تغيير الرقم السري بنجاح!');
+        }
+
+        function adminDeleteUser(idx) {
+            if(!currentUser || currentUser.role !== 'مدير') return alert('للمدير فقط');
+            if(confirm('هل أنت متأكد من حذف هذا الحساب؟')) {
+                registeredUsers.splice(idx, 1);
+                syncDataToCloud();
+                renderAdminUsersManagement();
+            }
+        }
+
+        function populatePosDropdown() {
+            let select = document.getElementById('posSelectProduct');
+            if(!select) return;
+            select.innerHTML = '';
+            inventory.forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.name} - السعر: ${item.price} ج.م (المخزون: ${item.qty})</option>`;
+            });
+        }
+
+        function addPosItemToCart() {
+            let prodId = parseInt(document.getElementById('posSelectProduct').value);
+            let qty = parseInt(document.getElementById('posQuantity').value) || 1;
+            let item = inventory.find(i => i.id === prodId);
+            if(!item) return alert('المنتج غير موجود');
+            if(item.qty < qty) return alert('الكمية المطلوبة أكبر من المتاحة بالمخزن!');
+
+            let existing = posCart.find(p => p.id === prodId);
+            if(existing) { existing.qty += qty; } else { posCart.push({ id: item.id, name: item.name, price: item.price, qty: qty }); }
+            renderPosCart();
+        }
+
+        function renderPosCart() {
+            let container = document.getElementById('posCartItemsList');
+            let total = 0;
+            if(posCart.length === 0) { container.innerHTML = 'لا توجد أصناف مضافة بالفاتورة بعد.'; document.getElementById('posCartTotal').innerText = '0'; return; }
+            container.innerHTML = '';
+            posCart.forEach((item, index) => {
+                let subTotal = item.price * item.qty;
+                total += subTotal;
+                container.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom:1px dashed #333; padding-bottom:4px;">
+                    <span>• ${item.name} (×${item.qty})</span> 
+                    <span><b>${subTotal} ج.م</b> <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto;" onclick="posCart.splice(${index},1); renderPosCart();">حذف</button></span>
+                </div>`;
+            });
+            document.getElementById('posCartTotal').innerText = total;
+        }
+
+        function finalizeAndSaveInvoice() {
+            let custName = document.getElementById('posCustomerName').value.trim() || (currentUser ? currentUser.name : 'عميل نقدي');
+            let custPhone = document.getElementById('posCustomerPhone').value.trim() || (currentUser ? currentUser.phone : '01000000000');
+            if(posCart.length === 0) return alert('الفاتورة فارغة!');
+
+            let totalVal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            posCart.forEach(posItem => {
+                let storeItem = inventory.find(i => i.id === posItem.id);
+                if(storeItem) { storeItem.qty -= posItem.qty; }
+            });
+
+            let newInvoice = {
+                id: 'BB-INV-' + Math.floor(1000 + Math.random() * 9000),
+                customer: custName,
+                phone: custPhone,
+                items: [...posCart],
+                total: totalVal,
+                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'})
+            };
+
+            savedInvoices.push(newInvoice);
+            posCart = [];
+            document.getElementById('posCustomerName').value = '';
+            document.getElementById('posCustomerPhone').value = '';
+            renderPosCart();
+            populatePosDropdown();
+            renderInventory();
+            renderWarehouseManagement();
+            renderInvoicesArchive();
+            syncDataToCloud();
+
+            alert('✅ تم حفظ الفاتورة بنجاح وخصم الكميات من المخزن!');
+            openInvoiceModalDirect(newInvoice);
+        }
+
+        function renderInvoicesArchive() {
+            let container = document.getElementById('invoicesArchiveList');
+            let query = document.getElementById('searchInvoiceInput') ? document.getElementById('searchInvoiceInput').value.toLowerCase() : '';
+            if(!container) return;
+
+            let filtered = savedInvoices.filter(inv => inv.id.toLowerCase().includes(query) || inv.customer.toLowerCase().includes(query));
+            document.getElementById('invTotalInvoicesDisplay').innerText = savedInvoices.length;
+            let totalSales = savedInvoices.reduce((sum, inv) => sum + inv.total, 0);
+            document.getElementById('invTotalSalesDisplay').innerText = totalSales + ' ج.م';
+
+            if(filtered.length === 0) { container.innerHTML = 'لا توجد فواتير محفوظة في الأرشيف.'; return; }
+            container.innerHTML = '';
+            filtered.forEach(inv => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div>
+                            <b>رقم الفاتورة: ${inv.id}</b> | العميل: ${inv.customer} (${inv.phone})<br>
+                            <small>التاريخ: ${inv.date} | الإجمالي: <b style="color:var(--accent);">${inv.total} ج.م</b></small>
+                        </div>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn-gold" style="width:auto; padding:6px 10px; font-size:11px;" onclick="openInvoiceModalById('${inv.id}')">🧾 عرض</button>
+                            <button class="btn-green" style="width:auto; padding:6px 10px; font-size:11px;" onclick="shareInvoiceWhatsAppByObj('${inv.id}')">🔗 واتساب</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openInvoiceModalById(invId) {
+            let inv = savedInvoices.find(i => i.id === invId);
+            if(inv) openInvoiceModalDirect(inv);
+        }
+
+        function openInvoiceModalDirect(inv) {
+            activeInvoiceForAction = inv;
+            document.getElementById('invModalId').innerText = 'رقم الفاتورة: #' + inv.id;
+            document.getElementById('invModalDate').innerText = 'التاريخ: ' + inv.date;
+            document.getElementById('invModalClient').innerText = inv.customer;
+            document.getElementById('invModalPhone').innerText = inv.phone;
+            document.getElementById('invModalTotal').innerText = inv.total;
+
+            let tbody = document.getElementById('invModalItems');
+            tbody.innerHTML = '';
+            inv.items.forEach(it => {
+                tbody.innerHTML += `<tr><td>${it.name}</td><td>${it.qty}</td><td>${it.price} ج.م</td><td>${it.price * it.qty} ج.م</td></tr>`;
+            });
+            switchTab('invoiceModal');
+        }
+
+        function closeInvoiceModal() { switchTab('advancedInvoicesStoreTab'); }
+
+        function downloadInvoiceImage() {
+            let element = document.getElementById('printableInvoice');
+            html2canvas(element).then(canvas => {
+                let link = document.createElement('a');
+                link.download = (activeInvoiceForAction ? activeInvoiceForAction.id : 'Invoice') + '.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function downloadInvoicePDF() { window.print(); }
+
+        function shareInvoiceWhatsAppDirect() {
+            if(!activeInvoiceForAction) return;
+            let inv = activeInvoiceForAction;
+            let itemsText = inv.items.map(i => `- ${i.name} (الكمية: ${i.qty}) = ${i.price * i.qty} ج.م`).join('\n');
+            let msg = `مرحباً بك يا ${inv.customer} 🐂\nإليك تفاصيل فاتورة الشراء والتصدير الرسمية من Black Bull Store:\n\nرقم الفاتورة: #${inv.id}\nالتاريخ: ${inv.date}\n\nالأصناف:\n${itemsText}\n\nالإجمالي الكلي: ${inv.total} جنيه\n\nشكراً لتعاملك معنا!`;
+            let phone = inv.phone.startsWith('0') ? '2' + inv.phone : inv.phone;
+            window.open(`https://wa.me/${phone}?text=` + encodeURIComponent(msg), '_blank');
+        }
+
+        function shareInvoiceWhatsAppByObj(invId) {
+            let inv = savedInvoices.find(i => i.id === invId);
+            if(inv) { activeInvoiceForAction = inv; shareInvoiceWhatsAppDirect(); }
+        }
+
+        function addNewWarehouseItem() {
+            let name = document.getElementById('whName').value.trim();
+            let qty = parseInt(document.getElementById('whQty').value) || 0;
+            let price = parseFloat(document.getElementById('whPrice').value) || 0;
+            let img = document.getElementById('whImg').value.trim();
+
+            if(!name || !price) return alert('الرجاء إدخال اسم المنتج والسعر');
+            inventory.push({ id: Date.now(), name, category: 'جملة محلي', price, qty, img: img || 'https://via.placeholder.com/150' });
+            document.getElementById('whName').value = '';
+            document.getElementById('whQty').value = '';
+            document.getElementById('whPrice').value = '';
+            document.getElementById('whImg').value = '';
+
+            syncDataToCloud();
+            renderInventory();
+            renderWarehouseManagement();
+            populatePosDropdown();
+            renderStore();
+            alert('✅ تمت إضافة المنتج للمخزن بنجاح!');
+        }
+
+        function renderWarehouseManagement() {
+            let container = document.getElementById('warehouseItemsList');
+            if(!container) return;
+            document.getElementById('invCountDisplay').innerText = inventory.length;
+            if(inventory.length === 0) { container.innerHTML = 'المخزن فارغ.'; return; }
+            container.innerHTML = '';
+            inventory.forEach(item => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div><b>${item.name}</b><br><small>السعر: ${item.price} ج.م | المخزون المتاح: <b style="color:${item.qty > 10 ? '#48bb78':'#e53e3e'}">${item.qty} قطعة</b></small></div>
+                        <button class="btn-red" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteWarehouseItem(${item.id})">حذف الصنف</button>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteWarehouseItem(id) {
+            inventory = inventory.filter(i => i.id !== id);
+            syncDataToCloud();
+            renderInventory();
+            renderWarehouseManagement();
+            populatePosDropdown();
+            renderStore();
+        }
+
+        function filterCategory(cat, element) {
+            currentFilter = cat;
+            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            renderStore();
+        }
+
+        function renderStore() {
+            let container = document.getElementById('storeProductsList');
+            if(!container) return;
+            container.innerHTML = '';
+            let filtered = inventory.filter(item => currentFilter === 'all' || item.category === currentFilter);
+            if(filtered.length === 0) { container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">لا توجد منتجات.</p>'; return; }
+            filtered.forEach(item => {
+                container.innerHTML += `
+                    <div class="product-card" onclick="openProductDetail(${item.id})">
+                        <img src="${item.img}" alt="${item.name}">
+                        <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
+                        <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small><br>
+                        <button class="btn-blue" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="event.stopPropagation(); addToCart(${item.id})">أضف للسلة</button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderLocalWholesale() {
+            let container = document.getElementById('localWholesaleProducts');
+            if(!container) return;
+            container.innerHTML = '';
+            inventory.forEach(item => {
+                container.innerHTML += `
+                    <div class="product-card" onclick="openProductDetail(${item.id})">
+                        <img src="${item.img}" alt="${item.name}">
+                        <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
+                        <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small>
+                    </div>
+                `;
+            });
+        }
+
+        function openProductDetail(id) {
+            let item = inventory.find(i => i.id === id);
+            if(!item) return;
+            document.getElementById('productDetailContent').innerHTML = `
+                <img src="${item.img}" alt="${item.name}" style="max-width: 250px; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                <h2>${item.name}</h2>
+                <p><b>السعر:</b> <span style="color:var(--accent); font-size: 18px;">${item.price} جنيه</span></p>
+                <p><b>المخزون المتاح:</b> ${item.qty} قطعة</p>
+                <button class="btn-gold" onclick="switchTab('supportTab')">💬 تواصل للطلب والتفاصيل</button>
+            `;
+            switchTab('productDetailTab');
+        }
+
+        function addToCart(id) {
+            let item = inventory.find(i => i.id === id);
+            if(item.qty <= 0) return alert('عذراً، هذا المنتج نفد من المخزن!');
+            cart.push(item);
+            renderCart();
+            alert('تمت الإضافة للسلة');
+        }
+
+        function renderCart() {
+            let container = document.getElementById('cartItems');
+            let total = 0;
+            if(cart.length === 0) { container.innerHTML = 'السلة فارغة'; document.getElementById('cartTotal').innerText = '0'; return; }
+            container.innerHTML = '';
+            cart.forEach(item => {
+                total += item.price;
+                container.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>• ${item.name}</span> <b>${item.price} ج.م</b></div>`;
+            });
+            document.getElementById('cartTotal').innerText = total;
+        }
+
+        function placeOrder() {
+            if(!currentUser) return alert('يجب تسجيل الدخول أولاً لإرسال الطلب!');
+            if(cart.length === 0) return alert('السلة فارغة!');
+
+            let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
+            cart.forEach(cartItem => {
+                let st = inventory.find(i => i.id === cartItem.id);
+                if(st) st.qty -= 1;
+            });
+
+            let newOrder = {
+                id: 'BB-' + Math.floor(1000 + Math.random() * 9000),
+                customer: currentUser.name,
+                phone: currentUser.phone,
+                items: [...cart],
+                total: totalVal,
+                status: 'قيد المراجعة والتوصيل ⏳',
+                date: new Date().toLocaleDateString('ar-EG')
+            };
+
+            savedInvoices.push({
+                id: 'INV-' + newOrder.id,
+                customer: newOrder.customer,
+                phone: newOrder.phone,
+                items: cart.map(c => ({ name: c.name, price: c.price, qty: 1 })),
+                total: totalVal,
+                date: newOrder.date
+            });
+
+            orders.push(newOrder);
+            cart = [];
+            syncDataToCloud();
+            renderCart();
+            renderOrders();
+            renderInvoicesArchive();
+            renderWarehouseManagement();
+            alert('✅ تم إرسال الطلب وحفظ الفاتورة الرسمية بنجاح!');
+            switchTab('ordersTab');
+        }
+
+        function renderOrders() {
+            let container = document.getElementById('ordersList');
+            if(!container) return;
+            if(orders.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
+            container.innerHTML = '';
+            orders.forEach(o => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div>
+                            <b>طلب/شحنة: ${o.id}</b> - الإجمالي: ${o.total} ج.م<br>
+                            <small>العميل: ${o.customer} | الهاتف: ${o.phone} | الحالة: <span style="color:var(--accent);">${o.status}</span></small>
+                        </div>
+                        <button class="btn-gold" style="width:auto; padding:6px 12px; font-size:12px;" onclick="openInvoiceModalById('INV-${o.id}')">🧾 عرض الفاتورة</button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderInventory() { updateAdminStats(); }
+
+        function updateAdminStats() {
+            let pCount = document.getElementById('statProductsCount');
+            let oCount = document.getElementById('statOrdersCount');
+            let uCount = document.getElementById('statUsersCount');
+            if(pCount) pCount.innerText = inventory.length;
+            if(oCount) oCount.innerText = orders.length;
+            if(uCount) uCount.innerText = registeredUsers.length;
+        }
+
+        function performTrackingSearch() {
+            let code = document.getElementById('trackInputCode').value;
+            let box = document.getElementById('trackingResultBox');
+            if(!code) return alert('الرجاء إدخال رقم بوليصة أو حاوية صحيحة');
+            box.innerHTML = `<div class="card" style="background:#111; border-color:var(--accent);">
+                <h4>📌 نتائج تتبع الشحنة: ${code}</h4>
+                <p>• الحالة الحالية: <span style="color:#48bb78; font-weight:bold;">في عرض البحر / في طريقه لميناء الوصول 🚢</span></p>
+                <p>• الميناء المُصدر: ميناء الإسكندرية 🇪🇬 | التوقع الوصول خلال 4 أيام.</p>
+            </div>`;
+        }
+
+        function calculateShippingAndCustoms() {
+            let country = document.getElementById('calcCountry').value;
+            let size = document.getElementById('calcContainerSize').value;
+            let val = parseFloat(document.getElementById('calcGoodsValue').value) || 0;
+            let freightCost = size === '40' ? 45000 : size === '20' ? 28000 : 8000;
+            let customDuty = val * 0.12; 
+            let totalEstimated = val + freightCost + customDuty;
+            document.getElementById('calcResultBox').innerHTML = `<div class="card" style="background:#111; border-color:var(--accent);">
+                <h4>📊 التقرير التقديري للتكلفة والشحن إلى (${country})</h4>
+                <p>• قيمة البضاعة: <b>${val} ج.م</b> | الشحن: <b>${freightCost} ج.م</b> | الجمارك: <b>${customDuty.toFixed(2)} ج.م</b></p>
+                <p style="color:var(--accent); font-size:16px;"><b>الإجمالي التقديري: ${totalEstimated.toFixed(2)} جنيه</b></p>
+            </div>`;
+        }
+
+        function submitExportInquiry() { alert('تم إرسال طلب التصدير بنجاح'); }
+        function submitCustomOrder() { alert('تم إرسال طلب التفصيل بنجاح'); }
+        
+        function sendChatMessage() {
+            let txt = document.getElementById('chatInput').value;
+            if(!txt) return;
+            chatLogs.push({ sender: currentUser ? currentUser.name : 'زائر', text: txt, type: 'outgoing' });
+            syncDataToCloud();
+            renderChat();
+            document.getElementById('chatInput').value = '';
+        }
+        function renderChat() {
+            let box = document.getElementById('chatMessages');
+            if(!box) return;
+            box.innerHTML = '';
+            chatLogs.forEach(msg => {
+                box.innerHTML += `<div class="chat-msg ${msg.type === 'outgoing' ? 'msg-outgoing' : 'msg-incoming'}"><b>${msg.sender}:</b> ${msg.text}</div>`;
+            });
         }
     </script>
 </body>
