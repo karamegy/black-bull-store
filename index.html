@@ -174,7 +174,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.9)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.10)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -581,6 +581,9 @@
             updateAdminStats();
             populatePosDropdown();
             
+            if(lastActiveTab === 'profileTab' && !currentUser) {
+                lastActiveTab = 'storeTab';
+            }
             switchTab(lastActiveTab, null, false);
         };
 
@@ -615,6 +618,8 @@
                     registeredUsers.push({ ...currentUser });
                 }
                 localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem('bb_cloud_user');
             }
             localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
             
@@ -676,7 +681,7 @@
         }
 
         function checkProfileAccess(btnElement = null) {
-            if(!currentUser) {
+            if (!currentUser) {
                 alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي الحقيقي!');
                 switchTab('authSection', btnElement);
             } else {
@@ -769,7 +774,7 @@
             updateAuthUI();
             renderUserProfileOrders();
             switchTab('profileTab');
-            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي وتفعيله بنجاح!');
+            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي وتفعيل بنجاح!');
         }
 
         function performLogin() {
@@ -850,7 +855,6 @@
             }
         }
 
-        // معاينة ورفع وتثبيت الصور الشخصية والغلاف فوراً في قاعدة البيانات المحلية والسحابية
         function previewImageFile(event, type) {
             let file = event.target.files[0];
             if(file && currentUser) {
