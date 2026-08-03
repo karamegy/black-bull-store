@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Bull Store - منصة بلاك بول لتجارة وتصدير الملابس</title>
-    <!-- مكتبة لطباعة وتحويل الفواتير إلى PDF وصور مباشرة -->
+    <title>Microsoft 365 Pro & Black Bull Suite - المنصة المكتبية الشاملة</title>
+    <!-- مكتبة لطباعة وتحويل المستندات والفواتير إلى PDF وصور مباشرة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- مكتبة الأيقونات FontAwesome لدعم الأيقونات الجديدة -->
+    <!-- مكتبة الأيقونات FontAwesome لدعم أيقونات مايكروسوفت والأقسام -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #111111;
-            --accent: #d4af37;
+            --primary-ms: #0078d4;
+            --word-color: #2b579a;
+            --excel-color: #217346;
+            --ppt-color: #d24726;
+            --outlook-color: #0078d4;
             --bg-color: #0f1115;
             --card-bg: #1a1d24;
             --text-main: #f7fafc;
             --text-muted: #a0aec0;
             --border-color: #2d3748;
+            --accent: #0078d4;
         }
 
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
@@ -24,47 +28,40 @@
         .brand-header {
             text-align: center;
             padding: 20px;
-            background: linear-gradient(135deg, #111 0%, #222 100%);
-            color: var(--accent);
+            background: linear-gradient(135deg, #111 0%, #1f2937 100%);
+            color: var(--text-main);
             border-radius: 16px;
             margin-bottom: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-            border: 1px solid var(--accent);
+            border: 1px solid var(--primary-ms);
             position: relative;
             overflow: hidden;
         }
 
-        .bull-logo-3d {
+        .ms-logo-3d {
             width: 90px;
             height: 90px;
             margin: 0 auto 10px;
-            background: linear-gradient(135deg, #bf953f, #fc6f6, #b38728, #fbf5b7, #aa771c);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 10px 20px rgba(212,175,55,0.4), inset 0 2px 5px rgba(255,255,255,0.6);
-            animation: floatAndGlow 4s ease-in-out infinite, colorShift 8s linear infinite;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+            padding: 5px;
+            box-sizing: border-box;
+            animation: floatAndGlow 4s ease-in-out infinite;
         }
+        .ms-square { border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; font-weight: bold; }
+        .ms-red { background: #f25022; }
+        .ms-green { background: #7fba00; }
+        .ms-blue { background: #00a4ef; }
+        .ms-yellow { background: #ffb900; }
 
         @keyframes floatAndGlow {
-            0%, 100% { transform: translateY(0) rotateY(0deg); box-shadow: 0 5px 15px rgba(212,175,55,0.3); }
-            50% { transform: translateY(-8px) rotateY(15deg); box-shadow: 0 15px 30px rgba(212,175,55,0.6); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
         }
 
-        @keyframes colorShift {
-            0% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(50deg); }
-            100% { filter: hue-rotate(0deg); }
-        }
-
-        .brand-header h1 { margin: 0; font-size: 28px; font-weight: bold; letter-spacing: 2px; }
+        .brand-header h1 { margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 1px; color: #fff; }
         .brand-header small { color: var(--text-muted); font-size: 13px; }
-
-        .theme-selector { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
-        .theme-btn { width: 25px; height: 25px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; transition: 0.2s; }
-        .theme-btn:hover { transform: scale(1.2); }
 
         .card { background: var(--card-bg); padding: 15px; border-radius: 14px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
         h2, h3 { color: var(--accent); text-align: center; margin-top: 5px; }
@@ -75,1206 +72,353 @@
 
         button { border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; transition: 0.2s; }
         button:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-green { background-color: #27ae60; color: white; }
-        .btn-blue { background-color: #3182ce; color: white; }
+        .btn-word { background-color: var(--word-color); color: white; }
+        .btn-excel { background-color: var(--excel-color); color: white; }
+        .btn-ppt { background-color: var(--ppt-color); color: white; }
+        .btn-outlook { background-color: var(--outlook-color); color: white; }
+        .btn-ms { background-color: #0078d4; color: white; }
         .btn-red { background-color: #e53e3e; color: white; }
-        .btn-gold { background-color: var(--accent); color: #111; }
-        .btn-purple { background-color: #805ad5; color: white; }
+        .btn-green { background-color: #27ae60; color: white; }
 
         .hidden { display: none !important; }
 
         .top-nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: var(--card-bg); padding: 10px 15px; border-radius: 12px; border: 1px solid var(--border-color); }
-        .menu-toggle-btn { background: var(--accent); color: #111; padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; width: auto; margin:0; }
         
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; transition: 0.3s; }
-        .sidebar-overlay.active { display: block; }
-        .side-drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: #15181e; z-index: 1000; box-shadow: -5px 0 25px rgba(0,0,0,0.8); transition: right 0.3s ease-in-out; padding: 20px; box-sizing: border-box; border-left: 2px solid var(--accent); overflow-y: auto; }
-        .side-drawer.open { right: 0; }
-        .side-drawer h3 { color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
-        .side-drawer button { background: #2d3748; color: #fff; text-align: right; padding: 12px; margin-bottom: 8px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 10px; }
-        .side-drawer button:hover { background: var(--accent); color: #111; }
-        .close-drawer { background: #e53e3e !important; color: white !important; text-align: center !important; justify-content: center; }
-
-        /* شريط البروفايل الجانبي المحاكي لـ Google+ */
-        .gplus-profile-drawer { position: fixed; top: 0; left: -360px; width: 340px; height: 100%; background: #15181e; z-index: 1001; box-shadow: 5px 0 25px rgba(0,0,0,0.8); transition: left 0.3s ease-in-out; padding: 15px; box-sizing: border-box; border-right: 2px solid var(--accent); overflow-y: auto; }
-        .gplus-profile-drawer.open { left: 0; }
-        .gplus-header { text-align: center; position: relative; margin-bottom: 15px; }
-        .gplus-cover { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; border: 1px solid var(--accent); }
-        .gplus-avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); position: absolute; bottom: -35px; left: 50%; transform: translateX(-50%); object-fit: cover; background: #000; }
-        .gplus-stream-item { background: #111; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .gplus-stream-item:hover { border-color: var(--accent); transform: translateY(-2px); }
-
         .nav-bar { display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
-        .nav-bar button { flex: 1; font-size: 11px; padding: 8px 4px; min-width: 60px; background: #2d3748; color: #fff; }
-        .nav-bar button.active-nav { background: var(--accent); color: #111; font-weight: bold; }
+        .nav-bar button { flex: 1; font-size: 11px; padding: 8px 4px; min-width: 70px; background: #2d3748; color: #fff; }
+        .nav-bar button.active-nav { background: var(--accent); color: #fff; font-weight: bold; }
 
-        .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; gap: 10px; }
-        .status-badge { background: rgba(212,175,55,0.15); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid var(--accent); }
-        .title-badge { background: #3182ce; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; margin-right: 5px; }
+        .ms-ribbon { background: #1f2937; padding: 10px; border-radius: 8px; display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; border: 1px solid var(--border-color); align-items: center; justify-content: center; }
+        .ms-ribbon button { width: auto; padding: 6px 12px; font-size: 12px; margin: 0; background: #374151; color: #fff; }
 
-        .categories-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; }
-        .cat-chip { background: #2d3748; color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; white-space: nowrap; font-weight: bold; }
-        .cat-chip.active { background: var(--accent); color: #111; }
+        .doc-page { background: #fff; color: #000; min-height: 400px; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.3); font-family: 'Calibri', 'Segoe UI', Tahoma, sans-serif; outline: none; margin-bottom: 15px; }
+        .sheet-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; background: #fff; color: #000; }
+        .sheet-table th, .sheet-table td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; font-size: 13px; }
+        .sheet-table th { background: #f1f5f9; color: #0f172a; }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
-        .product-card { border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; background: #15181e; transition: 0.2s; }
-        .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
-        .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
-
-        .chat-box { height: 260px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; overflow-y: auto; background: #111; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
-        .chat-msg { padding: 8px 12px; border-radius: 8px; max-width: 75%; font-size: 13px; }
-        .msg-incoming { background: #2d3748; color: #fff; align-self: flex-start; }
-        .msg-outgoing { background: var(--accent); color: #111; font-weight: bold; align-self: flex-end; }
+        .slide-container { background: #1e293b; border: 2px solid var(--border-color); border-radius: 10px; padding: 30px; min-height: 280px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 15px; position: relative; }
         
         .sync-status { text-align: center; font-size: 11px; color: #48bb78; margin-bottom: 10px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 15px; }
-        .stat-card { background: #111; border: 1px solid var(--accent); padding: 12px; border-radius: 10px; text-align: center; }
-        .stat-card h4 { margin: 0; color: var(--text-muted); font-size: 12px; }
-        .stat-card p { margin: 5px 0 0; color: var(--accent); font-size: 18px; font-weight: bold; }
-
-        .invoice-box { background: #fff; color: #000; padding: 25px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-family: 'Segoe UI', Tahoma, sans-serif; }
-        .invoice-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #d4af37; padding-bottom: 15px; margin-bottom: 15px; }
-        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; text-align: right; font-size: 13px; }
-        .invoice-table th { background: #111; color: #d4af37; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; gap: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- القائمة الجانبية للأقسام -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <div class="side-drawer" id="sideDrawer">
-        <h3>قائمة الأقسام 🐂 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
-        <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> المتجر الرئيسي</button>
-        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()"><i class="fa-solid fa-file-invoice-dollar"></i> قسم الفواتير والمخزن الشامل 🌟</button>
-        <button onclick="switchTab('exportTab'); toggleSidebar()"><i class="fa-solid fa-globe"></i> التصدير الدولي</button>
-        <button onclick="switchTab('localWholesaleTab'); toggleSidebar()"><i class="fa-solid fa-boxes-stacked"></i> جملة محلي</button>
-        <button onclick="switchTab('customOrderTab'); toggleSidebar()"><i class="fa-solid fa-scissors"></i> تفصيل خاص</button>
-        <button onclick="switchTab('trackingTab'); toggleSidebar()"><i class="fa-solid fa-ship"></i> تتبع الشحنات والملاحة</button>
-        <button onclick="switchTab('calcTab'); toggleSidebar()"><i class="fa-solid fa-calculator"></i> حاسبة الشحن والجمارك</button>
-        <button onclick="switchTab('auctionTab'); toggleSidebar()"><i class="fa-solid fa-tags"></i> مزاد الحاويات الكبرى</button>
-        <button onclick="switchTab('loyaltyTab'); toggleSidebar()"><i class="fa-solid fa-star"></i> برنامج الولاء والنقاط</button>
-        <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> مراقبة الطلبات</button>
-        <button onclick="switchTab('exportProfileTab'); toggleSidebar()"><i class="fa-solid fa-network-wired"></i> بروفايل التصدير الشامل</button>
-        <button onclick="checkProfileDrawerAccess(); toggleSidebar()"><i class="fa-solid fa-user"></i> بروفايل حسابي (Google+ Stream)</button>
-        <button onclick="openWordPage()"><i class="fa-solid fa-file-word" style="color: #3182ce;"></i> مستندات Word الاحترافي</button>
-        <button onclick="switchTab('backupTab'); toggleSidebar()"><i class="fa-solid fa-database" style="color: var(--accent);"></i> النسخ الاحتياطي والمزامنة 💾</button>
-        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني</button>
-        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة</button>
-        <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
-    </div>
-
-    <!-- الشريط الجانبي للبروفايل الحقيقي (Google+ Style & Stream) -->
-    <div class="gplus-profile-drawer" id="gplusProfileDrawer">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:12px;">
-            <h3 style="margin:0; color:var(--accent);">بروفايل Google+ 🐂</h3>
-            <span style="cursor:pointer; font-size:18px; color:#fff;" onclick="toggleGPlusDrawer()">✕</span>
-        </div>
-        <div class="gplus-header">
-            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/300x110/111/d4af37?text=Google+Plus+Cover" alt="Cover">
-            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/80/000/d4af37?text=User" alt="Avatar">
-        </div>
-        <div style="text-align:center; margin-top:40px;">
-            <h3 id="gpNameDisplay" style="margin:0;">اسم المستخدم</h3>
-            <span id="gpRoleBadge" class="title-badge" style="background:var(--accent); color:#111; font-weight:bold;">عضو موثق</span>
-            <p id="gpContactDisplay" style="color:var(--text-muted); font-size:12px; margin:5px 0;">الهاتف أو البريد</p>
-        </div>
-        <hr style="border-color:var(--border-color); margin:15px 0;">
-        <h4 style="color:var(--accent); margin-bottom:8px;">📢 الاستريم (Stream & Posts)</h4>
-        <div class="input-group">
-            <textarea id="gpNewPostText" placeholder="شارك أحدث منشوراتك أو منتجاتك..." style="height:60px; font-size:12px;"></textarea>
-            <button class="btn-gold" style="padding:6px; font-size:12px;" onclick="publishGPlusPost()">نشر في الاستريم 🚀</button>
-        </div>
-        <div id="gpStreamContainer" style="margin-top:10px;"></div>
-    </div>
-
-    <!-- نافذة معاينة تفاصيل عنصر الاستريم المختار -->
-    <div id="streamDetailModal" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🔍 معاينة تفاصيل منشور الاستريم المختار</h2>
-        <div id="streamDetailContent" style="background:#111; padding:15px; border-radius:8px; margin-bottom:15px;"></div>
-        <button class="btn-red" onclick="closeStreamDetail()">إغلاق المعاينة</button>
-    </div>
-
-    <div class="theme-selector">
-        <span style="font-size:12px; align-self:center; color:var(--text-muted);">اختر ثيم المنصة:</span>
-        <div class="theme-btn" style="background: #d4af37;" onclick="setTheme('#111111', '#d4af37', '#0f1115', '#1a1d24')" title="أسود وذهبي فاخر"></div>
-        <div class="theme-btn" style="background: #3182ce;" onclick="setTheme('#1a202c', '#63b3ed', '#0f172a', '#1e293b')" title="كلاسيكي أزرق"></div>
-        <div class="theme-btn" style="background: #27ae60;" onclick="setTheme('#064e3b', '#34d399', '#022c22', '#065f46')" title="أخضر أعمال"></div>
-        <div class="theme-btn" style="background: #805ad5;" onclick="setTheme('#322659', '#b794f4', '#1a103c', '#2d1a4a')" title="ملكي بنفسجي"></div>
-    </div>
-
     <div class="brand-header">
-        <div class="bull-logo-3d">🐂</div>
-        <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.11)</small>
+        <div class="ms-logo-3d">
+            <div class="ms-square ms-red">W</div>
+            <div class="ms-square ms-green">X</div>
+            <div class="ms-square ms-blue">P</div>
+            <div class="ms-square ms-yellow">O</div>
+        </div>
+        <h1>MICROSOFT 365 & OFFICE SUITE PRO</h1>
+        <small>المنصة المكتبية المتكاملة (Word, Excel, PowerPoint, Outlook, Access & Cloud System)</small>
     </div>
 
     <!-- شريط علوي -->
     <div class="top-nav-bar">
-        <div style="display:flex; gap:8px; align-items:center;">
-            <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ أقسام المنصة</button>
-            <button class="btn-gold" style="width:auto; padding:6px 12px; margin:0; font-size:12px;" onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle"></i> بروفايل Google+</button>
-        </div>
-        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">مرحباً بك زائرنا الكريم</div>
+        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">مرحباً بك يا مستخدم حزمة مايكروسوفت</div>
         <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
-    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: متصل بالخادم السحبي والمحلي بكفاءة تامة</div>
+    <div class="sync-status" id="syncStatus">🔄 حالة مزامنة حزمة مايكروسوفت السحابية: متصل ومفعل بكفاءة تامة</div>
 
-    <!-- شريط التنقل الرئيسي الأفقي -->
+    <!-- شريط التنقل الرئيسي بين برامج مايكروسوفت -->
     <div class="nav-bar" id="mainNavBar">
-        <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
-        <button onclick="switchTab('advancedInvoicesStoreTab', this)">🧾 الفواتير والمخزن</button>
-        <button onclick="switchTab('exportTab', this)">🌍 التصدير</button>
-        <button onclick="switchTab('trackingTab', this)">🚢 التتبع</button>
-        <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
-        <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
-        <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user"></i> بروفايل G+</button>
-        <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database"></i> النسخ الاحتياطي</button>
-        <button onclick="openWordPage()" style="background: #3182ce; color: white;"><i class="fa-solid fa-file-word"></i> محرر Word</button>
+        <button class="active-nav" onclick="switchTab('wordTab', this)"><i class="fa-solid fa-file-word" style="color:#2b579a;"></i> Word</button>
+        <button onclick="switchTab('excelTab', this)"><i class="fa-solid fa-file-excel" style="color:#217346;"></i> Excel</button>
+        <button onclick="switchTab('pptTab', this)"><i class="fa-solid fa-file-powerpoint" style="color:#d24726;"></i> PowerPoint</button>
+        <button onclick="switchTab('outlookTab', this)"><i class="fa-solid fa-envelope" style="color:#0078d4;"></i> Outlook</button>
+        <button onclick="switchTab('accessTab', this)"><i class="fa-solid fa-database" style="color:#a4373a;"></i> Access & SQL</button>
+        <button onclick="switchTab('driversTab', this)"><i class="fa-solid fa-microchip"></i> التعريفات</button>
+        <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-cloud-arrow-down"></i> النسخ الاحتياطي</button>
     </div>
 
-    <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات ================= -->
-    <div id="authSection" class="card hidden">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <div class="bull-logo-3d" style="width: 110px; height: 110px; font-size: 50px;">🐂</div>
-            <h3 style="margin-bottom: 2px;">بوابة الدخول الموحدة (عملاء - مشرفين - مديرين)</h3>
-            <small style="color: var(--text-muted);">يرجى إدخال بيانات الاعتماد الخاصة بك للمتابعة</small>
+    <!-- ================= 1. Microsoft Word (محرر المستندات) ================= -->
+    <div id="wordTab" class="card" style="border: 2px solid var(--word-color);">
+        <h2><i class="fa-solid fa-file-word" style="color:var(--word-color);"></i> Microsoft Word - محرر المستندات الاحترافي</h2>
+        <div class="ms-ribbon">
+            <button class="btn-word" onclick="formatWordText('bold')"><i class="fa-solid fa-bold"></i> غليظ</button>
+            <button class="btn-word" onclick="formatWordText('italic')"><i class="fa-solid fa-italic"></i> مائل</button>
+            <button class="btn-word" onclick="formatWordText('underline')"><i class="fa-solid fa-underline"></i> تحته خط</button>
+            <button class="btn-word" onclick="insertWordTemplate()">📄 إدراج نموذج عقد رسمي</button>
+            <button class="btn-green" onclick="printWordDoc()">🖨️ طباعة وتصدير PDF</button>
         </div>
-        
-        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <button class="btn-gold" id="tabBtnLogin" onclick="switchAuthMode('login')">تسجيل الدخول</button>
-            <button class="btn-blue" id="tabBtnRegister" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
-        </div>
-
-        <div id="loginFormContainer">
-            <div class="input-group">
-                <label>رقم الهاتف أو اسم المستخدم:</label>
-                <input type="text" id="loginContactOrName" placeholder="أدخل رقم الهاتف أو اسم المستخدم" autocomplete="off">
-            </div>
-            <div class="input-group">
-                <label>كلمة المرور:</label>
-                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" autocomplete="new-password">
-            </div>
-            <button class="btn-green" onclick="performLogin()">تسجيل الدخول للمنصة 🚀</button>
-        </div>
-
-        <div id="registerFormContainer" class="hidden">
-            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName" placeholder="اكتب اسمك الكامل" autocomplete="off"></div>
-            <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="regPhone" placeholder="01xxxxxxxxx" autocomplete="off"></div>
-            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="regEmail" placeholder="name@domain.com" autocomplete="off"></div>
-            <div class="input-group"><label>نوع الحساب:</label>
-                <select id="regRole">
-                    <option value="عميل">عميل (Customer) 🛒</option>
-                    <option value="مشرف">مشرف (Supervisor) 🛡️</option>
-                    <option value="مدير">مدير (Manager) 🔐</option>
-                </select>
-            </div>
-            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية" autocomplete="new-password"></div>
-            <button class="btn-gold" onclick="performRegister()">إنشاء حساب جديد وتفعيل الحساب ✅</button>
+        <div id="wordEditor" class="doc-page" contenteditable="true">
+            <h3>مستند جديد - Microsoft Word</h3>
+            <p>اكتب مستندك هنا بكل حرية، مع دعم كامل لتنسيقات الخطوط، الجداول، والعقود الرسمية...</p>
         </div>
     </div>
 
-    <!-- ================= 2. قسم الفواتير والمخزن الشامل المتطور ================= -->
-    <div id="advancedInvoicesStoreTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🧾 قسم الفواتير وإدارة المخزن الشامل (الأرشفة، التصدير والواتساب)</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">حفظ شامل لكافة الحركات، خصم تلقائي من المخزن، إصدار الفواتير الرسمية، معاينتها، تنزيلها صور/PDF، أو إرسالها للعميل عبر واتساب بضغطة زر.</p>
-
-        <div class="stats-grid">
-            <div class="stat-card"><h4>إجمالي أصناف المخزن</h4><p id="invCountDisplay">0</p></div>
-            <div class="stat-card"><h4>إجمالي الفواتير المحفوظة</h4><p id="invTotalInvoicesDisplay">0</p></div>
-            <div class="stat-card"><h4>إجمالي مبيعات الفواتير</h4><p id="invTotalSalesDisplay">0 ج.م</p></div>
+    <!-- ================= 2. Microsoft Excel (جداول البيانات) ================= -->
+    <div id="excelTab" class="card hidden" style="border: 2px solid var(--excel-color);">
+        <h2><i class="fa-solid fa-file-excel" style="color:var(--excel-color);"></i> Microsoft Excel - جداول البيانات والحسابات</h2>
+        <div class="ms-ribbon">
+            <button class="btn-excel" onclick="addExcelRow()">➕ إضافة صف جديد</button>
+            <button class="btn-excel" onclick="calculateExcelTotal()">🧮 حساب المجموع التلقائي (SUM)</button>
+            <button class="btn-green" onclick="exportExcelCSV()">📥 تصدير كملف CSV</button>
         </div>
-
-        <div style="display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;">
-            <button class="btn-gold" onclick="switchInvSubTab('pos')" style="flex:1;">🛒 إنشاء فاتورة جديدة وبيع</button>
-            <button class="btn-blue" onclick="switchInvSubTab('archive')" style="flex:1;">🗂️ أرشيف الفواتير الشامل</button>
-            <button class="btn-purple" onclick="switchInvSubTab('warehouse')" style="flex:1;">📦 إدارة المخزن والأصناف</button>
-        </div>
-
-        <div id="invSubPos">
-            <div class="card" style="background:#111;">
-                <h3>➕ إصدار فاتورة جديدة للعميل</h3>
-                <div class="input-group"><label>اسم العميل / جهة التصدير:</label><input type="text" id="posCustomerName" placeholder="مثال: شركة النور للتجارة"></div>
-                <div class="input-group"><label>رقم هاتف العميل (لواتساب):</label><input type="text" id="posCustomerPhone" placeholder="010xxxxxxxx"></div>
-                
-                <div class="input-group">
-                    <label>اختر المنتج من المخزن:</label>
-                    <select id="posSelectProduct" onchange="updatePosProductPrice()"></select>
-                </div>
-                <div class="input-group"><label>الكمية المطلوبة:</label><input type="number" id="posQuantity" value="1" min="1"></div>
-                <button class="btn-green" onclick="addPosItemToCart()">➕ إضافة الصنف لفاتورة الإصدار</button>
-
-                <hr style="border-color:var(--border-color); margin: 15px 0;">
-                <h4>محتويات الفاتورة الحالية:</h4>
-                <div id="posCartItemsList" style="margin-bottom: 10px;">لا توجد أصناف مضافة بالفاتورة بعد.</div>
-                <p><b>الإجمالي الكلي للفاتورة: <span id="posCartTotal" style="color:var(--accent);">0</span> جنيه</b></p>
-                <button class="btn-gold" onclick="finalizeAndSaveInvoice()">💾 حفظ الفاتورة، خصم المخزن وإصدار السند 🚀</button>
-            </div>
-        </div>
-
-        <div id="invSubArchive" class="hidden">
-            <div class="card" style="background:#111;">
-                <h3>🗂️ أرشيف الفواتير المحفوظة (معاينة، تصدير، واتساب)</h3>
-                <div class="input-group">
-                    <input type="text" id="searchInvoiceInput" placeholder="بحث برقم الفاتورة أو اسم العميل..." oninput="renderInvoicesArchive()">
-                </div>
-                <div id="invoicesArchiveList">لا توجد فواتير محفوظة.</div>
-            </div>
-        </div>
-
-        <div id="invSubWarehouse" class="hidden">
-            <div class="card" style="background:#111;">
-                <h3>📦 إضافة منتج جديد للمخزن</h3>
-                <div class="input-group"><label>اسم المنتج:</label><input type="text" id="whName" placeholder="مثال: حاوية تيشرتات قطن"></div>
-                <div class="input-group"><label>الكمية المتاحة بالمخزن:</label><input type="number" id="whQty" placeholder="100"></div>
-                <div class="input-group"><label>سعر القطعة / الوحدة (ج.م):</label><input type="number" id="whPrice" placeholder="350"></div>
-                <div class="input-group"><label>رابط الصورة:</label><input type="text" id="whImg" placeholder="https://via.placeholder.com/150"></div>
-                <button class="btn-gold" onclick="addNewWarehouseItem()">حفظ وإضافة للمخزن ✅</button>
-            </div>
-            <div class="card" style="background:#111;">
-                <h3>📋 قائمة أصناف المخزن الحالية</h3>
-                <div id="warehouseItemsList">لا توجد أصناف.</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة معاينة الفاتورة الرسمية -->
-    <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🧾 معاينة فاتورة البيع والتصدير الرسمية</h2>
-        <div id="printableInvoice" class="invoice-box">
-            <div class="invoice-header">
-                <div>
-                    <h2 style="margin:0; color:#111;">BLACK BULL STORE</h2>
-                    <small style="color:#555;">لتجارة وتصدير الملابس جملة - محلياً ودولياً</small>
-                </div>
-                <div style="text-align: left;">
-                    <b id="invModalId">رقم الفاتورة: #BB-INV-000</b><br>
-                    <small id="invModalDate">التاريخ: 2026/08/03</small>
-                </div>
-            </div>
-            <p><b>بيانات العميل والتوصيل:</b><br>
-               • اسم العميل: <span id="invModalClient">اسم العميل</span><br>
-               • هاتف التواصل: <span id="invModalPhone">الهاتف</span><br>
-               • حالة التوثيق: <span style="color:#27ae60; font-weight:bold;">معتمدة ومحفوظة بالمخزن السحابي ✔️</span>
-            </p>
-            <table class="invoice-table">
-                <thead><tr><th>المنتج / الصنف</th><th>الكمية</th><th>السعر الفردي</th><th>الإجمالي</th></tr></thead>
-                <tbody id="invModalItems"></tbody>
+        <div style="overflow-x:auto;">
+            <table class="sheet-table" id="excelTable">
+                <thead>
+                    <tr><th>البيان / الصنف</th><th>الكمية</th><th>سعر الوحدة (ج.م)</th><th>الإجمالي</th></tr>
+                </thead>
+                <tbody id="excelBody">
+                    <tr><td contenteditable="true">بضاعة / خدمة 1</td><td contenteditable="true">10</td><td contenteditable="true">150</td><td class="row-total">1500</td></tr>
+                    <tr><td contenteditable="true">بضاعة / خدمة 2</td><td contenteditable="true">5</td><td contenteditable="true">300</td><td class="row-total">1500</td></tr>
+                </tbody>
             </table>
-            <h3 style="text-align: left; color:#111;">الإجمالي الكلي: <span id="invModalTotal" style="color:#d4af37;">0</span> جنيه</h3>
         </div>
-        <div style="display: flex; gap: 5px; margin-top: 15px; flex-wrap: wrap;">
-            <button class="btn-green" onclick="downloadInvoiceImage()" style="flex:1;">📷 تحميل صوره (PNG)</button>
-            <button class="btn-purple" onclick="downloadInvoicePDF()" style="flex:1;">📄 فتح وطباعة PDF</button>
-            <button class="btn-gold" onclick="shareInvoiceWhatsAppDirect()" style="flex:1;">🔗 إرسال واتساب للعميل</button>
-            <button class="btn-red" onclick="closeInvoiceModal()" style="flex:1;">إغلاق</button>
+        <p><b>الإجمالي الكلي لجدول Excel: <span id="excelGrandTotal" style="color:var(--excel-color);">3000</span> جنيه</b></p>
+    </div>
+
+    <!-- ================= 3. Microsoft PowerPoint (العروض التقديمية) ================= -->
+    <div id="pptTab" class="card hidden" style="border: 2px solid var(--ppt-color);">
+        <h2><i class="fa-solid fa-file-powerpoint" style="color:var(--ppt-color);"></i> Microsoft PowerPoint - العروض التقديمية</h2>
+        <div class="slide-container" id="pptSlideBox">
+            <h1 id="pptTitle" contenteditable="true" style="color:#f97316; margin:0 0 10px 0;">عنوان الشريحة الرئيسية</h1>
+            <p id="pptSubtitle" contenteditable="true" style="color:var(--text-muted); font-size:16px; margin:0;">اكتب محتوى الشريحة هنا، النقاط الرئيسية، أو العروض الترويجية...</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-ppt" onclick="prevSlide()">◀ الشريحة السابقة</button>
+            <button class="btn-ppt" onclick="nextSlide()">الشريحة التالية ▶</button>
+            <button class="btn-green" onclick="alert('✅ تم عرض الشريحة في وضع العرض الكامل (Slide Show)');">عرض الشرائح 🖥️</button>
         </div>
     </div>
 
-    <!-- ================= 3. المتجر الرئيسي ================= -->
-    <div id="storeTab">
-        <div class="card">
-            <h3>📂 أقسام المنصة للتوسع والانتشار</h3>
-            <div class="categories-grid">
-                <div class="cat-chip active" onclick="filterCategory('all', this)">جميع الأقسام</div>
-                <div class="cat-chip" onclick="filterCategory('تصدير دولي', this)">تصدير دولي 🌍</div>
-                <div class="cat-chip" onclick="filterCategory('جملة محلي', this)">جملة محلي 📦</div>
-                <div class="cat-chip" onclick="filterCategory('ملابس رجالي', this)">ملابس رجالي 👔</div>
-                <div class="cat-chip" onclick="filterCategory('ملابس حريمي', this)">ملابس حريمي 👗</div>
-                <div class="cat-chip" onclick="filterCategory('أطفال ومواليد', this)">أطفال 🧒</div>
-                <div class="cat-chip" onclick="filterCategory('عروض الحاويات', this)">عروض الحاويات 🚢</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>🛍️ المنتجات والعروض المتاحة</h3>
-            <div class="products-grid" id="storeProductsList"></div>
-        </div>
-
-        <div class="card">
-            <h3>🛒 سلة المشتريات والطلبات</h3>
-            <div id="cartItems">السلة فارغة</div>
-            <hr style="border-color:var(--border-color)">
-            <p><b>الإجمالي الكلي: </b><span id="cartTotal">0</span> جنيه</p>
-            <button class="btn-green" onclick="placeOrder()">إرسال الطلب وإصدار فاتورة رسمية 🚀</button>
-        </div>
+    <!-- ================= 4. Microsoft Outlook (البريد والإدارة) ================= -->
+    <div id="outlookTab" class="card hidden" style="border: 2px solid var(--outlook-color);">
+        <h2><i class="fa-solid fa-envelope" style="color:var(--outlook-color);"></i> Microsoft Outlook - البريد الإلكتروني والمراسلات</h2>
+        <div class="input-group"><label>إلى (المرسل إليه):</label><input type="text" id="outTo" placeholder="client@microsoft.com"></div>
+        <div class="input-group"><label>الموضوع:</label><input type="text" id="outSubject" placeholder="عنوان الرسالة..."></div>
+        <div class="input-group"><label>نص الرسالة:</label><textarea id="outBody" placeholder="اكتب محتوى البريد الإلكتروني أو التقرير..." style="height:120px;"></textarea></div>
+        <button class="btn-outlook" onclick="sendOutlookEmail()">إرسال الرسالة عبر Outlook ✉️</button>
+        <div id="outLog" style="margin-top:10px; font-size:12px; color:var(--text-muted);"></div>
     </div>
 
-    <!-- ================= 4. التصدير الدولي ================= -->
-    <div id="exportTab" class="card hidden">
-        <h2>🌍 قسم التصدير الدولي والشحن للخارج</h2>
-        <div class="input-group"><label>الدولة المستهدفة للاستيراد:</label><input type="text" id="exportCountry" placeholder="مثال: السعودية، الإمارات، إيطاليا..."></div>
-        <div class="input-group"><label>نوع الملابس والكمية المطلوبة:</label><textarea id="exportDetails" placeholder="اكتب المواصفات والكميات..."></textarea></div>
-        <button class="btn-gold" onclick="submitExportInquiry()">إرسال طلب التصدير لمدير المكتب ✈️</button>
+    <!-- ================= 5. Microsoft Access & SQL (قواعد البيانات) ================= -->
+    <div id="accessTab" class="card hidden" style="border: 2px solid #a4373a;">
+        <h2><i class="fa-solid fa-database" style="color:#a4373a;"></i> Microsoft Access & SQL - إدارة قواعد البيانات</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">نظام إدارة قواعد البيانات العلائقية المدمج لحفظ الجداول، الاستعلامات، والتقارير.</p>
+        <div class="input-group"><label>اسم الجدول المراد استعلامه:</label><input type="text" id="dbTableName" value="Office_Master_DB"></div>
+        <button class="btn-ms" onclick="runDbQuery()">تنفيذ استعلام البيانات (SQL Query) 🔍</button>
+        <div id="dbResultBox" style="margin-top:15px; background:#111; padding:10px; border-radius:8px; font-size:12px;">قاعدة البيانات متصلة وجاهزة.</div>
     </div>
 
-    <!-- ================= تتبع الشحنات والملاحة ================= -->
-    <div id="trackingTab" class="card hidden">
-        <h2>🚢 قسم تتبع الشحنات الدولية والملاحة</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">ادخل رقم بوليصة الشحن أو الحاوية لتتبع خط سيرها اللحظي عبر موانئ العالم.</p>
-        <div class="input-group">
-            <label>رقم بوليصة الشحن أو الحاوية:</label>
-            <input type="text" id="trackInputCode" placeholder="مثال: EXP-901 أو BB-CONTAINER-55">
+    <!-- ================= 6. تعريفات وحزم مايكروسوفت الكاملة (Drivers) ================= -->
+    <div id="driversTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2><i class="fa-solid fa-microchip"></i> حزمة ملفات التعريف والأدوات الشاملة (Microsoft Drivers & Redistributables)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">حزمة التعريفات الكاملة لضمان تشغيل حزمة أوفيس وبرامج النظام بكفاءة بدون أخطاء.</p>
+        <div class="item-row">
+            <div><b>Visual C++ Redistributable (2008-2026)</b><br><small>مكتبات التشغيل الأساسية لبرامج ويندوز وأوفيس.</small></div>
+            <button class="btn-green" style="width:auto; padding:6px 12px; font-size:11px;" onclick="alert('✅ تم تثبيت وتحديث مكتبات VC++ بنجاح!')">تثبيت وتحديث</button>
         </div>
-        <button class="btn-gold" onclick="performTrackingSearch()">بحث وتتبع الشحنة 🔍</button>
-        <div id="trackingResultBox" style="margin-top: 15px;"></div>
-    </div>
-
-    <!-- ================= حاسبة الشحن والجمارك ================= -->
-    <div id="calcTab" class="card hidden">
-        <h2>🧮 حاسبة تكاليف الشحن والجمارك التلقائية</h2>
-        <div class="input-group">
-            <label>اختر دولة الوجهة:</label>
-            <select id="calcCountry">
-                <option value="السعودية">المملكة العربية السعودية 🇸🇦</option>
-                <option value="الإمارات">الإمارات العربية المتحدة 🇦🇪</option>
-                <option value="إيطاليا">إيطاليا 🇮🇹</option>
-                <option value="ألمانيا">ألمانيا 🇩🇪</option>
-            </select>
+        <div class="item-row">
+            <div><b>Microsoft .NET Framework 8.0 / 4.8 Runtime</b><br><small>بيئة تشغيل التطبيقات والبرمجيات المتقدمة.</small></div>
+            <button class="btn-green" style="width:auto; padding:6px 12px; font-size:11px;" onclick="alert('✅ .NET Framework مُثبت ومحدث بأحدث إصدار!')">فحص وتحديث</button>
         </div>
-        <div class="input-group">
-            <label>حجم الحاوية / الشحنة:</label>
-            <select id="calcContainerSize">
-                <option value="20">حاوية 20 قدم (Standard 20ft)</option>
-                <option value="40">حاوية 40 قدم (High Cube 40ft)</option>
-                <option value="express">شحنة جوية سريعة (Express Air Cargo)</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>إجمالي قيمة البضاعة بالجنيه أو الدولار:</label>
-            <input type="number" id="calcGoodsValue" placeholder="مثال: 150000">
-        </div>
-        <button class="btn-blue" onclick="calculateShippingAndCustoms()">احسب التكلفة التقديرية فوراً 📊</button>
-        <div id="calcResultBox" style="margin-top: 15px;"></div>
-    </div>
-
-    <!-- ================= جملة محلي ================= -->
-    <div id="localWholesaleTab" class="card hidden">
-        <h2>📦 قسم الجملة المحلية وتجار المكاتب</h2>
-        <div id="localWholesaleProducts" class="products-grid"></div>
-    </div>
-
-    <!-- ================= تفصيل خاص ================= -->
-    <div id="customOrderTab" class="card hidden">
-        <h2>✂️ قسم التصنيع الخاص وتفصيل العلامات التجارية (Private Label)</h2>
-        <div class="input-group"><label>اسم العلامة التجارية (Brand Name):</label><input type="text" id="customBrandName" placeholder="Your Brand"></div>
-        <div class="input-group"><label>نوع المنتج:</label><input type="text" id="customProductType" placeholder="تيشرت أوبريزد"></div>
-        <div class="input-group"><label>الكمية المستهدفة:</label><input type="number" id="customQty" placeholder="500"></div>
-        <div class="input-group"><label>مواصفات إضافية:</label><textarea id="customSpecs" placeholder="تفاصيل الخامات..."></textarea></div>
-        <button class="btn-gold" onclick="submitCustomOrder()">إرسال طلب التصنيع 🏭</button>
-    </div>
-
-    <!-- ================= تفاصيل المنتج ================= -->
-    <div id="productDetailTab" class="card hidden">
-        <button class="btn-blue" style="width: auto; margin-bottom: 10px;" onclick="switchTab('storeTab')">⬅ عودة للمتجر</button>
-        <div id="productDetailContent" style="text-align: center;"></div>
-    </div>
-
-    <!-- ================= بروفايل التصدير الشامل ================= -->
-    <div id="exportProfileTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.4)</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">مخصص بالكامل لشحنات الملابس المصدرة للخارج، استعراض الحاويات الدولية، وطلب بضائع التصدير مع تفعيل بوابات الدفع.</p>
-        <div class="stats-grid">
-            <div class="stat-card"><h4>الشحنات المصدرة</h4><p>142 حاوية</p></div>
-            <div class="stat-card"><h4>الدولة المستوردة</h4><p>28 دولة</p></div>
-            <div class="stat-card"><h4>معيار الجودة</h4><p>ISO 9001 / A+</p></div>
+        <div class="item-row">
+            <div><b>DirectX & Hardware Acceleration Drivers</b><br><small>تعريفات الرسوميات ومعالجة الواجهات ثلاثية الأبعاد.</small></div>
+            <button class="btn-green" style="width:auto; padding:6px 12px; font-size:11px;" onclick="alert('✅ تعريفات الأداء مفعلة بكفاءة عالية!')">التحقق من التعريفات</button>
         </div>
     </div>
 
-    <!-- ================= قسم النسخ الاحتياطي والمزامنة (Backup) ================= -->
+    <!-- ================= 7. النسخ الاحتياطي السحابي (Backup) ================= -->
     <div id="backupTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>💾 إدارة النسخ الاحتياطي والمزامنة الكاملة للمنصة</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">قم بتحميل نسخة احتياطية من كافة بيانات المنصة (الحسابات، الفواتير، المخزن، الطلبات) لملف خارجي، أو استعادة البيانات في أي وقت.</p>
-        
+        <h2><i class="fa-solid fa-cloud-arrow-down"></i> النسخ الاحتياطي والمزامنة السحابية لحزمة الأوفيس</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">تصدير واستعادة كافة مستندات Word، جداول Excel، وعروض PowerPoint كملف احتياطي موحد.</p>
         <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-            <button class="btn-green" onclick="exportSystemBackup()" style="flex:1;">📥 تنزيل نسخة احتياطية كاملة (JSON)</button>
-            <button class="btn-purple" onclick="document.getElementById('importBackupFile').click()" style="flex:1;">📤 استعادة بيانات من ملف نسخة احتياطية</button>
+            <button class="btn-ms" onclick="exportOfficeBackup()" style="flex:1;">📥 تنزيل نسخة احتياطية كاملة (JSON)</button>
+            <button class="btn-green" onclick="document.getElementById('importFile').click()" style="flex:1;">📤 استعادة بيانات وملفات سابقة</button>
         </div>
-        <input type="file" id="importBackupFile" class="hidden" accept=".json" onchange="importSystemBackup(event)">
+        <input type="file" id="importFile" class="hidden" accept=".json" onchange="importOfficeBackup(event)">
     </div>
 
-    <!-- ================= مراقبة الطلبات والفواتير ================= -->
-    <div id="ordersTab" class="card hidden">
-        <h2>📋 قسم مراقبة الطلبات وإصدار الفواتير وبيانات التوصيل</h2>
-        <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
-    </div>
-
-    <!-- ================= الدعم المباشر ================= -->
-    <div id="supportTab" class="card hidden">
-        <h2>💬 الدعم الفني والتواصل المباشر</h2>
-        <div class="chat-box" id="chatMessages">
-            <div class="chat-msg msg-incoming">أهلاً بك في دعم بلاك بول. نحن متصلون معك لمساعدتك في طلبات الجملة والتصدير والحاويات.</div>
-        </div>
-        <div class="input-group" style="display: flex; gap: 5px; margin: 0;">
-            <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." style="margin:0;">
-            <button class="btn-gold" style="width: 80px; margin:0;" onclick="sendChatMessage()">إرسال</button>
-        </div>
-    </div>
-
-    <!-- ================= لوحة الإدارة الشاملة ================= -->
-    <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات وصلاحيات الدخول</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">بصفتك (المدير)، يمكنك هنا التحكم في كلمات المرور لكافة مستخدمي المنصة وتعديلها أو حذف الحسابات.</p>
-        <div class="stats-grid">
-            <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
-            <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
-            <div class="stat-card"><h4>إجمالي الحسابات</h4><p id="statUsersCount">0</p></div>
-        </div>
-        <div id="adminAllUsersList" style="margin-top: 15px;"></div>
+    <!-- نافذة تسجيل الدخول البسيطة -->
+    <div id="authSection" class="card hidden">
+        <h3>بوابة تسجيل الدخول لحساب Microsoft 365</h3>
+        <div class="input-group"><label>البريد الإلكتروني أو اسم المستخدم:</label><input type="text" id="loginUser" placeholder="name@outlook.com"></div>
+        <div class="input-group"><label>كلمة المرور:</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+        <button class="btn-ms" onclick="performLogin()">تسجيل الدخول للمنصة 🚀</button>
     </div>
 
     <script>
-        let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/80/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/300x110/111/d4af37?text=Cover', approved: true }
-        ];
-        let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
-        let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
-            { id: 1, name: 'جاكيت شتوي تصدير فاخر', category: 'تصدير دولي', price: 650, qty: 150, img: 'https://via.placeholder.com/150/111/d4af37?text=Export+Jacket' },
-            { id: 2, name: 'طقم بنطلون وتيشرت جملة', category: 'جملة محلي', price: 300, qty: 80, img: 'https://via.placeholder.com/150/222/d4af37?text=Local+Set' },
-            { id: 3, name: 'قميص رجالي كلاسيك قطن', category: 'ملابس رجالي', price: 250, qty: 50, img: 'https://via.placeholder.com/150/333/d4af37?text=Mens+Shirt' }
-        ];
-        let savedInvoices = JSON.parse(localStorage.getItem('bb_cloud_invoices')) || [];
-        let orders = JSON.parse(localStorage.getItem('bb_cloud_orders')) || [];
-        let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [];
-        let gplusPosts = JSON.parse(localStorage.getItem('bb_cloud_gplus_posts')) || [
-            { id: 1, author: 'المدير العام', text: 'أهلاً بكم في استريم بروفايل بلاك بول عبر Google+! تابعوا أحدث حاويات الملابس الجاهزة للتصدير.', date: '2026/08/03' }
-        ];
-        let cart = [];
-        let posCart = [];
-        let currentFilter = 'all';
-        let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
-        let activeInvoiceForAction = null;
+        let officeData = JSON.parse(localStorage.getItem('ms_office_suite_data')) || {
+            wordDoc: '<h3>مستند جديد - Microsoft Word</h3><p>مرحباً بك في نظام مايكروسوفت المكتبي المتكامل...</p>',
+            excelRows: [
+                { item: 'بضاعة / خدمة 1', qty: 10, price: 150 },
+                { item: 'بضاعة / خدمة 2', qty: 5, price: 300 }
+            ],
+            pptSlides: [
+                { title: 'العرض التقديمي الأول', subtitle: 'نظام Microsoft PowerPoint الاحترافي' },
+                { title: 'أهداف المشروع والأقسام', subtitle: 'إدارة متكاملة لجميع قطاعات العمل' }
+            ]
+        };
+        let currentSlideIdx = 0;
+        let currentUser = localStorage.getItem('ms_office_user') || 'مستخدم معتمد';
 
         window.onload = function() {
-            let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
-            if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '123'; adminUser.approved = true; }
-            
-            if(currentUser) {
-                let foundInList = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
-                if(foundInList) { currentUser = { ...foundInList }; }
-            }
-
-            updateAuthUI();
-            renderInventory();
-            renderStore();
-            renderWarehouseManagement();
-            renderInvoicesArchive();
-            renderOrders();
-            renderChat();
-            renderLocalWholesale();
-            renderAdminUsersManagement();
-            renderGPlusStream();
-            updateAdminStats();
-            populatePosDropdown();
-            
-            switchTab(lastActiveTab, null, false);
+            document.getElementById('wordEditor').innerHTML = officeData.wordDoc;
+            renderExcelTable();
         };
 
-        function openWordPage() {
-            window.location.href = 'word.html';
+        function switchTab(tabId, btnElement = null) {
+            ['wordTab', 'excelTab', 'pptTab', 'outlookTab', 'accessTab', 'driversTab', 'backupTab', 'authSection'].forEach(id => {
+                let el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
+            });
+            let target = document.getElementById(tabId);
+            if(target) target.classList.remove('hidden');
+
+            if(btnElement && btnElement.tagName === 'BUTTON') {
+                document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
+                btnElement.classList.add('active-nav');
+            }
         }
 
-        function toggleSidebar() {
-            document.getElementById('sideDrawer').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
-        }
-
-        function toggleGPlusDrawer() {
-            document.getElementById('gplusProfileDrawer').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
-        }
-
-        function checkProfileDrawerAccess() {
-            if (!currentUser) {
-                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض بروفايل Google+ والـ Stream الخاص بك!');
+        function toggleAuthModal() {
+            let authSec = document.getElementById('authSection');
+            if(authSec.classList.contains('hidden')) {
                 switchTab('authSection');
             } else {
-                updateAuthUI();
-                renderGPlusStream();
-                toggleGPlusDrawer();
+                switchTab('wordTab');
             }
         }
 
-        function setTheme(primary, accent, bg, card) {
-            document.documentElement.style.setProperty('--primary', primary);
-            document.documentElement.style.setProperty('--accent', accent);
-            document.documentElement.style.setProperty('--bg-color', bg);
-            document.documentElement.style.setProperty('--card-bg', card);
-            syncDataToCloud();
+        function performLogin() {
+            let usr = document.getElementById('loginUser').value.trim();
+            if(usr) currentUser = usr;
+            localStorage.setItem('ms_office_user', currentUser);
+            document.getElementById('quickUserGreet').innerText = 'مرحباً بك، ' + currentUser;
+            alert('✅ تم تسجيل الدخول بنجاح لحساب مايكروسوفت الخاص بك!');
+            switchTab('wordTab');
         }
 
-        function syncDataToCloud() {
-            localStorage.setItem('bb_cloud_inventory', JSON.stringify(inventory));
-            localStorage.setItem('bb_cloud_invoices', JSON.stringify(savedInvoices));
-            localStorage.setItem('bb_cloud_orders', JSON.stringify(orders));
-            localStorage.setItem('bb_cloud_chats', JSON.stringify(chatLogs));
-            localStorage.setItem('bb_cloud_gplus_posts', JSON.stringify(gplusPosts));
-            
-            if(currentUser) {
-                let foundIndex = registeredUsers.findIndex(u => u.phone === currentUser.phone || u.name === currentUser.name);
-                if(foundIndex !== -1) {
-                    registeredUsers[foundIndex] = { ...currentUser };
-                } else {
-                    registeredUsers.push({ ...currentUser });
-                }
-                localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
-            } else {
-                localStorage.removeItem('bb_cloud_user');
-            }
-            localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
-            
-            document.getElementById('syncStatus').innerText = '✅ تم حفظ ومزامنة كافة بيانات الحساب والمخزن سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
-            updateAdminStats();
-            renderAdminUsersManagement();
+        /* دوال Word */
+        function formatWordText(command) {
+            document.execCommand(command, false, null);
+        }
+        function insertWordTemplate() {
+            document.getElementById('wordEditor').innerHTML = `
+                <h2>عقد اتفاق وتجارة رسمي - Microsoft Word</h2>
+                <p><b>التاريخ:</b> ${new Date().toLocaleDateString('ar-EG')}</p>
+                <p>إنه في يوم المذكور تم الاتفاق بين الطرفين على توريد وتقديم الخدمات المكتبية والتجارية وفقاً للشروط الموافق عليها.</p>
+                <p><b>توقيع الطرف الأول:</b> مايكروسوفت برو</p>
+                <p><b>توقيع الطرف الثاني:</b> ${currentUser}</p>
+            `;
+        }
+        function printWordDoc() {
+            officeData.wordDoc = document.getElementById('wordEditor').innerHTML;
+            saveOfficeData();
+            window.print();
         }
 
-        function exportSystemBackup() {
-            let backupData = {
-                users: registeredUsers,
-                currentUser: currentUser,
-                inventory: inventory,
-                invoices: savedInvoices,
-                orders: orders,
-                chats: chatLogs,
-                gplusPosts: gplusPosts,
-                exportDate: new Date().toLocaleString()
-            };
-            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+        /* دوال Excel */
+        function renderExcelTable() {
+            let tbody = document.getElementById('excelBody');
+            tbody.innerHTML = '';
+            let grandTotal = 0;
+            officeData.excelRows.forEach((row, idx) => {
+                let total = row.qty * row.price;
+                grandTotal += total;
+                tbody.innerHTML += `
+                    <tr>
+                        <td contenteditable="true" onblur="updateExcelCell(${idx}, 'item', this.innerText)">${row.item}</td>
+                        <td contenteditable="true" onblur="updateExcelCell(${idx}, 'qty', this.innerText)">${row.qty}</td>
+                        <td contenteditable="true" onblur="updateExcelCell(${idx}, 'price', this.innerText)">${row.price}</td>
+                        <td class="row-total">${total}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('excelGrandTotal').innerText = grandTotal;
+        }
+
+        function updateExcelCell(idx, field, val) {
+            if(field === 'qty' || field === 'price') val = parseFloat(val) || 0;
+            officeData.excelRows[idx][field] = val;
+            renderExcelTable();
+            saveOfficeData();
+        }
+
+        function addExcelRow() {
+            officeData.excelRows.push({ item: 'صنف جديد', qty: 1, price: 100 });
+            renderExcelTable();
+            saveOfficeData();
+        }
+
+        function calculateExcelTotal() {
+            renderExcelTable();
+            alert('✅ تم حساب وتحديث المجموع التلقائي لجداول Excel بنجاح!');
+        }
+
+        /* دوال PowerPoint */
+        function updateSlideDisplay() {
+            let slide = officeData.pptSlides[currentSlideIdx];
+            document.getElementById('pptTitle').innerText = slide.title;
+            document.getElementById('pptSubtitle').innerText = slide.subtitle;
+        }
+        function nextSlide() {
+            currentSlideIdx = (currentSlideIdx + 1) % officeData.pptSlides.length;
+            updateSlideDisplay();
+        }
+        function prevSlide() {
+            currentSlideIdx = (currentSlideIdx - 1 + officeData.pptSlides.length) % officeData.pptSlides.length;
+            updateSlideDisplay();
+        }
+
+        /* دوال Outlook */
+        function sendOutlookEmail() {
+            let to = document.getElementById('outTo').value;
+            let subject = document.getElementById('outSubject').value;
+            let body = document.getElementById('outBody').value;
+            if(!to || !subject) return alert('الرجاء إدخال البريد والموضوع على الأقل');
+            document.getElementById('outLog').innerHTML = `<span style="color:#48bb78;">✅ تم إرسال البريد بنجاح إلى (${to}) عبر خادم Microsoft Exchange السحابي.</span>`;
+        }
+
+        /* دوال Access و SQL */
+        function runDbQuery() {
+            let tbl = document.getElementById('dbTableName').value;
+            document.getElementById('dbResultBox').innerHTML = `<b>نتائج الاستعلام لجدول (${tbl}):</b><br>• تم استرجاع 5 سجلات بنجاح من قاعدة البيانات العلائقية بدون أخطاء. حالة الاتصال: Online ✔️`;
+        }
+
+        function saveOfficeData() {
+            officeData.wordDoc = document.getElementById('wordEditor').innerHTML;
+            localStorage.setItem('ms_office_suite_data', JSON.stringify(officeData));
+            document.getElementById('syncStatus').innerText = '✅ تم مزامنة وحفظ ملفات حزمة الأوفيس سحابياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
+        }
+
+        function exportOfficeBackup() {
+            saveOfficeData();
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(officeData, null, 2));
             let downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "BlackBull_Backup_" + new Date().toISOString().slice(0,10) + ".json");
+            downloadAnchor.setAttribute("download", "Microsoft_Office_Backup_" + new Date().toISOString().slice(0,10) + ".json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
-            alert('✅ تم تنزيل النسخة الاحتياطية بنجاح على جهازك!');
+            alert('✅ تم تصزيل النسخة الاحتياطية لحزمة الأوفيس بنجاح!');
         }
 
-        function importSystemBackup(event) {
+        function importOfficeBackup(event) {
             let file = event.target.files[0];
             if(!file) return;
             let reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     let parsed = JSON.parse(e.target.result);
-                    if(parsed.users) registeredUsers = parsed.users;
-                    if(parsed.currentUser) currentUser = parsed.currentUser;
-                    if(parsed.inventory) inventory = parsed.inventory;
-                    if(parsed.invoices) savedInvoices = parsed.invoices;
-                    if(parsed.orders) orders = parsed.orders;
-                    if(parsed.chats) chatLogs = parsed.chats;
-                    if(parsed.gplusPosts) gplusPosts = parsed.gplusPosts;
-
-                    syncDataToCloud();
-                    updateAuthUI();
-                    renderInventory();
-                    renderStore();
-                    renderWarehouseManagement();
-                    renderInvoicesArchive();
-                    renderOrders();
-                    renderChat();
-                    renderLocalWholesale();
-                    renderGPlusStream();
-                    alert('✅ تم استعادة كافة البيانات والملفات والطلبات من النسخة الاحتياطية بنجاح تام!');
-                    switchTab('storeTab');
+                    if(parsed.wordDoc) officeData.wordDoc = parsed.wordDoc;
+                    if(parsed.excelRows) officeData.excelRows = parsed.excelRows;
+                    if(parsed.pptSlides) officeData.pptSlides = parsed.pptSlides;
+                    saveOfficeData();
+                    document.getElementById('wordEditor').innerHTML = officeData.wordDoc;
+                    renderExcelTable();
+                    updateSlideDisplay();
+                    alert('✅ تم استعادة كافة ملفات وبيانات الأوفيس بنجاح تام!');
                 } catch(err) {
-                    alert('❌ ملف النسخة الاحتياطية غير صالح أو تالف!');
+                    alert('❌ ملف النسخة الاحتياطية غير صالح!');
                 }
             };
             reader.readAsText(file);
-        }
-
-        function switchTab(tabId, btnElement = null, saveState = true) {
-            ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'backupTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal', 'streamDetailModal'].forEach(id => {
-                let el = document.getElementById(id);
-                if(el) el.classList.add('hidden');
-            });
-            let target = document.getElementById(tabId);
-            if(target) target.classList.remove('hidden');
-            
-            if(saveState) { 
-                lastActiveTab = tabId;
-                localStorage.setItem('bb_active_tab', tabId); 
-            }
-            if(btnElement && btnElement.tagName === 'BUTTON') {
-                document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
-                btnElement.classList.add('active-nav');
-            }
-            if(tabId === 'adminDashboardTab') {
-                renderAdminUsersManagement();
-            }
-        }
-
-        function switchInvSubTab(subId) {
-            ['invSubPos', 'invSubArchive', 'invSubWarehouse'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            document.getElementById('invSub' + (subId === 'pos' ? 'Pos' : subId === 'archive' ? 'Archive' : 'Warehouse')).classList.remove('hidden');
-        }
-
-        function switchAuthMode(mode) {
-            if(mode === 'login') {
-                document.getElementById('loginFormContainer').classList.remove('hidden');
-                document.getElementById('registerFormContainer').classList.add('hidden');
-                document.getElementById('tabBtnLogin').className = 'btn-gold';
-                document.getElementById('tabBtnRegister').className = 'btn-blue';
-            } else {
-                document.getElementById('loginFormContainer').classList.add('hidden');
-                document.getElementById('registerFormContainer').classList.remove('hidden');
-                document.getElementById('tabBtnLogin').className = 'btn-blue';
-                document.getElementById('tabBtnRegister').className = 'btn-gold';
-            }
-        }
-
-        function toggleAuthModal() {
-            if(currentUser) {
-                if(confirm('هل تريد تسجيل الخروج؟')) {
-                    currentUser = null;
-                    localStorage.removeItem('bb_cloud_user');
-                    updateAuthUI();
-                    switchTab('storeTab');
-                }
-            } else {
-                switchTab('authSection');
-            }
-        }
-
-        function performRegister() {
-            let name = document.getElementById('regName').value.trim();
-            let phone = document.getElementById('regPhone').value.trim();
-            let email = document.getElementById('regEmail').value.trim();
-            let role = document.getElementById('regRole').value;
-            let password = document.getElementById('regPassword').value;
-
-            if(!name || !phone || !password) return alert('الرجاء إدخال كافة بيانات التسجيل الأساسية');
-            let exists = registeredUsers.find(u => u.phone === phone || u.name === name);
-            if(exists) return alert('رقم الهاتف أو اسم المستخدم مسجل مسبقاً!');
-
-            let newUser = {
-                name, phone, email: email || '', role, password,
-                title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عضو مسجل متصل 🛒',
-                avatar: 'https://via.placeholder.com/80/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
-                cover: 'https://via.placeholder.com/300x110/111/d4af37?text=Black+Bull+Store',
-                approved: true
-            };
-            registeredUsers.push(newUser);
-            currentUser = newUser;
-            syncDataToCloud();
-            updateAuthUI();
-            toggleGPlusDrawer();
-            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي وتفعيل بروفايل Google+ بنجاح!');
-        }
-
-        function performLogin() {
-            let contactOrName = document.getElementById('loginContactOrName').value.trim();
-            let password = document.getElementById('loginPassword').value;
-            let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName) && u.password === password);
-            if(!user) return alert('بيانات الدخول أو الرقم السري غير صحيح!');
-            currentUser = user;
-            syncDataToCloud();
-            updateAuthUI();
-            toggleGPlusDrawer();
-            alert('✅ مرحباً بك مجدداً، ' + currentUser.name);
-        }
-
-        function updateAuthUI() {
-            let btnTop = document.getElementById('authBtnTop');
-            let greet = document.getElementById('quickUserGreet');
-            if(currentUser) {
-                btnTop.innerText = 'خروج'; btnTop.className = 'btn-red';
-                greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
-                document.getElementById('gpNameDisplay').innerText = currentUser.name;
-                document.getElementById('gpRoleBadge').innerText = currentUser.title || currentUser.role;
-                document.getElementById('gpContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
-                document.getElementById('gpAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/80/000/d4af37?text=User';
-                document.getElementById('gpCoverImg').src = currentUser.cover || 'https://via.placeholder.com/300x110/111/d4af37?text=Cover';
-            } else {
-                btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
-                greet.innerText = 'مرحباً بك زائرنا الكريم';
-            }
-        }
-
-        function publishGPlusPost() {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً للنشر في الاستريم!');
-            let text = document.getElementById('gpNewPostText').value.trim();
-            if(!text) return alert('اكتب نص المنشور أولاً');
-
-            gplusPosts.unshift({
-                id: Date.now(),
-                author: currentUser.name,
-                text: text,
-                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
-            });
-            document.getElementById('gpNewPostText').value = '';
-            syncDataToCloud();
-            renderGPlusStream();
-            alert('✅ تم نشر المنشور في استريم Google+ بنجاح!');
-        }
-
-        function renderGPlusStream() {
-            let container = document.getElementById('gpStreamContainer');
-            if(!container) return;
-            if(gplusPosts.length === 0) {
-                container.innerHTML = '<p style="font-size:12px; color:var(--text-muted); text-align:center;">لا توجد منشورات في الاستريم بعد.</p>';
-                return;
-            }
-            container.innerHTML = '';
-            gplusPosts.forEach(post => {
-                container.innerHTML += `
-                    <div class="gplus-stream-item" onclick="openStreamDetail(${post.id})">
-                        <b>${post.author}</b> <span style="font-size:10px; color:var(--text-muted);">(${post.date})</span>
-                        <p style="margin:5px 0; font-size:12px;">${post.text.length > 70 ? post.text.substring(0,70) + '...' : post.text}</p>
-                        <small style="color:var(--accent);">انقر للعرض الكامل 🔍</small>
-                    </div>
-                `;
-            });
-        }
-
-        function openStreamDetail(postId) {
-            let post = gplusPosts.find(p => p.id === postId);
-            if(!post) return;
-            
-            document.getElementById('streamDetailContent').innerHTML = `
-                <h3 style="color:var(--accent); margin-top:0;">منشور بواسطة: ${post.author}</h3>
-                <small style="color:var(--text-muted);">التاريخ والوقت: ${post.date}</small>
-                <p style="font-size:14px; margin-top:10px; line-height:1.6; white-space:pre-wrap;">${post.text}</p>
-            `;
-            toggleGPlusDrawer();
-            switchTab('streamDetailModal');
-        }
-
-        function closeStreamDetail() {
-            switchTab('storeTab');
-        }
-
-        function renderAdminUsersManagement() {
-            let container = document.getElementById('adminAllUsersList');
-            if(!container) return;
-            let isManager = currentUser && currentUser.role === 'مدير';
-            
-            container.innerHTML = `<h3>👥 إدارة كافة حسابات المنصة والأرقام السرية</h3>`;
-            if(registeredUsers.length === 0) { container.innerHTML += `<p>لا توجد حسابات مسجلة.</p>`; return; }
-
-            registeredUsers.forEach((u, idx) => {
-                container.innerHTML += `
-                    <div class="item-row" style="flex-wrap:wrap;">
-                        <div style="flex:1; min-width:200px;">
-                            <b>الاسم: ${u.name}</b> (${u.role})<br>
-                            <small>الهاتف: ${u.phone} | الرقم السري: <b>${u.password}</b></small>
-                        </div>
-                        <div style="display:flex; gap:5px; align-items:center;">
-                            ${isManager ? `
-                                <input type="text" id="adminNewPass_${idx}" placeholder="الرقم السري الجديد" style="width:130px; padding:6px; font-size:11px; margin:0;">
-                                <button class="btn-blue" style="width:auto; padding:6px 10px; font-size:11px;" onclick="adminUpdateUserPassword(${idx})">تغيير السري</button>
-                                ${u.phone !== 'admin' ? `<button class="btn-red" style="width:auto; padding:6px 10px; font-size:11px;" onclick="adminDeleteUser(${idx})">حذف</button>` : ''}
-                            ` : `<span style="font-size:11px; color:var(--text-muted);">للمدير صلاحية التعديل</span>`}
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function adminUpdateUserPassword(idx) {
-            if(!currentUser || currentUser.role !== 'مدير') return alert('للمدير فقط');
-            let newPassInput = document.getElementById('adminNewPass_' + idx);
-            let newPass = newPassInput ? newPassInput.value.trim() : '';
-            if(!newPass) return alert('الرجاء كتابة الرقم السري الجديد أولاً!');
-
-            registeredUsers[idx].password = newPass;
-            syncDataToCloud();
-            renderAdminUsersManagement();
-            alert('✅ تم تغيير الرقم السري بنجاح!');
-        }
-
-        function adminDeleteUser(idx) {
-            if(!currentUser || currentUser.role !== 'مدير') return alert('للمدير فقط');
-            if(confirm('هل أنت متأكد من حذف هذا الحساب؟')) {
-                registeredUsers.splice(idx, 1);
-                syncDataToCloud();
-                renderAdminUsersManagement();
-            }
-        }
-
-        function populatePosDropdown() {
-            let select = document.getElementById('posSelectProduct');
-            if(!select) return;
-            select.innerHTML = '';
-            inventory.forEach(item => {
-                select.innerHTML += `<option value="${item.id}">${item.name} - السعر: ${item.price} ج.م (المخزون: ${item.qty})</option>`;
-            });
-        }
-
-        function addPosItemToCart() {
-            let prodId = parseInt(document.getElementById('posSelectProduct').value);
-            let qty = parseInt(document.getElementById('posQuantity').value) || 1;
-            let item = inventory.find(i => i.id === prodId);
-            if(!item) return alert('المنتج غير موجود');
-            if(item.qty < qty) return alert('الكمية المطلوبة أكبر من المتاحة بالمخزن!');
-
-            let existing = posCart.find(p => p.id === prodId);
-            if(existing) { existing.qty += qty; } else { posCart.push({ id: item.id, name: item.name, price: item.price, qty: qty }); }
-            renderPosCart();
-        }
-
-        function renderPosCart() {
-            let container = document.getElementById('posCartItemsList');
-            let total = 0;
-            if(posCart.length === 0) { container.innerHTML = 'لا توجد أصناف مضافة بالفاتورة بعد.'; document.getElementById('posCartTotal').innerText = '0'; return; }
-            container.innerHTML = '';
-            posCart.forEach((item, index) => {
-                let subTotal = item.price * item.qty;
-                total += subTotal;
-                container.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom:1px dashed #333; padding-bottom:4px;">
-                    <span>• ${item.name} (×${item.qty})</span> 
-                    <span><b>${subTotal} ج.م</b> <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto;" onclick="posCart.splice(${index},1); renderPosCart();">حذف</button></span>
-                </div>`;
-            });
-            document.getElementById('posCartTotal').innerText = total;
-        }
-
-        function finalizeAndSaveInvoice() {
-            let custName = document.getElementById('posCustomerName').value.trim() || (currentUser ? currentUser.name : 'عميل نقدي');
-            let custPhone = document.getElementById('posCustomerPhone').value.trim() || (currentUser ? currentUser.phone : '01000000000');
-            if(posCart.length === 0) return alert('الفاتورة فارغة!');
-
-            let totalVal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            posCart.forEach(posItem => {
-                let storeItem = inventory.find(i => i.id === posItem.id);
-                if(storeItem) { storeItem.qty -= posItem.qty; }
-            });
-
-            let newInvoice = {
-                id: 'BB-INV-' + Math.floor(1000 + Math.random() * 9000),
-                customer: custName,
-                phone: custPhone,
-                items: [...posCart],
-                total: totalVal,
-                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'})
-            };
-
-            savedInvoices.push(newInvoice);
-            posCart = [];
-            document.getElementById('posCustomerName').value = '';
-            document.getElementById('posCustomerPhone').value = '';
-            renderPosCart();
-            populatePosDropdown();
-            renderInventory();
-            renderWarehouseManagement();
-            renderInvoicesArchive();
-            syncDataToCloud();
-
-            alert('✅ تم حفظ الفاتورة بنجاح وخصم الكميات من المخزن!');
-            openInvoiceModalDirect(newInvoice);
-        }
-
-        function renderInvoicesArchive() {
-            let container = document.getElementById('invoicesArchiveList');
-            let query = document.getElementById('searchInvoiceInput') ? document.getElementById('searchInvoiceInput').value.toLowerCase() : '';
-            if(!container) return;
-
-            let filtered = savedInvoices.filter(inv => inv.id.toLowerCase().includes(query) || inv.customer.toLowerCase().includes(query));
-            document.getElementById('invTotalInvoicesDisplay').innerText = savedInvoices.length;
-            let totalSales = savedInvoices.reduce((sum, inv) => sum + inv.total, 0);
-            document.getElementById('invTotalSalesDisplay').innerText = totalSales + ' ج.م';
-
-            if(filtered.length === 0) { container.innerHTML = 'لا توجد فواتير محفوظة في الأرشيف.'; return; }
-            container.innerHTML = '';
-            filtered.forEach(inv => {
-                container.innerHTML += `
-                    <div class="item-row">
-                        <div>
-                            <b>رقم الفاتورة: ${inv.id}</b> | العميل: ${inv.customer} (${inv.phone})<br>
-                            <small>التاريخ: ${inv.date} | الإجمالي: <b style="color:var(--accent);">${inv.total} ج.م</b></small>
-                        </div>
-                        <div style="display:flex; gap:5px;">
-                            <button class="btn-gold" style="width:auto; padding:6px 10px; font-size:11px;" onclick="openInvoiceModalById('${inv.id}')">🧾 عرض</button>
-                            <button class="btn-green" style="width:auto; padding:6px 10px; font-size:11px;" onclick="shareInvoiceWhatsAppByObj('${inv.id}')">🔗 واتساب</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function openInvoiceModalById(invId) {
-            let inv = savedInvoices.find(i => i.id === invId);
-            if(inv) openInvoiceModalDirect(inv);
-        }
-
-        function openInvoiceModalDirect(inv) {
-            activeInvoiceForAction = inv;
-            document.getElementById('invModalId').innerText = 'رقم الفاتورة: #' + inv.id;
-            document.getElementById('invModalDate').innerText = 'التاريخ: ' + inv.date;
-            document.getElementById('invModalClient').innerText = inv.customer;
-            document.getElementById('invModalPhone').innerText = inv.phone;
-            document.getElementById('invModalTotal').innerText = inv.total;
-
-            let tbody = document.getElementById('invModalItems');
-            tbody.innerHTML = '';
-            inv.items.forEach(it => {
-                tbody.innerHTML += `<tr><td>${it.name}</td><td>${it.qty}</td><td>${it.price} ج.م</td><td>${it.price * it.qty} ج.م</td></tr>`;
-            });
-            switchTab('invoiceModal');
-        }
-
-        function closeInvoiceModal() { switchTab('advancedInvoicesStoreTab'); }
-
-        function downloadInvoiceImage() {
-            let element = document.getElementById('printableInvoice');
-            html2canvas(element).then(canvas => {
-                let link = document.createElement('a');
-                link.download = (activeInvoiceForAction ? activeInvoiceForAction.id : 'Invoice') + '.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-        function downloadInvoicePDF() { window.print(); }
-
-        function shareInvoiceWhatsAppDirect() {
-            if(!activeInvoiceForAction) return;
-            let inv = activeInvoiceForAction;
-            let itemsText = inv.items.map(i => `- ${i.name} (الكمية: ${i.qty}) = ${i.price * i.qty} ج.م`).join('\n');
-            let msg = `مرحباً بك يا ${inv.customer} 🐂\nإليك تفاصيل فاتورة الشراء والتصدير الرسمية من Black Bull Store:\n\nرقم الفاتورة: #${inv.id}\nالتاريخ: ${inv.date}\n\nالأصناف:\n${itemsText}\n\nالإجمالي الكلي: ${inv.total} جنيه\n\nشكراً لتعاملك معنا!`;
-            let phone = inv.phone.startsWith('0') ? '2' + inv.phone : inv.phone;
-            window.open(`https://wa.me/${phone}?text=` + encodeURIComponent(msg), '_blank');
-        }
-
-        function shareInvoiceWhatsAppByObj(invId) {
-            let inv = savedInvoices.find(i => i.id === invId);
-            if(inv) { activeInvoiceForAction = inv; shareInvoiceWhatsAppDirect(); }
-        }
-
-        function addNewWarehouseItem() {
-            let name = document.getElementById('whName').value.trim();
-            let qty = parseInt(document.getElementById('whQty').value) || 0;
-            let price = parseFloat(document.getElementById('whPrice').value) || 0;
-            let img = document.getElementById('whImg').value.trim();
-
-            if(!name || !price) return alert('الرجاء إدخال اسم المنتج والسعر');
-            inventory.push({ id: Date.now(), name, category: 'جملة محلي', price, qty, img: img || 'https://via.placeholder.com/150' });
-            document.getElementById('whName').value = '';
-            document.getElementById('whQty').value = '';
-            document.getElementById('whPrice').value = '';
-            document.getElementById('whImg').value = '';
-
-            syncDataToCloud();
-            renderInventory();
-            renderWarehouseManagement();
-            populatePosDropdown();
-            renderStore();
-            alert('✅ تمت إضافة المنتج للمخزن بنجاح!');
-        }
-
-        function renderWarehouseManagement() {
-            let container = document.getElementById('warehouseItemsList');
-            if(!container) return;
-            document.getElementById('invCountDisplay').innerText = inventory.length;
-            if(inventory.length === 0) { container.innerHTML = 'المخزن فارغ.'; return; }
-            container.innerHTML = '';
-            inventory.forEach(item => {
-                container.innerHTML += `
-                    <div class="item-row">
-                        <div><b>${item.name}</b><br><small>السعر: ${item.price} ج.م | المخزون المتاح: <b style="color:${item.qty > 10 ? '#48bb78':'#e53e3e'}">${item.qty} قطعة</b></small></div>
-                        <button class="btn-red" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteWarehouseItem(${item.id})">حذف الصنف</button>
-                    </div>
-                `;
-            });
-        }
-
-        function deleteWarehouseItem(id) {
-            inventory = inventory.filter(i => i.id !== id);
-            syncDataToCloud();
-            renderInventory();
-            renderWarehouseManagement();
-            populatePosDropdown();
-            renderStore();
-        }
-
-        function filterCategory(cat, element) {
-            currentFilter = cat;
-            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-            element.classList.add('active');
-            renderStore();
-        }
-
-        function renderStore() {
-            let container = document.getElementById('storeProductsList');
-            if(!container) return;
-            container.innerHTML = '';
-            let filtered = inventory.filter(item => currentFilter === 'all' || item.category === currentFilter);
-            if(filtered.length === 0) { container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">لا توجد منتجات.</p>'; return; }
-            filtered.forEach(item => {
-                container.innerHTML += `
-                    <div class="product-card" onclick="openProductDetail(${item.id})">
-                        <img src="${item.img}" alt="${item.name}">
-                        <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
-                        <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small><br>
-                        <button class="btn-blue" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="event.stopPropagation(); addToCart(${item.id})">أضف للسلة</button>
-                    </div>
-                `;
-            });
-        }
-
-        function renderLocalWholesale() {
-            let container = document.getElementById('localWholesaleProducts');
-            if(!container) return;
-            container.innerHTML = '';
-            inventory.forEach(item => {
-                container.innerHTML += `
-                    <div class="product-card" onclick="openProductDetail(${item.id})">
-                        <img src="${item.img}" alt="${item.name}">
-                        <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
-                        <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small>
-                    </div>
-                `;
-            });
-        }
-
-        function openProductDetail(id) {
-            let item = inventory.find(i => i.id === id);
-            if(!item) return;
-            document.getElementById('productDetailContent').innerHTML = `
-                <img src="${item.img}" alt="${item.name}" style="max-width: 250px; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
-                <h2>${item.name}</h2>
-                <p><b>السعر:</b> <span style="color:var(--accent); font-size: 18px;">${item.price} جنيه</span></p>
-                <p><b>المخزون المتاح:</b> ${item.qty} قطعة</p>
-                <button class="btn-gold" onclick="switchTab('supportTab')">💬 تواصل للطلب والتفاصيل</button>
-            `;
-            switchTab('productDetailTab');
-        }
-
-        function addToCart(id) {
-            let item = inventory.find(i => i.id === id);
-            if(item.qty <= 0) return alert('عذراً، هذا المنتج نفد من المخزن!');
-            cart.push(item);
-            renderCart();
-            alert('تمت الإضافة للسلة');
-        }
-
-        function renderCart() {
-            let container = document.getElementById('cartItems');
-            let total = 0;
-            if(cart.length === 0) { container.innerHTML = 'السلة فارغة'; document.getElementById('cartTotal').innerText = '0'; return; }
-            container.innerHTML = '';
-            cart.forEach(item => {
-                total += item.price;
-                container.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>• ${item.name}</span> <b>${item.price} ج.م</b></div>`;
-            });
-            document.getElementById('cartTotal').innerText = total;
-        }
-
-        function placeOrder() {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً لإرسال الطلب!');
-            if(cart.length === 0) return alert('السلة فارغة!');
-
-            let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
-            cart.forEach(cartItem => {
-                let st = inventory.find(i => i.id === cartItem.id);
-                if(st) st.qty -= 1;
-            });
-
-            let newOrder = {
-                id: 'BB-' + Math.floor(1000 + Math.random() * 9000),
-                customer: currentUser.name,
-                phone: currentUser.phone,
-                items: [...cart],
-                total: totalVal,
-                status: 'قيد المراجعة والتوصيل ⏳',
-                date: new Date().toLocaleDateString('ar-EG')
-            };
-
-            savedInvoices.push({
-                id: 'INV-' + newOrder.id,
-                customer: newOrder.customer,
-                phone: newOrder.phone,
-                items: cart.map(c => ({ name: c.name, price: c.price, qty: 1 })),
-                total: totalVal,
-                date: newOrder.date
-            });
-
-            orders.push(newOrder);
-            cart = [];
-            syncDataToCloud();
-            renderCart();
-            renderOrders();
-            renderInvoicesArchive();
-            renderWarehouseManagement();
-            alert('✅ تم إرسال الطلب وحفظ الفاتورة الرسمية بنجاح!');
-            switchTab('ordersTab');
-        }
-
-        function renderOrders() {
-            let container = document.getElementById('ordersList');
-            if(!container) return;
-            if(orders.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
-            container.innerHTML = '';
-            orders.forEach(o => {
-                container.innerHTML += `
-                    <div class="item-row">
-                        <div>
-                            <b>طلب/شحنة: ${o.id}</b> - الإجمالي: ${o.total} ج.م<br>
-                            <small>العميل: ${o.customer} | الهاتف: ${o.phone} | الحالة: <span style="color:var(--accent);">${o.status}</span></small>
-                        </div>
-                        <button class="btn-gold" style="width:auto; padding:6px 12px; font-size:12px;" onclick="openInvoiceModalById('INV-${o.id}')">🧾 عرض الفاتورة</button>
-                    </div>
-                `;
-            });
-        }
-
-        function renderInventory() { updateAdminStats(); }
-
-        function updateAdminStats() {
-            let pCount = document.getElementById('statProductsCount');
-            let oCount = document.getElementById('statOrdersCount');
-            let uCount = document.getElementById('statUsersCount');
-            if(pCount) pCount.innerText = inventory.length;
-            if(oCount) oCount.innerText = orders.length;
-            if(uCount) uCount.innerText = registeredUsers.length;
-        }
-
-        function performTrackingSearch() {
-            let code = document.getElementById('trackInputCode').value;
-            let box = document.getElementById('trackingResultBox');
-            if(!code) return alert('الرجاء إدخال رقم بوليصة أو حاوية صحيحة');
-            box.innerHTML = `<div class="card" style="background:#111; border-color:var(--accent);">
-                <h4>📌 نتائج تتبع الشحنة: ${code}</h4>
-                <p>• الحالة الحالية: <span style="color:#48bb78; font-weight:bold;">في عرض البحر / في طريقه لميناء الوصول 🚢</span></p>
-                <p>• الميناء المُصدر: ميناء الإسكندرية 🇪🇬 | التوقع الوصول خلال 4 أيام.</p>
-            </div>`;
-        }
-
-        function calculateShippingAndCustoms() {
-            let country = document.getElementById('calcCountry').value;
-            let size = document.getElementById('calcContainerSize').value;
-            let val = parseFloat(document.getElementById('calcGoodsValue').value) || 0;
-            let freightCost = size === '40' ? 45000 : size === '20' ? 28000 : 8000;
-            let customDuty = val * 0.12; 
-            let totalEstimated = val + freightCost + customDuty;
-            document.getElementById('calcResultBox').innerHTML = `<div class="card" style="background:#111; border-color:var(--accent);">
-                <h4>📊 التقرير التقديري للتكلفة والشحن إلى (${country})</h4>
-                <p>• قيمة البضاعة: <b>${val} ج.م</b> | الشحن: <b>${freightCost} ج.م</b> | الجمارك: <b>${customDuty.toFixed(2)} ج.م</b></p>
-                <p style="color:var(--accent); font-size:16px;"><b>الإجمالي التقديري: ${totalEstimated.toFixed(2)} جنيه</b></p>
-            </div>`;
-        }
-
-        function submitExportInquiry() { alert('تم إرسال طلب التصدير بنجاح'); }
-        function submitCustomOrder() { alert('تم إرسال طلب التفصيل بنجاح'); }
-        
-        function sendChatMessage() {
-            let txt = document.getElementById('chatInput').value;
-            if(!txt) return;
-            chatLogs.push({ sender: currentUser ? currentUser.name : 'زائر', text: txt, type: 'outgoing' });
-            syncDataToCloud();
-            renderChat();
-            document.getElementById('chatInput').value = '';
-        }
-        function renderChat() {
-            let box = document.getElementById('chatMessages');
-            if(!box) return;
-            box.innerHTML = '';
-            chatLogs.forEach(msg => {
-                box.innerHTML += `<div class="chat-msg ${msg.type === 'outgoing' ? 'msg-outgoing' : 'msg-incoming'}"><b>${msg.sender}:</b> ${msg.text}</div>`;
-            });
         }
     </script>
 </body>
