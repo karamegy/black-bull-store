@@ -155,7 +155,7 @@
         <button onclick="switchTab('loyaltyTab'); toggleSidebar()"><i class="fa-solid fa-star"></i> برنامج الولاء والنقاط</button>
         <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> مراقبة الطلبات</button>
         <button onclick="switchTab('exportProfileTab'); toggleSidebar()"><i class="fa-solid fa-network-wired"></i> بروفايل التصدير الشامل</button>
-        <button onclick="checkProfileAccess(); toggleSidebar()"><i class="fa-solid fa-user"></i> حسابي الشخصي</button>
+        <button onclick="checkProfileAccess(); toggleSidebar()"><i class="fa-solid fa-user"></i> حسابي الشخصي المتصل</button>
         <button onclick="openWordPage()"><i class="fa-solid fa-file-word" style="color: #3182ce;"></i> مستندات Word</button>
         <button onclick="switchTab('backupTab'); toggleSidebar()"><i class="fa-solid fa-database" style="color: var(--accent);"></i> النسخ الاحتياطي والمزامنة 💾</button>
         <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني</button>
@@ -194,7 +194,7 @@
         <button onclick="switchTab('trackingTab', this)">🚢 التتبع</button>
         <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
-        <button onclick="checkProfileAccess(this)">👤 حسابي</button>
+        <button onclick="checkProfileAccess(this)">👤 حسابي المتصل</button>
         <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database"></i> النسخ الاحتياطي</button>
         <button onclick="openWordPage()" style="background: #3182ce; color: white;"><i class="fa-solid fa-file-word"></i> Word</button>
     </div>
@@ -447,7 +447,7 @@
         </div>
     </div>
 
-    <!-- ================= الملف الشخصي (Profile) الشخص المسجل حقيقياً ================= -->
+    <!-- ================= الملف الشخصي الحقيقي المتصل (Profile) ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
             <!-- غلاف الحساب الشخصي - النقر يفتح اختيار ملف الغلاف -->
@@ -461,16 +461,16 @@
         </div>
         <div class="profile-info">
             <h2 id="profileNameDisplay">اسم المستخدم الحقيقي</h2>
-            <span id="profileTitleBadge" class="title-badge">عضو معتمد</span>
+            <span id="profileTitleBadge" class="title-badge">عضو متصل معتمد</span>
             <p style="color: var(--text-muted); font-size: 13px;" id="profileContactDisplay">الهاتف أو البريد</p>
-            <span class="status-badge" id="profileRoleBadge">حساب حقيقي مسجل وموثق سحابياً ✔️</span>
+            <span class="status-badge" id="profileRoleBadge">حساب حقيقي متصل وموثق سحابياً ✔️</span>
         </div>
         
         <hr style="margin: 20px 0; border-color:var(--border-color);">
         
         <!-- قسم تعديل معلومات الحساب الشخصي (ظاهر مباشرة بشكل منظم ودائم) -->
         <div class="card" style="background:#111; border: 1px dashed var(--accent);">
-            <h3>⚙️ تعديل بياناتك الشخصية وتثبيتها بشكل نهائي</h3>
+            <h3>⚙️ تعديل بياناتك الشخصية المتصلة وتثبيتها بشكل نهائي</h3>
             <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="editName"></div>
             <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="editPhone"></div>
             <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="editEmail"></div>
@@ -491,7 +491,7 @@
         <hr style="margin: 20px 0; border-color:var(--border-color);">
 
         <!-- عرض كافة الشحنات والطلبات والتفاعلات الخاصة بالحساب الحقيقي المسجل -->
-        <h3>📦 كافة طلباتك، شحناتك وفواتيرك المسجلة</h3>
+        <h3>📦 كافة طلباتك، شحناتك وفواتيرك المتصلة</h3>
         <div id="userProfileOrdersList" style="margin-top: 10px;">
             <p style="color:var(--text-muted); text-align:center;">لا توجد طلبات أو شحنات مسجلة باسمك حتى الآن.</p>
         </div>
@@ -682,7 +682,7 @@
 
         function checkProfileAccess(btnElement = null) {
             if (!currentUser) {
-                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي الحقيقي!');
+                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي المتصل الحقيقي!');
                 switchTab('authSection', btnElement);
             } else {
                 updateAuthUI();
@@ -763,7 +763,7 @@
 
             let newUser = {
                 name, phone, email: email || '', role, password,
-                title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عضو مسجل حقيقي 🛒',
+                title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عضو مسجل متصل 🛒',
                 avatar: 'https://via.placeholder.com/110/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
                 cover: 'https://via.placeholder.com/600x160/111/d4af37?text=Black+Bull+Store',
                 approved: true
@@ -774,7 +774,7 @@
             updateAuthUI();
             renderUserProfileOrders();
             switchTab('profileTab');
-            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي وتفعيل بنجاح!');
+            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي المتصل وتفعيله بنجاح!');
         }
 
         function performLogin() {
@@ -787,7 +787,7 @@
             updateAuthUI();
             renderUserProfileOrders();
             switchTab('profileTab');
-            alert('✅ مرحباً بك مجدداً في حسابك الشخصي، ' + currentUser.name);
+            alert('✅ مرحباً بك مجدداً في حسابك الشخصي المتصل، ' + currentUser.name);
         }
 
         function updateAuthUI() {
@@ -818,14 +818,14 @@
             let userInvoices = savedInvoices.filter(i => i.phone === currentUser.phone || i.customer === currentUser.name);
 
             if(userOrders.length === 0 && userInvoices.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted); text-align:center;">لا توجد طلبات أو شحنات مسجلة باسمك حتى الآن.</p>`;
+                container.innerHTML = `<p style="color:var(--text-muted); text-align:center;">لا توجد طلبات أو شحنات متصلة مسجلة باسمك حتى الآن.</p>`;
                 return;
             }
 
             container.innerHTML = '';
             
             if(userOrders.length > 0) {
-                container.innerHTML += `<h4 style="color:var(--accent); margin-bottom:5px;">📋 قائمة طلباتك وأوردراتك:</h4>`;
+                container.innerHTML += `<h4 style="color:var(--accent); margin-bottom:5px;">📋 قائمة طلباتك وأوردراتك المتصلة:</h4>`;
                 userOrders.forEach(o => {
                     container.innerHTML += `
                         <div class="item-row" style="background:#111; padding:8px 12px; border-radius:8px; margin-bottom:5px;">
@@ -840,7 +840,7 @@
             }
 
             if(userInvoices.length > 0) {
-                container.innerHTML += `<h4 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">🧾 فواتيرك الصادرة ومعاملاتك:</h4>`;
+                container.innerHTML += `<h4 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">🧾 فواتيرك الصادرة ومعاملاتك المتصلة:</h4>`;
                 userInvoices.forEach(inv => {
                     container.innerHTML += `
                         <div class="item-row" style="background:#111; padding:8px 12px; border-radius:8px; margin-bottom:5px;">
@@ -868,7 +868,7 @@
                         document.getElementById('userCoverImg').src = currentUser.cover;
                     }
                     syncDataToCloud();
-                    alert('✨ تم رفع وتثبيت الصورة بنجاح وحفظها بشكل دائم في حسابك!');
+                    alert('✨ تم رفع وتثبيت الصورة بنجاح وحفظها بشكل دائم في حسابك المتصل!');
                 };
                 reader.readAsDataURL(file);
             }
@@ -889,7 +889,7 @@
             syncDataToCloud();
             updateAuthUI();
             renderUserProfileOrders();
-            alert('✅ تم حفظ وتثبيت كافة تعديلات بياناتك الشخصية وصورك بنجاح تام ولن تختفي عند التحديث!');
+            alert('✅ تم حفظ وتثبيت كافة تعديلات بياناتك الشخصية وصورك بنجاح تام ولم تعد تختفي عند التحديث!');
         }
 
         function renderAdminUsersManagement() {
