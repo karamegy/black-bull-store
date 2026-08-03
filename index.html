@@ -115,9 +115,9 @@
         .cat-chip.active { background: var(--accent); color: #111; }
 
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-        .product-card { border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; background: #15181e; transition: 0.2s; }
+        .product-card { border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center; background: #15181e; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
-        .product-card img, .product-card video { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
+        .product-card img, .product-card video { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; cursor: pointer; }
 
         .media-lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; justify-content: center; align-items: center; flex-direction: column; padding: 20px; box-sizing: border-box; }
         .media-lightbox.active { display: flex; }
@@ -162,7 +162,7 @@
         <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> إدارة الطلبات والمشتريات 📋</button>
         <button onclick="switchTab('invoicesViewerTab'); toggleSidebar()"><i class="fa-solid fa-receipt"></i> استعرض ومشاهدة الفواتير السابقة 📑</button>
         <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle" style="color:var(--accent);"></i> بروفايل حسابي (Black Plus)</button>
-        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني وخدمة العملاء</button>
+        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني والمراسلات</button>
         <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة والتقارير</button>
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
@@ -212,11 +212,14 @@
             <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ الأقسام والتحكم</button>
             <button class="btn-gold" style="width:auto; padding:6px 12px; margin:0; font-size:12px;" onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle"></i> حسابي</button>
         </div>
-        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">زائرنا الكريم</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <img id="topNavAvatar" src="https://via.placeholder.com/30/000/d4af37?text=U" style="width:30px; height:30px; border-radius:50%; border:1px solid var(--accent); object-fit:cover; display:none;" alt="User">
+            <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">زائرنا الكريم</div>
+        </div>
         <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
-    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: متصل محليا وسحابيا (LocalStorage & Cloud Synced)</div>
+    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: متصل محليا وسحابياً بكامل الحزم والبيانات (LocalStorage & Cloud Synced)</div>
 
     <!-- شريط التنقل السريع -->
     <div class="nav-bar" id="mainNavBar">
@@ -309,7 +312,7 @@
         </div>
 
         <div class="card">
-            <h3>🛍️ المنتجات المتاحة (انقر على الوسائط للمعاينة)</h3>
+            <h3>🛍️ المنتجات المتاحة (انقر على الوسائط للمعاينة والمشاركة)</h3>
             <div class="products-grid" id="storeProductsList"></div>
         </div>
 
@@ -392,12 +395,11 @@
         </div>
     </div>
 
-    <!-- ================= الدعم الفني ================= -->
+    <!-- ================= الدعم الفني والمراسلات ================= -->
     <div id="supportTab" class="card hidden">
         <h2>💬 الدعم الفني المباشر والمراسلات العامة والخاصة</h2>
-        <div class="chat-box" id="chatMessages">
-            <div class="chat-msg msg-incoming">أهلاً بك في دعم بلاك بول. نحن هنا لمساعدتك في أي استفسار تجاري أو فني.</div>
-        </div>
+        <p style="text-align:center; color:var(--text-muted); font-size:12px;">تظهر في المراسلات الحسابات المسجلة كافة مع صور البروفايل والأسماء في قنوات الدعم والمحادثات.</p>
+        <div class="chat-box" id="chatMessages"></div>
         <div class="input-group" style="display: flex; gap: 5px; margin: 0;">
             <input type="text" id="chatInput" placeholder="اكتب رسالتك الموجهة للإدارة أو العملاء..." style="margin:0;">
             <button class="btn-gold" style="width: 80px; margin:0;" onclick="sendChatMessage()">إرسال</button>
@@ -426,7 +428,9 @@
         ];
         let orders = JSON.parse(localStorage.getItem('bb_cloud_orders')) || [];
         let invoicesArchive = JSON.parse(localStorage.getItem('bb_cloud_invoices')) || [];
-        let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [];
+        let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [
+            { sender: 'admin', role: 'مدير', avatar: '', text: 'أهلاً بك في دعم بلاك بول. نحن هنا لمساعدتك في أي استفسار تجاري أو فني.' }
+        ];
         
         let cart = [];
         let currentFilter = 'all';
@@ -577,21 +581,32 @@
         function updateAuthUI() {
             let btnTop = document.getElementById('authBtnTop');
             let greet = document.getElementById('quickUserGreet');
+            let topAvatar = document.getElementById('topNavAvatar');
+            
             if(currentUser) {
                 btnTop.innerText = 'خروج'; btnTop.className = 'btn-red';
-                greet.innerText = 'مرحباً، ' + currentUser.name;
+                greet.innerText = currentUser.name;
+                
+                if(currentUser.avatar) {
+                    topAvatar.src = currentUser.avatar;
+                    document.getElementById('gpAvatarImg').src = currentUser.avatar;
+                } else {
+                    let defaultAv = 'https://via.placeholder.com/85/000/d4af37?text=' + encodeURIComponent(currentUser.name.charAt(0));
+                    topAvatar.src = defaultAv;
+                    document.getElementById('gpAvatarImg').src = defaultAv;
+                }
+                topAvatar.style.display = 'block';
+
                 document.getElementById('gpNameDisplay').innerText = currentUser.name;
                 document.getElementById('gpContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
-                document.getElementById('gpRoleBadge').innerText = currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'عميل موثق 🛒';
-                
-                if(currentUser.avatar) document.getElementById('gpAvatarImg').src = currentUser.avatar;
-                else document.getElementById('gpAvatarImg').src = 'https://via.placeholder.com/85/000/d4af37?text=' + encodeURIComponent(currentUser.name.charAt(0));
+                document.getElementById('gpRoleBadge').innerText = currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'عضو موثق 🛒';
 
                 if(currentUser.cover) document.getElementById('gpCoverImg').src = currentUser.cover;
                 else document.getElementById('gpCoverImg').src = 'https://via.placeholder.com/350x120/111/d4af37?text=Black+Bull+Cover';
             } else {
                 btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
                 greet.innerText = 'زائرنا الكريم';
+                topAvatar.style.display = 'none';
             }
         }
 
@@ -692,19 +707,34 @@
             
             filtered.forEach(item => {
                 let mediaElement = item.type === 'video' ? 
-                    `<video src="${item.mediaUrl}" style="cursor:pointer;" onclick="event.stopPropagation(); openLightbox('${item.mediaUrl}', 'video')" muted></video>` :
-                    `<img src="${item.mediaUrl}" alt="${item.name}" style="cursor:pointer;" onclick="event.stopPropagation(); openLightbox('${item.mediaUrl}', 'image')" title="انقر لتكبير الصورة">`;
+                    `<video src="${item.mediaUrl}" onclick="event.stopPropagation(); openLightbox('${item.mediaUrl}', 'video')" muted></video>` :
+                    `<img src="${item.mediaUrl}" alt="${item.name}" onclick="event.stopPropagation(); openLightbox('${item.mediaUrl}', 'image')" title="انقر لتكبير الصورة">`;
 
                 container.innerHTML += `
                     <div class="product-card">
-                        ${mediaElement}
-                        <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
-                        <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small><br>
-                        <small style="display:block; color:var(--text-muted);">المتوفر: ${item.qty}</small>
-                        <button class="btn-blue" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="addToCart(${item.id})">أضف للسلة 🛒</button>
+                        <div>
+                            ${mediaElement}
+                            <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
+                            <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small><br>
+                            <small style="display:block; color:var(--text-muted);">المتوفر: ${item.qty}</small>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:4px; margin-top:5px;">
+                            <button class="btn-blue" style="padding: 5px; font-size: 11px; margin:0;" onclick="addToCart(${item.id})">أضف للسلة 🛒</button>
+                            <button class="btn-gold" style="padding: 4px; font-size: 10px; margin:0;" onclick="shareProduct('${item.name}', ${item.price})"><i class="fa-solid fa-share-nodes"></i> مشاركة 🌐</button>
+                        </div>
                     </div>
                 `;
             });
+        }
+
+        function shareProduct(name, price) {
+            let shareText = `🔥 متجر بلاك بول (Black Bull Store) 🐂\n📦 تسوق الآن منتجنا المميز: ${name}\n💰 السعر حصرياً: ${price} جنيه\n✨ اطلب الآن عبر المنصة وتواصل معنا مباشرة!`;
+            if (navigator.share) {
+                navigator.share({ title: name, text: shareText, url: window.location.href }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(shareText);
+                alert('✅ تم نسخ رابط تفاصيل المنتج ونص المشاركة إلى الحافظة بنجاح!');
+            }
         }
 
         function addToCart(id) {
@@ -827,9 +857,7 @@
                 </html>
             `;
 
-            let blob = new Blob(['\ufeff' + htmlContent], {
-                type: 'application/msword'
-            });
+            let blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword' });
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
@@ -919,8 +947,17 @@
         function sendChatMessage() {
             let txt = document.getElementById('chatInput').value.trim();
             if(!txt) return;
-            let senderName = currentUser ? currentUser.name + (currentUser.role === 'مدير' ? ' (الإدارة 🔐)' : ' (عميل 🛒)') : 'زائرنا الكريم';
-            chatLogs.push({ sender: senderName, text: txt, type: 'outgoing' });
+            let senderName = currentUser ? currentUser.name : 'زائرنا الكريم';
+            let senderRole = currentUser ? (currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'عضو موثق 🛒') : 'زائر';
+            let senderAvatar = currentUser && currentUser.avatar ? currentUser.avatar : '';
+            
+            chatLogs.push({ 
+                sender: senderName, 
+                role: senderRole, 
+                avatar: senderAvatar, 
+                text: txt, 
+                type: currentUser && currentUser.role === 'مدير' ? 'outgoing' : 'incoming' 
+            });
             syncData();
             renderChat();
             document.getElementById('chatInput').value = '';
@@ -931,8 +968,16 @@
             if(!box) return;
             box.innerHTML = '';
             chatLogs.forEach(msg => {
-                box.innerHTML += `<div class="chat-msg ${msg.type === 'outgoing' ? 'msg-outgoing' : 'msg-incoming'}"><b>${msg.sender}:</b> ${msg.text}</div>`;
+                let avTag = msg.avatar ? `<img src="${msg.avatar}" style="width:24px; height:24px; border-radius:50%; vertical-align:middle; margin-left:5px; object-fit:cover; border:1px solid var(--accent);" alt="av">` : `<i class="fa-solid fa-user-circle" style="margin-left:5px;"></i>`;
+                box.innerHTML += `
+                    <div class="chat-msg ${msg.type === 'outgoing' ? 'msg-outgoing' : 'msg-incoming'}" style="display:flex; flex-direction:column; gap:3px;">
+                        <div style="font-size:11px; opacity:0.8; display:flex; align-items:center;">
+                            ${avTag} <b>${msg.sender}</b> <span style="font-size:9px; background:rgba(0,0,0,0.3); padding:1px 4px; border-radius:3px; margin-right:5px;">${msg.role || ''}</span>
+                        </div>
+                        <div>${msg.text}</div>
+                    </div>`;
             });
+            box.scrollTop = box.scrollHeight;
         }
     </script>
 </body>
