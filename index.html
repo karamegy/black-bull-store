@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Bull Store - منصة بلاك بول لتجارة وتصدير الملابس + Google Plus</title>
+    <title>Black Bull Store - منصة بلاك بول المتكاملة لتجارة وتصدير الملابس + Google Plus</title>
     <!-- مكتبة لطباعة وتحويل الفواتير إلى PDF وصور مباشرة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- مكتبة الأيقونات FontAwesome -->
@@ -80,6 +80,7 @@
         .btn-red { background-color: #e53e3e; color: white; }
         .btn-gold { background-color: var(--accent); color: #111; }
         .btn-purple { background-color: #805ad5; color: white; }
+        .btn-orange { background-color: #dd6b20; color: white; }
 
         .hidden { display: none !important; }
 
@@ -88,6 +89,7 @@
         
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; transition: 0.3s; }
         .sidebar-overlay.active { display: block; }
+        
         .side-drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: #15181e; z-index: 1000; box-shadow: -5px 0 25px rgba(0,0,0,0.8); transition: right 0.3s ease-in-out; padding: 20px; box-sizing: border-box; border-left: 2px solid var(--accent); overflow-y: auto; }
         .side-drawer.open { right: 0; }
         .side-drawer h3 { color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
@@ -95,20 +97,12 @@
         .side-drawer button:hover { background: var(--accent); color: #111; }
         .close-drawer { background: #e53e3e !important; color: white !important; text-align: center !important; justify-content: center; }
 
-        /* بروفايل جوجل بلس المرتبط بالحساب (Black Plus Profile Drawer) */
         .gplus-profile-drawer { position: fixed; top: 0; left: -380px; width: 360px; height: 100%; background: #15181e; z-index: 1001; box-shadow: 5px 0 25px rgba(0,0,0,0.8); transition: left 0.3s ease-in-out; padding: 15px; box-sizing: border-box; border-right: 2px solid var(--accent); overflow-y: auto; }
         .gplus-profile-drawer.open { left: 0; }
         .gplus-header { text-align: center; position: relative; margin-bottom: 15px; }
         .gplus-cover { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--accent); cursor: pointer; }
         .gplus-avatar { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--accent); position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); object-fit: cover; background: #000; cursor: pointer; }
         
-        .gplus-nav-tabs { display: flex; gap: 4px; margin: 15px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
-        .gplus-nav-tabs button { flex: 1; font-size: 11px; padding: 6px; background: #2d3748; color: #fff; margin:0; }
-        .gplus-nav-tabs button.active { background: var(--accent); color: #111; font-weight: bold; }
-
-        .gplus-stream-item { background: #111; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .gplus-stream-item:hover { border-color: var(--accent); transform: translateY(-2px); }
-
         .nav-bar { display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
         .nav-bar button { flex: 1; font-size: 11px; padding: 8px 4px; min-width: 60px; background: #2d3748; color: #fff; }
         .nav-bar button.active-nav { background: var(--accent); color: #111; font-weight: bold; }
@@ -120,15 +114,14 @@
         .cat-chip { background: #2d3748; color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; white-space: nowrap; font-weight: bold; }
         .cat-chip.active { background: var(--accent); color: #111; }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
         .product-card { border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; background: #15181e; transition: 0.2s; }
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
-        .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
+        .product-card img, .product-card video { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
 
-        /* نافذة عارض الوسائط المنبثقة (Lightbox Modal) للمعاينة والتثبيت عند النقر */
         .media-lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; justify-content: center; align-items: center; flex-direction: column; padding: 20px; box-sizing: border-box; }
         .media-lightbox.active { display: flex; }
-        .media-lightbox-content { max-width: 90%; max-height: 80vh; border-radius: 10px; border: 2px solid var(--accent); box-shadow: 0 0 30px rgba(212,175,55,0.5); object-fit: contain; background: #000; }
+        .media-lightbox-content { max-width: 90%; max-height: 80vh; border-radius: 10px; border: 2px solid var(--accent); object-fit: contain; background: #000; }
         .media-lightbox-close { position: absolute; top: 20px; right: 25px; background: #e53e3e; color: white; border: none; font-size: 20px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: bold; }
 
         .chat-box { height: 260px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; overflow-y: auto; background: #111; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
@@ -151,529 +144,305 @@
 </head>
 <body>
 
-    <!-- عارض الوسائط المنبثقة (Lightbox) عند النقر على الصور أو الفيديوهات -->
+    <!-- عارض الوسائط المنبثقة -->
     <div class="media-lightbox" id="mediaLightbox" onclick="closeLightbox()">
         <button class="media-lightbox-close" onclick="closeLightbox()">✕</button>
         <div id="lightboxContainer" onclick="event.stopPropagation()"></div>
     </div>
 
-    <!-- القائمة الجانبية للأقسام الرئيسية -->
+    <!-- القائمة الجانبية الموسعة -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeAllDrawers()"></div>
     <div class="side-drawer" id="sideDrawer">
-        <h3>قائمة الأقسام 🐂 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
-        <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> المتجر الرئيسي</button>
-        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()"><i class="fa-solid fa-file-invoice-dollar"></i> قسم الفواتير والمخزن الشامل 🌟</button>
-        <button onclick="switchTab('exportTab'); toggleSidebar()"><i class="fa-solid fa-globe"></i> التصدير الدولي</button>
-        <button onclick="switchTab('localWholesaleTab'); toggleSidebar()"><i class="fa-solid fa-boxes-stacked"></i> جملة محلي</button>
-        <button onclick="switchTab('customOrderTab'); toggleSidebar()"><i class="fa-solid fa-scissors"></i> تفصيل خاص</button>
-        <button onclick="switchTab('trackingTab'); toggleSidebar()"><i class="fa-solid fa-ship"></i> تتبع الشحنات والملاحة</button>
-        <button onclick="switchTab('calcTab'); toggleSidebar()"><i class="fa-solid fa-calculator"></i> حاسبة الشحن والجمارك</button>
-        <button onclick="switchTab('auctionTab'); toggleSidebar()"><i class="fa-solid fa-tags"></i> مزاد الحاويات الكبرى</button>
-        <button onclick="switchTab('loyaltyTab'); toggleSidebar()"><i class="fa-solid fa-star"></i> برنامج الولاء والنقاط</button>
-        <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> مراقبة الطلبات</button>
-        <button onclick="switchTab('exportProfileTab'); toggleSidebar()"><i class="fa-solid fa-network-wired"></i> بروفايل التصدير الشامل</button>
+        <h3>قائمة الأقسام الموسعة 🐂 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
+        <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> المتجر الرئيسي والتسوق</button>
+        <button onclick="switchTab('addProductTab'); toggleSidebar()"><i class="fa-solid fa-cart-plus"></i> إضافة منتج جديد (صورة/فيديو) ➕</button>
+        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()"><i class="fa-solid fa-file-invoice-dollar"></i> إدارة المخزن والمستودعات 🌟</button>
+        <button onclick="switchTab('exportTab'); toggleSidebar()"><i class="fa-solid fa-globe"></i> قسم التصدير الدولي والشحن 🌍</button>
+        <button onclick="switchTab('logisticsTab'); toggleSidebar()"><i class="fa-solid fa-truck-fast"></i> تتبع الشحنات واللوجستيات 🚚</button>
+        <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> إدارة الطلبات والمشتريات 📋</button>
+        <button onclick="switchTab('invoicesViewerTab'); toggleSidebar()"><i class="fa-solid fa-receipt"></i> استعرض ومشاهدة الفواتير السابقة 📑</button>
         <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle" style="color:var(--accent);"></i> بروفايل حسابي (Black Plus)</button>
-        <button onclick="openWordPage()"><i class="fa-solid fa-file-word" style="color: #3182ce;"></i> مستندات Word الاحترافي</button>
-        <button onclick="switchTab('backupTab'); toggleSidebar()"><i class="fa-solid fa-database" style="color: var(--accent);"></i> النسخ الاحتياطي والمزامنة 💾</button>
-        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني</button>
-        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة</button>
+        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني وخدمة العملاء</button>
+        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة والتقارير</button>
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
 
-    <!-- بروفايل جوجل بلس المرتبط بالحساب (Black Plus - G+ Profile Drawer) -->
+    <!-- بروفايل جوجل بلس المرتبط بالحساب -->
     <div class="gplus-profile-drawer" id="gplusProfileDrawer">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:12px;">
             <h3 style="margin:0; color:var(--accent);">بروفايل Black Plus (G+) 🐂</h3>
             <span style="cursor:pointer; font-size:18px; color:#fff;" onclick="toggleGPlusDrawer()">✕</span>
         </div>
-        
         <div class="gplus-header">
-            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/d4af37?text=Black+Plus+Cover" alt="Cover" onclick="document.getElementById('uploadCoverInput').click()" title="انقر لتغيير وتثبيت صورة الغلاف للحساب المسجل">
+            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/d4af37?text=Cover" alt="Cover" onclick="document.getElementById('uploadCoverInput').click()" title="انقر لتغيير صورة الغلاف">
             <input type="file" id="uploadCoverInput" class="hidden" accept="image/*" onchange="handleCoverUpload(event)">
             
-            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/d4af37?text=User" alt="Avatar" onclick="document.getElementById('uploadAvatarInput').click()" title="انقر لتغيير وتثبيت الصورة الشخصية للحساب المسجل">
+            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/d4af37?text=User" alt="Avatar" onclick="document.getElementById('uploadAvatarInput').click()" title="انقر لتغيير الصورة الشخصية">
             <input type="file" id="uploadAvatarInput" class="hidden" accept="image/*" onchange="handleAvatarUpload(event)">
         </div>
         <div style="text-align:center; margin-top:45px;">
-            <h3 id="gpNameDisplay" style="margin:0;">اسم المستخدم المسجل</h3>
+            <h3 id="gpNameDisplay" style="margin:0;">اسم المستخدم</h3>
             <span id="gpRoleBadge" class="title-badge" style="background:var(--accent); color:#111; font-weight:bold;">عضو موثق</span>
-            <p id="gpContactDisplay" style="color:var(--text-muted); font-size:12px; margin:5px 0;">الهاتف أو البريد</p>
+            <p id="gpContactDisplay" style="color:var(--text-muted); font-size:12px; margin:5px 0;">الهاتف</p>
         </div>
-
-        <!-- تبويبات أقسام جوجل بلس -->
-        <div class="gplus-nav-tabs">
-            <button class="active" onclick="switchGPlusTab('stream', this)">الاستريم 📢</button>
-            <button onclick="switchGPlusTab('about', this)">حول ℹ️</button>
-            <button onclick="switchGPlusTab('photos', this)">الصور وفيديوهات المعرض 🖼️</button>
-            <button onclick="switchGPlusTab('circles', this)">الدوائر 👥</button>
-            <button onclick="switchGPlusTab('communities', this)">المجتمعات 🌐</button>
-        </div>
-
-        <!-- محتوى تبويب الاستريم -->
-        <div id="gpTabStream">
-            <div class="input-group">
-                <textarea id="gpNewPostText" placeholder="شارك أحدث منشوراتك، منتجاتك، أو حاويات التصدير..." style="height:60px; font-size:12px;"></textarea>
-                <div id="mediaPreviewContainer" style="margin-bottom:8px; text-align:center;"></div>
-                
-                <div style="display:flex; gap:5px; margin-bottom:5px;">
-                    <button class="btn-blue" style="font-size:11px; padding:6px; flex:1;" onclick="document.getElementById('postImageInput').click()"><i class="fa-solid fa-image"></i> رفع صورة</button>
-                    <button class="btn-purple" style="font-size:11px; padding:6px; flex:1;" onclick="document.getElementById('postVideoInput').click()"><i class="fa-solid fa-video"></i> رفع فيديو</button>
-                </div>
-                <input type="file" id="postImageInput" class="hidden" accept="image/*" onchange="handlePostMediaUpload(event, 'image')">
-                <input type="file" id="postVideoInput" class="hidden" accept="video/*" onchange="handlePostMediaUpload(event, 'video')">
-
-                <button class="btn-gold" style="padding:6px; font-size:12px;" onclick="publishGPlusPost()">نشر في استريم الحساب المسجل 🚀</button>
-            </div>
-            <div id="gpStreamContainer" style="margin-top:10px;"></div>
-        </div>
-
-        <!-- محتوى تبويب حول -->
-        <div id="gpTabAbout" class="hidden">
-            <div style="background:#111; padding:12px; border-radius:8px; font-size:12px; line-height:1.6; border:1px solid var(--border-color);">
-                <h4 style="color:var(--accent); margin-top:0;">معلومات الحساب المسجل والشركة</h4>
-                <div class="input-group" style="margin-bottom:8px;">
-                    <label>الاسم الظاهري:</label>
-                    <input type="text" id="aboutEditName" style="font-size:12px; padding:6px;" value="">
-                </div>
-                <div class="input-group" style="margin-bottom:8px;">
-                    <label>النبذة / السيرة الذاتية (Bio):</label>
-                    <textarea id="aboutEditBio" style="font-size:12px; padding:6px; height:50px;" placeholder="اكتب نبذة عن نشاطك التجاري..."></textarea>
-                </div>
-                <div class="input-group" style="margin-bottom:8px;">
-                    <label>الموقع / المقر:</label>
-                    <input type="text" id="aboutEditLocation" style="font-size:12px; padding:6px;" value="جمهورية مصر العربية - القاهرة / الإسكندرية">
-                </div>
-                <button class="btn-gold" style="font-size:11px; padding:6px;" onclick="saveAboutProfileInfo()">حفظ التعديلات في حول 💾</button>
-            </div>
-        </div>
-
-        <!-- محتوى تبويب الصور وفيديوهات المعرض (Photos & Media) مع التثبيت الفوري والمعاينة -->
-        <div id="gpTabPhotos" class="hidden">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <b style="font-size:12px; color:var(--accent);">معرض الوسائط للحساب المسجل:</b>
-                <button class="btn-green" style="font-size:10px; padding:4px 8px; width:auto;" onclick="document.getElementById('galleryUploadInput').click()">➕ إضافة ملف</button>
-                <input type="file" id="galleryUploadInput" class="hidden" accept="image/*,video/*" onchange="handleGalleryUpload(event)">
-            </div>
-            <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-bottom:8px;">💡 انقر على أي صورة أو فيديو لمشاهدتها بالحجم الكامل وتثبيتها سحابياً ومحلياً.</p>
-            <div id="gpGalleryContainer" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:6px;"></div>
-        </div>
-
-        <!-- محتوى تبويب الدوائر -->
-        <div id="gpTabCircles" class="hidden">
-            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px; border:1px solid var(--border-color);">
-                <p>🟢 <b>العائلة والأصدقاء:</b> (3 مُضافين)</p>
-                <p>🔵 <b>شركاء التصدير الدولي:</b> (14 شركة)</p>
-                <p>⭐ <b>تجار الجملة والمكاتب:</b> (42 تاجر)</p>
-                <button class="btn-blue" style="font-size:11px; padding:6px; margin-top:5px;" onclick="alert('✅ تم مزامنة الدوائر وتحديثها سحابياً ومحلياً!')">إدارة وتحديث الدوائر 🔄</button>
-            </div>
-        </div>
-
-        <!-- محتوى تبويب المجتمعات -->
-        <div id="gpTabCommunities" class="hidden">
-            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px; border:1px solid var(--border-color);">
-                <h4 style="color:var(--accent); margin-top:0;">المجتمعات المشترك بها للحساب</h4>
-                <div class="item-row">
-                    <div><b>🐂 مجتمع مصدري الملابس بمصر</b><br><small style="color:var(--text-muted);">1.2K عضو | نشط</small></div>
-                    <button class="btn-gold" style="font-size:10px; padding:4px 8px; width:auto;" onclick="switchTab('exportTab'); toggleGPlusDrawer();">دخول</button>
-                </div>
-                <div class="item-row" style="border:none;">
-                    <div><b>📦 تجارة الجملة وشحن الحاويات</b><br><small style="color:var(--text-muted);">850 عضو | نشط</small></div>
-                    <button class="btn-gold" style="font-size:10px; padding:4px 8px; width:auto;" onclick="switchTab('advancedInvoicesStoreTab'); toggleGPlusDrawer();">دخول</button>
-                </div>
-            </div>
-        </div>
+        <hr style="border-color:var(--border-color); margin:15px 0;">
+        <h4 style="color:var(--accent); font-size:14px; margin-bottom:8px;">إدارة المحتوى والطلبات الخاصة بي:</h4>
+        <button class="btn-blue" style="font-size:12px; padding:8px;" onclick="switchTab('ordersTab'); toggleGPlusDrawer()">📦 طلباتي ومشترياتي السابقة</button>
+        <button class="btn-green" style="font-size:12px; padding:8px;" onclick="switchTab('invoicesViewerTab'); toggleGPlusDrawer()">🧾 فواتيري السحابية</button>
+        <button class="btn-purple" style="font-size:12px; padding:8px;" onclick="switchTab('supportTab'); toggleGPlusDrawer()">💬 المراسلات والرسائل الخاصة</button>
     </div>
 
-    <!-- نافذة معاينة تفاصيل عنصر الاستريم المختار -->
-    <div id="streamDetailModal" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🔍 معاينة تفاصيل منشور Black Plus</h2>
-        <div id="streamDetailContent" style="background:#111; padding:15px; border-radius:8px; margin-bottom:15px;"></div>
-        <button class="btn-red" onclick="closeStreamDetail()">إغلاق المعاينة</button>
-    </div>
-
-    <!-- لوحة اختيار الثيمات والألوان المتعددة -->
+    <!-- شريط الثيمات -->
     <div class="theme-selector">
-        <span style="font-size:12px; align-self:center; color:var(--text-muted);">اختر ثيم المنصة والألوان:</span>
-        <div class="theme-btn" style="background: #d4af37;" onclick="setTheme('#111111', '#d4af37', '#0f1115', '#1a1d24')" title="أسود وذهبي فاخر"></div>
-        <div class="theme-btn" style="background: #3182ce;" onclick="setTheme('#1a202c', '#63b3ed', '#0f172a', '#1e293b')" title="كلاسيكي أزرق"></div>
-        <div class="theme-btn" style="background: #27ae60;" onclick="setTheme('#064e3b', '#34d399', '#022c22', '#065f46')" title="أخضر أعمال"></div>
-        <div class="theme-btn" style="background: #805ad5;" onclick="setTheme('#322659', '#b794f4', '#1a103c', '#2d1a4a')" title="ملكي بنفسجي"></div>
-        <div class="theme-btn" style="background: #e53e3e;" onclick="setTheme('#4a1515', '#fc8181', '#1a0f0f', '#2d1616')" title="حريء أحمر ناري"></div>
-        <div class="theme-btn" style="background: #319795;" onclick="setTheme('#134e4a', '#2dd4bf', '#042f2e', '#042f2e')" title="فيروزي بحري"></div>
+        <span style="font-size:12px; align-self:center; color:var(--text-muted);">ثيم المنصة:</span>
+        <div class="theme-btn" style="background: #d4af37;" onclick="setTheme('#111111', '#d4af37', '#0f1115', '#1a1d24')" title="أسود وذهبي"></div>
+        <div class="theme-btn" style="background: #3182ce;" onclick="setTheme('#1a202c', '#63b3ed', '#0f172a', '#1e293b')" title="أزرق"></div>
+        <div class="theme-btn" style="background: #27ae60;" onclick="setTheme('#064e3b', '#34d399', '#022c22', '#065f46')" title="أخضر"></div>
     </div>
 
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
-        <h1>BLACK BULL STORE & BLACK PLUS</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة + شبكة تواصل Google Plus المرتبطة بالحسابات (الإصدار 7.4.26)</small>
+        <h1>BLACK BULL STORE</h1>
+        <small>منصة تجارة وتصدير الملابس، المستودعات، الشحن الدولي، الفواتير السحابية والمحلية الشاملة</small>
     </div>
 
     <!-- شريط علوي -->
     <div class="top-nav-bar">
         <div style="display:flex; gap:8px; align-items:center;">
-            <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ أقسام المنصة</button>
-            <button class="btn-gold" style="width:auto; padding:6px 12px; margin:0; font-size:12px;" onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle"></i> بروفايل Black Plus</button>
+            <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ الأقسام والتحكم</button>
+            <button class="btn-gold" style="width:auto; padding:6px 12px; margin:0; font-size:12px;" onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle"></i> حسابي</button>
         </div>
-        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">مرحباً بك زائرنا الكريم</div>
+        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">زائرنا الكريم</div>
         <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
-    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: متصل بالخادم السحبي والمحلي بكفاءة تامة</div>
+    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: متصل محليا وسحابيا (LocalStorage & Cloud Synced)</div>
 
-    <!-- شريط التنقل الرئيسي الأفقي -->
+    <!-- شريط التنقل السريع -->
     <div class="nav-bar" id="mainNavBar">
         <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
-        <button onclick="switchTab('advancedInvoicesStoreTab', this)">🧾 الفواتير والمخزن</button>
+        <button onclick="switchTab('addProductTab', this)">➕ إضافة</button>
+        <button onclick="switchTab('advancedInvoicesStoreTab', this)">🧾 المخزن</button>
         <button onclick="switchTab('exportTab', this)">🌍 التصدير</button>
-        <button onclick="switchTab('trackingTab', this)">🚢 التتبع</button>
-        <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
+        <button onclick="switchTab('invoicesViewerTab', this)">📑 الفواتير</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
-        <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user"></i> بروفايل G+</button>
-        <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database"></i> النسخ الاحتياطي</button>
-        <button onclick="openWordPage()" style="background: #3182ce; color: white;"><i class="fa-solid fa-file-word"></i> محرر Word</button>
+        <button onclick="switchTab('supportTab', this)"><i class="fa-solid fa-headset"></i> الدعم</button>
     </div>
 
-    <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات ================= -->
+    <!-- ================= 1. تسجيل الدخول ================= -->
     <div id="authSection" class="card hidden">
         <div style="text-align: center; margin-bottom: 15px;">
-            <div class="bull-logo-3d" style="width: 110px; height: 110px; font-size: 50px;">🐂</div>
-            <h3 style="margin-bottom: 2px;">بوابة الدخول الموحدة وربط بروفايل Black Plus بالحساب المسجل</h3>
-            <small style="color: var(--text-muted);">يرجى إدخال بيانات الاعتماد الخاصة بك للمتابعة</small>
+            <div class="bull-logo-3d" style="width: 100px; height: 100px; font-size: 45px;">🐂</div>
+            <h3 style="margin-bottom: 2px;">بوابة الدخول وإنشاء الحسابات</h3>
         </div>
-        
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
             <button class="btn-gold" id="tabBtnLogin" onclick="switchAuthMode('login')">تسجيل الدخول</button>
             <button class="btn-blue" id="tabBtnRegister" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
         </div>
-
         <div id="loginFormContainer">
-            <div class="input-group">
-                <label>رقم الهاتف أو اسم المستخدم:</label>
-                <input type="text" id="loginContactOrName" placeholder="أدخل رقم الهاتف أو اسم المستخدم" autocomplete="off">
-            </div>
-            <div class="input-group">
-                <label>كلمة المرور:</label>
-                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" autocomplete="new-password">
-            </div>
-            <button class="btn-green" onclick="performLogin()">تسجيل الدخول للمنصة وفتح البروفايل 🚀</button>
+            <div class="input-group"><label>رقم الهاتف أو اسم المستخدم:</label><input type="text" id="loginContactOrName" placeholder="مثال: 01012345678 أو admin"></div>
+            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="loginPassword"></div>
+            <button class="btn-green" onclick="performLogin()">دخول 🚀</button>
         </div>
-
         <div id="registerFormContainer" class="hidden">
-            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName" placeholder="اكتب اسمك الكامل" autocomplete="off"></div>
-            <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="regPhone" placeholder="01xxxxxxxxx" autocomplete="off"></div>
-            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="regEmail" placeholder="name@domain.com" autocomplete="off"></div>
+            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName"></div>
+            <div class="input-group"><label>رقم الهاتف:</label><input type="text" id="regPhone"></div>
             <div class="input-group"><label>نوع الحساب:</label>
                 <select id="regRole">
                     <option value="عميل">عميل (Customer) 🛒</option>
-                    <option value="مشرف">مشرف (Supervisor) 🛡️</option>
                     <option value="مدير">مدير (Manager) 🔐</option>
                 </select>
             </div>
-            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية" autocomplete="new-password"></div>
-            <button class="btn-gold" onclick="performRegister()">إنشاء حساب جديد وتفعيل بروفايل Black Plus المرتبط ✅</button>
+            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword"></div>
+            <button class="btn-gold" onclick="performRegister()">تسجيل حساب جديد ✅</button>
         </div>
     </div>
 
-    <!-- ================= 2. قسم الفواتير والمخزن الشامل المتطور ================= -->
-    <div id="advancedInvoicesStoreTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🧾 قسم الفواتير وإدارة المخزن الشامل (الأرشفة، التصدير والواتساب)</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">حفظ شامل لكافة الحركات، خصم تلقائي من المخزن، إصدار الفواتير الرسمية، معاينتها، تنزيلها صور/PDF، أو إرسالها للعميل عبر واتساب بضغطة زر.</p>
-
-        <div class="stats-grid">
-            <div class="stat-card"><h4>إجمالي أصناف المخزن</h4><p id="invCountDisplay">0</p></div>
-            <div class="stat-card"><h4>إجمالي الفواتير المحفوظة</h4><p id="invTotalInvoicesDisplay">0</p></div>
-            <div class="stat-card"><h4>إجمالي مبيعات الفواتير</h4><p id="invTotalSalesDisplay">0 ج.م</p></div>
+    <!-- ================= 2. قسم إضافة منتج جديد ================= -->
+    <div id="addProductTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>➕ إضافة منتج جديد للمتجر والمستودع</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">رفع صور أو فيديوهات المنتجات، تحديد السعر، الكمية، والقسم لكي يتم عرضه مباشرة.</p>
+        
+        <div class="input-group"><label>اسم المنتج:</label><input type="text" id="newProdName" placeholder="مثال: جاكيت شتوي تصدير فاخر"></div>
+        <div class="input-group"><label>السعر (بالجنيه):</label><input type="number" id="newProdPrice" placeholder="500"></div>
+        <div class="input-group"><label>الكمية المتاحة بالمخزن:</label><input type="number" id="newProdQty" value="100" min="1"></div>
+        <div class="input-group">
+            <label>القسم / التصنيف (الأقسام الموسعة):</label>
+            <select id="newProdCategory">
+                <option value="تصدير دولي">تصدير دولي 🌍</option>
+                <option value="جملة محلي">جملة محلي 📦</option>
+                <option value="ملابس رجالي">ملابس رجالي 👔</option>
+                <option value="ملابس حريمي">ملابس حريمي 👗</option>
+                <option value="أطفال ومواليد">أطفال ومواليد 🧒</option>
+                <option value="فحم وأخشاب">فحم وأخشاب (صناعي) 🔥</option>
+                <option value="أقمشة ومنسوجات">أقمشة ومنسوجات 🧵</option>
+                <option value="أحذية ومستلزمات جلدية">أحذية ومستلزمات جلدية 👞</option>
+                <option value="إكسسوارات وموضة">إكسسوارات وموضة 💍</option>
+                <option value="مفروشات منزلية">مفروشات منزلية 🛏️</option>
+            </select>
         </div>
-
-        <div style="display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;">
-            <button class="btn-gold" onclick="switchInvSubTab('pos')" style="flex:1;">🛒 إنشاء فاتورة جديدة وبيع</button>
-            <button class="btn-blue" onclick="switchInvSubTab('archive')" style="flex:1;">🗂️ أرشيف الفواتير الشامل</button>
-            <button class="btn-purple" onclick="switchInvSubTab('warehouse')" style="flex:1;">📦 إدارة المخزن والأصناف</button>
+        <div class="input-group">
+            <label>ملف الوسائط (صورة أو فيديو):</label>
+            <input type="file" id="newProdMediaInput" accept="image/*,video/*" onchange="previewNewProductMedia(event)">
+            <div id="newProdMediaPreview" style="margin-top:10px; text-align:center;"></div>
         </div>
+        <button class="btn-gold" onclick="saveNewProductToStore()">حفظ ونشر المنتج في المتجر فوراً 🚀</button>
+    </div>
 
-        <div id="invSubPos">
-            <div class="card" style="background:#111;">
-                <h3>➕ إصدار فاتورة جديدة للعميل</h3>
-                <div class="input-group"><label>اسم العميل / جهة التصدير:</label><input type="text" id="posCustomerName" placeholder="مثال: شركة النور للتجارة"></div>
-                <div class="input-group"><label>رقم هاتف العميل (لواتساب):</label><input type="text" id="posCustomerPhone" placeholder="010xxxxxxxx"></div>
-                
-                <div class="input-group">
-                    <label>اختر المنتج من المخزن:</label>
-                    <select id="posSelectProduct" onchange="updatePosProductPrice()"></select>
-                </div>
-                <div class="input-group"><label>الكمية المطلوبة:</label><input type="number" id="posQuantity" value="1" min="1"></div>
-                <button class="btn-green" onclick="addPosItemToCart()">➕ إضافة الصنف لفاتورة الإصدار</button>
-
-                <hr style="border-color:var(--border-color); margin: 15px 0;">
-                <h4>محتويات الفاتورة الحالية:</h4>
-                <div id="posCartItemsList" style="margin-bottom: 10px;">لا توجد أصناف مضافة بالفاتورة بعد.</div>
-                <p><b>الإجمالي الكلي للفاتورة: <span id="posCartTotal" style="color:var(--accent);">0</span> جنيه</b></p>
-                <button class="btn-gold" onclick="finalizeAndSaveInvoice()">💾 حفظ الفاتورة، خصم المخزن وإصدار السند 🚀</button>
+    <!-- ================= 3. المتجر الرئيسي ================= -->
+    <div id="storeTab">
+        <div class="card">
+            <h3>📂 أقسام المتجر والتجارة الموسعة</h3>
+            <div class="categories-grid">
+                <div class="cat-chip active" onclick="filterCategory('all', this)">جميع المنتجات</div>
+                <div class="cat-chip" onclick="filterCategory('تصدير دولي', this)">تصدير دولي 🌍</div>
+                <div class="cat-chip" onclick="filterCategory('جملة محلي', this)">جملة محلي 📦</div>
+                <div class="cat-chip" onclick="filterCategory('ملابس رجالي', this)">ملابس رجالي 👔</div>
+                <div class="cat-chip" onclick="filterCategory('ملابس حريمي', this)">ملابس حريمي 👗</div>
+                <div class="cat-chip" onclick="filterCategory('أطفال ومواليد', this)">أطفال 🧒</div>
+                <div class="cat-chip" onclick="filterCategory('فحم وأخشاب', this)">فحم وأخشاب 🔥</div>
+                <div class="cat-chip" onclick="filterCategory('أقمشة ومنسوجات', this)">أقمشة ومنسوجات 🧵</div>
+                <div class="cat-chip" onclick="filterCategory('أحذية ومستلزمات جلدية', this)">أحذية ومستلزمات جلدية 👞</div>
+                <div class="cat-chip" onclick="filterCategory('إكسسوارات وموضة', this)">إكسسوارات وموضة 💍</div>
+                <div class="cat-chip" onclick="filterCategory('مفروشات منزلية', this)">مفروشات منزلية 🛏️</div>
             </div>
         </div>
 
-        <div id="invSubArchive" class="hidden">
-            <div class="card" style="background:#111;">
-                <h3>🗂️ أرشيف الفواتير المحفوظة (معاينة، تصدير، واتساب)</h3>
-                <div class="input-group">
-                    <input type="text" id="searchInvoiceInput" placeholder="بحث برقم الفاتورة أو اسم العميل..." oninput="renderInvoicesArchive()">
-                </div>
-                <div id="invoicesArchiveList">لا توجد فواتير محفوظة.</div>
-            </div>
+        <div class="card">
+            <h3>🛍️ المنتجات المتاحة (انقر على الوسائط للمعاينة)</h3>
+            <div class="products-grid" id="storeProductsList"></div>
         </div>
 
-        <div id="invSubWarehouse" class="hidden">
-            <div class="card" style="background:#111;">
-                <h3>📦 إضافة منتج جديد للمخزن</h3>
-                <div class="input-group"><label>اسم المنتج:</label><input type="text" id="whName" placeholder="مثال: حاوية تيشرتات قطن"></div>
-                <div class="input-group"><label>الكمية المتاحة بالمخزن:</label><input type="number" id="whQty" placeholder="100"></div>
-                <div class="input-group"><label>سعر القطعة / الوحدة (ج.م):</label><input type="number" id="whPrice" placeholder="350"></div>
-                <div class="input-group"><label>رابط الصورة:</label><input type="text" id="whImg" placeholder="https://via.placeholder.com/150"></div>
-                <button class="btn-gold" onclick="addNewWarehouseItem()">حفظ وإضافة للمخزن ✅</button>
-            </div>
-            <div class="card" style="background:#111;">
-                <h3>📋 قائمة أصناف المخزن الحالية</h3>
-                <div id="warehouseItemsList">لا توجد أصناف.</div>
-            </div>
+        <div class="card" style="border: 2px solid var(--accent);">
+            <h3>🛒 سلة المشتريات وإتمام الطلب</h3>
+            <div id="cartItems">السلة فارغة حالياً</div>
+            <hr style="border-color:var(--border-color)">
+            <p><b>الإجمالي الكلي: </b><span id="cartTotal" style="color:var(--accent);">0</span> جنيه</p>
+            <button class="btn-green" onclick="checkoutCart()">إتمام الشراء وإرسال الطلب وإصدار الفاتورة 🚀</button>
         </div>
     </div>
 
-    <!-- نافذة معاينة الفاتورة الرسمية -->
+    <!-- ================= 4. المخزن والمستودعات ================= -->
+    <div id="advancedInvoicesStoreTab" class="card hidden">
+        <h2>🧾 إدارة المخزن والمستودعات والأصناف</h2>
+        <div id="warehouseItemsList">لا توجد أصناف مسجلة.</div>
+    </div>
+
+    <!-- ================= 5. التصدير الدولي ================= -->
+    <div id="exportTab" class="card hidden">
+        <h2>🌍 إدارة التصدير التجاري الدولي</h2>
+        <p style="color:var(--text-muted); font-size:13px; text-align:center;">إعداد شحنات الملابس والفحم والأخشاب للتصدير الدولي للأسواق العالمية.</p>
+        <div class="input-group"><label>دولة الوجهة:</label><input type="text" id="exportDestination" placeholder="مثال: المملكة العربية السعودية / الإمارات / ألمانيا"></div>
+        <div class="input-group"><label>نوع البضاعة:</label><input type="text" id="exportGoodsType" placeholder="ملابس جاهزة / فحم طبيعي / أخشاب"></div>
+        <div class="input-group"><label>الوزن الكلي (طن / كجم):</label><input type="text" id="exportWeight" placeholder="5 طن"></div>
+        <button class="btn-blue" onclick="alert('✅ تم حفظ طلب التصدير وإرساله لقسم اللوجستيات والشحن الدولي.')">تأكيد طلب التصدير 🚢</button>
+    </div>
+
+    <!-- ================= 6. تتبع اللوجستيات والشحن ================= -->
+    <div id="logisticsTab" class="card hidden">
+        <h2>🚚 تتبع الشحنات واللوجستيات</h2>
+        <div class="input-group"><label>بحث برقم الشحنة أو بوليصة الحاوية:</label><input type="text" id="trackQuery" placeholder="مثال: BB-LOG-9821"></div>
+        <button class="btn-gold" onclick="alert('الشحنة قيد التحرك وتتبع خط سير التصدير بنجاح.')">بحث عن الشحنة 🔍</button>
+    </div>
+
+    <!-- ================= 7. قسم استعراض ومشاهدة الفواتير ================= -->
+    <div id="invoicesViewerTab" class="card hidden">
+        <h2>📑 أرشيف واستعراض الفواتير (صورة، PDF، Word)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">استعرض كافة فواتير المبيعات والتصدير السابقة، ومعاينتها أو تحميلها بالأشكال المختلفة.</p>
+        <div id="invoicesArchiveList">لا توجد فواتير مسجلة في الأرشيف حالياً.</div>
+    </div>
+
+    <!-- ================= 8. إدارة الطلبات ================= -->
+    <div id="ordersTab" class="card hidden">
+        <h2>📋 سجل المشتريات والطلبات</h2>
+        <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
+    </div>
+
+    <!-- ================= الفاتورة الرسمية الحالية ================= -->
     <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🧾 معاينة فاتورة البيع والتصدير الرسمية</h2>
+        <h2>🧾 فاتورة المشتريات والبيع الرسمية</h2>
         <div id="printableInvoice" class="invoice-box">
             <div class="invoice-header">
                 <div>
                     <h2 style="margin:0; color:#111;">BLACK BULL STORE</h2>
-                    <small style="color:#555;">لتجارة وتصدير الملابس جملة - محلياً ودولياً</small>
+                    <small style="color:#555;">منصة بيع وتصدير الملابس والمستودعات</small>
                 </div>
                 <div style="text-align: left;">
                     <b id="invModalId">رقم الفاتورة: #BB-INV-000</b><br>
                     <small id="invModalDate">التاريخ: 2026/08/03</small>
                 </div>
             </div>
-            <p><b>بيانات العميل والتوصيل:</b><br>
-               • اسم العميل: <span id="invModalClient">اسم العميل</span><br>
-               • هاتف التواصل: <span id="invModalPhone">الهاتف</span><br>
-               • حالة التوثيق: <span style="color:#27ae60; font-weight:bold;">معتمدة ومحفوظة بالمخزن السحابي ✔️</span>
+            <p><b>بيانات العميل:</b><br>
+               • اسم العميل: <span id="invModalClient">العميل</span><br>
+               • هاتف التواصل: <span id="invModalPhone">الهاتف</span>
             </p>
             <table class="invoice-table">
-                <thead><tr><th>المنتج / الصنف</th><th>الكمية</th><th>السعر الفردي</th><th>الإجمالي</th></tr></thead>
+                <thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead>
                 <tbody id="invModalItems"></tbody>
             </table>
             <h3 style="text-align: left; color:#111;">الإجمالي الكلي: <span id="invModalTotal" style="color:#d4af37;">0</span> جنيه</h3>
         </div>
-        <div style="display: flex; gap: 5px; margin-top: 15px; flex-wrap: wrap;">
-            <button class="btn-green" onclick="downloadInvoiceImage()" style="flex:1;">📷 تحميل صوره (PNG)</button>
-            <button class="btn-purple" onclick="downloadInvoicePDF()" style="flex:1;">📄 فتح وطباعة PDF</button>
-            <button class="btn-gold" onclick="shareInvoiceWhatsAppDirect()" style="flex:1;">🔗 إرسال واتساب للعميل</button>
-            <button class="btn-red" onclick="closeInvoiceModal()" style="flex:1;">إغلاق</button>
-        </div>
-    </div>
-
-    <!-- ================= 3. المتجر الرئيسي ================= -->
-    <div id="storeTab">
-        <div class="card">
-            <h3>📂 أقسام المنصة للتوسع والانتشار</h3>
-            <div class="categories-grid">
-                <div class="cat-chip active" onclick="filterCategory('all', this)">جميع الأقسام</div>
-                <div class="cat-chip" onclick="filterCategory('تصدير دولي', this)">تصدير دولي 🌍</div>
-                <div class="cat-chip" onclick="filterCategory('جملة محلي', this)">جملة محلي 📦</div>
-                <div class="cat-chip" onclick="filterCategory('ملابس رجالي', this)">ملابس رجالي 👔</div>
-                <div class="cat-chip" onclick="filterCategory('ملابس حريمي', this)">ملابس حريمي 👗</div>
-                <div class="cat-chip" onclick="filterCategory('أطفال ومواليد', this)">أطفال 🧒</div>
-                <div class="cat-chip" onclick="filterCategory('عروض الحاويات', this)">عروض الحاويات 🚢</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>🛍️ المنتجات والعروض المتاحة (انقر على المنتج للعرض)</h3>
-            <div class="products-grid" id="storeProductsList"></div>
-        </div>
-
-        <div class="card">
-            <h3>🛒 سلة المشتريات والطلبات</h3>
-            <div id="cartItems">السلة فارغة</div>
-            <hr style="border-color:var(--border-color)">
-            <p><b>الإجمالي الكلي: </b><span id="cartTotal">0</span> جنيه</p>
-            <button class="btn-green" onclick="placeOrder()">إرسال الطلب وإصدار فاتورة رسمية 🚀</button>
-        </div>
-    </div>
-
-    <!-- ================= 4. التصدير الدولي ================= -->
-    <div id="exportTab" class="card hidden">
-        <h2>🌍 قسم التصدير الدولي والشحن للخارج</h2>
-        <div class="input-group"><label>الدولة المستهدفة للاستيراد:</label><input type="text" id="exportCountry" placeholder="مثال: السعودية، الإمارات، إيطاليا..."></div>
-        <div class="input-group"><label>نوع الملابس والكمية المطلوبة:</label><textarea id="exportDetails" placeholder="اكتب المواصفات والكميات..."></textarea></div>
-        <button class="btn-gold" onclick="submitExportInquiry()">إرسال طلب التصدير لمدير المكتب ✈️</button>
-    </div>
-
-    <!-- ================= تتبع الشحنات والملاحة ================= -->
-    <div id="trackingTab" class="card hidden">
-        <h2>🚢 قسم تتبع الشحنات الدولية والملاحة</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">ادخل رقم بوليصة الشحن أو الحاوية لتتبع خط سيرها اللحظي عبر موانئ العالم.</p>
-        <div class="input-group">
-            <label>رقم بوليصة الشحن أو الحاوية:</label>
-            <input type="text" id="trackInputCode" placeholder="مثال: EXP-901 أو BB-CONTAINER-55">
-        </div>
-        <button class="btn-gold" onclick="performTrackingSearch()">بحث وتتبع الشحنة 🔍</button>
-        <div id="trackingResultBox" style="margin-top: 15px;"></div>
-    </div>
-
-    <!-- ================= حاسبة الشحن والجمارك ================= -->
-    <div id="calcTab" class="card hidden">
-        <h2>🧮 حاسبة تكاليف الشحن والجمارك التلقائية</h2>
-        <div class="input-group">
-            <label>اختر دولة الوجهة:</label>
-            <select id="calcCountry">
-                <option value="السعودية">المملكة العربية السعودية 🇸🇦</option>
-                <option value="الإمارات">الإمارات العربية المتحدة 🇦🇪</option>
-                <option value="إيطاليا">إيطاليا 🇮🇹</option>
-                <option value="ألمانيا">ألمانيا 🇩🇪</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>حجم الحاوية / الشحنة:</label>
-            <select id="calcContainerSize">
-                <option value="20">حاوية 20 قدم (Standard 20ft)</option>
-                <option value="40">حاوية 40 قدم (High Cube 40ft)</option>
-                <option value="express">شحنة جوية سريعة (Express Air Cargo)</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>إجمالي قيمة البضاعة بالجنيه أو الدولار:</label>
-            <input type="number" id="calcGoodsValue" placeholder="مثال: 150000">
-        </div>
-        <button class="btn-blue" onclick="calculateShippingAndCustoms()">احسب التكلفة التقديرية فوراً 📊</button>
-        <div id="calcResultBox" style="margin-top: 15px;"></div>
-    </div>
-
-    <!-- ================= جملة محلي ================= -->
-    <div id="localWholesaleTab" class="card hidden">
-        <h2>📦 قسم الجملة المحلية وتجار المكاتب</h2>
-        <div id="localWholesaleProducts" class="products-grid"></div>
-    </div>
-
-    <!-- ================= تفصيل خاص ================= -->
-    <div id="customOrderTab" class="card hidden">
-        <h2>✂️ قسم التصنيع الخاص وتفصيل العلامات التجارية (Private Label)</h2>
-        <div class="input-group"><label>اسم العلامة التجارية (Brand Name):</label><input type="text" id="customBrandName" placeholder="Your Brand"></div>
-        <div class="input-group"><label>نوع المنتج:</label><input type="text" id="customProductType" placeholder="تيشرت أوبريزد"></div>
-        <div class="input-group"><label>الكمية المستهدفة:</label><input type="number" id="customQty" placeholder="500"></div>
-        <div class="input-group"><label>مواصفات إضافية:</label><textarea id="customSpecs" placeholder="تفاصيل الخامات..."></textarea></div>
-        <button class="btn-gold" onclick="submitCustomOrder()">إرسال طلب التصنيع 🏭</button>
-    </div>
-
-    <!-- ================= تفصيل المنتج (مع إمكانية النقر لتكبير صورة المنتج) ================= -->
-    <div id="productDetailTab" class="card hidden">
-        <button class="btn-blue" style="width: auto; margin-bottom: 10px;" onclick="switchTab('storeTab')">⬅ عودة للمتجر</button>
-        <div id="productDetailContent" style="text-align: center;"></div>
-    </div>
-
-    <!-- ================= بروفايل التصدير الشامل ================= -->
-    <div id="exportProfileTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.4)</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">مخصص بالكامل لشحنات الملابس المصدرة للخارج، استعراض الحاويات الدولية، وطلب بضائع التصدير مع تفعيل بوابات الدفع.</p>
-        <div class="stats-grid">
-            <div class="stat-card"><h4>الشحنات المصدرة</h4><p>142 حاوية</p></div>
-            <div class="stat-card"><h4>الدولة المستوردة</h4><p>28 دولة</p></div>
-            <div class="stat-card"><h4>معيار الجودة</h4><p>ISO 9001 / A+</p></div>
-        </div>
-    </div>
-
-    <!-- ================= قسم النسخ الاحتياطي والمزامنة (Backup) ================= -->
-    <div id="backupTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>💾 إدارة النسخ الاحتياطي والمزامنة الكاملة للمنصة</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">قم بتحميل نسخة احتياطية من كافة بيانات المنصة (الحسابات، الفواتير، المخزن، الطلبات) لملف خارجي، أو استعادة البيانات في أي وقت.</p>
         
-        <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-            <button class="btn-green" onclick="exportSystemBackup()" style="flex:1;">📥 تنزيل نسخة احتياطية كاملة (JSON)</button>
-            <button class="btn-purple" onclick="document.getElementById('importBackupFile').click()" style="flex:1;">📤 استعادة بيانات من ملف نسخة احتياطية</button>
+        <!-- أزرار التصدير -->
+        <div style="display: flex; gap: 5px; margin-top: 15px; flex-wrap: wrap;">
+            <button class="btn-green" onclick="downloadInvoiceImage()" style="flex:1;">📷 صورة الفاتورة (PNG)</button>
+            <button class="btn-orange" onclick="downloadInvoiceWord()" style="flex:1;"><i class="fa-solid fa-file-word"></i> تحميل ملف الورد (Word)</button>
+            <button class="btn-purple" onclick="window.print()" style="flex:1;">📄 طباعة PDF</button>
+            <button class="btn-red" onclick="switchTab('storeTab')" style="flex:1;">العودة للمتجر</button>
         </div>
-        <input type="file" id="importBackupFile" class="hidden" accept=".json" onchange="importSystemBackup(event)">
     </div>
 
-    <!-- ================= مراقبة الطلبات والفواتير ================= -->
-    <div id="ordersTab" class="card hidden">
-        <h2>📋 قسم مراقبة الطلبات وإصدار الفواتير وبيانات التوصيل</h2>
-        <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
-    </div>
-
-    <!-- ================= الدعم المباشر ================= -->
+    <!-- ================= الدعم الفني ================= -->
     <div id="supportTab" class="card hidden">
-        <h2>💬 الدعم الفني والتواصل المباشر</h2>
+        <h2>💬 الدعم الفني المباشر والمراسلات العامة والخاصة</h2>
         <div class="chat-box" id="chatMessages">
-            <div class="chat-msg msg-incoming">أهلاً بك في دعم بلاك بول. نحن متصلون معك لمساعدتك في طلبات الجملة والتصدير والحاويات.</div>
+            <div class="chat-msg msg-incoming">أهلاً بك في دعم بلاك بول. نحن هنا لمساعدتك في أي استفسار تجاري أو فني.</div>
         </div>
         <div class="input-group" style="display: flex; gap: 5px; margin: 0;">
-            <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." style="margin:0;">
+            <input type="text" id="chatInput" placeholder="اكتب رسالتك الموجهة للإدارة أو العملاء..." style="margin:0;">
             <button class="btn-gold" style="width: 80px; margin:0;" onclick="sendChatMessage()">إرسال</button>
         </div>
     </div>
 
-    <!-- ================= لوحة الإدارة الشاملة ================= -->
-    <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات وصلاحيات الدخول</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">بصفتك (المدير)، يمكنك هنا التحكم في كلمات المرور لكافة مستخدمي المنصة وتعديلها أو حذف الحسابات.</p>
+    <!-- ================= لوحة الإدارة ================= -->
+    <div id="adminDashboardTab" class="card hidden">
+        <h2>🔐 لوحة التحكم الشاملة والتقارير</h2>
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
             <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
-            <div class="stat-card"><h4>إجمالي الحسابات</h4><p id="statUsersCount">0</p></div>
+            <div class="stat-card"><h4>إجمالي الفواتير</h4><p id="statInvoicesCount">0</p></div>
         </div>
-        <div id="adminAllUsersList" style="margin-top: 15px;"></div>
     </div>
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/350x120/111/d4af37?text=Cover', bio: 'المدير العام لمنصة بلاك بول لتجارة وتصدير الملابس.', location: 'القاهرة - مصر', approved: true }
+            { name: 'admin', phone: 'admin', role: 'مدير', password: '123', avatar: '', cover: '' }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
         let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
-            { id: 1, name: 'جاكيت شتوي تصدير فاخر', category: 'تصدير دولي', price: 650, qty: 150, img: 'https://via.placeholder.com/150/111/d4af37?text=Export+Jacket' },
-            { id: 2, name: 'طقم بنطلون وتيشرت جملة', category: 'جملة محلي', price: 300, qty: 80, img: 'https://via.placeholder.com/150/222/d4af37?text=Local+Set' },
-            { id: 3, name: 'قميص رجالي كلاسيك قطن', category: 'ملابس رجالي', price: 250, qty: 50, img: 'https://via.placeholder.com/150/333/d4af37?text=Mens+Shirt' }
+            { id: 1, name: 'جاكيت شتوي تصدير فاخر', category: 'تصدير دولي', price: 650, qty: 150, type: 'image', mediaUrl: 'https://via.placeholder.com/150/111/d4af37?text=Jacket' },
+            { id: 2, name: 'طقم بنطلون وتيشرت جملة', category: 'جملة محلي', price: 300, qty: 80, type: 'image', mediaUrl: 'https://via.placeholder.com/150/222/d4af37?text=Set' },
+            { id: 3, name: 'أقمشة قطنية فاخرة للبيع بالجملة', category: 'أقمشة ومنسوجات', price: 1200, qty: 200, type: 'image', mediaUrl: 'https://via.placeholder.com/150/333/d4af37?text=Fabrics' }
         ];
-        let savedInvoices = JSON.parse(localStorage.getItem('bb_cloud_invoices')) || [];
         let orders = JSON.parse(localStorage.getItem('bb_cloud_orders')) || [];
+        let invoicesArchive = JSON.parse(localStorage.getItem('bb_cloud_invoices')) || [];
         let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [];
         
         let cart = [];
-        let posCart = [];
         let currentFilter = 'all';
-        let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
-        let activeInvoiceForAction = null;
-        let tempPostMedia = null;
-        let tempPostMediaType = null;
+        let tempNewProdMedia = null;
+        let tempNewProdMediaType = 'image';
+        let activeInvoice = null;
 
         window.onload = function() {
-            let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
-            if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '123'; adminUser.approved = true; }
-            
-            if(currentUser) {
-                let foundInList = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
-                if(foundInList) { currentUser = { ...foundInList }; }
-            }
-
             updateAuthUI();
-            renderInventory();
             renderStore();
             renderWarehouseManagement();
-            renderInvoicesArchive();
             renderOrders();
+            renderInvoicesArchive();
             renderChat();
-            renderLocalWholesale();
-            renderAdminUsersManagement();
-            renderGPlusStream();
-            renderGPlusGallery();
-            updateAdminStats();
-            populatePosDropdown();
-            
-            switchTab(lastActiveTab, null, false);
+            updateStats();
         };
-
-        function openWordPage() {
-            window.location.href = 'word.html';
-        }
 
         function toggleSidebar() {
             document.getElementById('sideDrawer').classList.toggle('open');
@@ -682,7 +451,7 @@
 
         function toggleGPlusDrawer() {
             if(!currentUser) {
-                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض بروفايل Black Plus (Google+) المرتبط بحسابك!');
+                alert('⚠️ يرجى تسجيل الدخول أولاً!');
                 switchTab('authSection');
                 return;
             }
@@ -698,172 +467,27 @@
 
         function checkProfileDrawerAccess() {
             if (!currentUser) {
-                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض بروفايل Black Plus (Google+) المرتبط بحسابك!');
+                alert('⚠️ يرجى تسجيل الدخول أولاً!');
                 switchTab('authSection');
             } else {
-                updateAuthUI();
-                renderGPlusStream();
-                renderGPlusGallery();
                 toggleGPlusDrawer();
             }
         }
 
-        // فتح وعرض الصورة أو الفيديو بالحجم الكامل عند النقر وتثبيتها
         function openLightbox(url, type) {
             let lightbox = document.getElementById('mediaLightbox');
             let container = document.getElementById('lightboxContainer');
             if(type === 'video') {
                 container.innerHTML = `<video src="${url}" class="media-lightbox-content" controls autoplay></video>`;
             } else {
-                container.innerHTML = `<img src="${url}" class="media-lightbox-content" alt="Enlarged Media">`;
+                container.innerHTML = `<img src="${url}" class="media-lightbox-content" alt="Media">`;
             }
             lightbox.classList.add('active');
         }
 
         function closeLightbox() {
-            let lightbox = document.getElementById('mediaLightbox');
+            document.getElementById('mediaLightbox').classList.remove('active');
             document.getElementById('lightboxContainer').innerHTML = '';
-            lightbox.classList.remove('active');
-        }
-
-        function switchGPlusTab(tabName, btn) {
-            ['gpTabStream', 'gpTabAbout', 'gpTabPhotos', 'gpTabCircles', 'gpTabCommunities'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            document.getElementById('gpTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.remove('hidden');
-            
-            let parent = btn.parentElement;
-            parent.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-
-        // ربط الصورة الشخصية حصرياً بالحساب المسجل الحالي وتخزينها محلياً وسحابياً
-        function handleAvatarUpload(event) {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً!');
-            let file = event.target.files[0];
-            if(!file) return;
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let base64Img = e.target.result;
-                currentUser.avatar = base64Img;
-                
-                if(!currentUser.gallery) currentUser.gallery = [];
-                currentUser.gallery.unshift({ id: Date.now(), type: 'image', url: base64Img });
-
-                document.getElementById('gpAvatarImg').src = base64Img;
-                syncDataToCloud();
-                renderGPlusGallery();
-                alert('✅ تم تحديث وتثبيت الصورة الشخصية للحساب المسجل بنجاح تام!');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // ربط صورة الغلاف حصرياً بالحساب المسجل الحالي وتخزينها محلياً وسحابياً
-        function handleCoverUpload(event) {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً!');
-            let file = event.target.files[0];
-            if(!file) return;
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let base64Img = e.target.result;
-                currentUser.cover = base64Img;
-
-                if(!currentUser.gallery) currentUser.gallery = [];
-                currentUser.gallery.unshift({ id: Date.now(), type: 'image', url: base64Img });
-
-                document.getElementById('gpCoverImg').src = base64Img;
-                syncDataToCloud();
-                renderGPlusGallery();
-                alert('✅ تم تحديث وتثبيت صورة الغلاف للحساب المسجل بنجاح تام!');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function handlePostMediaUpload(event, type) {
-            let file = event.target.files[0];
-            if(!file) return;
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                tempPostMedia = e.target.result;
-                tempPostMediaType = type;
-                let previewBox = document.getElementById('mediaPreviewContainer');
-                if(type === 'image') {
-                    previewBox.innerHTML = `<img src="${tempPostMedia}" style="max-height:90px; border-radius:6px; border:1px solid var(--accent); cursor:pointer;" onclick="openLightbox('${tempPostMedia}', 'image')" title="انقر للتكبير"> <button class="btn-red" style="font-size:9px; padding:2px 6px; width:auto;" onclick="clearPostMedia()">حذف المرفق</button>`;
-                } else {
-                    previewBox.innerHTML = `<video src="${tempPostMedia}" controls style="max-height:90px; border-radius:6px; border:1px solid var(--accent);"></video> <button class="btn-red" style="font-size:9px; padding:2px 6px; width:auto;" onclick="clearPostMedia()">حذف المرفق</button>`;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function clearPostMedia() {
-            tempPostMedia = null;
-            tempPostMediaType = null;
-            document.getElementById('mediaPreviewContainer').innerHTML = '';
-        }
-
-        function handleGalleryUpload(event) {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً!');
-            let file = event.target.files[0];
-            if(!file) return;
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let isVideo = file.type.startsWith('video');
-                if(!currentUser.gallery) currentUser.gallery = [];
-                currentUser.gallery.unshift({ id: Date.now(), type: isVideo ? 'video' : 'image', url: e.target.result });
-                syncDataToCloud();
-                renderGPlusGallery();
-                alert('✅ تمت إضافة الملف وتثبيته في معرض الحساب المسجل بنجاح!');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function renderGPlusGallery() {
-            let container = document.getElementById('gpGalleryContainer');
-            if(!container) return;
-            if(!currentUser || !currentUser.gallery || currentUser.gallery.length === 0) {
-                container.innerHTML = '<p style="font-size:12px; color:var(--text-muted); grid-column:1/-1; text-align:center;">لا توجد صور أو فيديوهات مرفوعة في حسابك بعد.</p>';
-                return;
-            }
-            container.innerHTML = '';
-            currentUser.gallery.forEach((item, idx) => {
-                if(item.type === 'video') {
-                    container.innerHTML += `
-                        <div style="position:relative; background:#000; border-radius:6px; overflow:hidden; border:1px solid var(--border-color);">
-                            <video src="${item.url}" style="width:100%; height:90px; object-fit:cover; cursor:pointer;" onclick="openLightbox('${item.url}', 'video')"></video>
-                            <span style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.7); color:#fff; font-size:9px; padding:2px 4px; border-radius:3px;">▶ فيديو</span>
-                            <button class="btn-red" style="position:absolute; top:2px; left:2px; font-size:8px; padding:2px 4px; width:auto;" onclick="deleteGalleryItem(${idx})">✕</button>
-                        </div>`;
-                } else {
-                    container.innerHTML += `
-                        <div style="position:relative; border-radius:6px; overflow:hidden; border:1px solid var(--border-color);">
-                            <img src="${item.url}" style="width:100%; height:90px; object-fit:cover; cursor:pointer;" onclick="openLightbox('${item.url}', 'image')" title="انقر لتكبير المشاهدة">
-                            <button class="btn-red" style="position:absolute; top:2px; left:2px; font-size:8px; padding:2px 4px; width:auto;" onclick="deleteGalleryItem(${idx})">✕</button>
-                        </div>`;
-                }
-            });
-        }
-
-        function deleteGalleryItem(idx) {
-            if(!currentUser || !currentUser.gallery) return;
-            currentUser.gallery.splice(idx, 1);
-            syncDataToCloud();
-            renderGPlusGallery();
-        }
-
-        function saveAboutProfileInfo() {
-            if(!currentUser) return;
-            let nameInput = document.getElementById('aboutEditName').value.trim();
-            let bioInput = document.getElementById('aboutEditBio').value.trim();
-            let locInput = document.getElementById('aboutEditLocation').value.trim();
-
-            if(nameInput) currentUser.name = nameInput;
-            currentUser.bio = bioInput;
-            currentUser.location = locInput;
-
-            syncDataToCloud();
-            updateAuthUI();
-            alert('✅ تم حفظ وتحديث بيانات قسم (حول) لحسابك المسجل بنجاح سحابياً ومحلياً!');
         }
 
         function setTheme(primary, accent, bg, card) {
@@ -871,113 +495,28 @@
             document.documentElement.style.setProperty('--accent', accent);
             document.documentElement.style.setProperty('--bg-color', bg);
             document.documentElement.style.setProperty('--card-bg', card);
-            syncDataToCloud();
         }
 
-        function syncDataToCloud() {
+        function syncData() {
             localStorage.setItem('bb_cloud_inventory', JSON.stringify(inventory));
-            localStorage.setItem('bb_cloud_invoices', JSON.stringify(savedInvoices));
             localStorage.setItem('bb_cloud_orders', JSON.stringify(orders));
+            localStorage.setItem('bb_cloud_invoices', JSON.stringify(invoicesArchive));
             localStorage.setItem('bb_cloud_chats', JSON.stringify(chatLogs));
-            
-            if(currentUser) {
-                let foundIndex = registeredUsers.findIndex(u => u.phone === currentUser.phone || u.name === currentUser.name);
-                if(foundIndex !== -1) {
-                    registeredUsers[foundIndex] = { ...currentUser };
-                } else {
-                    registeredUsers.push({ ...currentUser });
-                }
-                localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
-            } else {
-                localStorage.removeItem('bb_cloud_user');
-            }
+            if(currentUser) localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
             localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
-            
-            document.getElementById('syncStatus').innerText = '✅ تم حفظ ومزامنة كافة بيانات الحساب المسجل والمخزن وجوجل بلس سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
-            updateAdminStats();
-            renderAdminUsersManagement();
+            updateStats();
         }
 
-        function exportSystemBackup() {
-            let backupData = {
-                users: registeredUsers,
-                currentUser: currentUser,
-                inventory: inventory,
-                invoices: savedInvoices,
-                orders: orders,
-                chats: chatLogs,
-                exportDate: new Date().toLocaleString()
-            };
-            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-            let downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "BlackBull_Plus_Backup_" + new Date().toISOString().slice(0,10) + ".json");
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            alert('✅ تم تنزيل النسخة الاحتياطية بنجاح على جهازك!');
-        }
-
-        function importSystemBackup(event) {
-            let file = event.target.files[0];
-            if(!file) return;
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    let parsed = JSON.parse(e.target.result);
-                    if(parsed.users) registeredUsers = parsed.users;
-                    if(parsed.currentUser) currentUser = parsed.currentUser;
-                    if(parsed.inventory) inventory = parsed.inventory;
-                    if(parsed.invoices) savedInvoices = parsed.invoices;
-                    if(parsed.orders) orders = parsed.orders;
-                    if(parsed.chats) chatLogs = parsed.chats;
-
-                    syncDataToCloud();
-                    updateAuthUI();
-                    renderInventory();
-                    renderStore();
-                    renderWarehouseManagement();
-                    renderInvoicesArchive();
-                    renderOrders();
-                    renderChat();
-                    renderLocalWholesale();
-                    renderGPlusStream();
-                    renderGPlusGallery();
-                    alert('✅ تم استعادة كافة البيانات والملفات والطلبات بنجاح تام!');
-                    switchTab('storeTab');
-                } catch(err) {
-                    alert('❌ ملف النسخة الاحتياطية غير صالح أو تالف!');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function switchTab(tabId, btnElement = null, saveState = true) {
-            ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'backupTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal', 'streamDetailModal'].forEach(id => {
-                let el = document.getElementById(id);
-                if(el) el.classList.add('hidden');
+        function switchTab(tabId, btnElement = null) {
+            ['storeTab', 'addProductTab', 'advancedInvoicesStoreTab', 'exportTab', 'logisticsTab', 'invoicesViewerTab', 'ordersTab', 'supportTab', 'adminDashboardTab', 'authSection', 'invoiceModal'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
             });
-            let target = document.getElementById(tabId);
-            if(target) target.classList.remove('hidden');
-            
-            if(saveState) { 
-                lastActiveTab = tabId;
-                localStorage.setItem('bb_active_tab', tabId); 
-            }
-            if(btnElement && btnElement.tagName === 'BUTTON') {
+            document.getElementById(tabId).classList.remove('hidden');
+            if(btnElement) {
                 document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
                 btnElement.classList.add('active-nav');
             }
-            if(tabId === 'adminDashboardTab') {
-                renderAdminUsersManagement();
-            }
-        }
-
-        function switchInvSubTab(subId) {
-            ['invSubPos', 'invSubArchive', 'invSubWarehouse'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            document.getElementById('invSub' + (subId === 'pos' ? 'Pos' : subId === 'archive' ? 'Archive' : 'Warehouse')).classList.remove('hidden');
+            closeAllDrawers();
         }
 
         function switchAuthMode(mode) {
@@ -1010,53 +549,29 @@
         function performRegister() {
             let name = document.getElementById('regName').value.trim();
             let phone = document.getElementById('regPhone').value.trim();
-            let email = document.getElementById('regEmail').value.trim();
             let role = document.getElementById('regRole').value;
             let password = document.getElementById('regPassword').value;
 
-            if(!name || !phone || !password) return alert('الرجاء إدخال كافة بيانات التسجيل الأساسية');
-            let exists = registeredUsers.find(u => u.phone === phone || u.name === name);
-            if(exists) return alert('رقم الهاتف أو اسم المستخدم مسجل مسبقاً!');
-
-            let newUser = {
-                name, phone, email: email || '', role, password,
-                title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عضو مسجل متصل 🛒',
-                avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
-                cover: 'https://via.placeholder.com/350x120/111/d4af37?text=Black+Plus+Profile',
-                bio: 'مهتم بتجارة وتصدير الملابس الجاهزة.',
-                location: 'مصر',
-                approved: true,
-                posts: [],
-                gallery: [
-                    { id: 1, type: 'image', url: 'https://via.placeholder.com/350x250/111/d4af37?text=Export+Jacket+HD' },
-                    { id: 2, type: 'image', url: 'https://via.placeholder.com/350x250/222/d4af37?text=Local+Set+HD' }
-                ]
-            };
+            if(!name || !phone || !password) return alert('الرجاء إدخال كافة البيانات');
+            let newUser = { name, phone, role, password, avatar: '', cover: '' };
             registeredUsers.push(newUser);
             currentUser = newUser;
-            syncDataToCloud();
+            syncData();
             updateAuthUI();
-            toggleGPlusDrawer();
-            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي وتفعيل بروفايل Black Plus (Google+) المرتبط بنجاح!');
+            alert('✅ تم إنشاء الحساب وتسجيل الدخول بنجاح!');
+            switchTab('storeTab');
         }
 
         function performLogin() {
-            let contactOrName = document.getElementById('loginContactOrName').value.trim();
+            let contact = document.getElementById('loginContactOrName').value.trim();
             let password = document.getElementById('loginPassword').value;
-            let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName) && u.password === password);
-            if(!user) return alert('بيانات الدخول أو الرقم السري غير صحيح!');
+            let user = registeredUsers.find(u => (u.phone === contact || u.name === contact) && u.password === password);
+            if(!user) return alert('بيانات الدخول غير صحيحة!');
             currentUser = user;
-            
-            // ضمان وجود الحقول الافتراضية للبروفايل إن لم تكن موجودة
-            if(!currentUser.posts) currentUser.posts = [];
-            if(!currentUser.gallery) currentUser.gallery = [
-                { id: 1, type: 'image', url: 'https://via.placeholder.com/350x250/111/d4af37?text=Default+Gallery' }
-            ];
-
-            syncDataToCloud();
+            syncData();
             updateAuthUI();
-            toggleGPlusDrawer();
-            alert('✅ مرحباً بك مجدداً، ' + currentUser.name + ' - تم تحميل بروفايلك المرتبط بنجاح!');
+            alert('✅ مرحباً بك، ' + currentUser.name);
+            switchTab('storeTab');
         }
 
         function updateAuthUI() {
@@ -1064,349 +579,101 @@
             let greet = document.getElementById('quickUserGreet');
             if(currentUser) {
                 btnTop.innerText = 'خروج'; btnTop.className = 'btn-red';
-                greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
+                greet.innerText = 'مرحباً، ' + currentUser.name;
                 document.getElementById('gpNameDisplay').innerText = currentUser.name;
-                document.getElementById('gpRoleBadge').innerText = currentUser.title || currentUser.role;
                 document.getElementById('gpContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
-                document.getElementById('gpAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/85/000/d4af37?text=User';
-                document.getElementById('gpCoverImg').src = currentUser.cover || 'https://via.placeholder.com/350x120/111/d4af37?text=Cover';
+                document.getElementById('gpRoleBadge').innerText = currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'عميل موثق 🛒';
                 
-                document.getElementById('aboutEditName').value = currentUser.name || '';
-                document.getElementById('aboutEditBio').value = currentUser.bio || '';
-                document.getElementById('aboutEditLocation').value = currentUser.location || '';
+                if(currentUser.avatar) document.getElementById('gpAvatarImg').src = currentUser.avatar;
+                else document.getElementById('gpAvatarImg').src = 'https://via.placeholder.com/85/000/d4af37?text=' + encodeURIComponent(currentUser.name.charAt(0));
+
+                if(currentUser.cover) document.getElementById('gpCoverImg').src = currentUser.cover;
+                else document.getElementById('gpCoverImg').src = 'https://via.placeholder.com/350x120/111/d4af37?text=Black+Bull+Cover';
             } else {
                 btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
-                greet.innerText = 'مرحباً بك زائرنا الكريم';
+                greet.innerText = 'زائرنا الكريم';
             }
         }
 
-        function publishGPlusPost() {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً للنشر في الاستريم!');
-            let text = document.getElementById('gpNewPostText').value.trim();
-            if(!text && !tempPostMedia) return alert('اكتب نص المنشور أو أرفق صورة/فيديو أولاً');
-
-            let newPost = {
-                id: Date.now(),
-                author: currentUser.name,
-                text: text,
-                media: tempPostMedia,
-                mediaType: tempPostMediaType,
-                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
+        function handleAvatarUpload(event) {
+            let file = event.target.files[0];
+            if(!file || !currentUser) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                currentUser.avatar = e.target.result;
+                let masterUser = registeredUsers.find(u => u.phone === currentUser.phone);
+                if(masterUser) masterUser.avatar = currentUser.avatar;
+                syncData();
+                updateAuthUI();
+                alert('✅ تم تحديث الصورة الشخصية للبروفايل بنجاح!');
             };
-
-            if(!currentUser.posts) currentUser.posts = [];
-            currentUser.posts.unshift(newPost);
-
-            if(tempPostMedia) {
-                if(!currentUser.gallery) currentUser.gallery = [];
-                currentUser.gallery.unshift({ id: Date.now(), type: tempPostMediaType, url: tempPostMedia });
-                renderGPlusGallery();
-            }
-
-            document.getElementById('gpNewPostText').value = '';
-            clearPostMedia();
-            syncDataToCloud();
-            renderGPlusStream();
-            alert('✅ تم نشر المنشور في استريم حسابك المسجل بنجاح!');
+            reader.readAsDataURL(file);
         }
 
-        function renderGPlusStream() {
-            let container = document.getElementById('gpStreamContainer');
-            if(!container) return;
-            if(!currentUser || !currentUser.posts || currentUser.posts.length === 0) {
-                container.innerHTML = '<p style="font-size:12px; color:var(--text-muted); text-align:center;">لا توجد منشورات خاصة بحسابك في الاستريم بعد.</p>';
-                return;
-            }
-            container.innerHTML = '';
-            currentUser.posts.forEach(post => {
-                let mediaHtml = '';
-                if(post.media) {
-                    if(post.mediaType === 'image') {
-                        mediaHtml = `<img src="${post.media}" style="width:100%; max-height:120px; object-fit:cover; border-radius:6px; margin-top:5px; cursor:pointer;" onclick="event.stopPropagation(); openLightbox('${post.media}', 'image')">`;
-                    } else {
-                        mediaHtml = `<video src="${post.media}" style="width:100%; max-height:120px; object-fit:cover; border-radius:6px; margin-top:5px;" controls></video>`;
-                    }
-                }
-                container.innerHTML += `
-                    <div class="gplus-stream-item" onclick="openStreamDetail(${post.id})">
-                        <b>${post.author}</b> <span style="font-size:10px; color:var(--text-muted);">(${post.date})</span>
-                        <p style="margin:5px 0; font-size:12px;">${post.text ? (post.text.length > 70 ? post.text.substring(0,70) + '...' : post.text) : 'مرفق مرئي'}</p>
-                        ${mediaHtml}
-                        <small style="color:var(--accent); display:block; margin-top:4px;">انقر للعرض الكامل 🔍</small>
-                    </div>
-                `;
-            });
+        function handleCoverUpload(event) {
+            let file = event.target.files[0];
+            if(!file || !currentUser) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                currentUser.cover = e.target.result;
+                let masterUser = registeredUsers.find(u => u.phone === currentUser.phone);
+                if(masterUser) masterUser.cover = currentUser.cover;
+                syncData();
+                updateAuthUI();
+                alert('✅ تم تحديث غلاف بروفايل Black Plus بنجاح!');
+            };
+            reader.readAsDataURL(file);
         }
 
-        function openStreamDetail(postId) {
-            if(!currentUser || !currentUser.posts) return;
-            let post = currentUser.posts.find(p => p.id === postId);
-            if(!post) return;
-            
-            let mediaHtml = '';
-            if(post.media) {
-                if(post.mediaType === 'image') {
-                    mediaHtml = `<img src="${post.media}" style="width:100%; max-height:250px; object-fit:contain; border-radius:8px; margin-top:10px; cursor:pointer;" onclick="openLightbox('${post.media}', 'image')" title="انقر لتكبير الصورة">`;
+        function previewNewProductMedia(event) {
+            let file = event.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            tempNewProdMediaType = file.type.startsWith('video') ? 'video' : 'image';
+            reader.onload = function(e) {
+                tempNewProdMedia = e.target.result;
+                let previewBox = document.getElementById('newProdMediaPreview');
+                if(tempNewProdMediaType === 'video') {
+                    previewBox.innerHTML = `<video src="${tempNewProdMedia}" controls style="max-height:120px; border-radius:8px; border:1px solid var(--accent);"></video>`;
                 } else {
-                    mediaHtml = `<video src="${post.media}" style="width:100%; max-height:250px; object-fit:contain; border-radius:8px; margin-top:10px;" controls></video>`;
+                    previewBox.innerHTML = `<img src="${tempNewProdMedia}" style="max-height:120px; border-radius:8px; border:1px solid var(--accent);">`;
                 }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveNewProductToStore() {
+            let name = document.getElementById('newProdName').value.trim();
+            let price = parseFloat(document.getElementById('newProdPrice').value) || 0;
+            let qty = parseInt(document.getElementById('newProdQty').value) || 1;
+            let category = document.getElementById('newProdCategory').value;
+
+            if(!name || !price) return alert('الرجاء إدخال اسم المنتج والسعر على الأقل!');
+            if(!tempNewProdMedia) {
+                tempNewProdMedia = 'https://via.placeholder.com/150/111/d4af37?text=Product';
             }
 
-            document.getElementById('streamDetailContent').innerHTML = `
-                <h3 style="color:var(--accent); margin-top:0;">منشور بواسطة: ${post.author}</h3>
-                <small style="color:var(--text-muted);">التاريخ والوقت: ${post.date}</small>
-                <p style="font-size:14px; margin-top:10px; line-height:1.6; white-space:pre-wrap;">${post.text || ''}</p>
-                ${mediaHtml}
-            `;
-            closeAllDrawers();
-            switchTab('streamDetailModal');
-        }
-
-        function closeStreamDetail() {
-            switchTab('storeTab');
-        }
-
-        function renderAdminUsersManagement() {
-            let container = document.getElementById('adminAllUsersList');
-            if(!container) return;
-            let isManager = currentUser && currentUser.role === 'مدير';
-            
-            container.innerHTML = `<h3>👥 إدارة كافة حسابات المنصة والأرقام السرية</h3>`;
-            if(registeredUsers.length === 0) { container.innerHTML += `<p>لا توجد حسابات مسجلة.</p>`; return; }
-
-            registeredUsers.forEach((u, idx) => {
-                container.innerHTML += `
-                    <div class="item-row" style="flex-wrap:wrap;">
-                        <div style="flex:1; min-width:200px;">
-                            <b>الاسم: ${u.name}</b> (${u.role})<br>
-                            <small>الهاتف: ${u.phone} | الرقم السري: <b>${u.password}</b></small>
-                        </div>
-                        <div style="display:flex; gap:5px; align-items:center;">
-                            ${isManager ? `
-                                <input type="text" id="adminNewPass_${idx}" placeholder="الرقم السري الجديد" style="width:130px; padding:6px; font-size:11px; margin:0;">
-                                <button class="btn-blue" style="width:auto; padding:6px 10px; font-size:11px;" onclick="adminUpdateUserPassword(${idx})">تغيير السري</button>
-                                ${u.phone !== 'admin' ? `<button class="btn-red" style="width:auto; padding:6px 10px; font-size:11px;" onclick="adminDeleteUser(${idx})">حذف</button>` : ''}
-                            ` : `<span style="font-size:11px; color:var(--text-muted);">للمدير صلاحية التعديل</span>`}
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function adminUpdateUserPassword(idx) {
-            if(!currentUser || currentUser.role !== 'مدير') return alert('للمدير فقط');
-            let newPassInput = document.getElementById('adminNewPass_' + idx);
-            let newPass = newPassInput ? newPassInput.value.trim() : '';
-            if(!newPass) return alert('الرجاء كتابة الرقم السري الجديد أولاً!');
-
-            registeredUsers[idx].password = newPass;
-            syncDataToCloud();
-            renderAdminUsersManagement();
-            alert('✅ تم تغيير الرقم السري بنجاح!');
-        }
-
-        function adminDeleteUser(idx) {
-            if(!currentUser || currentUser.role !== 'مدير') return alert('للمدير فقط');
-            if(confirm('هل أنت متأكد من حذف هذا الحساب؟')) {
-                registeredUsers.splice(idx, 1);
-                syncDataToCloud();
-                renderAdminUsersManagement();
-            }
-        }
-
-        function populatePosDropdown() {
-            let select = document.getElementById('posSelectProduct');
-            if(!select) return;
-            select.innerHTML = '';
-            inventory.forEach(item => {
-                select.innerHTML += `<option value="${item.id}">${item.name} - السعر: ${item.price} ج.م (المخزون: ${item.qty})</option>`;
-            });
-        }
-
-        function addPosItemToCart() {
-            let prodId = parseInt(document.getElementById('posSelectProduct').value);
-            let qty = parseInt(document.getElementById('posQuantity').value) || 1;
-            let item = inventory.find(i => i.id === prodId);
-            if(!item) return alert('المنتج غير موجود');
-            if(item.qty < qty) return alert('الكمية المطلوبة أكبر من المتاحة بالمخزن!');
-
-            let existing = posCart.find(p => p.id === prodId);
-            if(existing) { existing.qty += qty; } else { posCart.push({ id: item.id, name: item.name, price: item.price, qty: qty }); }
-            renderPosCart();
-        }
-
-        function renderPosCart() {
-            let container = document.getElementById('posCartItemsList');
-            let total = 0;
-            if(posCart.length === 0) { container.innerHTML = 'لا توجد أصناف مضافة بالفاتورة بعد.'; document.getElementById('posCartTotal').innerText = '0'; return; }
-            container.innerHTML = '';
-            posCart.forEach((item, index) => {
-                let subTotal = item.price * item.qty;
-                total += subTotal;
-                container.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom:1px dashed #333; padding-bottom:4px;">
-                    <span>• ${item.name} (×${item.qty})</span> 
-                    <span><b>${subTotal} ج.م</b> <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto;" onclick="posCart.splice(${index},1); renderPosCart();">حذف</button></span>
-                </div>`;
-            });
-            document.getElementById('posCartTotal').innerText = total;
-        }
-
-        function finalizeAndSaveInvoice() {
-            let custName = document.getElementById('posCustomerName').value.trim() || (currentUser ? currentUser.name : 'عميل نقدي');
-            let custPhone = document.getElementById('posCustomerPhone').value.trim() || (currentUser ? currentUser.phone : '01000000000');
-            if(posCart.length === 0) return alert('الفاتورة فارغة!');
-
-            let totalVal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            posCart.forEach(posItem => {
-                let storeItem = inventory.find(i => i.id === posItem.id);
-                if(storeItem) { storeItem.qty -= posItem.qty; }
-            });
-
-            let newInvoice = {
-                id: 'BB-INV-' + Math.floor(1000 + Math.random() * 9000),
-                customer: custName,
-                phone: custPhone,
-                items: [...posCart],
-                total: totalVal,
-                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'})
+            let newProduct = {
+                id: Date.now(),
+                name, price, qty, category,
+                type: tempNewProdMediaType,
+                mediaUrl: tempNewProdMedia,
+                addedBy: currentUser ? currentUser.name : 'إدارة النظام'
             };
 
-            savedInvoices.push(newInvoice);
-            posCart = [];
-            document.getElementById('posCustomerName').value = '';
-            document.getElementById('posCustomerPhone').value = '';
-            renderPosCart();
-            populatePosDropdown();
-            renderInventory();
-            renderWarehouseManagement();
-            renderInvoicesArchive();
-            syncDataToCloud();
-
-            alert('✅ تم حفظ الفاتورة بنجاح وخصم الكميات من المخزن!');
-            openInvoiceModalDirect(newInvoice);
-        }
-
-        function renderInvoicesArchive() {
-            let container = document.getElementById('invoicesArchiveList');
-            let query = document.getElementById('searchInvoiceInput') ? document.getElementById('searchInvoiceInput').value.toLowerCase() : '';
-            if(!container) return;
-
-            let filtered = savedInvoices.filter(inv => inv.id.toLowerCase().includes(query) || inv.customer.toLowerCase().includes(query));
-            document.getElementById('invTotalInvoicesDisplay').innerText = savedInvoices.length;
-            let totalSales = savedInvoices.reduce((sum, inv) => sum + inv.total, 0);
-            document.getElementById('invTotalSalesDisplay').innerText = totalSales + ' ج.م';
-
-            if(filtered.length === 0) { container.innerHTML = 'لا توجد فواتير محفوظة في الأرشيف.'; return; }
-            container.innerHTML = '';
-            filtered.forEach(inv => {
-                container.innerHTML += `
-                    <div class="item-row">
-                        <div>
-                            <b>رقم الفاتورة: ${inv.id}</b> | العميل: ${inv.customer} (${inv.phone})<br>
-                            <small>التاريخ: ${inv.date} | الإجمالي: <b style="color:var(--accent);">${inv.total} ج.م</b></small>
-                        </div>
-                        <div style="display:flex; gap:5px;">
-                            <button class="btn-gold" style="width:auto; padding:6px 10px; font-size:11px;" onclick="openInvoiceModalById('${inv.id}')">🧾 عرض</button>
-                            <button class="btn-green" style="width:auto; padding:6px 10px; font-size:11px;" onclick="shareInvoiceWhatsAppByObj('${inv.id}')">🔗 واتساب</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function openInvoiceModalById(invId) {
-            let inv = savedInvoices.find(i => i.id === invId);
-            if(inv) openInvoiceModalDirect(inv);
-        }
-
-        function openInvoiceModalDirect(inv) {
-            activeInvoiceForAction = inv;
-            document.getElementById('invModalId').innerText = 'رقم الفاتورة: #' + inv.id;
-            document.getElementById('invModalDate').innerText = 'التاريخ: ' + inv.date;
-            document.getElementById('invModalClient').innerText = inv.customer;
-            document.getElementById('invModalPhone').innerText = inv.phone;
-            document.getElementById('invModalTotal').innerText = inv.total;
-
-            let tbody = document.getElementById('invModalItems');
-            tbody.innerHTML = '';
-            inv.items.forEach(it => {
-                tbody.innerHTML += `<tr><td>${it.name}</td><td>${it.qty}</td><td>${it.price} ج.م</td><td>${it.price * it.qty} ج.م</td></tr>`;
-            });
-            switchTab('invoiceModal');
-        }
-
-        function closeInvoiceModal() { switchTab('advancedInvoicesStoreTab'); }
-
-        function downloadInvoiceImage() {
-            let element = document.getElementById('printableInvoice');
-            html2canvas(element).then(canvas => {
-                let link = document.createElement('a');
-                link.download = (activeInvoiceForAction ? activeInvoiceForAction.id : 'Invoice') + '.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-        function downloadInvoicePDF() { window.print(); }
-
-        function shareInvoiceWhatsAppDirect() {
-            if(!activeInvoiceForAction) return;
-            let inv = activeInvoiceForAction;
-            let itemsText = inv.items.map(i => `- ${i.name} (الكمية: ${i.qty}) = ${i.price * i.qty} ج.م`).join('\n');
-            let msg = `مرحباً بك يا ${inv.customer} 🐂\nإليك تفاصيل فاتورة الشراء والتصدير الرسمية من Black Bull Store:\n\nرقم الفاتورة: #${inv.id}\nالتاريخ: ${inv.date}\n\nالأصناف:\n${itemsText}\n\nالإجمالي الكلي: ${inv.total} جنيه\n\nشكراً لتعاملك معنا!`;
-            let phone = inv.phone.startsWith('0') ? '2' + inv.phone : inv.phone;
-            window.open(`https://wa.me/${phone}?text=` + encodeURIComponent(msg), '_blank');
-        }
-
-        function shareInvoiceWhatsAppByObj(invId) {
-            let inv = savedInvoices.find(i => i.id === invId);
-            if(inv) { activeInvoiceForAction = inv; shareInvoiceWhatsAppDirect(); }
-        }
-
-        function addNewWarehouseItem() {
-            let name = document.getElementById('whName').value.trim();
-            let qty = parseInt(document.getElementById('whQty').value) || 0;
-            let price = parseFloat(document.getElementById('whPrice').value) || 0;
-            let img = document.getElementById('whImg').value.trim();
-
-            if(!name || !price) return alert('الرجاء إدخال اسم المنتج والسعر');
-            inventory.push({ id: Date.now(), name, category: 'جملة محلي', price, qty, img: img || 'https://via.placeholder.com/150' });
-            document.getElementById('whName').value = '';
-            document.getElementById('whQty').value = '';
-            document.getElementById('whPrice').value = '';
-            document.getElementById('whImg').value = '';
-
-            syncDataToCloud();
-            renderInventory();
-            renderWarehouseManagement();
-            populatePosDropdown();
+            inventory.push(newProduct);
+            syncData();
             renderStore();
-            alert('✅ تمت إضافة المنتج للمخزن بنجاح!');
-        }
-
-        function renderWarehouseManagement() {
-            let container = document.getElementById('warehouseItemsList');
-            if(!container) return;
-            document.getElementById('invCountDisplay').innerText = inventory.length;
-            if(inventory.length === 0) { container.innerHTML = 'المخزن فارغ.'; return; }
-            container.innerHTML = '';
-            inventory.forEach(item => {
-                container.innerHTML += `
-                    <div class="item-row">
-                        <div><b>${item.name}</b><br><small>السعر: ${item.price} ج.م | المخزون المتاح: <b style="color:${item.qty > 10 ? '#48bb78':'#e53e3e'}">${item.qty} قطعة</b></small></div>
-                        <button class="btn-red" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteWarehouseItem(${item.id})">حذف الصنف</button>
-                    </div>
-                `;
-            });
-        }
-
-        function deleteWarehouseItem(id) {
-            inventory = inventory.filter(i => i.id !== id);
-            syncDataToCloud();
-            renderInventory();
             renderWarehouseManagement();
-            populatePosDropdown();
-            renderStore();
+
+            document.getElementById('newProdName').value = '';
+            document.getElementById('newProdPrice').value = '';
+            document.getElementById('newProdMediaInput').value = '';
+            document.getElementById('newProdMediaPreview').innerHTML = '';
+            tempNewProdMedia = null;
+
+            alert('✅ تمت إضافة المنتج ونشره في المتجر بنجاح تام!');
+            switchTab('storeTab');
         }
 
         function filterCategory(cat, element) {
@@ -1421,72 +688,59 @@
             if(!container) return;
             container.innerHTML = '';
             let filtered = inventory.filter(item => currentFilter === 'all' || item.category === currentFilter);
-            if(filtered.length === 0) { container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">لا توجد منتجات.</p>'; return; }
+            if(filtered.length === 0) { container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">لا توجد منتجات متاحة في هذا القسم.</p>'; return; }
+            
             filtered.forEach(item => {
+                let mediaElement = item.type === 'video' ? 
+                    `<video src="${item.mediaUrl}" style="cursor:pointer;" onclick="event.stopPropagation(); openLightbox('${item.mediaUrl}', 'video')" muted></video>` :
+                    `<img src="${item.mediaUrl}" alt="${item.name}" style="cursor:pointer;" onclick="event.stopPropagation(); openLightbox('${item.mediaUrl}', 'image')" title="انقر لتكبير الصورة">`;
+
                 container.innerHTML += `
-                    <div class="product-card" onclick="openProductDetail(${item.id})">
-                        <img src="${item.img}" alt="${item.name}" title="انقر لتكبير صورة المنتج" onclick="event.stopPropagation(); openLightbox('${item.img}', 'image')">
+                    <div class="product-card">
+                        ${mediaElement}
                         <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
                         <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small><br>
-                        <button class="btn-blue" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="event.stopPropagation(); addToCart(${item.id})">أضف للسلة</button>
+                        <small style="display:block; color:var(--text-muted);">المتوفر: ${item.qty}</small>
+                        <button class="btn-blue" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="addToCart(${item.id})">أضف للسلة 🛒</button>
                     </div>
                 `;
             });
-        }
-
-        function renderLocalWholesale() {
-            let container = document.getElementById('localWholesaleProducts');
-            if(!container) return;
-            container.innerHTML = '';
-            inventory.forEach(item => {
-                container.innerHTML += `
-                    <div class="product-card" onclick="openProductDetail(${item.id})">
-                        <img src="${item.img}" alt="${item.name}" title="انقر لتكبير الصورة" onclick="event.stopPropagation(); openLightbox('${item.img}', 'image')">
-                        <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
-                        <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small>
-                    </div>
-                `;
-            });
-        }
-
-        function openProductDetail(id) {
-            let item = inventory.find(i => i.id === id);
-            if(!item) return;
-            document.getElementById('productDetailContent').innerHTML = `
-                <img src="${item.img}" alt="${item.name}" style="max-width: 250px; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; cursor:pointer;" onclick="openLightbox('${item.img}', 'image')" title="انقر لتكبير الصورة">
-                <h2>${item.name}</h2>
-                <p><b>السعر:</b> <span style="color:var(--accent); font-size: 18px;">${item.price} جنيه</span></p>
-                <p><b>المخزون المتاح:</b> ${item.qty} قطعة</p>
-                <button class="btn-gold" onclick="switchTab('supportTab')">💬 تواصل للطلب والتفاصيل</button>
-            `;
-            switchTab('productDetailTab');
         }
 
         function addToCart(id) {
             let item = inventory.find(i => i.id === id);
-            if(item.qty <= 0) return alert('عذراً، هذا المنتج نفد من المخزن!');
+            if(!item || item.qty <= 0) return alert('عذراً، المنتج نفد من المخزن!');
             cart.push(item);
             renderCart();
-            alert('تمت الإضافة للسلة');
+            alert('✅ تمت إضافة المنتج إلى سلة المشتريات بنجاح');
         }
 
         function renderCart() {
             let container = document.getElementById('cartItems');
             let total = 0;
-            if(cart.length === 0) { container.innerHTML = 'السلة فارغة'; document.getElementById('cartTotal').innerText = '0'; return; }
+            if(cart.length === 0) { container.innerHTML = 'السلة فارغة حالياً'; document.getElementById('cartTotal').innerText = '0'; return; }
             container.innerHTML = '';
-            cart.forEach(item => {
+            cart.forEach((item, index) => {
                 total += item.price;
-                container.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>• ${item.name}</span> <b>${item.price} ج.م</b></div>`;
+                container.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; border-bottom:1px dashed #333; padding-bottom:4px;">
+                        <span>• ${item.name}</span> 
+                        <span><b>${item.price} ج.م</b> <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto;" onclick="cart.splice(${index},1); renderCart();">حذف</button></span>
+                    </div>`;
             });
             document.getElementById('cartTotal').innerText = total;
         }
 
-        function placeOrder() {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً لإرسال الطلب!');
+        function checkoutCart() {
+            if(!currentUser) {
+                alert('⚠️ يرجى تسجيل الدخول أولاً لإتمام الشراء وإصدار الفاتورة!');
+                switchTab('authSection');
+                return;
+            }
             if(cart.length === 0) return alert('السلة فارغة!');
 
             let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
+            
             cart.forEach(cartItem => {
                 let st = inventory.find(i => i.id === cartItem.id);
                 if(st) st.qty -= 1;
@@ -1498,95 +752,180 @@
                 phone: currentUser.phone,
                 items: [...cart],
                 total: totalVal,
-                status: 'قيد المراجعة والتوصيل ⏳',
-                date: new Date().toLocaleDateString('ar-EG')
+                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
             };
 
-            savedInvoices.push({
-                id: 'INV-' + newOrder.id,
-                customer: newOrder.customer,
-                phone: newOrder.phone,
-                items: cart.map(c => ({ name: c.name, price: c.price, qty: 1 })),
-                total: totalVal,
-                date: newOrder.date
-            });
-
             orders.push(newOrder);
+            invoicesArchive.push(newOrder);
+            syncData();
+            
+            activeInvoice = newOrder;
             cart = [];
-            syncDataToCloud();
             renderCart();
+            renderStore();
+            renderWarehouseManagement();
             renderOrders();
             renderInvoicesArchive();
-            renderWarehouseManagement();
-            alert('✅ تم إرسال الطلب وحفظ الفاتورة الرسمية بنجاح!');
-            switchTab('ordersTab');
+
+            alert('✅ تم إتمام الطلب بنجاح وتم إصدار الفاتورة الفورية!');
+            openInvoiceModal(newOrder);
         }
 
-        function renderOrders() {
-            let container = document.getElementById('ordersList');
+        function openInvoiceModal(order) {
+            document.getElementById('invModalId').innerText = 'رقم الفاتورة: #' + order.id;
+            document.getElementById('invModalDate').innerText = 'التاريخ: ' + order.date;
+            document.getElementById('invModalClient').innerText = order.customer;
+            document.getElementById('invModalPhone').innerText = order.phone;
+            document.getElementById('invModalTotal').innerText = order.total;
+
+            let tbody = document.getElementById('invModalItems');
+            tbody.innerHTML = '';
+            order.items.forEach(it => {
+                tbody.innerHTML += `<tr><td>${it.name}</td><td>1</td><td>${it.price} ج.م</td><td>${it.price} ج.م</td></tr>`;
+            });
+            switchTab('invoiceModal');
+            activeInvoice = order;
+        }
+
+        function downloadInvoiceImage() {
+            let element = document.getElementById('printableInvoice');
+            html2canvas(element).then(canvas => {
+                let link = document.createElement('a');
+                link.download = (activeInvoice ? activeInvoice.id : 'Invoice') + '.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function downloadInvoiceWord() {
+            if(!activeInvoice) return alert('لا توجد فاتورة نشطة حالياً!');
+            
+            let htmlContent = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>Invoice</title></head>
+                <body style="direction: rtl; font-family: 'Segoe UI', Tahoma, sans-serif;">
+                    <h1 style="color: #d4af37; text-align: center;">BLACK BULL STORE</h1>
+                    <h3 style="text-align: center;">فاتورة مشتريات وتصدير رسمية</h3>
+                    <p><b>رقم الفاتورة:</b> #${activeInvoice.id}</p>
+                    <p><b>التاريخ:</b> ${activeInvoice.date}</p>
+                    <p><b>اسم العميل:</b> ${activeInvoice.customer} (${activeInvoice.phone})</p>
+                    <table border="1" style="width: 100%; border-collapse: collapse; text-align: right;">
+                        <thead>
+                            <tr style="background: #111; color: #d4af37;">
+                                <th style="padding: 8px;">المنتج</th>
+                                <th style="padding: 8px;">الكمية</th>
+                                <th style="padding: 8px;">السعر</th>
+                                <th style="padding: 8px;">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${activeInvoice.items.map(it => `<tr><td style="padding: 8px;">${it.name}</td><td style="padding: 8px;">1</td><td style="padding: 8px;">${it.price} ج.م</td><td style="padding: 8px;">${it.price} ج.م</td></tr>`).join('')}
+                        </tbody>
+                    </table>
+                    <h3 style="text-align: left; margin-top: 20px;">الإجمالي الكلي: ${activeInvoice.total} جنيه</h3>
+                </body>
+                </html>
+            `;
+
+            let blob = new Blob(['\ufeff' + htmlContent], {
+                type: 'application/msword'
+            });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `${activeInvoice.id}.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function renderInvoicesArchive() {
+            let container = document.getElementById('invoicesArchiveList');
             if(!container) return;
-            if(orders.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
+            let list = invoicesArchive;
+            if(currentUser && currentUser.role !== 'مدير') {
+                list = invoicesArchive.filter(i => i.customer === currentUser.name);
+            }
+            if(list.length === 0) { container.innerHTML = 'لا توجد فواتير مسجلة في الأرشيف حالياً.'; return; }
             container.innerHTML = '';
-            orders.forEach(o => {
+            list.forEach(inv => {
                 container.innerHTML += `
                     <div class="item-row">
                         <div>
-                            <b>طلب/شحنة: ${o.id}</b> - الإجمالي: ${o.total} ج.م<br>
-                            <small>العميل: ${o.customer} | الهاتف: ${o.phone} | الحالة: <span style="color:var(--accent);">${o.status}</span></small>
+                            <b>فاتورة رقم: #${inv.id}</b> - الإجمالي: <b style="color:var(--accent);">${inv.total} ج.م</b><br>
+                            <small>العميل: ${inv.customer} | التاريخ: ${inv.date}</small>
                         </div>
-                        <button class="btn-gold" style="width:auto; padding:6px 12px; font-size:12px;" onclick="openInvoiceModalById('INV-${o.id}')">🧾 عرض الفاتورة</button>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn-gold" style="width:auto; padding:5px 8px; font-size:11px;" onclick="openInvoiceModal(invoicesArchive.find(x => x.id === '${inv.id}'))">👁️ مشاهدة</button>
+                        </div>
                     </div>
                 `;
             });
         }
 
-        function renderInventory() { updateAdminStats(); }
+        function renderWarehouseManagement() {
+            let container = document.getElementById('warehouseItemsList');
+            if(!container) return;
+            if(inventory.length === 0) { container.innerHTML = 'المخزن فارغ.'; return; }
+            container.innerHTML = '';
+            inventory.forEach(item => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div><b>${item.name}</b> (${item.category})<br><small>السعر: ${item.price} ج.م | المخزون: <b>${item.qty} قطعة</b></small></div>
+                        <button class="btn-red" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteWarehouseItem(${item.id})">حذف</button>
+                    </div>
+                `;
+            });
+        }
 
-        function updateAdminStats() {
+        function deleteWarehouseItem(id) {
+            inventory = inventory.filter(i => i.id !== id);
+            syncData();
+            renderStore();
+            renderWarehouseManagement();
+        }
+
+        function renderOrders() {
+            let container = document.getElementById('ordersList');
+            if(!container) return;
+            let list = orders;
+            if(currentUser && currentUser.role !== 'مدير') {
+                list = orders.filter(o => o.customer === currentUser.name);
+            }
+            if(list.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
+            container.innerHTML = '';
+            list.forEach(o => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div>
+                            <b>طلب رقم: ${o.id}</b> - الإجمالي: <b style="color:var(--accent);">${o.total} ج.م</b><br>
+                            <small>العميل: ${o.customer} (${o.phone}) | التاريخ: ${o.date}</small>
+                        </div>
+                        <button class="btn-gold" style="width:auto; padding:6px 10px; font-size:11px;" onclick="openInvoiceModal(orders.find(x => x.id === '${o.id}'))">🧾 عرض الفاتورة</button>
+                    </div>
+                `;
+            });
+        }
+
+        function updateStats() {
             let pCount = document.getElementById('statProductsCount');
             let oCount = document.getElementById('statOrdersCount');
-            let uCount = document.getElementById('statUsersCount');
+            let iCount = document.getElementById('statInvoicesCount');
             if(pCount) pCount.innerText = inventory.length;
             if(oCount) oCount.innerText = orders.length;
-            if(uCount) uCount.innerText = registeredUsers.length;
+            if(iCount) iCount.innerText = invoicesArchive.length;
         }
 
-        function performTrackingSearch() {
-            let code = document.getElementById('trackInputCode').value;
-            let box = document.getElementById('trackingResultBox');
-            if(!code) return alert('الرجاء إدخال رقم بوليصة أو حاوية صحيحة');
-            box.innerHTML = `<div class="card" style="background:#111; border-color:var(--accent);">
-                <h4>📌 نتائج تتبع الشحنة: ${code}</h4>
-                <p>• الحالة الحالية: <span style="color:#48bb78; font-weight:bold;">في عرض البحر / في طريقه لميناء الوصول 🚢</span></p>
-                <p>• الميناء المُصدر: ميناء الإسكندرية 🇪🇬 | التوقع الوصول خلال 4 أيام.</p>
-            </div>`;
-        }
-
-        function calculateShippingAndCustoms() {
-            let country = document.getElementById('calcCountry').value;
-            let size = document.getElementById('calcContainerSize').value;
-            let val = parseFloat(document.getElementById('calcGoodsValue').value) || 0;
-            let freightCost = size === '40' ? 45000 : size === '20' ? 28000 : 8000;
-            let customDuty = val * 0.12; 
-            let totalEstimated = val + freightCost + customDuty;
-            document.getElementById('calcResultBox').innerHTML = `<div class="card" style="background:#111; border-color:var(--accent);">
-                <h4>📊 التقرير التقديري للتكلفة والشحن إلى (${country})</h4>
-                <p>• قيمة البضاعة: <b>${val} ج.م</b> | الشحن: <b>${freightCost} ج.م</b> | الجمارك: <b>${customDuty.toFixed(2)} ج.م</b></p>
-                <p style="color:var(--accent); font-size:16px;"><b>الإجمالي التقديري: ${totalEstimated.toFixed(2)} جنيه</b></p>
-            </div>`;
-        }
-
-        function submitExportInquiry() { alert('تم إرسال طلب التصدير بنجاح'); }
-        function submitCustomOrder() { alert('تم إرسال طلب التفصيل بنجاح'); }
-        
         function sendChatMessage() {
-            let txt = document.getElementById('chatInput').value;
+            let txt = document.getElementById('chatInput').value.trim();
             if(!txt) return;
-            chatLogs.push({ sender: currentUser ? currentUser.name : 'زائر', text: txt, type: 'outgoing' });
-            syncDataToCloud();
+            let senderName = currentUser ? currentUser.name + (currentUser.role === 'مدير' ? ' (الإدارة 🔐)' : ' (عميل 🛒)') : 'زائرنا الكريم';
+            chatLogs.push({ sender: senderName, text: txt, type: 'outgoing' });
+            syncData();
             renderChat();
             document.getElementById('chatInput').value = '';
         }
+
         function renderChat() {
             let box = document.getElementById('chatMessages');
             if(!box) return;
