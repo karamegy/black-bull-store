@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بلاك بلوك - سناب شات (Word)</title>
+    <style>
+        :root {
+            --snap-yellow: #fffc00;
+            --snap-dark: #111111;
+            --snap-gray: #f4f4f4;
+            --snap-blue: #007aff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* الحاوية الرئيسية للهاتف/المنصة */
+        .snap-container {
+            width: 100%;
+            max-width: 430px;
+            height: 100%;
+            max-height: 900px;
+            background: var(--snap-dark);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 252, 0, 0.2);
+        }
+
+        @media (min-width: 431px) {
+            .snap-container {
+                border-radius: 30px;
+                height: 90vh;
+            }
+        }
+
+        /* شريط العرض العلوي (الهيدر) */
+        .snap-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--snap-yellow);
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .user-info span {
+            font-size: 11px;
+            color: var(--snap-yellow);
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* منطقة الكاميرا / العرض الوسطى */
+        .snap-viewfinder {
+            flex: 1;
+            position: relative;
+            background: #222;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #camera-feed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .placeholder-cam {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .placeholder-cam h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--snap-yellow);
+        }
+
+        .placeholder-cam p {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        /* فلاتر سناب شات الوهمية */
+        .filters-bar {
+            position: absolute;
+            top: 80px;
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 20px;
+            scrollbar-width: none;
+        }
+
+        .filters-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-chip {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+
+        .filter-chip.active {
+            background: var(--snap-yellow);
+            color: #000;
+            font-weight: bold;
+            border-color: var(--snap-yellow);
+        }
+
+        /* أزرار التقاط الكاميرا السفلى */
+        .camera-controls {
+            padding: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 5;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+
+        .capture-btn {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: 0.1s;
+        }
+
+        .capture-btn:active {
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .side-cam-btn {
+            background: rgba(0,0,0,0.4);
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* شريط التنقل السفلي (Navbar) الخاص بسناب شات */
+        .snap-nav {
+            display: flex;
+            justify-content: space-around;
+            background: #000;
+            padding: 12px 0;
+            border-top: 1px solid #222;
+            z-index: 10;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: #777;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: var(--snap-yellow);
+        }
+
+        /* شاشات التبويب المختلفة (قصص، دردشة، خريطة) */
+        .tab-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            background: var(--snap-dark);
+            display: none;
+            flex-direction: column;
+            z-index: 8;
+            overflow-y: auto;
+            padding: 70px 15px 20px 15px;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* قسم القصص (Stories) */
+        .stories-section h3, .chat-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--snap-yellow);
+        }
+
+        .story-list {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .story-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .story-ring {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid var(--snap-yellow);
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-ring img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .story-item span {
+            font-size: 12px;
+            max-width: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* قسم المحادثات (Chat) */
+        .chat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .chat-row:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .chat-row img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: hover;
+        }
+
+        .chat-details {
+            flex: 1;
+        }
+
+        .chat-details h4 {
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .chat-details p {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .chat-time {
+            font-size: 10px;
+            color: var(--snap-yellow);
+        }
+
+        /* إشعارات سناب الوهمية (Toast Notification) */
+        .snap-toast {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(255, 252, 0, 0.9);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            z-index: 100;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .snap-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+    <!-- مكتبة الأيقونات FontAwesome لتصميم مميز متطابق -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="snap-container">
+        
+        <!-- إشعار التنبيه الفوري -->
+        <div id="snapToast" class="snap-toast">تم حفظ السناب في الذكريات!</div>
+
+        <!-- شريط الهيدر العلوي -->
+        <div class="snap-header" id="mainHeader">
+            <div class="user-profile">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="صورة الحساب" class="avatar" onclick="showScore()">
+                <div class="user-info">
+                    <h4 id="userName">حساب بلاك بلوك</h4>
+                    <span><i class="fa-solid fa-fire"></i> <span id="userScore">1,492</span> نقطة</span>
+                </div>
+            </div>
+            <div class="header-icons">
+                <button class="icon-btn" onclick="triggerSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="icon-btn" onclick="openAddFriends()"><i class="fa-solid fa-user-plus"></i></button>
+                <button class="icon-btn" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+            </div>
+        </div>
+
+        <!-- الشاشة الرئيسية (الكاميرا والتقاط السنبات) -->
+        <div class="snap-viewfinder" id="cameraView">
+            <video id="camera-feed" autoplay playsinline></video>
+            <div class="placeholder-cam" id="camPlaceholder">
+                <h2>كاميرا بلاك بلوك (Word)</h2>
+                <p>اضغط على زر التقاط الصور لتفعيل ميزات سناب شات بالكامل داخل المنصة.</p>
+            </div>
+
+            <!-- شريط فلاتر سناب شات -->
+            <div class="filters-bar">
+                <div class="filter-chip active" onclick="applyFilter('normal', this)">عادي</div>
+                <div class="filter-chip" onclick="applyFilter('dog', this)">🐶 كلب لطيف</div>
+                <div class="filter-chip" onclick="applyFilter('flower', this)">🌸 تاج الزهور</div>
+                <div class="filter-chip" onclick="applyFilter('neon', this)">⚡ نيون بلوك</div>
+                <div class="filter-chip" onclick="applyFilter('retro', this)">📼 ريترو القديم</div>
+            </div>
+
+            <!-- أزرار الالتقاط السفلية -->
+            <div class="camera-controls">
+                <button class="side-cam-btn" onclick="openGallery()"><i class="fa-solid fa-image"></i></button>
+                <button class="capture-btn" onclick="takeSnap()"></button>
+                <button class="side-cam-btn" onclick="switchCamera()"><i class="fa-solid fa-rotate"></i></button>
+            </div>
+        </div>
+
+        <!-- تبويب القصص (Stories) -->
+        <div class="tab-content" id="storiesTab">
+            <h3>قصص حسابات المنصة</h3>
+            <div class="story-list" id="storyListContainer">
+                <!-- يتم تعبئتها برمجياً -->
+            </div>
+            <h3>اكتشف المحتوى المميز</h3>
+            <div class="chat-list">
+                <div class="chat-row">
+                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100" alt="Spotlight">
+                    <div class="chat-details">
+                        <h4>تحدي بلاك بلوك الجديد</h4>
+                        <p>شاهد أفضل اللحظات والقصص الرائجة اليوم</p>
+                    </div>
+                    <span class="chat-time">رائج</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- تبويب المحادثات (Chat & Messaging) -->
+        <div class="tab-content" id="chatTab">
+            <h3>الدردشات والرسائل الفورية</h3>
+            <div class="chat-list">
+                <div class="chat-row" onclick="openChatRoom('أحمد محمد')">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="أحمد">
+                    <div class="chat-details">
+                        <h4>أحمد محمد</h4>
+                        <p>📷 سناب جديد (اضغط للفتح)</p>
+                    </div>
+                    <span class="chat-time">منذ دقيقتين</span>
+                </div>
+                <div class="chat-row" onclick="openChatRoom('ساره علي')">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="ساره">
+                    <div class="chat-details">
+                        <h4>ساره علي</h4>
+                        <p>مرحباً بك في قسم Word الجديد!</p>
+                    </div>
+                    <span class="chat-time">منذ ساعة</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريط التنقل السفلي (Navbar) -->
+        <div class="snap-nav">
+            <button class="nav-item" onclick="switchTab('chatTab', this)"><i class="fa-regular fa-comment"></i><span>الدردشة</span></button>
+            <button class="nav-item active" onclick="switchTab('cameraView', this)"><i class="fa-solid fa-camera"></i><span>الكاميرا</span></button>
+            <button class="nav-item" onclick="switchTab('storiesTab', this)"><i class="fa-solid fa-circle-notch"></i><span>القصص</span></button>
+        </div>
+
+    </div>
+
+    <script>
+        // تفعيل الكاميرا الحية (إن توفر إذن المتصفح)
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                const video = document.getElementById('camera-feed');
+                video.srcObject = stream;
+                video.style.display = 'block';
+                document.getElementById('camPlaceholder').style.display = 'none';
+            })
+            .catch(err => {
+                console.log("الكاميرا غير متاحة، يتم استخدام الواجهة التفاعلية البديلة.");
+            });
+
+        // تبديل التبويبات بين الكاميرا، القصص، والدردشة
+        function switchTab(tabId, btnElement) {
+            // إخفاء كل المحتويات
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('cameraView').style.display = 'none';
+            
+            // إزالة التنشيط عن أزرار الناف بار
+            document.querySelectorAll('.snap-nav .nav-item').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            if (tabId === 'cameraView') {
+                document.getElementById('cameraView').style.display = 'flex';
+                document.getElementById('mainHeader').style.display = 'flex';
+            } else {
+                document.getElementById('mainHeader').style.display = 'flex';
+                document.getElementById(tabId).classList.add('active');
+            }
+        }
+
+        // التقاط سناب وتحديث النقاط (ميزات سناب الشاملة)
+        function takeSnap() {
+            showToast("📸 تم التقاط السناب وإضافته للذكريات!");
+            // زيادة نقاط الحساب تلقائياً عند كل تفاعل (ميزة شبيهة بسناب)
+            let scoreEl = document.getElementById('userScore');
+            let currentScore = parseInt(scoreEl.innerText.replace(',', '')) + 1;
+            scoreEl.innerText = currentScore.toLocaleString();
+        }
+
+        // تطبيق الفلاتر الوهمية على الكاميرا
+        function applyFilter(filterName, element) {
+            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+            element.classList.add('active');
+            
+            let viewfinder = document.getElementById('cameraView');
+            viewfinder.style.filter = "none";
+            
+            if (filterName === 'dog') {
+                viewfinder.style.filter = "sepia(0.3) contrast(1.2)";
+                showToast("🐶 تم تطبيق فلاتر الوجه بنجاح");
+            } else if (filterName === 'neon') {
+                viewfinder.style.filter = "hue-rotate(90deg) saturate(2)";
+                showToast("⚡ تم تفعيل نيون بلاك بلوك");
+            } else if (filterName === 'retro') {
+                viewfinder.style.filter = "grayscale(0.5) contrast(1.5)";
+                showToast("📼 وضع الفيديو الكلاسيكي");
+            }
+        }
+
+        // إظهار التنبيهات المنبثقة
+        function showToast(message) {
+            let toast = document.getElementById('snapToast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // وظائف إضافية للمنصة
+        function showScore() {
+            let score = document.getElementById('userScore').innerText;
+            alert("إجمالي نقاطك في منصة بلاك بلوك (Snap Score): " + score);
+        }
+
+        function openAddFriends() {
+            showToast("👥 ميزة إضافة الأصدقاء عبر الباركود مفعّلة!");
+        }
+
+        function openSettings() {
+            showToast("⚙️ إعدادات حساب المنصة وخصوصية القصص.");
+        }
+
+        function openGallery() {
+            showToast("📁 تم فتح ذكريات المنصة والستوديو.");
+        }
+
+        function switchCamera() {
+            showToast("🔄 تم تبديل الكاميرا (امامية/خلفية).");
+        }
+
+        function openChatRoom(name) {
+            showToast("💬 جاري فتح محادثة آمنة مع " + name);
+        }
+
+        // توليد قصص وهمية لحسابات المنصة ديناميكياً
+        const accounts = [
+            { name: "Admin_Block", img: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" },
+            { name: "Tech_News", img: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100" },
+            { name: "Design_Pro", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100" },
+            { name: "Block_Official", img: "https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=100" }
+        ];
+
+        const storyContainer = document.getElementById('storyListContainer');
+        accounts.forEach(acc => {
+            storyContainer.innerHTML += `
+                <div class="story-item" onclick="showToast('📖 عرض قصة ${acc.name}')">
+                    <div class="story-ring">
+                        <img src="${acc.img}" alt="${acc.name}">
+                    </div>
+                    <span>${acc.name}</span>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
