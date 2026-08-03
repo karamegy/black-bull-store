@@ -110,12 +110,13 @@
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
         .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
 
-        .profile-header { position: relative; text-align: center; margin-bottom: 45px; }
-        .profile-cover-container { width: 100%; height: 150px; border-radius: 12px; overflow: hidden; border: 1px solid var(--accent); position: relative; background: #000; cursor: pointer; }
+        /* بروفايل جوجل بلس المطور */
+        .profile-header { position: relative; text-align: center; margin-bottom: 55px; }
+        .profile-cover-container { width: 100%; height: 160px; border-radius: 12px; overflow: hidden; border: 2px solid var(--accent); position: relative; background: #000; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .profile-cover { width: 100%; height: 100%; object-fit: cover; }
-        .profile-avatar-container { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--accent); position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); overflow: hidden; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.6); cursor: pointer; }
+        .profile-avatar-container { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--accent); position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%); overflow: hidden; background: #000; box-shadow: 0 6px 20px rgba(0,0,0,0.8); cursor: pointer; }
         .profile-avatar { width: 100%; height: 100%; object-fit: cover; }
-        .profile-info { margin-top: 15px; text-align: center; }
+        .profile-info { margin-top: 20px; text-align: center; }
 
         .chat-box { height: 260px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; overflow-y: auto; background: #111; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
         .chat-msg { padding: 8px 12px; border-radius: 8px; max-width: 75%; font-size: 13px; }
@@ -169,7 +170,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.4)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.5)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -440,16 +441,16 @@
         </div>
     </div>
 
-    <!-- ================= الملف الشخصي (Profile) ================= -->
+    <!-- ================= الملف الشخصي (Profile) - جوجل بلس ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
-            <!-- النقر على الغلاف يفتح نافذة اختيار صورة الغلاف مباشرة -->
+            <!-- غلاف الحساب الشخصي - النقر يفتح اختيار ملف الغلاف -->
             <div class="profile-cover-container" onclick="document.getElementById('uploadCoverFile').click()" title="انقر لتغيير الغلاف مباشرة">
                 <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover" alt="Cover">
             </div>
-            <!-- النقر على الصورة الشخصية يفتح نافذة اختيار الصورة الشخصية مباشرة -->
+            <!-- صورة الملف الشخصي الدائرية - النقر يفتح اختيار ملف الصورة الشخصية -->
             <div class="profile-avatar-container" onclick="document.getElementById('uploadAvatarFile').click()" title="انقر لتغيير الصورة الشخصية مباشرة">
-                <img id="userAvatarImg" class="profile-avatar" src="https://via.placeholder.com/85/000/d4af37?text=Bull" alt="Avatar">
+                <img id="userAvatarImg" class="profile-avatar" src="https://via.placeholder.com/110/000/d4af37?text=Bull" alt="Avatar">
             </div>
         </div>
         <div class="profile-info">
@@ -525,7 +526,7 @@
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover', approved: true }
+            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/110/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x160/111/d4af37?text=Manager+Cover', approved: true }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
         let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
@@ -546,7 +547,7 @@
             let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
             if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '123'; adminUser.approved = true; }
             
-            // مزامنة حالة المستخدم الحالي إذا تم تحديث بياناته مسبقاً في القائمة العامة
+            // مزامنة حالة المستخدم الحالي من القائمة العامة لمنع تلف البيانات
             if(currentUser) {
                 let foundInList = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
                 if(foundInList) {
@@ -566,7 +567,7 @@
             updateAdminStats();
             populatePosDropdown();
             
-            // فتح التبويب الأخير بشكل صحيح وثابت منعاً للعودة الافتراضية للمتجر
+            // فتح التبويب الأخير بشكل ثبات تام عند الـ Refresh
             switchTab(lastActiveTab, null, false);
         };
 
@@ -695,8 +696,8 @@
             let newUser = {
                 name, phone, email: email || '', role, password,
                 title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒',
-                avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
-                cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Store',
+                avatar: 'https://via.placeholder.com/110/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
+                cover: 'https://via.placeholder.com/600x160/111/d4af37?text=Black+Bull+Store',
                 approved: true
             };
             registeredUsers.push(newUser);
@@ -730,8 +731,8 @@
                 document.getElementById('profileNameDisplay').innerText = currentUser.name;
                 document.getElementById('profileTitleBadge').innerText = currentUser.title || currentUser.role;
                 document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
-                document.getElementById('userAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/85/000/d4af37?text=Bull';
-                document.getElementById('userCoverImg').src = currentUser.cover || 'https://via.placeholder.com/600x130/111/d4af37?text=Cover';
+                document.getElementById('userAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/110/000/d4af37?text=Bull';
+                document.getElementById('userCoverImg').src = currentUser.cover || 'https://via.placeholder.com/600x160/111/d4af37?text=Cover';
                 document.getElementById('editName').value = currentUser.name;
                 document.getElementById('editPhone').value = currentUser.phone;
                 document.getElementById('editEmail').value = currentUser.email || '';
