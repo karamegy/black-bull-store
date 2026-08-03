@@ -111,9 +111,9 @@
         .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
 
         .profile-header { position: relative; text-align: center; margin-bottom: 45px; }
-        .profile-cover-container { width: 100%; height: 150px; border-radius: 12px; overflow: hidden; border: 1px solid var(--accent); position: relative; background: #000; }
+        .profile-cover-container { width: 100%; height: 150px; border-radius: 12px; overflow: hidden; border: 1px solid var(--accent); position: relative; background: #000; cursor: pointer; }
         .profile-cover { width: 100%; height: 100%; object-fit: cover; }
-        .profile-avatar-container { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--accent); position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); overflow: hidden; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+        .profile-avatar-container { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--accent); position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); overflow: hidden; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.6); cursor: pointer; }
         .profile-avatar { width: 100%; height: 100%; object-fit: cover; }
         .profile-info { margin-top: 15px; text-align: center; }
 
@@ -169,7 +169,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.2)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.3)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -244,14 +244,12 @@
             <div class="stat-card"><h4>إجمالي مبيعات الفواتير</h4><p id="invTotalSalesDisplay">0 ج.م</p></div>
         </div>
 
-        <!-- أزرار التنقل الفرعية للقسم -->
         <div style="display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;">
             <button class="btn-gold" onclick="switchInvSubTab('pos')" style="flex:1;">🛒 إنشاء فاتورة جديدة وبيع</button>
             <button class="btn-blue" onclick="switchInvSubTab('archive')" style="flex:1;">🗂️ أرشيف الفواتير الشامل</button>
             <button class="btn-purple" onclick="switchInvSubTab('warehouse')" style="flex:1;">📦 إدارة المخزن والأصناف</button>
         </div>
 
-        <!-- فرع 1: إنشاء فاتورة جديدة (POS) -->
         <div id="invSubPos">
             <div class="card" style="background:#111;">
                 <h3>➕ إصدار فاتورة جديدة للعميل</h3>
@@ -273,7 +271,6 @@
             </div>
         </div>
 
-        <!-- فرع 2: أرشيف الفواتير -->
         <div id="invSubArchive" class="hidden">
             <div class="card" style="background:#111;">
                 <h3>🗂️ أرشيف الفواتير المحفوظة (معاينة، تصدير، واتساب)</h3>
@@ -284,7 +281,6 @@
             </div>
         </div>
 
-        <!-- فرع 3: إدارة المخزن -->
         <div id="invSubWarehouse" class="hidden">
             <div class="card" style="background:#111;">
                 <h3>📦 إضافة منتج جديد للمخزن</h3>
@@ -301,7 +297,7 @@
         </div>
     </div>
 
-    <!-- نافذة معاينة الفاتورة الرسمية (للطباعة والتحميل والواتساب) -->
+    <!-- نافذة معاينة الفاتورة الرسمية -->
     <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🧾 معاينة فاتورة البيع والتصدير الرسمية</h2>
         <div id="printableInvoice" class="invoice-box">
@@ -444,13 +440,15 @@
         </div>
     </div>
 
-    <!-- ================= الملف الشخصي ================= -->
+    <!-- ================= الملف الشخصي (Profile) ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
-            <div class="profile-cover-container">
+            <!-- النقر على الغلاف يفتح نافذة اختيار صورة الغلاف مباشرة -->
+            <div class="profile-cover-container" onclick="document.getElementById('uploadCoverFile').click()" title="انقر لتغيير الغلاف مباشرة">
                 <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover" alt="Cover">
             </div>
-            <div class="profile-avatar-container">
+            <!-- النقر على الصورة الشخصية يفتح نافذة اختيار الصورة الشخصية مباشرة -->
+            <div class="profile-avatar-container" onclick="document.getElementById('uploadAvatarFile').click()" title="انقر لتغيير الصورة الشخصية مباشرة">
                 <img id="userAvatarImg" class="profile-avatar" src="https://via.placeholder.com/85/000/d4af37?text=Bull" alt="Avatar">
             </div>
         </div>
@@ -460,15 +458,39 @@
             <p style="color: var(--text-muted); font-size: 13px;" id="profileContactDisplay">الهاتف أو البريد</p>
             <span class="status-badge" id="profileRoleBadge">حساب مسجل وموثق سحابياً ✔️</span>
         </div>
+        
         <hr style="margin: 20px 0; border-color:var(--border-color);">
-        <h3>👤 تعديل الملف الشخصي وصور الحساب</h3>
-        <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="editName"></div>
-        <div class="input-group"><label>رقم الهاتف / اسم المستخدم:</label><input type="text" id="editPhone"></div>
-        <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="editEmail"></div>
-        <div class="input-group"><label>🖼️ تحميل الصورة الشخصية:</label><input type="file" id="uploadAvatarFile" accept="image/*" onchange="previewImageFile(event, 'avatar')"></div>
-        <div class="input-group"><label>🌄 تحميل صورة الغلاف:</label><input type="file" id="uploadCoverFile" accept="image/*" onchange="previewImageFile(event, 'cover')"></div>
-        <div class="input-group"><label>كلمة المرور الجديدة:</label><input type="password" id="editPassword" placeholder="اتركه فارغاً إذا لم ترغب بتغييره"></div>
-        <button class="btn-blue" onclick="saveProfileChanges()">حفظ وتثبيت التعديلات والصور سحابياً 💾</button>
+        
+        <!-- زر فتح/إغلاق تعديل معلومات الحساب الشخصي بناءً على طلبك -->
+        <button class="btn-blue" onclick="toggleEditProfileSection()" style="margin-bottom: 15px;">⚙️ تعديل معلومات الحساب الشخصي (تعديل البيانات والصور)</button>
+
+        <!-- قسم التعديل المخفي افتراضياً ويظهر عند الضغط على الزر أعلاه -->
+        <div id="editProfileSectionContainer" class="card hidden" style="background:#111; border: 1px dashed var(--accent);">
+            <h3>👤 تعديل الملف الشخصي وصور الحساب (اضغط مباشرة على صورتك أو غلافك للتغيير الفوري)</h3>
+            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="editName"></div>
+            <div class="input-group"><label>رقم الهاتف / اسم المستخدم:</label><input type="text" id="editPhone"></div>
+            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="editEmail"></div>
+            
+            <!-- حقول الملفات المخفية التي يتم تفعيلها بلمس الصورة أو الغلاف أو الأزرار -->
+            <div class="input-group hidden"><input type="file" id="uploadAvatarFile" accept="image/*" onchange="previewImageFile(event, 'avatar')"></div>
+            <div class="input-group hidden"><input type="file" id="uploadCoverFile" accept="image/*" onchange="previewImageFile(event, 'cover')"></div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                <button class="btn-purple" style="flex:1;" onclick="document.getElementById('uploadAvatarFile').click()">📷 تغيير الصورة الشخصية</button>
+                <button class="btn-blue" style="flex:1;" onclick="document.getElementById('uploadCoverFile').click()">🌄 تغيير صورة الغلاف</button>
+            </div>
+
+            <div class="input-group"><label>كلمة المرور الجديدة:</label><input type="password" id="editPassword" placeholder="اتركه فارغاً إذا لم ترغب بتغييره"></div>
+            <button class="btn-green" onclick="saveProfileChanges()">حفظ وتثبيت التعديلات والصور والصرف سحابياً 💾</button>
+        </div>
+
+        <hr style="margin: 20px 0; border-color:var(--border-color);">
+
+        <!-- عرض الشحنات والأوردرات الخاصة بكل عميل مسجل اسفل بروفايله مباشرة -->
+        <h3>📦 الشحنات والأوردرات المسجلة الخاصة بحسابك</h3>
+        <div id="userProfileOrdersList" style="margin-top: 10px;">
+            <p style="color:var(--text-muted); text-align:center;">لا توجد شحنات أو أوردرات مسجلة باسمك حالياً.</p>
+        </div>
     </div>
 
     <!-- ================= مراقبة الطلبات والفواتير ================= -->
@@ -492,6 +514,7 @@
     <!-- ================= لوحة الإدارة الشاملة ================= -->
     <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2 style="color: var(--accent);">🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات وصلاحيات الدخول</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">بصفتك (المدير)، يمكنك هنا التحكم في كلمات المرور لكافة مستخدمي المنصة وتعديلها أو حذف الحسابات.</p>
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
             <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
@@ -502,7 +525,7 @@
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '1234', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover', approved: true }
+            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover', approved: true }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
         let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
@@ -521,7 +544,7 @@
 
         window.onload = function() {
             let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
-            if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '1234'; adminUser.approved = true; }
+            if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '123'; adminUser.approved = true; }
             updateAuthUI();
             renderInventory();
             renderStore();
@@ -530,6 +553,7 @@
             renderOrders();
             renderChat();
             renderLocalWholesale();
+            renderAdminUsersManagement();
             updateAdminStats();
             populatePosDropdown();
             switchTab(lastActiveTab, null, false);
@@ -554,16 +578,18 @@
             localStorage.setItem('bb_cloud_orders', JSON.stringify(orders));
             localStorage.setItem('bb_cloud_chats', JSON.stringify(chatLogs));
             localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
+            
             if(currentUser) {
-                localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
-                let found = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
-                if(found) {
-                    found.name = currentUser.name; found.email = currentUser.email; found.avatar = currentUser.avatar;
-                    found.cover = currentUser.cover; found.title = currentUser.title; found.role = currentUser.role; found.password = currentUser.password;
+                let foundIndex = registeredUsers.findIndex(u => u.phone === currentUser.phone || u.name === currentUser.name);
+                if(foundIndex !== -1) {
+                    registeredUsers[foundIndex] = { ...currentUser };
                 }
+                localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
             }
-            document.getElementById('syncStatus').innerText = '✅ تم مزامنة وحفظ البيانات سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
+            
+            document.getElementById('syncStatus').innerText = '✅ تم مزامنة وحفظ التحديثات والصور سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
             updateAdminStats();
+            renderAdminUsersManagement();
         }
 
         function checkProfileAccess(btnElement = null) {
@@ -571,19 +597,38 @@
                 alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي!');
                 switchTab('authSection', btnElement);
             } else {
+                updateAuthUI();
+                renderUserProfileOrders();
                 switchTab('profileTab', btnElement);
+            }
+        }
+
+        // إظهار أو إخفاء زر وتعديل معلومات الحساب الشخصي
+        function toggleEditProfileSection() {
+            let section = document.getElementById('editProfileSectionContainer');
+            if(section) {
+                section.classList.toggle('hidden');
             }
         }
 
         function switchTab(tabId, btnElement = null, saveState = true) {
             ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
+                let el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
             });
-            document.getElementById(tabId).classList.remove('hidden');
+            let target = document.getElementById(tabId);
+            if(target) target.classList.remove('hidden');
+            
             if(saveState) { localStorage.setItem('bb_active_tab', tabId); }
             if(btnElement && btnElement.tagName === 'BUTTON') {
                 document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
                 btnElement.classList.add('active-nav');
+            }
+            if(tabId === 'adminDashboardTab') {
+                renderAdminUsersManagement();
+            }
+            if(tabId === 'profileTab' && currentUser) {
+                renderUserProfileOrders();
             }
         }
 
@@ -635,7 +680,7 @@
             let newUser = {
                 name, phone, email: email || '', role, password,
                 title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒',
-                avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + name.charAt(0),
+                avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
                 cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Store',
                 approved: true
             };
@@ -643,6 +688,7 @@
             currentUser = newUser;
             syncDataToCloud();
             updateAuthUI();
+            renderUserProfileOrders();
             switchTab('profileTab');
             alert('✅ أهلاً بك يا ' + currentUser.name + ' تم إنشاء الحساب بنجاح!');
         }
@@ -651,10 +697,11 @@
             let contactOrName = document.getElementById('loginContactOrName').value.trim();
             let password = document.getElementById('loginPassword').value;
             let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName) && u.password === password);
-            if(!user) return alert('بيانات الدخول غير صحيحة!');
+            if(!user) return alert('بيانات الدخول أو الرقم السري غير صحيح!');
             currentUser = user;
             syncDataToCloud();
             updateAuthUI();
+            renderUserProfileOrders();
             switchTab('profileTab');
             alert('✅ مرحباً بك مجدداً، ' + currentUser.name);
         }
@@ -668,8 +715,8 @@
                 document.getElementById('profileNameDisplay').innerText = currentUser.name;
                 document.getElementById('profileTitleBadge').innerText = currentUser.title || currentUser.role;
                 document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
-                document.getElementById('userAvatarImg').src = currentUser.avatar || '';
-                document.getElementById('userCoverImg').src = currentUser.cover || '';
+                document.getElementById('userAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/85/000/d4af37?text=Bull';
+                document.getElementById('userCoverImg').src = currentUser.cover || 'https://via.placeholder.com/600x130/111/d4af37?text=Cover';
                 document.getElementById('editName').value = currentUser.name;
                 document.getElementById('editPhone').value = currentUser.phone;
                 document.getElementById('editEmail').value = currentUser.email || '';
@@ -679,14 +726,69 @@
             }
         }
 
+        // عرض الشحنات والأوردرات والطلبات الخاصة بالعميل الحالي في بروفايله
+        function renderUserProfileOrders() {
+            let container = document.getElementById('userProfileOrdersList');
+            if(!container || !currentUser) return;
+
+            let userOrders = orders.filter(o => o.phone === currentUser.phone || o.customer === currentUser.name);
+            let userInvoices = savedInvoices.filter(i => i.phone === currentUser.phone || i.customer === currentUser.name);
+
+            if(userOrders.length === 0 && userInvoices.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); text-align:center;">لا توجد شحنات أو أوردرات مسجلة باسمك حالياً.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            
+            // عرض الطلبات والأوردرات
+            if(userOrders.length > 0) {
+                container.innerHTML += `<h4 style="color:var(--accent); margin-bottom:5px;">📋 قائمة الأوردرات والطلبات المسجلة:</h4>`;
+                userOrders.forEach(o => {
+                    container.innerHTML += `
+                        <div class="item-row" style="background:#111; padding:8px 12px; border-radius:8px; margin-bottom:5px;">
+                            <div>
+                                <b>رقم الطلب: ${o.id}</b> | التاريخ: ${o.date}<br>
+                                <small>الإجمالي: <b style="color:var(--accent);">${o.total} ج.م</b> | الحالة: <span style="color:#48bb78;">${o.status}</span></small>
+                            </div>
+                            <button class="btn-gold" style="width:auto; padding:5px 10px; font-size:11px;" onclick="openInvoiceModalById('INV-${o.id}')">🧾 عرض الفاتورة</button>
+                        </div>
+                    `;
+                });
+            }
+
+            // عرض الشحنات والفواتير الخاصة بالعميل
+            if(userInvoices.length > 0) {
+                container.innerHTML += `<h4 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">🚢 فواتير الشحن والتصدير الخاصة بك:</h4>`;
+                userInvoices.forEach(inv => {
+                    container.innerHTML += `
+                        <div class="item-row" style="background:#111; padding:8px 12px; border-radius:8px; margin-bottom:5px;">
+                            <div>
+                                <b>الفاتورة: ${inv.id}</b> | التاريخ: ${inv.date}<br>
+                                <small>القيمة الإجمالية: <b style="color:var(--accent);">${inv.total} ج.م</b></small>
+                            </div>
+                            <button class="btn-blue" style="width:auto; padding:5px 10px; font-size:11px;" onclick="openInvoiceModalById('${inv.id}')">📄 معاينة الشحنة/الفاتورة</button>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // معاينة وحفظ الصور الشخصية والغلاف فوراً عند اختيارها أو النقر عليها
         function previewImageFile(event, type) {
             let file = event.target.files[0];
             if(file && currentUser) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    if(type === 'avatar') { currentUser.avatar = e.target.result; document.getElementById('userAvatarImg').src = currentUser.avatar; }
-                    else if(type === 'cover') { currentUser.cover = e.target.result; document.getElementById('userCoverImg').src = currentUser.cover; }
+                    if(type === 'avatar') {
+                        currentUser.avatar = e.target.result;
+                        document.getElementById('userAvatarImg').src = currentUser.avatar;
+                    } else if(type === 'cover') {
+                        currentUser.cover = e.target.result;
+                        document.getElementById('userCoverImg').src = currentUser.cover;
+                    }
                     syncDataToCloud();
+                    alert('✨ تم رفع وتثبيت الصورة بنجاح وتحديثها على المنصة!');
                 };
                 reader.readAsDataURL(file);
             }
@@ -697,11 +799,74 @@
             currentUser.name = document.getElementById('editName').value || currentUser.name;
             currentUser.phone = document.getElementById('editPhone').value || currentUser.phone;
             currentUser.email = document.getElementById('editEmail').value || currentUser.email;
-            let newPass = document.getElementById('editPassword').value;
-            if(newPass) currentUser.password = newPass;
+            
+            let newPass = document.getElementById('editPassword').value.trim();
+            if(newPass) {
+                currentUser.password = newPass;
+            }
+
             syncDataToCloud();
             updateAuthUI();
-            alert('✅ تم حفظ التعديلات والصور بنجاح!');
+            renderUserProfileOrders();
+            alert('✅ تم حفظ وتثبيت كافة التعديلات، الحساب والصور بنجاح تام!');
+        }
+
+        // ================= إدارة الحسابات وتغيير الرقم السري بواسطة المدير =================
+        function renderAdminUsersManagement() {
+            let container = document.getElementById('adminAllUsersList');
+            if(!container) return;
+            
+            let isManager = currentUser && currentUser.role === 'مدير';
+            
+            container.innerHTML = `<h3>👥 إدارة كافة حسابات المنصة والأرقام السرية</h3>`;
+            if(registeredUsers.length === 0) {
+                container.innerHTML += `<p>لا توجد حسابات مسجلة.</p>`;
+                return;
+            }
+
+            registeredUsers.forEach((u, idx) => {
+                container.innerHTML += `
+                    <div class="item-row" style="flex-wrap:wrap;">
+                        <div style="flex:1; min-width:200px;">
+                            <b>الاسم: ${u.name}</b> (${u.role})<br>
+                            <small>الهاتف: ${u.phone} | الرقم السري: <b>${u.password}</b></small>
+                        </div>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            ${isManager ? `
+                                <input type="text" id="adminNewPass_${idx}" placeholder="الرقم السري الجديد" style="width:130px; padding:6px; font-size:11px; margin:0;">
+                                <button class="btn-blue" style="width:auto; padding:6px 10px; font-size:11px;" onclick="adminUpdateUserPassword(${idx})">تغيير السري</button>
+                                ${u.phone !== 'admin' ? `<button class="btn-red" style="width:auto; padding:6px 10px; font-size:11px;" onclick="adminDeleteUser(${idx})">حذف</button>` : ''}
+                            ` : `<span style="font-size:11px; color:var(--text-muted);">للمدير صلاحية التعديل</span>`}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function adminUpdateUserPassword(idx) {
+            if(!currentUser || currentUser.role !== 'مدير') {
+                return alert('⚠️ عذراً، هذه الصلاحية مخصصة للمدير العام فقط!');
+            }
+            let newPassInput = document.getElementById('adminNewPass_' + idx);
+            let newPass = newPassInput ? newPassInput.value.trim() : '';
+            if(!newPass) return alert('الرجاء كتابة الرقم السري الجديد أولاً!');
+
+            registeredUsers[idx].password = newPass;
+            if(currentUser && currentUser.phone === registeredUsers[idx].phone) {
+                currentUser.password = newPass;
+            }
+            syncDataToCloud();
+            renderAdminUsersManagement();
+            alert('✅ تم تغيير وتثبيت الرقم السري للحساب (' + registeredUsers[idx].name + ') بنجاح!');
+        }
+
+        function adminDeleteUser(idx) {
+            if(!currentUser || currentUser.role !== 'مدير') return alert('للمدير فقط');
+            if(confirm('هل أنت متأكد من حذف هذا الحساب؟')) {
+                registeredUsers.splice(idx, 1);
+                syncDataToCloud();
+                renderAdminUsersManagement();
+            }
         }
 
         // ================= الوظائف المتقدمة لقسم الفواتير والمخزن =================
@@ -747,13 +912,12 @@
         }
 
         function finalizeAndSaveInvoice() {
-            let custName = document.getElementById('posCustomerName').value.trim() || 'عميل نقدي';
-            let custPhone = document.getElementById('posCustomerPhone').value.trim() || '01000000000';
+            let custName = document.getElementById('posCustomerName').value.trim() || (currentUser ? currentUser.name : 'عميل نقدي');
+            let custPhone = document.getElementById('posCustomerPhone').value.trim() || (currentUser ? currentUser.phone : '01000000000');
             if(posCart.length === 0) return alert('الفاتورة فارغة!');
 
             let totalVal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-            // خصم الكميات من المخزن الرئيسي تلقائياً
             posCart.forEach(posItem => {
                 let storeItem = inventory.find(i => i.id === posItem.id);
                 if(storeItem) {
@@ -779,6 +943,7 @@
             renderInventory();
             renderWarehouseManagement();
             renderInvoicesArchive();
+            renderUserProfileOrders();
             syncDataToCloud();
 
             alert('✅ تم حفظ الفاتورة بنجاح وخصم الكميات من المخزن!');
@@ -989,7 +1154,6 @@
 
             let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
             
-            // خصم المخزن للطلب السريع
             cart.forEach(cartItem => {
                 let st = inventory.find(i => i.id === cartItem.id);
                 if(st) st.qty -= 1;
@@ -1005,7 +1169,6 @@
                 date: new Date().toLocaleDateString('ar-EG')
             };
 
-            // حفظ الطلب أيضاً كفاتورة رسمية في الأرشيف
             savedInvoices.push({
                 id: 'INV-' + newOrder.id,
                 customer: newOrder.customer,
@@ -1022,6 +1185,7 @@
             renderOrders();
             renderInvoicesArchive();
             renderWarehouseManagement();
+            renderUserProfileOrders();
             alert('✅ تم إرسال الطلب وحفظ الفاتورة الرسمية بنجاح!');
             switchTab('ordersTab');
         }
