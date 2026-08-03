@@ -149,7 +149,7 @@
         <button onclick="switchTab('exportProfileTab'); toggleSidebar()">🌐 بروفايل التصدير الشامل</button>
         <button onclick="switchTab('profileTab'); toggleSidebar()">👤 حسابي الشخصي</button>
         <button onclick="switchTab('supportTab'); toggleSidebar()">💬 الدعم الفني</button>
-        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;">🔐 لوحة الإدارة</button>
+        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;">🔐 لوحة الإدارة الشاملة</button>
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
 
@@ -171,7 +171,7 @@
     <div class="top-nav-bar">
         <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ أقسام المنصة</button>
         <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">مرحباً بك زائرنا الكريم</div>
-        <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">دخول</button>
+        <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
     <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: متصل بالخادم السحبي والمحلي بكفاءة تامة</div>
@@ -181,39 +181,62 @@
         <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
         <button onclick="switchTab('exportTab', this)">🌍 التصدير</button>
         <button onclick="switchTab('localWholesaleTab', this)">📦 جملة محلي</button>
-        <button onclick="switchTab('customOrderTab', this)">✂️ تفصيل خاص</button>
+        <button onclick="switchTab('customOrderTab', this)">✂️ تفصيل</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
         <button onclick="switchTab('exportProfileTab', this)">🌐 التصدير الشامل</button>
         <button onclick="switchTab('profileTab', this)">👤 حسابي</button>
         <button onclick="switchTab('supportTab', this)">💬 الدعم</button>
     </div>
 
-    <!-- ================= 1. تسجيل الدخول مع لوجو متحرك عالي الجودة ================= -->
+    <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات المتقدم (مديرين، مشرفين، عملاء) ================= -->
     <div id="authSection" class="card hidden">
-        <!-- أيقونة اللوجو المتحرك ذو الجودة العالية داخل تسجيل الدخول -->
         <div style="text-align: center; margin-bottom: 15px;">
             <div class="bull-logo-3d" style="width: 110px; height: 110px; font-size: 50px;">🐂</div>
-            <h3 style="margin-bottom: 2px;">تسجيل حساب جديد أو الدخول الموحد</h3>
-            <small style="color: var(--text-muted);">انضم إلى شبكة بلاك بول العالمية لتصدير وتجارة الملابس</small>
+            <h3 style="margin-bottom: 2px;">بوابة الدخول الموحدة (عملاء - مشرفين - مديرين)</h3>
+            <small style="color: var(--text-muted);">تسجيل حساب جديد أو تسجيل الدخول باسم المستخدم وكلمة المرور</small>
         </div>
-        <div id="stepLoginInputs">
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-gold" id="tabBtnLogin" onclick="switchAuthMode('login')">تسجيل الدخول</button>
+            <button class="btn-blue" id="tabBtnRegister" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
+        </div>
+
+        <!-- نموذج تسجيل الدخول -->
+        <div id="loginFormContainer">
+            <div class="input-group">
+                <label>رقم الهاتف أو اسم المستخدم:</label>
+                <input type="text" id="loginContactOrName" placeholder="اكتب رقم الهاتف أو الاسم">
+            </div>
+            <div class="input-group">
+                <label>كلمة المرور:</label>
+                <input type="password" id="loginPassword" placeholder="كلمة المرور">
+            </div>
+            <button class="btn-green" onclick="performLogin()">تسجيل الدخول للمنصة 🚀</button>
+        </div>
+
+        <!-- نموذج إنشاء حساب جديد -->
+        <div id="registerFormContainer" class="hidden">
             <div class="input-group">
                 <label>الاسم الكامل:</label>
                 <input type="text" id="regName" placeholder="اكتب اسمك الكامل">
             </div>
             <div class="input-group">
-                <label>رقم الهاتف أو البريد الإلكتروني:</label>
-                <input type="text" id="regContact" placeholder="01xxxxxxxxx أو email@domain.com">
+                <label>رقم الهاتف الأساسي:</label>
+                <input type="text" id="regPhone" placeholder="01xxxxxxxxx">
             </div>
-            <button class="btn-gold" onclick="sendVerificationCode()">إرسال رمز التصدّيق السحبي 📩</button>
-        </div>
-        <div id="stepVerifyCode" class="hidden">
-            <p style="font-size:13px; color:var(--text-muted); text-align:center;">تم إرسال رمز التحقق (استخدم الرمز التجريبي: 1234)</p>
             <div class="input-group">
-                <label>أدخل رمز التحقق (4 أرقام):</label>
-                <input type="text" id="verifyInput" placeholder="1234" maxlength="4" style="text-align: center; letter-spacing: 5px; font-size: 18px;">
+                <label>نوع الحساب:</label>
+                <select id="regRole">
+                    <option value="عميل">عميل (Customer) 🛒</option>
+                    <option value="مشرف">مشرف (Supervisor) 🛡️</option>
+                    <option value="مدير">مدير (Manager) 🔐</option>
+                </select>
             </div>
-            <button class="btn-green" onclick="verifyAndLogin()">تأكيد وتفعيل الحساب ✅</button>
+            <div class="input-group">
+                <label>كلمة المرور:</label>
+                <input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية">
+            </div>
+            <button class="btn-gold" onclick="performRegister()">إنشاء حساب جديد وتفعيل الحساب ✅</button>
         </div>
     </div>
 
@@ -242,7 +265,7 @@
             <div id="cartItems">السلة فارغة</div>
             <hr style="border-color:var(--border-color)">
             <p><b>الإجمالي الكلي: </b><span id="cartTotal">0</span> جنيه</p>
-            <button class="btn-green" onclick="placeOrder()">إرسال الطلب واعتماده سحابياً 🚀</button>
+            <button class="btn-green" onclick="placeOrder()">إرسال الطلب مع إرفاق كافة بيانات التوصيل 🚀</button>
         </div>
     </div>
 
@@ -332,7 +355,7 @@
         </div>
     </div>
 
-    <!-- ================= 8. الملف الشخصي ================= -->
+    <!-- ================= 8. الملف الشخصي (شبيه بحساب جوجل بلس متكامل) ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
             <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover">
@@ -341,25 +364,28 @@
         <div class="profile-info">
             <h2 id="profileNameDisplay">اسم المستخدم</h2>
             <span id="profileTitleBadge" class="title-badge">عضو جديد</span>
-            <p style="color: var(--text-muted); font-size: 13px;" id="profileContactDisplay">البريد أو الهاتف</p>
-            <span class="status-badge">حساب مسجل وموثق سحابياً ✔️</span>
+            <p style="color: var(--text-muted); font-size: 13px;" id="profileContactDisplay">الهاتف أو البريد</p>
+            <span class="status-badge" id="profileRoleBadge">حساب مسجل وموثق سحابياً ✔️</span>
         </div>
         <hr style="margin: 20px 0; border-color:var(--border-color);">
-        <h3>تعديل الملف الشخصي والبيانات</h3>
+        <h3>👤 تعديل الملف الشخصي والبيانات</h3>
+        <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="editName"></div>
+        <div class="input-group"><label>رقم الهاتف:</label><input type="text" id="editPhone"></div>
         <div class="input-group"><label>رابط الصورة الشخصية:</label><input type="text" id="editAvatar"></div>
         <div class="input-group"><label>رابط صورة الغلاف:</label><input type="text" id="editCover"></div>
-        <button class="btn-blue" onclick="saveProfileChanges()">حفظ التعديلات سحابياً</button>
+        <div class="input-group"><label>كلمة المرور الجديدة:</label><input type="password" id="editPassword" placeholder="اتركه فارغاً إذا لمغن ترغب بتغييره"></div>
+        <button class="btn-blue" onclick="saveProfileChanges()">حفظ وتحديث التعديلات سحابياً 💾</button>
     </div>
 
-    <!-- ================= 9. مراقبة الطلبات والفواتير ================= -->
+    <!-- ================= 9. مراقبة الطلبات والفواتير ومعاينة بيانات التوصيل ================= -->
     <div id="ordersTab" class="card hidden">
-        <h2>📋 قسم مراقبة الطلبات وإصدار الفواتير</h2>
+        <h2>📋 قسم مراقبة الطلبات وإصدار الفواتير وبيانات التوصيل</h2>
         <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
     </div>
 
     <!-- نافذة معاينة الفاتورة للطباعة والحفظ والمشاركة -->
     <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🧾 معاينة فاتورة الطلب الرسمية</h2>
+        <h2>🧾 معاينة فاتورة الطلب الرسمية وبيانات التوصيل</h2>
         <div id="printableInvoice" class="invoice-box">
             <div class="invoice-header">
                 <div>
@@ -371,7 +397,11 @@
                     <small id="invModalDate">التاريخ: 2026/08/03</small>
                 </div>
             </div>
-            <p><b>بيانات العميل:</b> <span id="invModalClient">اسم العميل</span> (<span id="invModalPhone">الهاتف</span>)</p>
+            <p><b>بيانات العميل والتوصيل:</b><br>
+               • الاسم: <span id="invModalClient">اسم العميل</span><br>
+               • الهاتف الأساسي: <span id="invModalPhone">الهاتف</span><br>
+               • حالة الشحن والتوصيل: <span style="color:#27ae60; font-weight:bold;">جاهز للتوصيل والشحن</span>
+            </p>
             <table class="invoice-table">
                 <thead>
                     <tr><th>المنتج / الصنف</th><th>السعر</th></tr>
@@ -400,20 +430,21 @@
         </div>
     </div>
 
-    <!-- ================= 11. لوحة الإدارة ================= -->
+    <!-- ================= 11. لوحة الإدارة الشاملة (تحكم كامل للمدير والمشرفين) ================= -->
     <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2 style="color: var(--accent);">🔐 لوحة التحكم الإدارية المركزية</h2>
+        <h2 style="color: var(--accent);">🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات</h2>
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
             <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
-            <div class="stat-card"><h4>إجمالي المبيعات</h4><p id="statTotalSales">0 ج.م</p></div>
+            <div class="stat-card"><h4>إجمالي الحسابات</h4><p id="statUsersCount">0</p></div>
         </div>
-        <div style="display: flex; gap: 5px; margin-bottom: 15px;">
-            <button class="btn-blue" onclick="switchAdminSubTab('manageProducts')">📦 المنتجات</button>
-            <button class="btn-blue" onclick="switchAdminSubTab('manageOrders')">📋 الطلبات</button>
-            <button class="btn-purple" onclick="switchAdminSubTab('manageUsers')">👑 الأعضاء</button>
+        <div style="display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;">
+            <button class="btn-blue" onclick="switchAdminSubTab('manageProducts')" style="flex:1;">📦 المنتجات</button>
+            <button class="btn-blue" onclick="switchAdminSubTab('manageOrders')" style="flex:1;">📋 الطلبات والتوصيل</button>
+            <button class="btn-purple" onclick="switchAdminSubTab('manageUsers')" style="flex:1;">👑 إدارة الحسابات والباسورد</button>
         </div>
 
+        <!-- إدارة المنتجات -->
         <div id="adminSubProducts">
             <h3>➕ إضافة منتج جديد</h3>
             <div class="input-group"><label>اسم المنتج:</label><input type="text" id="invName" placeholder="حاوية تيشرتات"></div>
@@ -430,21 +461,25 @@
             <div id="inventoryList" style="margin-top:15px;"></div>
         </div>
 
+        <!-- إدارة الطلبات وبيانات التوصيل -->
         <div id="adminSubOrders" class="hidden">
-            <h3>📋 متابعة وتعديل طلبات العملاء</h3>
+            <h3>📋 متابعة الطلبات وكافة بيانات التوصيل للعملاء</h3>
             <div id="adminOrdersList">لا توجد طلبات لعرضها.</div>
         </div>
 
+        <!-- إدارة الحسابات وتغيير الباسورد والصلاحيات -->
         <div id="adminSubUsers" class="hidden">
-            <h3>👑 إدارة الألقاب والأعضاء</h3>
-            <div class="input-group"><label>اسم المستخدم:</label><input type="text" id="adminUserTarget"></div>
-            <div class="input-group"><label>اللقب المخصص:</label><input type="text" id="adminUserTitle"></div>
-            <button class="btn-gold" onclick="updateUserTitle()">تعيين اللقب</button>
-            <div id="adminUsersList" style="margin-top: 15px;"></div>
+            <h3>👑 إدارة كافة الحسابات (التحكم بالباسورد والصلاحيات)</h3>
+            <p style="font-size:12px; color:var(--text-muted);">بصفتك مديراً للمنصة، يمكنك تعديل كلمات المرور وصلاحيات أي مستخدم أو مشرف أو عميل مسجل:</p>
+            <div id="adminAllUsersList" style="margin-top: 15px;"></div>
         </div>
     </div>
 
     <script>
+        let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
+            { name: 'المدير العام', phone: '01000000000', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover' },
+            { name: 'محمد مشرف', phone: '01111111111', role: 'مشرف', password: '123', title: 'مشرف المنصة 🛡️', avatar: 'https://via.placeholder.com/85/222/3182ce?text=Super', cover: 'https://via.placeholder.com/600x130/111/3182ce?text=Supervisor' }
+        ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
         let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
             { id: 1, name: 'جاكيت شتوي تصدير فاخر', category: 'تصدير دولي', price: 650, qty: 150, img: 'https://via.placeholder.com/150/111/d4af37?text=Export+Jacket' },
@@ -454,11 +489,8 @@
         let orders = JSON.parse(localStorage.getItem('bb_cloud_orders')) || [];
         let exportRequests = JSON.parse(localStorage.getItem('bb_cloud_exports')) || [];
         let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [];
-        let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [];
         let cart = [];
         let currentFilter = 'all';
-
-        // استرجاع آخر تبويب نشط عند عمل Refresh لعدم الخروج وضمان استمرارية التجربة
         let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
 
         window.onload = function() {
@@ -470,9 +502,7 @@
             renderLocalWholesale();
             updateAdminStats();
             renderAdminOrders();
-            renderAdminUsers();
-            
-            // فتح آخر تبويب تم حفظه لمنع إعادة التوجيه الافتراضية بعد الريفرش
+            renderAdminAllUsers();
             switchTab(lastActiveTab, null, false);
         };
 
@@ -497,9 +527,14 @@
             localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
             if(currentUser) {
                 localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
-                let found = registeredUsers.find(u => u.contact === currentUser.contact);
-                if(!found) { registeredUsers.push(currentUser); }
-                else { found.title = currentUser.title; found.avatar = currentUser.avatar; }
+                let found = registeredUsers.find(u => u.phone === currentUser.phone);
+                if(found) {
+                    found.name = currentUser.name;
+                    found.avatar = currentUser.avatar;
+                    found.cover = currentUser.cover;
+                    found.title = currentUser.title;
+                    found.role = currentUser.role;
+                }
             }
             let status = document.getElementById('syncStatus');
             status.innerText = '✅ تم مزامنة وحفظ البيانات سحابياً ومحلياً بنجاح (' + new Date().toLocaleTimeString('ar-EG') + ')';
@@ -507,15 +542,20 @@
         }
 
         function switchTab(tabId, btnElement = null, saveState = true) {
+            // حماية لوحة الإدارة (فقط المدير يمكنه دخولها)
+            if(tabId === 'adminDashboardTab') {
+                if(!currentUser || currentUser.role !== 'مدير') {
+                    alert('عذراً، لوحة التحكم الإدارية الشاملة مخصصة للمدير العام فقط!');
+                    return;
+                }
+            }
+
             ['storeTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
             document.getElementById(tabId).classList.remove('hidden');
             
-            if(saveState) {
-                localStorage.setItem('bb_active_tab', tabId);
-            }
-
+            if(saveState) { localStorage.setItem('bb_active_tab', tabId); }
             if(btnElement && btnElement.tagName === 'BUTTON') {
                 document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
                 btnElement.classList.add('active-nav');
@@ -529,7 +569,20 @@
             document.getElementById('adminSub' + (subId === 'manageProducts' ? 'Products' : subId === 'manageOrders' ? 'Orders' : 'Users')).classList.remove('hidden');
         }
 
-        let tempLoginData = null;
+        function switchAuthMode(mode) {
+            if(mode === 'login') {
+                document.getElementById('loginFormContainer').classList.remove('hidden');
+                document.getElementById('registerFormContainer').classList.add('hidden');
+                document.getElementById('tabBtnLogin').className = 'btn-gold';
+                document.getElementById('tabBtnRegister').className = 'btn-blue';
+            } else {
+                document.getElementById('loginFormContainer').classList.add('hidden');
+                document.getElementById('registerFormContainer').classList.remove('hidden');
+                document.getElementById('tabBtnLogin').className = 'btn-blue';
+                document.getElementById('tabBtnRegister').className = 'btn-gold';
+            }
+        }
+
         function toggleAuthModal() {
             if(currentUser) {
                 if(confirm('هل تريد تسجيل الخروج؟')) {
@@ -543,29 +596,50 @@
             }
         }
 
-        function sendVerificationCode() {
+        function performRegister() {
             let name = document.getElementById('regName').value;
-            let contact = document.getElementById('regContact').value;
-            if(!name || !contact) return alert('الرجاء إدخال الاسم ووسيلة الاتصال');
+            let phone = document.getElementById('regPhone').value;
+            let role = document.getElementById('regRole').value;
+            let password = document.getElementById('regPassword').value;
 
-            tempLoginData = { name: name, contact: contact, title: 'عضو جديد 🛡️', avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + name.charAt(0), cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Store' };
-            document.getElementById('stepLoginInputs').classList.add('hidden');
-            document.getElementById('stepVerifyCode').classList.remove('hidden');
-            alert('تم إرسال رمز التحقق (1234)');
+            if(!name || !phone || !password) return alert('الرجاء إدخال كافة بيانات التسجيل');
+
+            let exists = registeredUsers.find(u => u.phone === phone);
+            if(exists) return alert('رقم الهاتف مسجل مسبقاً!');
+
+            let newUser = {
+                name: name,
+                phone: phone,
+                role: role,
+                password: password,
+                title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒',
+                avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + name.charAt(0),
+                cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Store'
+            };
+
+            registeredUsers.push(newUser);
+            currentUser = newUser;
+            syncDataToCloud();
+            updateAuthUI();
+            renderAdminAllUsers();
+            switchTab('profileTab');
+            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم إنشاء الحساب بنجاح!');
         }
 
-        function verifyAndLogin() {
-            let code = document.getElementById('verifyInput').value;
-            if(code !== '1234') return alert('رمز التحقق غير صحيح! استخدم 1234');
+        function performLogin() {
+            let contactOrName = document.getElementById('loginContactOrName').value;
+            let password = document.getElementById('loginPassword').value;
 
-            currentUser = tempLoginData;
+            if(!contactOrName || !password) return alert('الرجاء إدخال اسم المستخدم/الهاتف وكلمة المرور');
+
+            let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName) && u.password === password);
+            if(!user) return alert('بيانات الدخول غير صحيحة! تأكد من الاسم/الهاتف وكلمة المرور.');
+
+            currentUser = user;
             syncDataToCloud();
-            document.getElementById('stepVerifyCode').classList.add('hidden');
-            document.getElementById('stepLoginInputs').classList.remove('hidden');
-            document.getElementById('verifyInput').value = '';
             updateAuthUI();
             switchTab('profileTab');
-            alert('أهلاً بك يا ' + currentUser.name);
+            alert('✅ مرحباً بك مجدداً، ' + currentUser.name);
         }
 
         function updateAuthUI() {
@@ -574,16 +648,20 @@
             if(currentUser) {
                 btnTop.innerText = 'خروج';
                 btnTop.className = 'btn-red';
-                greet.innerText = 'مرحباً، ' + currentUser.name;
+                greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
                 document.getElementById('profileNameDisplay').innerText = currentUser.name;
-                document.getElementById('profileTitleBadge').innerText = currentUser.title || 'عضو معتمد';
-                document.getElementById('profileContactDisplay').innerText = currentUser.contact;
+                document.getElementById('profileTitleBadge').innerText = currentUser.title || currentUser.role;
+                document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
+                document.getElementById('profileRoleBadge').innerText = 'نوع الحساب: ' + currentUser.role + ' ✔️';
                 document.getElementById('userAvatarImg').src = currentUser.avatar;
                 document.getElementById('userCoverImg').src = currentUser.cover;
+                
+                document.getElementById('editName').value = currentUser.name;
+                document.getElementById('editPhone').value = currentUser.phone;
                 document.getElementById('editAvatar').value = currentUser.avatar;
                 document.getElementById('editCover').value = currentUser.cover;
             } else {
-                btnTop.innerText = 'دخول';
+                btnTop.innerText = 'تسجيل الدخول';
                 btnTop.className = 'btn-gold';
                 greet.innerText = 'مرحباً بك زائرنا الكريم';
             }
@@ -591,11 +669,16 @@
 
         function saveProfileChanges() {
             if(!currentUser) return;
+            currentUser.name = document.getElementById('editName').value || currentUser.name;
+            currentUser.phone = document.getElementById('editPhone').value || currentUser.phone;
             currentUser.avatar = document.getElementById('editAvatar').value || currentUser.avatar;
             currentUser.cover = document.getElementById('editCover').value || currentUser.cover;
+            let newPass = document.getElementById('editPassword').value;
+            if(newPass) { currentUser.password = newPass; }
+
             syncDataToCloud();
             updateAuthUI();
-            alert('تم حفظ وتحديث الملف الشخصي سحابياً بنجاح!');
+            alert('✅ تم حفظ وتحديث الملف الشخصي سحابياً بنجاح!');
         }
 
         function filterCategory(cat, element) {
@@ -669,17 +752,18 @@
         }
 
         function placeOrder() {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً!');
+            if(!currentUser) return alert('يجب تسجيل الدخول أولاً لإرسال الطلب وإرفاق بيانات التوصيل!');
             if(cart.length === 0) return alert('السلة فارغة!');
 
             let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
             let newOrder = {
                 id: 'BB-' + Math.floor(1000 + Math.random() * 9000),
                 customer: currentUser.name,
-                phone: currentUser.contact,
+                phone: currentUser.phone,
+                role: currentUser.role,
                 items: [...cart],
                 total: totalVal,
-                status: 'قيد المراجعة سحابياً ⏳',
+                status: 'قيد المراجعة والتوصيل ⏳',
                 date: new Date().toLocaleDateString('ar-EG')
             };
 
@@ -689,7 +773,7 @@
             renderCart();
             renderOrders();
             renderAdminOrders();
-            alert('تم إرسال الطلب بنجاح! رقم الطلب: ' + newOrder.id);
+            alert('✅ تم إرسال الطلب بنجاح مع كافة بيانات التوصيل الخاصة بك! رقم الطلب: ' + newOrder.id);
             switchTab('ordersTab');
         }
 
@@ -705,10 +789,11 @@
             let exportOrder = {
                 id: 'EXP-G7-' + Math.floor(1000 + Math.random() * 9000),
                 customer: currentUser.name,
-                phone: currentUser.contact,
+                phone: currentUser.phone,
+                role: currentUser.role,
                 items: [{ name: `[تصدير دولي] ${itemType} - الكمية: ${qty} - الميناء: ${port}`, price: 0 }],
                 total: 'حسب الاعتماد المالي',
-                status: `قيد المعالجة (طريقة الدفع: ${payment}) 🌐`,
+                status: `قيد المعالجة (الدفع: ${payment}) 🌐`,
                 date: new Date().toLocaleDateString('ar-EG')
             };
 
@@ -730,7 +815,7 @@
                     <div class="item-row">
                         <div>
                             <b>طلب/شحنة: ${o.id}</b> - الإجمالي: ${o.total}<br>
-                            <small>الحالة: <span style="color:var(--accent);">${o.status}</span> | التاريخ: ${o.date}</small>
+                            <small>العميل: ${o.customer} | الهاتف: ${o.phone} | الحالة: <span style="color:var(--accent);">${o.status}</span></small>
                         </div>
                         <button class="btn-gold" style="width:auto; padding:6px 12px; font-size:12px;" onclick="openInvoice('${o.id}')">🧾 عرض الفاتورة</button>
                     </div>
@@ -771,25 +856,40 @@
             window.open('https://wa.me/?text=' + text, '_blank');
         }
 
-        function updateUserTitle() {
-            let targetName = document.getElementById('adminUserTarget').value;
-            let newTitle = document.getElementById('adminUserTitle').value;
-            let u = registeredUsers.find(x => x.name === targetName);
-            if(!u) return alert('لم يتم العثور على المستخدم!');
-            u.title = newTitle;
-            if(currentUser && currentUser.name === targetName) { currentUser.title = newTitle; updateAuthUI(); }
-            syncDataToCloud();
-            renderAdminUsers();
-            alert('تم تحديث اللقب بنجاح!');
+        function renderAdminAllUsers() {
+            let container = document.getElementById('adminAllUsersList');
+            if(!container) return;
+            container.innerHTML = '';
+            registeredUsers.forEach((u, index) => {
+                container.innerHTML += `
+                    <div class="card" style="background:#111; margin-bottom:10px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <b>${u.name}</b> <span class="title-badge">${u.role}</span>
+                        </div>
+                        <div class="input-group"><label>الهاتف:</label><input type="text" id="admPhone_${index}" value="${u.phone}"></div>
+                        <div class="input-group"><label>كلمة المرور:</label><input type="text" id="admPass_${index}" value="${u.password}"></div>
+                        <div class="input-group"><label>الصلاحية:</label>
+                            <select id="admRole_${index}">
+                                <option value="عميل" ${u.role === 'عميل' ? 'selected' : ''}>عميل</option>
+                                <option value="مشرف" ${u.role === 'مشرف' ? 'selected' : ''}>مشرف</option>
+                                <option value="مدير" ${u.role === 'مدير' ? 'selected' : ''}>مدير</option>
+                            </select>
+                        </div>
+                        <button class="btn-gold" onclick="adminUpdateUser(${index})">حفظ وتحديث بيانات المستخدم 🔐</button>
+                    </div>
+                `;
+            });
         }
 
-        function renderAdminUsers() {
-            let container = document.getElementById('adminUsersList');
-            if(!container) return;
-            container.innerHTML = '<h4>قائمة الحسابات والألقاب الحالية:</h4>';
-            registeredUsers.forEach(u => {
-                container.innerHTML += `<div class="item-row"><span><b>${u.name}</b> (${u.contact})</span> <span class="title-badge">${u.title || 'عضو جديد'}</span></div>`;
-            });
+        function adminUpdateUser(index) {
+            registeredUsers[index].phone = document.getElementById(`admPhone_${index}`).value;
+            registeredUsers[index].password = document.getElementById(`admPass_${index}`).value;
+            registeredUsers[index].role = document.getElementById(`admRole_${index}`).value;
+            registeredUsers[index].title = registeredUsers[index].role === 'مدير' ? 'المدير العام 🔐' : registeredUsers[index].role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒';
+            
+            syncDataToCloud();
+            renderAdminAllUsers();
+            alert('✅ تم تحديث بيانات وحساب المستخدم بنجاح!');
         }
 
         function addInventoryItem() {
@@ -824,8 +924,7 @@
         function updateAdminStats() {
             document.getElementById('statProductsCount').innerText = inventory.length;
             document.getElementById('statOrdersCount').innerText = orders.length;
-            let totalSales = orders.reduce((sum, o) => sum + (typeof o.total === 'number' ? o.total : 0), 0);
-            document.getElementById('statTotalSales').innerText = totalSales + ' ج.م';
+            document.getElementById('statUsersCount').innerText = registeredUsers.length;
         }
 
         function renderAdminOrders() {
@@ -835,9 +934,14 @@
             container.innerHTML = '';
             orders.forEach(o => {
                 container.innerHTML += `
-                    <div class="item-row">
-                        <div><b>${o.id}</b> - ${o.customer} (${o.total})<br><small>الحالة: ${o.status}</small></div>
-                        <button class="btn-green" style="width:auto; padding:5px;" onclick="updateOrderStatus('${o.id}', 'تم القبول والاعتماد ✅')">قبول</button>
+                    <div class="item-row" style="flex-direction:column; align-items:flex-start;">
+                        <div><b>طلب #${o.id}</b> | الإجمالي: ${o.total} ج.م</div>
+                        <div style="color:var(--text-muted); font-size:12px;">
+                            • اسم العميل: <b>${o.customer}</b><br>
+                            • رقم الهاتف للتوصيل: <b style="color:var(--accent);">${o.phone}</b><br>
+                            • الحالة: ${o.status}
+                        </div>
+                        <button class="btn-green" style="width:auto; padding:5px 10px; margin-top:5px;" onclick="updateOrderStatus('${o.id}', 'تم اعتماد وقبول الطلب وجاري التوصيل ✅')">قبول وتأكيد الطلب</button>
                     </div>
                 `;
             });
