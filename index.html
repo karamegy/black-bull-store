@@ -143,6 +143,10 @@
         <button onclick="switchTab('exportTab'); toggleSidebar()">🌍 التصدير الدولي</button>
         <button onclick="switchTab('localWholesaleTab'); toggleSidebar()">📦 جملة محلي</button>
         <button onclick="switchTab('customOrderTab'); toggleSidebar()">✂️ تفصيل خاص</button>
+        <button onclick="switchTab('trackingTab'); toggleSidebar()">🚢 تتبع الشحنات والملاحة</button>
+        <button onclick="switchTab('calcTab'); toggleSidebar()">🧮 حاسبة الشحن والجمارك</button>
+        <button onclick="switchTab('auctionTab'); toggleSidebar()">🏷️ مزاد الحاويات الكبرى</button>
+        <button onclick="switchTab('loyaltyTab'); toggleSidebar()">⭐ برنامج الولاء والنقاط</button>
         <button onclick="switchTab('ordersTab'); toggleSidebar()">📋 مراقبة الطلبات</button>
         <button onclick="switchTab('exportProfileTab'); toggleSidebar()">🌐 بروفايل التصدير الشامل</button>
         <button onclick="checkProfileAccess(); toggleSidebar()">👤 حسابي الشخصي</button>
@@ -162,7 +166,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المتطور 7.0)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المتطور 7.2)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -178,12 +182,12 @@
     <div class="nav-bar" id="mainNavBar">
         <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
         <button onclick="switchTab('exportTab', this)">🌍 التصدير</button>
-        <button onclick="switchTab('localWholesaleTab', this)">📦 جملة محلي</button>
-        <button onclick="switchTab('customOrderTab', this)">✂️ تفصيل</button>
+        <button onclick="switchTab('trackingTab', this)">🚢 التتبع</button>
+        <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
+        <button onclick="switchTab('auctionTab', this)">🏷️ المزاد</button>
+        <button onclick="switchTab('loyaltyTab', this)">⭐ الولاء</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
-        <button onclick="switchTab('exportProfileTab', this)">🌐 التصدير الشامل</button>
         <button onclick="checkProfileAccess(this)">👤 حسابي</button>
-        <button onclick="switchTab('supportTab', this)">💬 الدعم</button>
     </div>
 
     <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات ================= -->
@@ -199,7 +203,6 @@
             <button class="btn-blue" id="tabBtnRegister" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
         </div>
 
-        <!-- نموذج تسجيل الدخول -->
         <div id="loginFormContainer">
             <div class="input-group">
                 <label>رقم الهاتف أو اسم المستخدم المدير (admin):</label>
@@ -212,32 +215,18 @@
             <button class="btn-green" onclick="performLogin()">تسجيل الدخول للمنصة 🚀</button>
         </div>
 
-        <!-- نموذج إنشاء حساب جديد -->
         <div id="registerFormContainer" class="hidden">
-            <div class="input-group">
-                <label>الاسم الكامل:</label>
-                <input type="text" id="regName" placeholder="اكتب اسمك الكامل">
-            </div>
-            <div class="input-group">
-                <label>رقم الهاتف الأساسي / اسم المستخدم:</label>
-                <input type="text" id="regPhone" placeholder="01xxxxxxxxx">
-            </div>
-            <div class="input-group">
-                <label>البريد الإلكتروني:</label>
-                <input type="email" id="regEmail" placeholder="name@domain.com">
-            </div>
-            <div class="input-group">
-                <label>نوع الحساب:</label>
+            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName" placeholder="اكتب اسمك الكامل"></div>
+            <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="regPhone" placeholder="01xxxxxxxxx"></div>
+            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="regEmail" placeholder="name@domain.com"></div>
+            <div class="input-group"><label>نوع الحساب:</label>
                 <select id="regRole">
                     <option value="عميل">عميل (Customer) 🛒</option>
                     <option value="مشرف">مشرف (Supervisor) 🛡️</option>
                     <option value="مدير">مدير (Manager) 🔐</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label>كلمة المرور:</label>
-                <input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية">
-            </div>
+            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية"></div>
             <button class="btn-gold" onclick="performRegister()">إنشاء حساب جديد وتفعيل الحساب ✅</button>
         </div>
     </div>
@@ -274,15 +263,84 @@
     <!-- ================= 3. التصدير الدولي ================= -->
     <div id="exportTab" class="card hidden">
         <h2>🌍 قسم التصدير الدولي والشحن للخارج</h2>
-        <div class="input-group">
-            <label>الدولة المستهدفة للاستيراد:</label>
-            <input type="text" id="exportCountry" placeholder="مثال: السعودية، الإمارات، إيطاليا...">
-        </div>
-        <div class="input-group">
-            <label>نوع الملابس والكمية المطلوبة:</label>
-            <textarea id="exportDetails" placeholder="اكتب المواصفات والكميات..."></textarea>
-        </div>
+        <div class="input-group"><label>الدولة المستهدفة للاستيراد:</label><input type="text" id="exportCountry" placeholder="مثال: السعودية، الإمارات، إيطاليا..."></div>
+        <div class="input-group"><label>نوع الملابس والكمية المطلوبة:</label><textarea id="exportDetails" placeholder="اكتب المواصفات والكميات..."></textarea></div>
         <button class="btn-gold" onclick="submitExportInquiry()">إرسال طلب التصدير لمدير المكتب ✈️</button>
+    </div>
+
+    <!-- ================= الجديد 1: تتبع الشحنات والملاحة ================= -->
+    <div id="trackingTab" class="card hidden">
+        <h2>🚢 قسم تتبع الشحنات الدولية والملاحة</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">ادخل رقم بوليصة الشحن أو الحاوية لتتبع خط سيرها اللحظي عبر موانئ العالم.</p>
+        <div class="input-group">
+            <label>رقم بوليصة الشحن أو الحاوية:</label>
+            <input type="text" id="trackInputCode" placeholder="مثال: EXP-901 أو BB-CONTAINER-55">
+        </div>
+        <button class="btn-gold" onclick="performTrackingSearch()">بحث وتتبع الشحنة 🔍</button>
+        <div id="trackingResultBox" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- ================= الجديد 2: حاسبة الشحن والجمارك ================= -->
+    <div id="calcTab" class="card hidden">
+        <h2>🧮 حاسبة تكاليف الشحن والجمارك التلقائية</h2>
+        <div class="input-group">
+            <label>اختر دولة الوجهة:</label>
+            <select id="calcCountry">
+                <option value="السعودية">المملكة العربية السعودية 🇸🇦</option>
+                <option value="الإمارات">الإمارات العربية المتحدة 🇦🇪</option>
+                <option value="إيطاليا">إيطاليا 🇮🇹</option>
+                <option value="ألمانيا">ألمانيا 🇩🇪</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>حجم الحاوية / الشحنة:</label>
+            <select id="calcContainerSize">
+                <option value="20">حاوية 20 قدم (Standard 20ft)</option>
+                <option value="40">حاوية 40 قدم (High Cube 40ft)</option>
+                <option value="express">شحنة جوية سريعة (Express Air Cargo)</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>إجمالي قيمة البضاعة بالجنيه أو الدولار:</label>
+            <input type="number" id="calcGoodsValue" placeholder="مثال: 150000">
+        </div>
+        <button class="btn-blue" onclick="calculateShippingAndCustoms()">احسب التكلفة التقديرية فوراً 📊</button>
+        <div id="calcResultBox" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- ================= الجديد 3: مزاد الحاويات الكبرى ================= -->
+    <div id="auctionTab" class="card hidden">
+        <h2>🏷️ قسم مزاد الحاويات الكبرى وعروض الجملة الضخمة</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">عروض تصريف الفوائض الكبرى وتخفيضات الحاويات المغلقة لكبار التجار.</p>
+        <div class="products-grid" id="auctionProductsGrid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150/222/d4af37?text=Closed+Container+A">
+                <b style="font-size: 13px; display:block; margin: 5px 0;">حاوية ملابس صيفية مختلطة (10,000 قطعة)</b>
+                <small style="color:var(--accent); font-weight:bold;">سعر المزاد الابتدائية: 180,000 ج.م</small><br>
+                <button class="btn-green" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="alert('تم تسجيل مزايدتك بنجاح على الحاوية الكبرى!')">المزايدة الآن ⚡</button>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150/333/d4af37?text=Closed+Container+B">
+                <b style="font-size: 13px; display:block; margin: 5px 0;">حاوية ملابس شتوية فرز أول (7,500 قطعة)</b>
+                <small style="color:var(--accent); font-weight:bold;">سعر المزاد الابتدائية: 240,000 ج.م</small><br>
+                <button class="btn-green" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="alert('تم تسجيل مزايدتك بنجاح على الحاوية الكبرى!')">المزايدة الآن ⚡</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= الجديد 4: برنامج الولاء والنقاط ================= -->
+    <div id="loyaltyTab" class="card hidden">
+        <h2>⭐ برنامج الولاء ونقاط النخبة لتجار الجملة</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><h4>نقاطك المتاحة</h4><p id="loyaltyPointsDisplay">1,250 نقطة</p></div>
+            <div class="stat-card"><h4>مستوى العضوية</h4><p style="color:#d4af37;">VIP Diamond 💎</p></div>
+            <div class="stat-card"><h4>نسبة خصم الشحن</h4><p>15% مدى الحياة</p></div>
+        </div>
+        <div class="card" style="background:#111;">
+            <h3>🎁 استبدال النقاط بخصومات نقدية</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">كل 500 نقطة تمنحك قسيمة خصم بقيمة 250 جنيه على شحنتك القادمة.</p>
+            <button class="btn-gold" onclick="alert('✅ تم استبدال 500 نقطة بنجاح! تم إضافة قسيمة خصم 250 جنيه إلى رصيد حسابك.')">استبدال 500 نقطة بخصم 250 ج.م 🎟️</button>
+        </div>
     </div>
 
     <!-- ================= 4. جملة محلي ================= -->
@@ -309,7 +367,7 @@
 
     <!-- ================= 7. بروفايل التصدير الشامل ================= -->
     <div id="exportProfileTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.0)</h2>
+        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.2)</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">مخصص بالكامل لشحنات الملابس المصدرة للخارج، استعراض الحاويات الدولية، وطلب بضائع التصدير مع تفعيل بوابات الدفع.</p>
         
         <div class="stats-grid">
@@ -330,23 +388,15 @@
 
         <div class="card" style="background:#111;">
             <h3>📦 طلبية تصدير جديدة (تفعيل نظام الجيل السابع)</h3>
-            <div class="input-group">
-                <label>اختر صنف التصدير:</label>
+            <div class="input-group"><label>اختر صنف التصدير:</label>
                 <select id="gen7ExportItem">
                     <option value="حاوية ملابس شتوية متكاملة">حاوية ملابس شتوية متكاملة (جاكيتات وهوديز)</option>
                     <option value="حاوية ملابس صيفية وقطنية">حاوية ملابس صيفية وقطنية (تيشرتات وبنطلونات)</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label>الكمية المطلوبة:</label>
-                <input type="number" id="gen7ExportQty" placeholder="مثال: 5000 قطعة">
-            </div>
-            <div class="input-group">
-                <label>ميناء الوصول / بلد الاستيراد:</label>
-                <input type="text" id="gen7ExportPort" placeholder="مثال: ميناء جبل علي، دبي">
-            </div>
-            <div class="input-group">
-                <label style="color:var(--accent);">💳 طريقة الدفع:</label>
+            <div class="input-group"><label>الكمية المطلوبة:</label><input type="number" id="gen7ExportQty" placeholder="مثال: 5000 قطعة"></div>
+            <div class="input-group"><label>ميناء الوصول / بلد الاستيراد:</label><input type="text" id="gen7ExportPort" placeholder="مثال: ميناء جبل علي، دبي"></div>
+            <div class="input-group"><label style="color:var(--accent);">💳 طريقة الدفع:</label>
                 <select id="gen7PaymentMethod">
                     <option value="اعتماد مستندي بنكي L/C">اعتماد مستندي بنكي L/C</option>
                     <option value="تحويل بنكي مباشر SWIFT / IBAN">تحويل بنكي مباشر SWIFT / IBAN</option>
@@ -357,7 +407,7 @@
         </div>
     </div>
 
-    <!-- ================= 8. الملف الشخصي (يظهر فقط عند التسجيل) ================= -->
+    <!-- ================= 8. الملف الشخصي ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
             <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover">
@@ -406,9 +456,7 @@
                • حالة الشحن والتوصيل: <span style="color:#27ae60; font-weight:bold;">جاهز للتوصيل والشحن</span>
             </p>
             <table class="invoice-table">
-                <thead>
-                    <tr><th>المنتج / الصنف</th><th>السعر</th></tr>
-                </thead>
+                <thead><tr><th>المنتج / الصنف</th><th>السعر</th></tr></thead>
                 <tbody id="invModalItems"></tbody>
             </table>
             <h3 style="text-align: left; color:#111;">الإجمالي الكلي: <span id="invModalTotal" style="color:#d4af37;">0</span> جنيه</h3>
@@ -447,7 +495,6 @@
             <button class="btn-purple" onclick="switchAdminSubTab('manageUsers')" style="flex:1;">👑 إدارة كافة الحسابات والباسورد</button>
         </div>
 
-        <!-- إدارة المنتجات -->
         <div id="adminSubProducts">
             <h3>➕ إضافة منتج جديد</h3>
             <div class="input-group"><label>اسم المنتج:</label><input type="text" id="invName" placeholder="حاوية تيشرتات"></div>
@@ -464,13 +511,11 @@
             <div id="inventoryList" style="margin-top:15px;"></div>
         </div>
 
-        <!-- إدارة الطلبات -->
         <div id="adminSubOrders" class="hidden">
             <h3>📋 متابعة الطلبات وكافة بيانات التوصيل للعملاء</h3>
             <div id="adminOrdersList">لا توجد طلبات لعرضها.</div>
         </div>
 
-        <!-- إدارة الحسابات -->
         <div id="adminSubUsers" class="hidden">
             <h3>👑 إدارة كافة الحسابات (تغيير الاسم، الرقم، الإيميل، والباسورد والصلاحيات)</h3>
             <div id="adminAllUsersList" style="margin-top: 15px;"></div>
@@ -561,7 +606,7 @@
                 }
             }
 
-            ['storeTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
+            ['storeTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'auctionTab', 'loyaltyTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
             document.getElementById(tabId).classList.remove('hidden');
@@ -820,6 +865,43 @@
             renderAdminOrders();
             alert('✅ تم تقديم طلب التصدير بنجاح! رقم الشحنة: ' + exportOrder.id);
             switchTab('ordersTab');
+        }
+
+        // دوظائف الأقسام الجديدة المضافة
+        function performTrackingSearch() {
+            let code = document.getElementById('trackInputCode').value;
+            let box = document.getElementById('trackingResultBox');
+            if(!code) return alert('الرجاء إدخال رقم بوليصة أو حاوية صحيحة');
+            box.innerHTML = `
+                <div class="card" style="background:#111; border-color:var(--accent);">
+                    <h4>📌 نتائج تتبع الشحنة: ${code}</h4>
+                    <p>• الحالة الحالية: <span style="color:#48bb78; font-weight:bold;">في عرض البحر / في طريقه لميناء الوصول 🚢</span></p>
+                    <p>• تاريخ التحرك: 2026/08/01 | الميناء المُصدر: ميناء الإسكندرية 🇪🇬</p>
+                    <p>• الميناء المستهدف: ميناء الوجهة المُحدد | التوقع الوصول خلال 4 أيام.</p>
+                </div>
+            `;
+        }
+
+        function calculateShippingAndCustoms() {
+            let country = document.getElementById('calcCountry').value;
+            let size = document.getElementById('calcContainerSize').value;
+            let val = parseFloat(document.getElementById('calcGoodsValue').value) || 0;
+            let box = document.getElementById('calcResultBox');
+
+            let freightCost = size === '40' ? 45000 : size === '20' ? 28000 : 8000;
+            let customDuty = val * 0.12; // رسوم جمركية تقريبية 12%
+            let totalEstimated = val + freightCost + customDuty;
+
+            box.innerHTML = `
+                <div class="card" style="background:#111; border-color:var(--accent);">
+                    <h4>📊 التقرير التقديري للتكلفة والشحن إلى (${country})</h4>
+                    <p>• قيمة البضاعة: <b>${val} ج.م</b></p>
+                    <p>• تكلفة الشحن والملاحة: <b>${freightCost} ج.م</b></p>
+                    <p>• الرسوم الجمركية والضرائب التقديرية: <b>${customDuty.toFixed(2)} ج.م</b></p>
+                    <hr style="border-color:var(--border-color)">
+                    <p style="color:var(--accent); font-size:16px;"><b>التكلفة الإجمالية الواصلة: ${totalEstimated.toFixed(2)} جنيه</b></p>
+                </div>
+            `;
         }
 
         function renderOrders() {
