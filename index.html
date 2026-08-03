@@ -174,13 +174,13 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.10)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.11)</small>
     </div>
 
     <!-- شريط علوي -->
     <div class="top-nav-bar">
         <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ أقسام المنصة</button>
-        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">مرحباً بك زائرنا الكريم</div>
+        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent); font-weight: bold; cursor: pointer;" onclick="checkProfileAccess()">مرحباً بك زائرنا الكريم</div>
         <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
@@ -795,7 +795,9 @@
             let greet = document.getElementById('quickUserGreet');
             if(currentUser) {
                 btnTop.innerText = 'خروج'; btnTop.className = 'btn-red';
-                greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
+                // ربط الاسم وصلاحية حسابي المتصل لتكون مطابقة تماماً للملف الشخصي
+                greet.innerHTML = `مرحباً، ${currentUser.name} <span style="font-size:11px; color:#fff; background:#3182ce; padding:2px 6px; border-radius:4px;">(${currentUser.role})</span>`;
+                
                 document.getElementById('profileNameDisplay').innerText = currentUser.name;
                 document.getElementById('profileTitleBadge').innerText = currentUser.title || currentUser.role;
                 document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone + (currentUser.email ? ' | ' + currentUser.email : '');
@@ -806,7 +808,7 @@
                 document.getElementById('editEmail').value = currentUser.email || '';
             } else {
                 btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
-                greet.innerText = 'مرحباً بك زائرنا الكريم';
+                greet.innerText = 'مرحباً بك زائرنا الكريم (انقر هنا لتسجيل الدخول)';
             }
         }
 
