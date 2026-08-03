@@ -95,12 +95,12 @@
         .side-drawer button:hover { background: var(--accent); color: #111; }
         .close-drawer { background: #e53e3e !important; color: white !important; text-align: center !important; justify-content: center; }
 
-        /* بروفايل جوجل بلس المحاكي (Black Plus Profile Drawer & Sections) */
+        /* بروفايل جوجل بلس المحاكي (Black Plus Profile Drawer) */
         .gplus-profile-drawer { position: fixed; top: 0; left: -380px; width: 360px; height: 100%; background: #15181e; z-index: 1001; box-shadow: 5px 0 25px rgba(0,0,0,0.8); transition: left 0.3s ease-in-out; padding: 15px; box-sizing: border-box; border-right: 2px solid var(--accent); overflow-y: auto; }
         .gplus-profile-drawer.open { left: 0; }
         .gplus-header { text-align: center; position: relative; margin-bottom: 15px; }
-        .gplus-cover { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--accent); }
-        .gplus-avatar { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--accent); position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); object-fit: cover; background: #000; }
+        .gplus-cover { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--accent); cursor: pointer; }
+        .gplus-avatar { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--accent); position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); object-fit: cover; background: #000; cursor: pointer; }
         
         .gplus-nav-tabs { display: flex; gap: 4px; margin: 15px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
         .gplus-nav-tabs button { flex: 1; font-size: 11px; padding: 6px; background: #2d3748; color: #fff; margin:0; }
@@ -125,6 +125,12 @@
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
         .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
 
+        /* نافذة عارض الوسائط المنبثقة (Lightbox Modal) للمعاينة عند النقر */
+        .media-lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; justify-content: center; align-items: center; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        .media-lightbox.active { display: flex; }
+        .media-lightbox-content { max-width: 90%; max-height: 80vh; border-radius: 10px; border: 2px solid var(--accent); box-shadow: 0 0 30px rgba(212,175,55,0.5); object-fit: contain; background: #000; }
+        .media-lightbox-close { position: absolute; top: 20px; right: 25px; background: #e53e3e; color: white; border: none; font-size: 20px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: bold; }
+
         .chat-box { height: 260px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; overflow-y: auto; background: #111; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
         .chat-msg { padding: 8px 12px; border-radius: 8px; max-width: 75%; font-size: 13px; }
         .msg-incoming { background: #2d3748; color: #fff; align-self: flex-start; }
@@ -145,7 +151,13 @@
 </head>
 <body>
 
-    <!-- القائمة الجانبية لأقسام المنصة الرئيسية -->
+    <!-- عارض الوسائط المنبثقة (Lightbox) عند النقر على الصور أو الفيديوهات -->
+    <div class="media-lightbox" id="mediaLightbox" onclick="closeLightbox()">
+        <button class="media-lightbox-close" onclick="closeLightbox()">✕</button>
+        <div id="lightboxContainer" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <!-- القائمة الجانبية للأقسام الرئيسية -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeAllDrawers()"></div>
     <div class="side-drawer" id="sideDrawer">
         <h3>قائمة الأقسام 🐂 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
@@ -168,7 +180,7 @@
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
 
-    <!-- بروفايل جوجل بلس المحاكي (Black Plus - G+ Profile Drawer) المتكامل -->
+    <!-- بروفايل جوجل بلس المحاكي (Black Plus - G+ Profile Drawer) -->
     <div class="gplus-profile-drawer" id="gplusProfileDrawer">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:12px;">
             <h3 style="margin:0; color:var(--accent);">بروفايل Black Plus (G+) 🐂</h3>
@@ -176,8 +188,11 @@
         </div>
         
         <div class="gplus-header">
-            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/d4af37?text=Black+Plus+Cover" alt="Cover">
-            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/d4af37?text=User" alt="Avatar">
+            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/d4af37?text=Black+Plus+Cover" alt="Cover" onclick="document.getElementById('uploadCoverInput').click()" title="انقر لتغيير وتكبير صورة الغلاف">
+            <input type="file" id="uploadCoverInput" class="hidden" accept="image/*" onchange="handleCoverUpload(event)">
+            
+            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/d4af37?text=User" alt="Avatar" onclick="document.getElementById('uploadAvatarInput').click()" title="انقر لتغيير وتكبير الصورة الشخصية">
+            <input type="file" id="uploadAvatarInput" class="hidden" accept="image/*" onchange="handleAvatarUpload(event)">
         </div>
         <div style="text-align:center; margin-top:45px;">
             <h3 id="gpNameDisplay" style="margin:0;">اسم المستخدم</h3>
@@ -185,11 +200,11 @@
             <p id="gpContactDisplay" style="color:var(--text-muted); font-size:12px; margin:5px 0;">الهاتف أو البريد</p>
         </div>
 
-        <!-- تبويبات أقسام جوجل بلس (Stream, About, Photos, Circles, Communities) -->
+        <!-- تبويبات أقسام جوجل بلس -->
         <div class="gplus-nav-tabs">
             <button class="active" onclick="switchGPlusTab('stream', this)">الاستريم 📢</button>
             <button onclick="switchGPlusTab('about', this)">حول ℹ️</button>
-            <button onclick="switchGPlusTab('photos', this)">الصور 🖼️</button>
+            <button onclick="switchGPlusTab('photos', this)">الصور وفيديوهات المعرض 🖼️</button>
             <button onclick="switchGPlusTab('circles', this)">الدوائر 👥</button>
             <button onclick="switchGPlusTab('communities', this)">المجتمعات 🌐</button>
         </div>
@@ -198,45 +213,73 @@
         <div id="gpTabStream">
             <div class="input-group">
                 <textarea id="gpNewPostText" placeholder="شارك أحدث منشوراتك، منتجاتك، أو حاويات التصدير..." style="height:60px; font-size:12px;"></textarea>
+                <div id="mediaPreviewContainer" style="margin-bottom:8px; text-align:center;"></div>
+                
+                <div style="display:flex; gap:5px; margin-bottom:5px;">
+                    <button class="btn-blue" style="font-size:11px; padding:6px; flex:1;" onclick="document.getElementById('postImageInput').click()"><i class="fa-solid fa-image"></i> رفع صورة</button>
+                    <button class="btn-purple" style="font-size:11px; padding:6px; flex:1;" onclick="document.getElementById('postVideoInput').click()"><i class="fa-solid fa-video"></i> رفع فيديو</button>
+                </div>
+                <input type="file" id="postImageInput" class="hidden" accept="image/*" onchange="handlePostMediaUpload(event, 'image')">
+                <input type="file" id="postVideoInput" class="hidden" accept="video/*" onchange="handlePostMediaUpload(event, 'video')">
+
                 <button class="btn-gold" style="padding:6px; font-size:12px;" onclick="publishGPlusPost()">نشر في استريم Black Plus 🚀</button>
             </div>
             <div id="gpStreamContainer" style="margin-top:10px;"></div>
         </div>
 
-        <!-- محتوى تبويب حول (About) -->
+        <!-- محتوى تبويب حول -->
         <div id="gpTabAbout" class="hidden">
-            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px; line-height:1.6;">
-                <p><b>🏢 اسم الشركة:</b> Black Bull Store & Black Plus</p>
-                <p><b>🌍 النشاط:</b> تجارة وتصدير الملابس جملة محلياً ودولياً.</p>
-                <p><b>📍 المقر:</b> جمهورية مصر العربية - القاهرة / الإسكندرية.</p>
-                <p><b>⭐ معيار الجودة:</b> إدارة الأعمال الشاملة والربط السحابي (Generation 7.4).</p>
+            <div style="background:#111; padding:12px; border-radius:8px; font-size:12px; line-height:1.6; border:1px solid var(--border-color);">
+                <h4 style="color:var(--accent); margin-top:0;">معلومات الحساب والشركة</h4>
+                <div class="input-group" style="margin-bottom:8px;">
+                    <label>الاسم الظاهري:</label>
+                    <input type="text" id="aboutEditName" style="font-size:12px; padding:6px;" value="">
+                </div>
+                <div class="input-group" style="margin-bottom:8px;">
+                    <label>النبذة / السيرة الذاتية (Bio):</label>
+                    <textarea id="aboutEditBio" style="font-size:12px; padding:6px; height:50px;" placeholder="اكتب نبذة عن نشاطك التجاري..."></textarea>
+                </div>
+                <div class="input-group" style="margin-bottom:8px;">
+                    <label>الموقع / المقر:</label>
+                    <input type="text" id="aboutEditLocation" style="font-size:12px; padding:6px;" value="جمهورية مصر العربية - القاهرة / الإسكندرية">
+                </div>
+                <button class="btn-gold" style="font-size:11px; padding:6px;" onclick="saveAboutProfileInfo()">حفظ التعديلات في حول 💾</button>
             </div>
         </div>
 
-        <!-- محتوى تبويب الصور (Photos) -->
+        <!-- محتوى تبويب الصور وفيديوهات المعرض (Photos & Media) مع خاصية المعبرة عند النقر -->
         <div id="gpTabPhotos" class="hidden">
-            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:6px;">
-                <img src="https://via.placeholder.com/150/111/d4af37?text=Export+Jacket" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
-                <img src="https://via.placeholder.com/150/222/d4af37?text=Local+Set" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
-                <img src="https://via.placeholder.com/150/333/d4af37?text=Container" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
-                <img src="https://via.placeholder.com/150/444/d4af37?text=Black+Bull" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <b style="font-size:12px; color:var(--accent);">معرض الصور وفيديوهات الحساب:</b>
+                <button class="btn-green" style="font-size:10px; padding:4px 8px; width:auto;" onclick="document.getElementById('galleryUploadInput').click()">➕ إضافة ملف</button>
+                <input type="file" id="galleryUploadInput" class="hidden" accept="image/*,video/*" onchange="handleGalleryUpload(event)">
             </div>
+            <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-bottom:8px;">💡 انقر على أي صورة أو فيديو لمشاهدتها بالحجم الكامل.</p>
+            <div id="gpGalleryContainer" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:6px;"></div>
         </div>
 
-        <!-- محتوى تبويب الدوائر (Circles) -->
+        <!-- محتوى تبويب الدوائر -->
         <div id="gpTabCircles" class="hidden">
-            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px;">
+            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px; border:1px solid var(--border-color);">
                 <p>🟢 <b>العائلة والأصدقاء:</b> (3 مُضافين)</p>
                 <p>🔵 <b>شركاء التصدير الدولي:</b> (14 شركة)</p>
                 <p>⭐ <b>تجار الجملة والمكاتب:</b> (42 تاجر)</p>
+                <button class="btn-blue" style="font-size:11px; padding:6px; margin-top:5px;" onclick="alert('✅ تم مزامنة الدوائر وتحديثها سحابياً!')">إدارة وتحديث الدوائر 🔄</button>
             </div>
         </div>
 
-        <!-- محتوى تبويب المجتمعات (Communities) -->
+        <!-- محتوى تبويب المجتمعات -->
         <div id="gpTabCommunities" class="hidden">
-            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px;">
-                <p>🐂 <b>مجتمع مصدري الملابس بمصر</b> (1.2K عضو)</p>
-                <p>📦 <b>تجارة الجملة وشحن الحاويات</b> (850 عضو)</p>
+            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px; border:1px solid var(--border-color);">
+                <h4 style="color:var(--accent); margin-top:0;">المجتمعات المشترك بها</h4>
+                <div class="item-row">
+                    <div><b>🐂 مجتمع مصدري الملابس بمصر</b><br><small style="color:var(--text-muted);">1.2K عضو | نشط</small></div>
+                    <button class="btn-gold" style="font-size:10px; padding:4px 8px; width:auto;" onclick="switchTab('exportTab'); toggleGPlusDrawer();">دخول</button>
+                </div>
+                <div class="item-row" style="border:none;">
+                    <div><b>📦 تجارة الجملة وشحن الحاويات</b><br><small style="color:var(--text-muted);">850 عضو | نشط</small></div>
+                    <button class="btn-gold" style="font-size:10px; padding:4px 8px; width:auto;" onclick="switchTab('advancedInvoicesStoreTab'); toggleGPlusDrawer();">دخول</button>
+                </div>
             </div>
         </div>
     </div>
@@ -248,18 +291,21 @@
         <button class="btn-red" onclick="closeStreamDetail()">إغلاق المعاينة</button>
     </div>
 
+    <!-- لوحة اختيار الثيمات والألوان المتعددة -->
     <div class="theme-selector">
-        <span style="font-size:12px; align-self:center; color:var(--text-muted);">اختر ثيم المنصة:</span>
+        <span style="font-size:12px; align-self:center; color:var(--text-muted);">اختر ثيم المنصة والألوان:</span>
         <div class="theme-btn" style="background: #d4af37;" onclick="setTheme('#111111', '#d4af37', '#0f1115', '#1a1d24')" title="أسود وذهبي فاخر"></div>
         <div class="theme-btn" style="background: #3182ce;" onclick="setTheme('#1a202c', '#63b3ed', '#0f172a', '#1e293b')" title="كلاسيكي أزرق"></div>
         <div class="theme-btn" style="background: #27ae60;" onclick="setTheme('#064e3b', '#34d399', '#022c22', '#065f46')" title="أخضر أعمال"></div>
         <div class="theme-btn" style="background: #805ad5;" onclick="setTheme('#322659', '#b794f4', '#1a103c', '#2d1a4a')" title="ملكي بنفسجي"></div>
+        <div class="theme-btn" style="background: #e53e3e;" onclick="setTheme('#4a1515', '#fc8181', '#1a0f0f', '#2d1616')" title="حريء أحمر ناري"></div>
+        <div class="theme-btn" style="background: #319795;" onclick="setTheme('#134e4a', '#2dd4bf', '#042f2e', '#042f2e')" title="فيروزي بحري"></div>
     </div>
 
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE & BLACK PLUS</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة + شبكة تواصل Google Plus المتكاملة (الإصدار الجيل السابع المطور 7.4.12)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة + شبكة تواصل Google Plus ومتصفح الوسائط (الإصدار 7.4.20)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -441,7 +487,7 @@
         </div>
 
         <div class="card">
-            <h3>🛍️ المنتجات والعروض المتاحة</h3>
+            <h3>🛍️ المنتجات والعروض المتاحة (انقر على المنتج للعرض)</h3>
             <div class="products-grid" id="storeProductsList"></div>
         </div>
 
@@ -518,7 +564,7 @@
         <button class="btn-gold" onclick="submitCustomOrder()">إرسال طلب التصنيع 🏭</button>
     </div>
 
-    <!-- ================= تفاصيل المنتج ================= -->
+    <!-- ================= تفاصيل المنتج (مع إمكانية النقر لتكبير صورة المنتج) ================= -->
     <div id="productDetailTab" class="card hidden">
         <button class="btn-blue" style="width: auto; margin-bottom: 10px;" onclick="switchTab('storeTab')">⬅ عودة للمتجر</button>
         <div id="productDetailContent" style="text-align: center;"></div>
@@ -579,7 +625,7 @@
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/350x120/111/d4af37?text=Cover', approved: true }
+            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/350x120/111/d4af37?text=Cover', bio: 'المدير العام لمنصة بلاك بول لتجارة وتصدير الملابس.', location: 'القاهرة - مصر', approved: true }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
         let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
@@ -591,13 +637,22 @@
         let orders = JSON.parse(localStorage.getItem('bb_cloud_orders')) || [];
         let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [];
         let gplusPosts = JSON.parse(localStorage.getItem('bb_cloud_gplus_posts')) || [
-            { id: 1, author: 'المدير العام', text: 'أهلاً بكم في استريم بروفايل Black Plus عبر Google+! تابعوا أحدث حاويات الملابس الجاهزة للتصدير.', date: '2026/08/03' }
+            { id: 1, author: 'المدير العام', text: 'أهلاً بكم في استريم بروفايل Black Plus عبر Google+! تابعوا أحدث حاويات الملابس الجاهزة للتصدير.', media: null, mediaType: null, date: '2026/08/03' }
         ];
+        let userGallery = JSON.parse(localStorage.getItem('bb_cloud_gallery')) || [
+            { id: 1, type: 'image', url: 'https://via.placeholder.com/350x250/111/d4af37?text=Export+Jacket+HD' },
+            { id: 2, type: 'image', url: 'https://via.placeholder.com/350x250/222/d4af37?text=Local+Set+HD' },
+            { id: 3, type: 'image', url: 'https://via.placeholder.com/350x250/333/d4af37?text=Container+Shipping' },
+            { id: 4, type: 'image', url: 'https://via.placeholder.com/350x250/444/d4af37?text=Black+Bull+Store' }
+        ];
+
         let cart = [];
         let posCart = [];
         let currentFilter = 'all';
         let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
         let activeInvoiceForAction = null;
+        let tempPostMedia = null;
+        let tempPostMediaType = null;
 
         window.onload = function() {
             let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
@@ -618,6 +673,7 @@
             renderLocalWholesale();
             renderAdminUsersManagement();
             renderGPlusStream();
+            renderGPlusGallery();
             updateAdminStats();
             populatePosDropdown();
             
@@ -651,8 +707,27 @@
             } else {
                 updateAuthUI();
                 renderGPlusStream();
+                renderGPlusGallery();
                 toggleGPlusDrawer();
             }
+        }
+
+        // فتح وعرض الصورة أو الفيديو بالحجم الكامل عند النقر
+        function openLightbox(url, type) {
+            let lightbox = document.getElementById('mediaLightbox');
+            let container = document.getElementById('lightboxContainer');
+            if(type === 'video') {
+                container.innerHTML = `<video src="${url}" class="media-lightbox-content" controls autoplay></video>`;
+            } else {
+                container.innerHTML = `<img src="${url}" class="media-lightbox-content" alt="Enlarged Media">`;
+            }
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            let lightbox = document.getElementById('mediaLightbox');
+            document.getElementById('lightboxContainer').innerHTML = '';
+            lightbox.classList.remove('active');
         }
 
         function switchGPlusTab(tabName, btn) {
@@ -664,6 +739,122 @@
             let parent = btn.parentElement;
             parent.querySelectorAll('button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+        }
+
+        function handleAvatarUpload(event) {
+            let file = event.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let base64Img = e.target.result;
+                if(currentUser) currentUser.avatar = base64Img;
+                document.getElementById('gpAvatarImg').src = base64Img;
+                userGallery.unshift({ id: Date.now(), type: 'image', url: base64Img });
+                syncDataToCloud();
+                renderGPlusGallery();
+                alert('✅ تم تحديث وحفظ الصورة الشخصية بنجاح!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleCoverUpload(event) {
+            let file = event.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let base64Img = e.target.result;
+                if(currentUser) currentUser.cover = base64Img;
+                document.getElementById('gpCoverImg').src = base64Img;
+                userGallery.unshift({ id: Date.now(), type: 'image', url: base64Img });
+                syncDataToCloud();
+                renderGPlusGallery();
+                alert('✅ تم تحديث وحفظ صورة الغلاف بنجاح!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handlePostMediaUpload(event, type) {
+            let file = event.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                tempPostMedia = e.target.result;
+                tempPostMediaType = type;
+                let previewBox = document.getElementById('mediaPreviewContainer');
+                if(type === 'image') {
+                    previewBox.innerHTML = `<img src="${tempPostMedia}" style="max-height:90px; border-radius:6px; border:1px solid var(--accent); cursor:pointer;" onclick="openLightbox('${tempPostMedia}', 'image')" title="انقر للتكبير"> <button class="btn-red" style="font-size:9px; padding:2px 6px; width:auto;" onclick="clearPostMedia()">حذف المرفق</button>`;
+                } else {
+                    previewBox.innerHTML = `<video src="${tempPostMedia}" controls style="max-height:90px; border-radius:6px; border:1px solid var(--accent);"></video> <button class="btn-red" style="font-size:9px; padding:2px 6px; width:auto;" onclick="clearPostMedia()">حذف المرفق</button>`;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearPostMedia() {
+            tempPostMedia = null;
+            tempPostMediaType = null;
+            document.getElementById('mediaPreviewContainer').innerHTML = '';
+        }
+
+        function handleGalleryUpload(event) {
+            let file = event.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let isVideo = file.type.startsWith('video');
+                userGallery.unshift({ id: Date.now(), type: isVideo ? 'video' : 'image', url: e.target.result });
+                syncDataToCloud();
+                renderGPlusGallery();
+                alert('✅ تمت إضافة الملف بنجاح لمعرض الصور والفيديوهات!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderGPlusGallery() {
+            let container = document.getElementById('gpGalleryContainer');
+            if(!container) return;
+            if(userGallery.length === 0) {
+                container.innerHTML = '<p style="font-size:12px; color:var(--text-muted); grid-column:1/-1; text-align:center;">لا توجد صور أو فيديوهات مرفوعة بعد.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            userGallery.forEach((item, idx) => {
+                if(item.type === 'video') {
+                    container.innerHTML += `
+                        <div style="position:relative; background:#000; border-radius:6px; overflow:hidden; border:1px solid var(--border-color);">
+                            <video src="${item.url}" style="width:100%; height:90px; object-fit:cover; cursor:pointer;" onclick="openLightbox('${item.url}', 'video')"></video>
+                            <span style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.7); color:#fff; font-size:9px; padding:2px 4px; border-radius:3px;">▶ فيديو (انقر للمشاهدة)</span>
+                            <button class="btn-red" style="position:absolute; top:2px; left:2px; font-size:8px; padding:2px 4px; width:auto;" onclick="deleteGalleryItem(${idx})">✕</button>
+                        </div>`;
+                } else {
+                    container.innerHTML += `
+                        <div style="position:relative; border-radius:6px; overflow:hidden; border:1px solid var(--border-color);">
+                            <img src="${item.url}" style="width:100%; height:90px; object-fit:cover; cursor:pointer;" onclick="openLightbox('${item.url}', 'image')" title="انقر للتكبير المشاهدة">
+                            <button class="btn-red" style="position:absolute; top:2px; left:2px; font-size:8px; padding:2px 4px; width:auto;" onclick="deleteGalleryItem(${idx})">✕</button>
+                        </div>`;
+                }
+            });
+        }
+
+        function deleteGalleryItem(idx) {
+            userGallery.splice(idx, 1);
+            syncDataToCloud();
+            renderGPlusGallery();
+        }
+
+        function saveAboutProfileInfo() {
+            if(!currentUser) return;
+            let nameInput = document.getElementById('aboutEditName').value.trim();
+            let bioInput = document.getElementById('aboutEditBio').value.trim();
+            let locInput = document.getElementById('aboutEditLocation').value.trim();
+
+            if(nameInput) currentUser.name = nameInput;
+            currentUser.bio = bioInput;
+            currentUser.location = locInput;
+
+            syncDataToCloud();
+            updateAuthUI();
+            alert('✅ تم حفظ وتحديث بيانات قسم (حول) بنجاح سحابياً!');
         }
 
         function setTheme(primary, accent, bg, card) {
@@ -680,6 +871,7 @@
             localStorage.setItem('bb_cloud_orders', JSON.stringify(orders));
             localStorage.setItem('bb_cloud_chats', JSON.stringify(chatLogs));
             localStorage.setItem('bb_cloud_gplus_posts', JSON.stringify(gplusPosts));
+            localStorage.setItem('bb_cloud_gallery', JSON.stringify(userGallery));
             
             if(currentUser) {
                 let foundIndex = registeredUsers.findIndex(u => u.phone === currentUser.phone || u.name === currentUser.name);
@@ -708,6 +900,7 @@
                 orders: orders,
                 chats: chatLogs,
                 gplusPosts: gplusPosts,
+                gallery: userGallery,
                 exportDate: new Date().toLocaleString()
             };
             let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
@@ -734,6 +927,7 @@
                     if(parsed.orders) orders = parsed.orders;
                     if(parsed.chats) chatLogs = parsed.chats;
                     if(parsed.gplusPosts) gplusPosts = parsed.gplusPosts;
+                    if(parsed.gallery) userGallery = parsed.gallery;
 
                     syncDataToCloud();
                     updateAuthUI();
@@ -745,6 +939,7 @@
                     renderChat();
                     renderLocalWholesale();
                     renderGPlusStream();
+                    renderGPlusGallery();
                     alert('✅ تم استعادة كافة البيانات والملفات والطلبات بنجاح تام!');
                     switchTab('storeTab');
                 } catch(err) {
@@ -825,6 +1020,8 @@
                 title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عضو مسجل متصل 🛒',
                 avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
                 cover: 'https://via.placeholder.com/350x120/111/d4af37?text=Black+Plus+Profile',
+                bio: 'مهتم بتجارة وتصدير الملابس الجاهزة.',
+                location: 'مصر',
                 approved: true
             };
             registeredUsers.push(newUser);
@@ -858,6 +1055,10 @@
                 document.getElementById('gpContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
                 document.getElementById('gpAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/85/000/d4af37?text=User';
                 document.getElementById('gpCoverImg').src = currentUser.cover || 'https://via.placeholder.com/350x120/111/d4af37?text=Cover';
+                
+                document.getElementById('aboutEditName').value = currentUser.name || '';
+                document.getElementById('aboutEditBio').value = currentUser.bio || '';
+                document.getElementById('aboutEditLocation').value = currentUser.location || '';
             } else {
                 btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
                 greet.innerText = 'مرحباً بك زائرنا الكريم';
@@ -867,15 +1068,25 @@
         function publishGPlusPost() {
             if(!currentUser) return alert('يجب تسجيل الدخول أولاً للنشر في الاستريم!');
             let text = document.getElementById('gpNewPostText').value.trim();
-            if(!text) return alert('اكتب نص المنشور أولاً');
+            if(!text && !tempPostMedia) return alert('اكتب نص المنشور أو أرفق صورة/فيديو أولاً');
 
-            gplusPosts.unshift({
+            let newPost = {
                 id: Date.now(),
                 author: currentUser.name,
                 text: text,
+                media: tempPostMedia,
+                mediaType: tempPostMediaType,
                 date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
-            });
+            };
+
+            gplusPosts.unshift(newPost);
+            if(tempPostMedia) {
+                userGallery.unshift({ id: Date.now(), type: tempPostMediaType, url: tempPostMedia });
+                renderGPlusGallery();
+            }
+
             document.getElementById('gpNewPostText').value = '';
+            clearPostMedia();
             syncDataToCloud();
             renderGPlusStream();
             alert('✅ تم نشر المنشور في استريم Black Plus بنجاح!');
@@ -890,11 +1101,20 @@
             }
             container.innerHTML = '';
             gplusPosts.forEach(post => {
+                let mediaHtml = '';
+                if(post.media) {
+                    if(post.mediaType === 'image') {
+                        mediaHtml = `<img src="${post.media}" style="width:100%; max-height:120px; object-fit:cover; border-radius:6px; margin-top:5px; cursor:pointer;" onclick="event.stopPropagation(); openLightbox('${post.media}', 'image')">`;
+                    } else {
+                        mediaHtml = `<video src="${post.media}" style="width:100%; max-height:120px; object-fit:cover; border-radius:6px; margin-top:5px;" controls></video>`;
+                    }
+                }
                 container.innerHTML += `
                     <div class="gplus-stream-item" onclick="openStreamDetail(${post.id})">
                         <b>${post.author}</b> <span style="font-size:10px; color:var(--text-muted);">(${post.date})</span>
-                        <p style="margin:5px 0; font-size:12px;">${post.text.length > 70 ? post.text.substring(0,70) + '...' : post.text}</p>
-                        <small style="color:var(--accent);">انقر للعرض الكامل 🔍</small>
+                        <p style="margin:5px 0; font-size:12px;">${post.text ? (post.text.length > 70 ? post.text.substring(0,70) + '...' : post.text) : 'مرفق مرئي'}</p>
+                        ${mediaHtml}
+                        <small style="color:var(--accent); display:block; margin-top:4px;">انقر للعرض الكامل 🔍</small>
                     </div>
                 `;
             });
@@ -904,10 +1124,20 @@
             let post = gplusPosts.find(p => p.id === postId);
             if(!post) return;
             
+            let mediaHtml = '';
+            if(post.media) {
+                if(post.mediaType === 'image') {
+                    mediaHtml = `<img src="${post.media}" style="width:100%; max-height:250px; object-fit:contain; border-radius:8px; margin-top:10px; cursor:pointer;" onclick="openLightbox('${post.media}', 'image')" title="انقر لتكبير الصورة">`;
+                } else {
+                    mediaHtml = `<video src="${post.media}" style="width:100%; max-height:250px; object-fit:contain; border-radius:8px; margin-top:10px;" controls></video>`;
+                }
+            }
+
             document.getElementById('streamDetailContent').innerHTML = `
                 <h3 style="color:var(--accent); margin-top:0;">منشور بواسطة: ${post.author}</h3>
                 <small style="color:var(--text-muted);">التاريخ والوقت: ${post.date}</small>
-                <p style="font-size:14px; margin-top:10px; line-height:1.6; white-space:pre-wrap;">${post.text}</p>
+                <p style="font-size:14px; margin-top:10px; line-height:1.6; white-space:pre-wrap;">${post.text || ''}</p>
+                ${mediaHtml}
             `;
             closeAllDrawers();
             switchTab('streamDetailModal');
@@ -1176,7 +1406,7 @@
             filtered.forEach(item => {
                 container.innerHTML += `
                     <div class="product-card" onclick="openProductDetail(${item.id})">
-                        <img src="${item.img}" alt="${item.name}">
+                        <img src="${item.img}" alt="${item.name}" title="انقر لتكبير صورة المنتج" onclick="event.stopPropagation(); openLightbox('${item.img}', 'image')">
                         <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
                         <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small><br>
                         <button class="btn-blue" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="event.stopPropagation(); addToCart(${item.id})">أضف للسلة</button>
@@ -1192,7 +1422,7 @@
             inventory.forEach(item => {
                 container.innerHTML += `
                     <div class="product-card" onclick="openProductDetail(${item.id})">
-                        <img src="${item.img}" alt="${item.name}">
+                        <img src="${item.img}" alt="${item.name}" title="انقر لتكبير الصورة" onclick="event.stopPropagation(); openLightbox('${item.img}', 'image')">
                         <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
                         <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small>
                     </div>
@@ -1204,7 +1434,7 @@
             let item = inventory.find(i => i.id === id);
             if(!item) return;
             document.getElementById('productDetailContent').innerHTML = `
-                <img src="${item.img}" alt="${item.name}" style="max-width: 250px; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                <img src="${item.img}" alt="${item.name}" style="max-width: 250px; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; cursor:pointer;" onclick="openLightbox('${item.img}', 'image')" title="انقر لتكبير الصورة">
                 <h2>${item.name}</h2>
                 <p><b>السعر:</b> <span style="color:var(--accent); font-size: 18px;">${item.price} جنيه</span></p>
                 <p><b>المخزون المتاح:</b> ${item.qty} قطعة</p>
