@@ -6,6 +6,8 @@
     <title>Black Bull Store - منصة بلاك بول لتجارة وتصدير الملابس</title>
     <!-- مكتبة لطباعة وتحويل الفواتير إلى PDF وصور مباشرة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- مكتبة الأيقونات FontAwesome لدعم الأيقونات الجديدة -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #111111;
@@ -142,20 +144,22 @@
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <div class="side-drawer" id="sideDrawer">
         <h3>قائمة الأقسام 🐂 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
-        <button onclick="switchTab('storeTab'); toggleSidebar()">🏪 المتجر الرئيسي</button>
-        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()">🧾 قسم الفواتير والمخزن الشامل 🌟</button>
-        <button onclick="switchTab('exportTab'); toggleSidebar()">🌍 التصدير الدولي</button>
-        <button onclick="switchTab('localWholesaleTab'); toggleSidebar()">📦 جملة محلي</button>
-        <button onclick="switchTab('customOrderTab'); toggleSidebar()">✂️ تفصيل خاص</button>
-        <button onclick="switchTab('trackingTab'); toggleSidebar()">🚢 تتبع الشحنات والملاحة</button>
-        <button onclick="switchTab('calcTab'); toggleSidebar()">🧮 حاسبة الشحن والجمارك</button>
-        <button onclick="switchTab('auctionTab'); toggleSidebar()">🏷️ مزاد الحاويات الكبرى</button>
-        <button onclick="switchTab('loyaltyTab'); toggleSidebar()">⭐ برنامج الولاء والنقاط</button>
-        <button onclick="switchTab('ordersTab'); toggleSidebar()">📋 مراقبة الطلبات</button>
-        <button onclick="switchTab('exportProfileTab'); toggleSidebar()">🌐 بروفايل التصدير الشامل</button>
-        <button onclick="checkProfileAccess(); toggleSidebar()">👤 حسابي الشخصي</button>
-        <button onclick="switchTab('supportTab'); toggleSidebar()">💬 الدعم الفني</button>
-        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;">🔐 لوحة الإدارة الشاملة</button>
+        <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> المتجر الرئيسي</button>
+        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()"><i class="fa-solid fa-file-invoice-dollar"></i> قسم الفواتير والمخزن الشامل 🌟</button>
+        <button onclick="switchTab('exportTab'); toggleSidebar()"><i class="fa-solid fa-globe"></i> التصدير الدولي</button>
+        <button onclick="switchTab('localWholesaleTab'); toggleSidebar()"><i class="fa-solid fa-boxes-stacked"></i> جملة محلي</button>
+        <button onclick="switchTab('customOrderTab'); toggleSidebar()"><i class="fa-solid fa-scissors"></i> تفصيل خاص</button>
+        <button onclick="switchTab('trackingTab'); toggleSidebar()"><i class="fa-solid fa-ship"></i> تتبع الشحنات والملاحة</button>
+        <button onclick="switchTab('calcTab'); toggleSidebar()"><i class="fa-solid fa-calculator"></i> حاسبة الشحن والجمارك</button>
+        <button onclick="switchTab('auctionTab'); toggleSidebar()"><i class="fa-solid fa-tags"></i> مزاد الحاويات الكبرى</button>
+        <button onclick="switchTab('loyaltyTab'); toggleSidebar()"><i class="fa-solid fa-star"></i> برنامج الولاء والنقاط</button>
+        <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> مراقبة الطلبات</button>
+        <button onclick="switchTab('exportProfileTab'); toggleSidebar()"><i class="fa-solid fa-network-wired"></i> بروفايل التصدير الشامل</button>
+        <button onclick="checkProfileAccess(); toggleSidebar()"><i class="fa-solid fa-user"></i> حسابي الشخصي</button>
+        <!-- زر الانتقال إلى صفحة word.html داخل القائمة الجانبية -->
+        <button onclick="openWordPage()"><i class="fa-solid fa-file-word" style="color: #3182ce;"></i> مستندات Word</button>
+        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني</button>
+        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة</button>
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
 
@@ -191,6 +195,8 @@
         <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
         <button onclick="checkProfileAccess(this)">👤 حسابي</button>
+        <!-- زر صفحة Word داخل شريط التنقل العلوي بجوار حسابي لتنسيق المنصة -->
+        <button onclick="openWordPage()" style="background: #3182ce; color: white;"><i class="fa-solid fa-file-word"></i> Word</button>
     </div>
 
     <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات ================= -->
@@ -570,6 +576,11 @@
             // فتح التبويب الأخير بشكل ثبات تام عند الـ Refresh
             switchTab(lastActiveTab, null, false);
         };
+
+        // وظيفة الانتقال إلى صفحة word.html
+        function openWordPage() {
+            window.location.href = 'word.html';
+        }
 
         function toggleSidebar() {
             document.getElementById('sideDrawer').classList.toggle('open');
