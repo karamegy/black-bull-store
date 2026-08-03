@@ -210,7 +210,7 @@
             </div>
             <div class="input-group">
                 <label>كلمة المرور:</label>
-                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور">
+                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور (1234)">
             </div>
             <button class="btn-green" onclick="performLogin()">تسجيل الدخول للمنصة 🚀</button>
         </div>
@@ -524,7 +524,7 @@
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'المدير العام', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '0103698906', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover' },
+            { name: 'المدير العام', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '1234', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover' },
             { name: 'محمد مشرف', phone: '01111111111', email: 'supervisor@blackbull.com', role: 'مشرف', password: '123', title: 'مشرف المنصة 🛡️', avatar: 'https://via.placeholder.com/85/222/3182ce?text=Super', cover: 'https://via.placeholder.com/600x130/111/3182ce?text=Supervisor' }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
@@ -541,11 +541,11 @@
         let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
 
         window.onload = function() {
-            // تحديث بيانات المدير التلقائية في حال وجود بيانات قديمة مخزنة محلياً
+            // تحديث بيانات المدير التلقائية للتأكد من مطابقتها لـ admin و 1234 دائماً
             let adminUser = registeredUsers.find(u => u.role === 'مدير');
             if(adminUser) {
                 adminUser.phone = 'admin';
-                adminUser.password = '0103698906';
+                adminUser.password = '1234';
             }
             updateAuthUI();
             renderInventory();
@@ -580,7 +580,7 @@
             localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
             if(currentUser) {
                 localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
-                let found = registeredUsers.find(u => u.phone === currentUser.phone);
+                let found = registeredUsers.find(u => u.phone === currentUser.phone || u.role === currentUser.role);
                 if(found) {
                     found.name = currentUser.name;
                     found.email = currentUser.email;
@@ -588,6 +588,7 @@
                     found.cover = currentUser.cover;
                     found.title = currentUser.title;
                     found.role = currentUser.role;
+                    found.password = currentUser.password;
                 }
             }
             let status = document.getElementById('syncStatus');
@@ -994,7 +995,7 @@
             registeredUsers[index].role = document.getElementById(`admRole_${index}`).value;
             registeredUsers[index].title = registeredUsers[index].role === 'مدير' ? 'المدير العام 🔐' : registeredUsers[index].role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒';
             
-            if(currentUser && currentUser.phone === registeredUsers[index].phone) {
+            if(currentUser && (currentUser.phone === registeredUsers[index].phone || currentUser.role === registeredUsers[index].role)) {
                 currentUser = registeredUsers[index];
             }
 
