@@ -156,8 +156,8 @@
         <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> مراقبة الطلبات</button>
         <button onclick="switchTab('exportProfileTab'); toggleSidebar()"><i class="fa-solid fa-network-wired"></i> بروفايل التصدير الشامل</button>
         <button onclick="checkProfileAccess(); toggleSidebar()"><i class="fa-solid fa-user"></i> حسابي الشخصي</button>
-        <!-- زر الانتقال إلى صفحة word.html داخل القائمة الجانبية -->
         <button onclick="openWordPage()"><i class="fa-solid fa-file-word" style="color: #3182ce;"></i> مستندات Word</button>
+        <button onclick="switchTab('backupTab'); toggleSidebar()"><i class="fa-solid fa-database" style="color: var(--accent);"></i> النسخ الاحتياطي والمزامنة 💾</button>
         <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني</button>
         <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة</button>
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
@@ -174,7 +174,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.5)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.8)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -195,7 +195,7 @@
         <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
         <button onclick="checkProfileAccess(this)">👤 حسابي</button>
-        <!-- زر صفحة Word داخل شريط التنقل العلوي بجوار حسابي لتنسيق المنصة -->
+        <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database"></i> النسخ الاحتياطي</button>
         <button onclick="openWordPage()" style="background: #3182ce; color: white;"><i class="fa-solid fa-file-word"></i> Word</button>
     </div>
 
@@ -447,7 +447,7 @@
         </div>
     </div>
 
-    <!-- ================= الملف الشخصي (Profile) - جوجل بلس ================= -->
+    <!-- ================= الملف الشخصي (Profile) الشخص المسجل حقيقياً ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
             <!-- غلاف الحساب الشخصي - النقر يفتح اختيار ملف الغلاف -->
@@ -460,44 +460,56 @@
             </div>
         </div>
         <div class="profile-info">
-            <h2 id="profileNameDisplay">اسم المستخدم</h2>
-            <span id="profileTitleBadge" class="title-badge">عضو جديد</span>
+            <h2 id="profileNameDisplay">اسم المستخدم الحقيقي</h2>
+            <span id="profileTitleBadge" class="title-badge">عضو معتمد</span>
             <p style="color: var(--text-muted); font-size: 13px;" id="profileContactDisplay">الهاتف أو البريد</p>
-            <span class="status-badge" id="profileRoleBadge">حساب مسجل وموثق سحابياً ✔️</span>
+            <span class="status-badge" id="profileRoleBadge">حساب حقيقي مسجل وموثق سحابياً ✔️</span>
         </div>
         
         <hr style="margin: 20px 0; border-color:var(--border-color);">
         
         <!-- زر فتح/إغلاق تعديل معلومات الحساب الشخصي -->
-        <button class="btn-blue" onclick="toggleEditProfileSection()" style="margin-bottom: 15px;">⚙️ تعديل معلومات الحساب الشخصي (تعديل البيانات والصور)</button>
+        <button class="btn-blue" onclick="toggleEditProfileSection()" style="margin-bottom: 15px;">⚙️ تعديل معلومات حسابك الحقيقي (تعديل البيانات والصور)</button>
 
-        <!-- قسم التعديل المخفي افتراضياً ويظهر عند الضغط على الزر أعلاه -->
+        <!-- قسم التعديل المخفي افتراضياً -->
         <div id="editProfileSectionContainer" class="card hidden" style="background:#111; border: 1px dashed var(--accent);">
-            <h3>👤 تعديل الملف الشخصي وصور الحساب (اضغط مباشرة على صورتك أو غلافك للتغيير الفوري)</h3>
+            <h3>👤 تعديل بياناتك الشخصية وصور الحساب (اضغط مباشرة على صورتك أو غلافك للتغيير الفوري)</h3>
             <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="editName"></div>
-            <div class="input-group"><label>رقم الهاتف / اسم المستخدم:</label><input type="text" id="editPhone"></div>
+            <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="editPhone"></div>
             <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="editEmail"></div>
             
-            <!-- حقول الملفات المخفية التي يتم تفعيلها بلمس الصورة أو الغلاف أو الأزرار -->
+            <!-- حقول الملفات المخفية -->
             <div class="input-group hidden"><input type="file" id="uploadAvatarFile" accept="image/*" onchange="previewImageFile(event, 'avatar')"></div>
             <div class="input-group hidden"><input type="file" id="uploadCoverFile" accept="image/*" onchange="previewImageFile(event, 'cover')"></div>
             
             <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                <button class="btn-purple" style="flex:1;" onclick="document.getElementById('uploadAvatarFile').click()">📷 تغيير الصورة الشخصية</button>
+                <button class="btn-purple" style="flex:1;" onclick="document.getElementById('uploadAvatarFile').click()">📷 تغيير صورتك الشخصية</button>
                 <button class="btn-blue" style="flex:1;" onclick="document.getElementById('uploadCoverFile').click()">🌄 تغيير صورة الغلاف</button>
             </div>
 
             <div class="input-group"><label>كلمة المرور الجديدة:</label><input type="password" id="editPassword" placeholder="اتركه فارغاً إذا لم ترغب بتغييره"></div>
-            <button class="btn-green" onclick="saveProfileChanges()">حفظ وتثبيت التعديلات والصور والصرف سحابياً 💾</button>
+            <button class="btn-green" onclick="saveProfileChanges()">حفظ وتثبيت التعديلات والصور وصرفها سحابياً 💾</button>
         </div>
 
         <hr style="margin: 20px 0; border-color:var(--border-color);">
 
-        <!-- عرض الشحنات والأوردرات الخاصة بكل عميل مسجل اسفل بروفايله مباشرة -->
-        <h3>📦 الشحنات والأوردرات المسجلة الخاصة بحسابك</h3>
+        <!-- عرض كافة الشحنات والطلبات والتفاعلات الخاصة بالحساب الحقيقي المسجل -->
+        <h3>📦 كافة طلباتك، شحناتك وفواتيرك المسجلة</h3>
         <div id="userProfileOrdersList" style="margin-top: 10px;">
-            <p style="color:var(--text-muted); text-align:center;">لا توجد شحنات أو أوردرات مسجلة باسمك حالياً.</p>
+            <p style="color:var(--text-muted); text-align:center;">لا توجد طلبات أو شحنات مسجلة باسمك حتى الآن.</p>
         </div>
+    </div>
+
+    <!-- ================= قسم النسخ الاحتياطي والمزامنة (Backup) ================= -->
+    <div id="backupTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>💾 إدارة النسخ الاحتياطي والمزامنة الكاملة للمنصة</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">قم بتحميل نسخة احتياطية من كافة بيانات المنصة (الحسابات، الفواتير، المخزن، الطلبات) لملف خارجي، أو استعادة البيانات في أي وقت.</p>
+        
+        <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+            <button class="btn-green" onclick="exportSystemBackup()" style="flex:1;">📥 تنزيل نسخة احتياطية كاملة (JSON)</button>
+            <button class="btn-purple" onclick="document.getElementById('importBackupFile').click()" style="flex:1;">📤 استعادة بيانات من ملف نسخة احتياطية</button>
+        </div>
+        <input type="file" id="importBackupFile" class="hidden" accept=".json" onchange="importSystemBackup(event)">
     </div>
 
     <!-- ================= مراقبة الطلبات والفواتير ================= -->
@@ -520,7 +532,7 @@
 
     <!-- ================= لوحة الإدارة الشاملة ================= -->
     <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2 style="color: var(--accent);">🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات وصلاحيات الدخول</h2>
+        <h2>🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات وصلاحيات الدخول</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">بصفتك (المدير)، يمكنك هنا التحكم في كلمات المرور لكافة مستخدمي المنصة وتعديلها أو حذف الحسابات.</p>
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
@@ -553,7 +565,6 @@
             let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
             if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '123'; adminUser.approved = true; }
             
-            // مزامنة حالة المستخدم الحالي من القائمة العامة لمنع تلف البيانات
             if(currentUser) {
                 let foundInList = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
                 if(foundInList) {
@@ -573,11 +584,9 @@
             updateAdminStats();
             populatePosDropdown();
             
-            // فتح التبويب الأخير بشكل ثبات تام عند الـ Refresh
             switchTab(lastActiveTab, null, false);
         };
 
-        // وظيفة الانتقال إلى صفحة word.html
         function openWordPage() {
             window.location.href = 'word.html';
         }
@@ -612,14 +621,66 @@
             }
             localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
             
-            document.getElementById('syncStatus').innerText = '✅ تم مزامنة وحفظ التحديثات والصور سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
+            document.getElementById('syncStatus').innerText = '✅ تم حفظ ومزامنة كافة بيانات الحساب والمخزن سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
             updateAdminStats();
             renderAdminUsersManagement();
         }
 
+        function exportSystemBackup() {
+            let backupData = {
+                users: registeredUsers,
+                currentUser: currentUser,
+                inventory: inventory,
+                invoices: savedInvoices,
+                orders: orders,
+                chats: chatLogs,
+                exportDate: new Date().toLocaleString()
+            };
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+            let downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "BlackBull_Backup_" + new Date().toISOString().slice(0,10) + ".json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            alert('✅ تم تنزيل النسخة الاحتياطية بنجاح على جهازك!');
+        }
+
+        function importSystemBackup(event) {
+            let file = event.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let parsed = JSON.parse(e.target.result);
+                    if(parsed.users) registeredUsers = parsed.users;
+                    if(parsed.currentUser) currentUser = parsed.currentUser;
+                    if(parsed.inventory) inventory = parsed.inventory;
+                    if(parsed.invoices) savedInvoices = parsed.invoices;
+                    if(parsed.orders) orders = parsed.orders;
+                    if(parsed.chats) chatLogs = parsed.chats;
+
+                    syncDataToCloud();
+                    updateAuthUI();
+                    renderInventory();
+                    renderStore();
+                    renderWarehouseManagement();
+                    renderInvoicesArchive();
+                    renderOrders();
+                    renderChat();
+                    renderLocalWholesale();
+                    alert('✅ تم استعادة كافة البيانات والملفات والطلبات من النسخة الاحتياطية بنجاح تام!');
+                    switchTab('storeTab');
+                } catch(err) {
+                    alert('❌ ملف النسخة الاحتياطية غير صالح أو تالف!');
+                }
+            };
+            reader.readAsText(file);
+        }
+
         function checkProfileAccess(btnElement = null) {
             if(!currentUser) {
-                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي!');
+                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي الحقيقي!');
                 switchTab('authSection', btnElement);
             } else {
                 updateAuthUI();
@@ -636,7 +697,7 @@
         }
 
         function switchTab(tabId, btnElement = null, saveState = true) {
-            ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
+            ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'backupTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.classList.add('hidden');
             });
@@ -700,13 +761,13 @@
             let role = document.getElementById('regRole').value;
             let password = document.getElementById('regPassword').value;
 
-            if(!name || !phone || !password) return alert('الرجاء إدخال كافة بيانات التسجيل');
+            if(!name || !phone || !password) return alert('الرجاء إدخال كافة بيانات التسجيل الأساسية');
             let exists = registeredUsers.find(u => u.phone === phone || u.name === name);
             if(exists) return alert('رقم الهاتف أو اسم المستخدم مسجل مسبقاً!');
 
             let newUser = {
                 name, phone, email: email || '', role, password,
-                title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒',
+                title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عضو مسجل حقيقي 🛒',
                 avatar: 'https://via.placeholder.com/110/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
                 cover: 'https://via.placeholder.com/600x160/111/d4af37?text=Black+Bull+Store',
                 approved: true
@@ -717,7 +778,7 @@
             updateAuthUI();
             renderUserProfileOrders();
             switchTab('profileTab');
-            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم إنشاء الحساب بنجاح!');
+            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي وتفعيله بنجاح!');
         }
 
         function performLogin() {
@@ -730,7 +791,7 @@
             updateAuthUI();
             renderUserProfileOrders();
             switchTab('profileTab');
-            alert('✅ مرحباً بك مجدداً، ' + currentUser.name);
+            alert('✅ مرحباً بك مجدداً في حسابك الشخصي، ' + currentUser.name);
         }
 
         function updateAuthUI() {
@@ -741,7 +802,7 @@
                 greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
                 document.getElementById('profileNameDisplay').innerText = currentUser.name;
                 document.getElementById('profileTitleBadge').innerText = currentUser.title || currentUser.role;
-                document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
+                document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone + (currentUser.email ? ' | ' + currentUser.email : '');
                 document.getElementById('userAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/110/000/d4af37?text=Bull';
                 document.getElementById('userCoverImg').src = currentUser.cover || 'https://via.placeholder.com/600x160/111/d4af37?text=Cover';
                 document.getElementById('editName').value = currentUser.name;
@@ -761,14 +822,14 @@
             let userInvoices = savedInvoices.filter(i => i.phone === currentUser.phone || i.customer === currentUser.name);
 
             if(userOrders.length === 0 && userInvoices.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted); text-align:center;">لا توجد شحنات أو أوردرات مسجلة باسمك حالياً.</p>`;
+                container.innerHTML = `<p style="color:var(--text-muted); text-align:center;">لا توجد طلبات أو شحنات مسجلة باسمك حتى الآن.</p>`;
                 return;
             }
 
             container.innerHTML = '';
             
             if(userOrders.length > 0) {
-                container.innerHTML += `<h4 style="color:var(--accent); margin-bottom:5px;">📋 قائمة الأوردرات والطلبات المسجلة:</h4>`;
+                container.innerHTML += `<h4 style="color:var(--accent); margin-bottom:5px;">📋 قائمة طلباتك وأوردراتك:</h4>`;
                 userOrders.forEach(o => {
                     container.innerHTML += `
                         <div class="item-row" style="background:#111; padding:8px 12px; border-radius:8px; margin-bottom:5px;">
@@ -783,7 +844,7 @@
             }
 
             if(userInvoices.length > 0) {
-                container.innerHTML += `<h4 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">🚢 فواتير الشحن والتصدير الخاصة بك:</h4>`;
+                container.innerHTML += `<h4 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">🧾 فواتيرك الصادرة ومعاملاتك:</h4>`;
                 userInvoices.forEach(inv => {
                     container.innerHTML += `
                         <div class="item-row" style="background:#111; padding:8px 12px; border-radius:8px; margin-bottom:5px;">
@@ -791,14 +852,14 @@
                                 <b>الفاتورة: ${inv.id}</b> | التاريخ: ${inv.date}<br>
                                 <small>القيمة الإجمالية: <b style="color:var(--accent);">${inv.total} ج.م</b></small>
                             </div>
-                            <button class="btn-blue" style="width:auto; padding:5px 10px; font-size:11px;" onclick="openInvoiceModalById('${inv.id}')">📄 معاينة الشحنة/الفاتورة</button>
+                            <button class="btn-blue" style="width:auto; padding:5px 10px; font-size:11px;" onclick="openInvoiceModalById('${inv.id}')">📄 معاينة الفاتورة</button>
                         </div>
                     `;
                 });
             }
         }
 
-        // معاينة وحفظ الصور الشخصية والغلاف فوراً مع تثبيتها في الذاكرة
+        // معاينة ورفع وتثبيت الصور الشخصية والغلاف فوراً في قاعدة البيانات المحلية والسحابية
         function previewImageFile(event, type) {
             let file = event.target.files[0];
             if(file && currentUser) {
@@ -812,7 +873,7 @@
                         document.getElementById('userCoverImg').src = currentUser.cover;
                     }
                     syncDataToCloud();
-                    alert('✨ تم رفع وتثبيت الصورة بنجاح وتحديثها على المنصة!');
+                    alert('✨ تم رفع وتثبيت الصورة بنجاح وحفظها بشكل دائم في حسابك!');
                 };
                 reader.readAsDataURL(file);
             }
@@ -833,7 +894,7 @@
             syncDataToCloud();
             updateAuthUI();
             renderUserProfileOrders();
-            alert('✅ تم حفظ وتثبيت كافة التعديلات، الحساب والصور بنجاح تام ولن تختفي عند الـ Refresh!');
+            alert('✅ تم حفظ وتثبيت كافة تعديلات بياناتك الشخصية وصورك بنجاح تام ولن تختفي عند التحديث!');
         }
 
         function renderAdminUsersManagement() {
