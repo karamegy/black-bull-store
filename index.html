@@ -110,10 +110,13 @@
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
         .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
 
-        .profile-header { position: relative; text-align: center; margin-bottom: 25px; }
-        .profile-cover { width: 100%; height: 130px; background: linear-gradient(135deg, #111, var(--accent)); border-radius: 10px; object-fit: cover; }
-        .profile-avatar { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--accent); position: absolute; bottom: -35px; right: 50%; transform: translateX(50%); object-fit: cover; background: #000; }
-        .profile-info { margin-top: 45px; text-align: center; }
+        /* ستايل بروفايل جوجل بلس المثبت والمحدث */
+        .profile-header { position: relative; text-align: center; margin-bottom: 45px; }
+        .profile-cover-container { width: 100%; height: 150px; border-radius: 12px; overflow: hidden; border: 1px solid var(--accent); position: relative; }
+        .profile-cover { width: 100%; height: 100%; object-fit: cover; }
+        .profile-avatar-container { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--accent); position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); overflow: hidden; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+        .profile-avatar { width: 100%; height: 100%; object-fit: cover; }
+        .profile-info { margin-top: 15px; text-align: center; }
 
         .chat-box { height: 260px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; overflow-y: auto; background: #111; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
         .chat-msg { padding: 8px 12px; border-radius: 8px; max-width: 75%; font-size: 13px; }
@@ -166,7 +169,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.3)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -367,7 +370,7 @@
 
     <!-- ================= 7. بروفايل التصدير الشامل ================= -->
     <div id="exportProfileTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.3)</h2>
+        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.4)</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">مخصص بالكامل لشحنات الملابس المصدرة للخارج، استعراض الحاويات الدولية، وطلب بضائع التصدير مع تفعيل بوابات الدفع.</p>
         
         <div class="stats-grid">
@@ -407,11 +410,15 @@
         </div>
     </div>
 
-    <!-- ================= 8. الملف الشخصي ================= -->
+    <!-- ================= 8. الملف الشخصي (تصميم شبيه بجوجل بلس + رفع صور) ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
-            <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover" alt="Cover">
-            <img id="userAvatarImg" class="profile-avatar" src="https://via.placeholder.com/85/000/d4af37?text=Bull" alt="Avatar">
+            <div class="profile-cover-container">
+                <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover" alt="Cover">
+            </div>
+            <div class="profile-avatar-container">
+                <img id="userAvatarImg" class="profile-avatar" src="https://via.placeholder.com/85/000/d4af37?text=Bull" alt="Avatar">
+            </div>
         </div>
         <div class="profile-info">
             <h2 id="profileNameDisplay">اسم المستخدم</h2>
@@ -420,12 +427,22 @@
             <span class="status-badge" id="profileRoleBadge">حساب مسجل وموثق سحابياً ✔️</span>
         </div>
         <hr style="margin: 20px 0; border-color:var(--border-color);">
-        <h3>👤 تعديل الملف الشخصي (تغيير الاسم، الرقم، الإيميل، والباسورد)</h3>
+        <h3>👤 تعديل الملف الشخصي وصور الحساب (Google Plus Style)</h3>
+        
         <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="editName"></div>
         <div class="input-group"><label>رقم الهاتف / اسم المستخدم:</label><input type="text" id="editPhone"></div>
         <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="editEmail"></div>
-        <div class="input-group"><label>رابط الصورة الشخصية:</label><input type="text" id="editAvatar" placeholder="https://..."></div>
-        <div class="input-group"><label>رابط صورة الغلاف:</label><input type="text" id="editCover" placeholder="https://..."></div>
+        
+        <!-- حقول رفع الصور من الهاتف أو الكمبيوتر -->
+        <div class="input-group">
+            <label>🖼️ تحميل الصورة الشخصية من الجهاز:</label>
+            <input type="file" id="uploadAvatarFile" accept="image/*" onchange="previewImageFile(event, 'avatar')">
+        </div>
+        <div class="input-group">
+            <label>🌄 تحميل صورة الغلاف من الجهاز:</label>
+            <input type="file" id="uploadCoverFile" accept="image/*" onchange="previewImageFile(event, 'cover')">
+        </div>
+
         <div class="input-group"><label>كلمة المرور الجديدة:</label><input type="password" id="editPassword" placeholder="اتركه فارغاً إذا لم ترغب بتغييره"></div>
         <button class="btn-blue" onclick="saveProfileChanges()">حفظ وتثبيت التعديلات والصور سحابياً 💾</button>
     </div>
@@ -540,6 +557,10 @@
         let currentFilter = 'all';
         let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
 
+        // متغيرات مؤقتة لحفظ الصور المرفوعة محلياً
+        let tempAvatarData = '';
+        let tempCoverData = '';
+
         window.onload = function() {
             let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
             if(adminUser) {
@@ -609,7 +630,7 @@
         function switchTab(tabId, btnElement = null, saveState = true) {
             if(tabId === 'adminDashboardTab') {
                 if(!currentUser || currentUser.role !== 'مدير' || currentUser.phone !== 'admin') {
-                    alert('عذراً، لوحة التحكم الإدارية الشاملة مخصصة للمدير المؤسс (admin) فقط!');
+                    alert('عذراً، لوحة التحكم الإدارية الشاملة مخصصة للمدير المؤسس (admin) فقط!');
                     return;
                 }
             }
@@ -656,7 +677,6 @@
                     switchTab('storeTab');
                 }
             } else {
-                // تفريغ حقول الدخول تماماً عند فتح النافذة لحفظ خصوصية المنصة
                 document.getElementById('loginContactOrName').value = '';
                 document.getElementById('loginPassword').value = '';
                 switchTab('authSection');
@@ -684,7 +704,7 @@
                 title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒',
                 avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + name.charAt(0),
                 cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Store',
-                approved: role === 'عميل' ? true : false // المشرفون والمديرون الجدد يحتاجون موافقة المدير المؤسس
+                approved: role === 'عميل' ? true : false
             };
 
             registeredUsers.push(newUser);
@@ -711,10 +731,9 @@
             let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName || (contactOrName === 'admin' && u.role === 'مدير')) && u.password === password);
             if(!user) return alert('بيانات الدخول غير صحيحة! تأكد من صحة بيانات الاعتماد المدخلة.');
 
-            // شرط عدم السماح لأي مدير أو مشرف بالدخول إلا بعد حصوله على مفتاح التفعيل من المدير المؤسس
             if((user.role === 'مشرف' || user.role === 'مدير') && user.phone !== 'admin') {
                 if(!user.approved) {
-                    return alert('🔒 عذراً، لا يمكنك تسجيل الدخول بصفتك (' + user.role + ') إلا بعد أن يقوم المدير المؤسс بمنحك مفتاح التفعيل والصلاحية من لوحة الإدارة.');
+                    return alert('🔒 عذراً، لا يمكنك تسجيل الدخول بصفتك (' + user.role + ') إلا بعد أن يقوم المدير المؤسس بمنحك مفتاح التفعيل والصلاحية من لوحة الإدارة.');
                 }
             }
 
@@ -742,12 +761,31 @@
                 document.getElementById('editName').value = currentUser.name;
                 document.getElementById('editPhone').value = currentUser.phone;
                 document.getElementById('editEmail').value = currentUser.email || '';
-                document.getElementById('editAvatar').value = currentUser.avatar;
-                document.getElementById('editCover').value = currentUser.cover;
+                
+                tempAvatarData = currentUser.avatar;
+                tempCoverData = currentUser.cover;
             } else {
                 btnTop.innerText = 'تسجيل الدخول';
                 btnTop.className = 'btn-gold';
                 greet.innerText = 'مرحباً بك زائرنا الكريم';
+            }
+        }
+
+        // دالة لمعاينة ورفع الصور من الهاتف أو الكمبيوتر وتحويلها إلى Base64
+        function previewImageFile(event, type) {
+            let file = event.target.files[0];
+            if(file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    if(type === 'avatar') {
+                        tempAvatarData = e.target.result;
+                        document.getElementById('userAvatarImg').src = tempAvatarData;
+                    } else if(type === 'cover') {
+                        tempCoverData = e.target.result;
+                        document.getElementById('userCoverImg').src = tempCoverData;
+                    }
+                };
+                reader.readAsDataURL(file);
             }
         }
 
@@ -756,15 +794,17 @@
             currentUser.name = document.getElementById('editName').value || currentUser.name;
             currentUser.phone = document.getElementById('editPhone').value || currentUser.phone;
             currentUser.email = document.getElementById('editEmail').value || currentUser.email;
-            currentUser.avatar = document.getElementById('editAvatar').value || currentUser.avatar;
-            currentUser.cover = document.getElementById('editCover').value || currentUser.cover;
+            
+            if(tempAvatarData) currentUser.avatar = tempAvatarData;
+            if(tempCoverData) currentUser.cover = tempCoverData;
+
             let newPass = document.getElementById('editPassword').value;
             if(newPass) { currentUser.password = newPass; }
 
             syncDataToCloud();
             updateAuthUI();
             renderAdminAllUsers();
-            alert('✅ تم حفظ وتثبيت الملف الشخصي سحابياً بنجاح!');
+            alert('✅ تم حفظ وتثبيت الملف الشخصي والصور بشكل مثبت ودائم سحابياً بنجاح!');
         }
 
         function filterCategory(cat, element) {
