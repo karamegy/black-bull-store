@@ -169,7 +169,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.3)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.4)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -461,7 +461,7 @@
         
         <hr style="margin: 20px 0; border-color:var(--border-color);">
         
-        <!-- زر فتح/إغلاق تعديل معلومات الحساب الشخصي بناءً على طلبك -->
+        <!-- زر فتح/إغلاق تعديل معلومات الحساب الشخصي -->
         <button class="btn-blue" onclick="toggleEditProfileSection()" style="margin-bottom: 15px;">⚙️ تعديل معلومات الحساب الشخصي (تعديل البيانات والصور)</button>
 
         <!-- قسم التعديل المخفي افتراضياً ويظهر عند الضغط على الزر أعلاه -->
@@ -545,6 +545,15 @@
         window.onload = function() {
             let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
             if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '123'; adminUser.approved = true; }
+            
+            // مزامنة حالة المستخدم الحالي إذا تم تحديث بياناته مسبقاً في القائمة العامة
+            if(currentUser) {
+                let foundInList = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
+                if(foundInList) {
+                    currentUser = { ...foundInList };
+                }
+            }
+
             updateAuthUI();
             renderInventory();
             renderStore();
@@ -556,6 +565,8 @@
             renderAdminUsersManagement();
             updateAdminStats();
             populatePosDropdown();
+            
+            // فتح التبويب الأخير بشكل صحيح وثابت منعاً للعودة الافتراضية للمتجر
             switchTab(lastActiveTab, null, false);
         };
 
@@ -577,15 +588,17 @@
             localStorage.setItem('bb_cloud_invoices', JSON.stringify(savedInvoices));
             localStorage.setItem('bb_cloud_orders', JSON.stringify(orders));
             localStorage.setItem('bb_cloud_chats', JSON.stringify(chatLogs));
-            localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
             
             if(currentUser) {
                 let foundIndex = registeredUsers.findIndex(u => u.phone === currentUser.phone || u.name === currentUser.name);
                 if(foundIndex !== -1) {
                     registeredUsers[foundIndex] = { ...currentUser };
+                } else {
+                    registeredUsers.push({ ...currentUser });
                 }
                 localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
             }
+            localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
             
             document.getElementById('syncStatus').innerText = '✅ تم مزامنة وحفظ التحديثات والصور سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
             updateAdminStats();
@@ -603,7 +616,6 @@
             }
         }
 
-        // إظهار أو إخفاء زر وتعديل معلومات الحساب الشخصي
         function toggleEditProfileSection() {
             let section = document.getElementById('editProfileSectionContainer');
             if(section) {
@@ -619,7 +631,10 @@
             let target = document.getElementById(tabId);
             if(target) target.classList.remove('hidden');
             
-            if(saveState) { localStorage.setItem('bb_active_tab', tabId); }
+            if(saveState) { 
+                lastActiveTab = tabId;
+                localStorage.setItem('bb_active_tab', tabId); 
+            }
             if(btnElement && btnElement.tagName === 'BUTTON') {
                 document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
                 btnElement.classList.add('active-nav');
@@ -726,7 +741,6 @@
             }
         }
 
-        // عرض الشحنات والأوردرات والطلبات الخاصة بالعميل الحالي في بروفايله
         function renderUserProfileOrders() {
             let container = document.getElementById('userProfileOrdersList');
             if(!container || !currentUser) return;
@@ -741,7 +755,6 @@
 
             container.innerHTML = '';
             
-            // عرض الطلبات والأوردرات
             if(userOrders.length > 0) {
                 container.innerHTML += `<h4 style="color:var(--accent); margin-bottom:5px;">📋 قائمة الأوردرات والطلبات المسجلة:</h4>`;
                 userOrders.forEach(o => {
@@ -757,7 +770,6 @@
                 });
             }
 
-            // عرض الشحنات والفواتير الخاصة بالعميل
             if(userInvoices.length > 0) {
                 container.innerHTML += `<h4 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">🚢 فواتير الشحن والتصدير الخاصة بك:</h4>`;
                 userInvoices.forEach(inv => {
@@ -774,7 +786,7 @@
             }
         }
 
-        // معاينة وحفظ الصور الشخصية والغلاف فوراً عند اختيارها أو النقر عليها
+        // معاينة وحفظ الصور الشخصية والغلاف فوراً مع تثبيتها في الذاكرة
         function previewImageFile(event, type) {
             let file = event.target.files[0];
             if(file && currentUser) {
@@ -795,10 +807,11 @@
         }
 
         function saveProfileChanges() {
-            if(!currentUser) return;
-            currentUser.name = document.getElementById('editName').value || currentUser.name;
-            currentUser.phone = document.getElementById('editPhone').value || currentUser.phone;
-            currentUser.email = document.getElementById('editEmail').value || currentUser.email;
+            if(!currentUser) return alert('يجب تسجيل الدخول أولاً');
+            
+            currentUser.name = document.getElementById('editName').value.trim() || currentUser.name;
+            currentUser.phone = document.getElementById('editPhone').value.trim() || currentUser.phone;
+            currentUser.email = document.getElementById('editEmail').value.trim() || currentUser.email;
             
             let newPass = document.getElementById('editPassword').value.trim();
             if(newPass) {
@@ -808,10 +821,9 @@
             syncDataToCloud();
             updateAuthUI();
             renderUserProfileOrders();
-            alert('✅ تم حفظ وتثبيت كافة التعديلات، الحساب والصور بنجاح تام!');
+            alert('✅ تم حفظ وتثبيت كافة التعديلات، الحساب والصور بنجاح تام ولن تختفي عند الـ Refresh!');
         }
 
-        // ================= إدارة الحسابات وتغيير الرقم السري بواسطة المدير =================
         function renderAdminUsersManagement() {
             let container = document.getElementById('adminAllUsersList');
             if(!container) return;
@@ -869,7 +881,6 @@
             }
         }
 
-        // ================= الوظائف المتقدمة لقسم الفواتير والمخزن =================
         function populatePosDropdown() {
             let select = document.getElementById('posSelectProduct');
             if(!select) return;
@@ -1074,7 +1085,6 @@
             renderStore();
         }
 
-        // ================= المتجر والطلبات العادية =================
         function filterCategory(cat, element) {
             currentFilter = cat;
             document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
