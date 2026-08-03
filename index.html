@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Bull Store - منصة بلاك بول لتجارة وتصدير الملابس</title>
+    <title>Black Bull Store - منصة بلاك بول لتجارة وتصدير الملابس + Google Plus</title>
     <!-- مكتبة لطباعة وتحويل الفواتير إلى PDF وصور مباشرة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- مكتبة الأيقونات FontAwesome لدعم الأيقونات الجديدة -->
+    <!-- مكتبة الأيقونات FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -88,19 +88,32 @@
         
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; transition: 0.3s; }
         .sidebar-overlay.active { display: block; }
-        .side-drawer { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: #15181e; z-index: 1000; box-shadow: -5px 0 25px rgba(0,0,0,0.8); transition: right 0.3s ease-in-out; padding: 20px; box-sizing: border-box; border-left: 2px solid var(--accent); overflow-y: auto; }
+        .side-drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: #15181e; z-index: 1000; box-shadow: -5px 0 25px rgba(0,0,0,0.8); transition: right 0.3s ease-in-out; padding: 20px; box-sizing: border-box; border-left: 2px solid var(--accent); overflow-y: auto; }
         .side-drawer.open { right: 0; }
         .side-drawer h3 { color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
         .side-drawer button { background: #2d3748; color: #fff; text-align: right; padding: 12px; margin-bottom: 8px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 10px; }
         .side-drawer button:hover { background: var(--accent); color: #111; }
         .close-drawer { background: #e53e3e !important; color: white !important; text-align: center !important; justify-content: center; }
 
+        /* بروفايل جوجل بلس المحاكي (Black Plus Profile Drawer & Sections) */
+        .gplus-profile-drawer { position: fixed; top: 0; left: -380px; width: 360px; height: 100%; background: #15181e; z-index: 1001; box-shadow: 5px 0 25px rgba(0,0,0,0.8); transition: left 0.3s ease-in-out; padding: 15px; box-sizing: border-box; border-right: 2px solid var(--accent); overflow-y: auto; }
+        .gplus-profile-drawer.open { left: 0; }
+        .gplus-header { text-align: center; position: relative; margin-bottom: 15px; }
+        .gplus-cover { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--accent); }
+        .gplus-avatar { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--accent); position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); object-fit: cover; background: #000; }
+        
+        .gplus-nav-tabs { display: flex; gap: 4px; margin: 15px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        .gplus-nav-tabs button { flex: 1; font-size: 11px; padding: 6px; background: #2d3748; color: #fff; margin:0; }
+        .gplus-nav-tabs button.active { background: var(--accent); color: #111; font-weight: bold; }
+
+        .gplus-stream-item { background: #111; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .gplus-stream-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+
         .nav-bar { display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
         .nav-bar button { flex: 1; font-size: 11px; padding: 8px 4px; min-width: 60px; background: #2d3748; color: #fff; }
         .nav-bar button.active-nav { background: var(--accent); color: #111; font-weight: bold; }
 
         .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; gap: 10px; }
-        .status-badge { background: rgba(212,175,55,0.15); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 12px; border: 1px solid var(--accent); }
         .title-badge { background: #3182ce; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; margin-right: 5px; }
 
         .categories-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; }
@@ -111,14 +124,6 @@
         .product-card { border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; background: #15181e; transition: 0.2s; }
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
         .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
-
-        /* بروفايل الحساب المطور */
-        .profile-header { position: relative; text-align: center; margin-bottom: 55px; }
-        .profile-cover-container { width: 100%; height: 160px; border-radius: 12px; overflow: hidden; border: 2px solid var(--accent); position: relative; background: #000; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .profile-cover { width: 100%; height: 100%; object-fit: cover; }
-        .profile-avatar-container { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--accent); position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%); overflow: hidden; background: #000; box-shadow: 0 6px 20px rgba(0,0,0,0.8); cursor: pointer; }
-        .profile-avatar { width: 100%; height: 100%; object-fit: cover; }
-        .profile-info { margin-top: 20px; text-align: center; }
 
         .chat-box { height: 260px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; overflow-y: auto; background: #111; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
         .chat-msg { padding: 8px 12px; border-radius: 8px; max-width: 75%; font-size: 13px; }
@@ -140,8 +145,8 @@
 </head>
 <body>
 
-    <!-- القائمة الجانبية المبتكرة -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <!-- القائمة الجانبية لأقسام المنصة الرئيسية -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeAllDrawers()"></div>
     <div class="side-drawer" id="sideDrawer">
         <h3>قائمة الأقسام 🐂 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
         <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> المتجر الرئيسي</button>
@@ -155,12 +160,92 @@
         <button onclick="switchTab('loyaltyTab'); toggleSidebar()"><i class="fa-solid fa-star"></i> برنامج الولاء والنقاط</button>
         <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> مراقبة الطلبات</button>
         <button onclick="switchTab('exportProfileTab'); toggleSidebar()"><i class="fa-solid fa-network-wired"></i> بروفايل التصدير الشامل</button>
-        <button onclick="checkProfileAccess(); toggleSidebar()"><i class="fa-solid fa-user"></i> حسابي الشخصي المتصل</button>
-        <button onclick="openWordPage()"><i class="fa-solid fa-file-word" style="color: #3182ce;"></i> مستندات Word</button>
+        <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle" style="color:var(--accent);"></i> بروفايل حسابي (Black Plus)</button>
+        <button onclick="openWordPage()"><i class="fa-solid fa-file-word" style="color: #3182ce;"></i> مستندات Word الاحترافي</button>
         <button onclick="switchTab('backupTab'); toggleSidebar()"><i class="fa-solid fa-database" style="color: var(--accent);"></i> النسخ الاحتياطي والمزامنة 💾</button>
         <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني</button>
         <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة</button>
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
+    </div>
+
+    <!-- بروفايل جوجل بلس المحاكي (Black Plus - G+ Profile Drawer) المتكامل -->
+    <div class="gplus-profile-drawer" id="gplusProfileDrawer">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:12px;">
+            <h3 style="margin:0; color:var(--accent);">بروفايل Black Plus (G+) 🐂</h3>
+            <span style="cursor:pointer; font-size:18px; color:#fff;" onclick="toggleGPlusDrawer()">✕</span>
+        </div>
+        
+        <div class="gplus-header">
+            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/d4af37?text=Black+Plus+Cover" alt="Cover">
+            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/d4af37?text=User" alt="Avatar">
+        </div>
+        <div style="text-align:center; margin-top:45px;">
+            <h3 id="gpNameDisplay" style="margin:0;">اسم المستخدم</h3>
+            <span id="gpRoleBadge" class="title-badge" style="background:var(--accent); color:#111; font-weight:bold;">عضو موثق</span>
+            <p id="gpContactDisplay" style="color:var(--text-muted); font-size:12px; margin:5px 0;">الهاتف أو البريد</p>
+        </div>
+
+        <!-- تبويبات أقسام جوجل بلس (Stream, About, Photos, Circles, Communities) -->
+        <div class="gplus-nav-tabs">
+            <button class="active" onclick="switchGPlusTab('stream', this)">الاستريم 📢</button>
+            <button onclick="switchGPlusTab('about', this)">حول ℹ️</button>
+            <button onclick="switchGPlusTab('photos', this)">الصور 🖼️</button>
+            <button onclick="switchGPlusTab('circles', this)">الدوائر 👥</button>
+            <button onclick="switchGPlusTab('communities', this)">المجتمعات 🌐</button>
+        </div>
+
+        <!-- محتوى تبويب الاستريم -->
+        <div id="gpTabStream">
+            <div class="input-group">
+                <textarea id="gpNewPostText" placeholder="شارك أحدث منشوراتك، منتجاتك، أو حاويات التصدير..." style="height:60px; font-size:12px;"></textarea>
+                <button class="btn-gold" style="padding:6px; font-size:12px;" onclick="publishGPlusPost()">نشر في استريم Black Plus 🚀</button>
+            </div>
+            <div id="gpStreamContainer" style="margin-top:10px;"></div>
+        </div>
+
+        <!-- محتوى تبويب حول (About) -->
+        <div id="gpTabAbout" class="hidden">
+            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px; line-height:1.6;">
+                <p><b>🏢 اسم الشركة:</b> Black Bull Store & Black Plus</p>
+                <p><b>🌍 النشاط:</b> تجارة وتصدير الملابس جملة محلياً ودولياً.</p>
+                <p><b>📍 المقر:</b> جمهورية مصر العربية - القاهرة / الإسكندرية.</p>
+                <p><b>⭐ معيار الجودة:</b> إدارة الأعمال الشاملة والربط السحابي (Generation 7.4).</p>
+            </div>
+        </div>
+
+        <!-- محتوى تبويب الصور (Photos) -->
+        <div id="gpTabPhotos" class="hidden">
+            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:6px;">
+                <img src="https://via.placeholder.com/150/111/d4af37?text=Export+Jacket" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
+                <img src="https://via.placeholder.com/150/222/d4af37?text=Local+Set" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
+                <img src="https://via.placeholder.com/150/333/d4af37?text=Container" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
+                <img src="https://via.placeholder.com/150/444/d4af37?text=Black+Bull" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
+            </div>
+        </div>
+
+        <!-- محتوى تبويب الدوائر (Circles) -->
+        <div id="gpTabCircles" class="hidden">
+            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px;">
+                <p>🟢 <b>العائلة والأصدقاء:</b> (3 مُضافين)</p>
+                <p>🔵 <b>شركاء التصدير الدولي:</b> (14 شركة)</p>
+                <p>⭐ <b>تجار الجملة والمكاتب:</b> (42 تاجر)</p>
+            </div>
+        </div>
+
+        <!-- محتوى تبويب المجتمعات (Communities) -->
+        <div id="gpTabCommunities" class="hidden">
+            <div style="background:#111; padding:10px; border-radius:8px; font-size:12px;">
+                <p>🐂 <b>مجتمع مصدري الملابس بمصر</b> (1.2K عضو)</p>
+                <p>📦 <b>تجارة الجملة وشحن الحاويات</b> (850 عضو)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة معاينة تفاصيل عنصر الاستريم المختار -->
+    <div id="streamDetailModal" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🔍 معاينة تفاصيل منشور Black Plus</h2>
+        <div id="streamDetailContent" style="background:#111; padding:15px; border-radius:8px; margin-bottom:15px;"></div>
+        <button class="btn-red" onclick="closeStreamDetail()">إغلاق المعاينة</button>
     </div>
 
     <div class="theme-selector">
@@ -173,14 +258,17 @@
 
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
-        <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.11)</small>
+        <h1>BLACK BULL STORE & BLACK PLUS</h1>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة + شبكة تواصل Google Plus المتكاملة (الإصدار الجيل السابع المطور 7.4.12)</small>
     </div>
 
     <!-- شريط علوي -->
     <div class="top-nav-bar">
-        <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ أقسام المنصة</button>
-        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent); font-weight: bold; cursor: pointer;" onclick="checkProfileAccess()">مرحباً بك زائرنا الكريم</div>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <button class="menu-toggle-btn" onclick="toggleSidebar()">☰ أقسام المنصة</button>
+            <button class="btn-gold" style="width:auto; padding:6px 12px; margin:0; font-size:12px;" onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle"></i> بروفايل Black Plus</button>
+        </div>
+        <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">مرحباً بك زائرنا الكريم</div>
         <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
@@ -194,9 +282,9 @@
         <button onclick="switchTab('trackingTab', this)">🚢 التتبع</button>
         <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
-        <button onclick="checkProfileAccess(this)">👤 حسابي المتصل</button>
+        <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user"></i> بروفايل G+</button>
         <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database"></i> النسخ الاحتياطي</button>
-        <button onclick="openWordPage()" style="background: #3182ce; color: white;"><i class="fa-solid fa-file-word"></i> Word</button>
+        <button onclick="openWordPage()" style="background: #3182ce; color: white;"><i class="fa-solid fa-file-word"></i> محرر Word</button>
     </div>
 
     <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات ================= -->
@@ -236,7 +324,7 @@
                 </select>
             </div>
             <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية" autocomplete="new-password"></div>
-            <button class="btn-gold" onclick="performRegister()">إنشاء حساب جديد وتفعيل الحساب ✅</button>
+            <button class="btn-gold" onclick="performRegister()">إنشاء حساب جديد وتفعيل بروفايل Black Plus ✅</button>
         </div>
     </div>
 
@@ -447,56 +535,6 @@
         </div>
     </div>
 
-    <!-- ================= الملف الشخصي الحقيقي المتصل (Profile) ================= -->
-    <div id="profileTab" class="card hidden">
-        <div class="profile-header">
-            <!-- غلاف الحساب الشخصي - النقر يفتح اختيار ملف الغلاف -->
-            <div class="profile-cover-container" onclick="document.getElementById('uploadCoverFile').click()" title="انقر لتغيير الغلاف مباشرة">
-                <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover" alt="Cover">
-            </div>
-            <!-- صورة الملف الشخصي الدائرية - النقر يفتح اختيار ملف الصورة الشخصية -->
-            <div class="profile-avatar-container" onclick="document.getElementById('uploadAvatarFile').click()" title="انقر لتغيير الصورة الشخصية مباشرة">
-                <img id="userAvatarImg" class="profile-avatar" src="https://via.placeholder.com/110/000/d4af37?text=Bull" alt="Avatar">
-            </div>
-        </div>
-        <div class="profile-info">
-            <h2 id="profileNameDisplay">اسم المستخدم الحقيقي</h2>
-            <span id="profileTitleBadge" class="title-badge">عضو متصل معتمد</span>
-            <p style="color: var(--text-muted); font-size: 13px;" id="profileContactDisplay">الهاتف أو البريد</p>
-            <span class="status-badge" id="profileRoleBadge">حساب حقيقي متصل وموثق سحابياً ✔️</span>
-        </div>
-        
-        <hr style="margin: 20px 0; border-color:var(--border-color);">
-        
-        <!-- قسم تعديل معلومات الحساب الشخصي (ظاهر مباشرة بشكل منظم ودائم) -->
-        <div class="card" style="background:#111; border: 1px dashed var(--accent);">
-            <h3>⚙️ تعديل بياناتك الشخصية المتصلة وتثبيتها بشكل نهائي</h3>
-            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="editName"></div>
-            <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="editPhone"></div>
-            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="editEmail"></div>
-            
-            <!-- حقول الملفات المخفية للصور والغلاف -->
-            <div class="input-group hidden"><input type="file" id="uploadAvatarFile" accept="image/*" onchange="previewImageFile(event, 'avatar')"></div>
-            <div class="input-group hidden"><input type="file" id="uploadCoverFile" accept="image/*" onchange="previewImageFile(event, 'cover')"></div>
-            
-            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                <button class="btn-purple" style="flex:1;" onclick="document.getElementById('uploadAvatarFile').click()">📷 رفع صورة شخصية</button>
-                <button class="btn-blue" style="flex:1;" onclick="document.getElementById('uploadCoverFile').click()">🌄 رفع صورة الغلاف</button>
-            </div>
-
-            <div class="input-group"><label>كلمة المرور الجديدة:</label><input type="password" id="editPassword" placeholder="اتركه فارغاً إذا لم ترغب بتغييره"></div>
-            <button class="btn-green" onclick="saveProfileChanges()">حفظ وتثبيت التعديلات والصور نهائياً 💾</button>
-        </div>
-
-        <hr style="margin: 20px 0; border-color:var(--border-color);">
-
-        <!-- عرض كافة الشحنات والطلبات والتفاعلات الخاصة بالحساب الحقيقي المسجل -->
-        <h3>📦 كافة طلباتك، شحناتك وفواتيرك المتصلة</h3>
-        <div id="userProfileOrdersList" style="margin-top: 10px;">
-            <p style="color:var(--text-muted); text-align:center;">لا توجد طلبات أو شحنات مسجلة باسمك حتى الآن.</p>
-        </div>
-    </div>
-
     <!-- ================= قسم النسخ الاحتياطي والمزامنة (Backup) ================= -->
     <div id="backupTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>💾 إدارة النسخ الاحتياطي والمزامنة الكاملة للمنصة</h2>
@@ -541,7 +579,7 @@
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/110/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x160/111/d4af37?text=Manager+Cover', approved: true }
+            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '123', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/350x120/111/d4af37?text=Cover', approved: true }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
         let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
@@ -552,6 +590,9 @@
         let savedInvoices = JSON.parse(localStorage.getItem('bb_cloud_invoices')) || [];
         let orders = JSON.parse(localStorage.getItem('bb_cloud_orders')) || [];
         let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [];
+        let gplusPosts = JSON.parse(localStorage.getItem('bb_cloud_gplus_posts')) || [
+            { id: 1, author: 'المدير العام', text: 'أهلاً بكم في استريم بروفايل Black Plus عبر Google+! تابعوا أحدث حاويات الملابس الجاهزة للتصدير.', date: '2026/08/03' }
+        ];
         let cart = [];
         let posCart = [];
         let currentFilter = 'all';
@@ -564,9 +605,7 @@
             
             if(currentUser) {
                 let foundInList = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
-                if(foundInList) {
-                    currentUser = { ...foundInList };
-                }
+                if(foundInList) { currentUser = { ...foundInList }; }
             }
 
             updateAuthUI();
@@ -578,12 +617,10 @@
             renderChat();
             renderLocalWholesale();
             renderAdminUsersManagement();
+            renderGPlusStream();
             updateAdminStats();
             populatePosDropdown();
             
-            if(lastActiveTab === 'profileTab' && !currentUser) {
-                lastActiveTab = 'storeTab';
-            }
             switchTab(lastActiveTab, null, false);
         };
 
@@ -594,6 +631,39 @@
         function toggleSidebar() {
             document.getElementById('sideDrawer').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function toggleGPlusDrawer() {
+            document.getElementById('gplusProfileDrawer').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function closeAllDrawers() {
+            document.getElementById('sideDrawer').classList.remove('open');
+            document.getElementById('gplusProfileDrawer').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+
+        function checkProfileDrawerAccess() {
+            if (!currentUser) {
+                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض بروفايل Black Plus (Google+) والـ Stream الخاص بك!');
+                switchTab('authSection');
+            } else {
+                updateAuthUI();
+                renderGPlusStream();
+                toggleGPlusDrawer();
+            }
+        }
+
+        function switchGPlusTab(tabName, btn) {
+            ['gpTabStream', 'gpTabAbout', 'gpTabPhotos', 'gpTabCircles', 'gpTabCommunities'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById('gpTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.remove('hidden');
+            
+            let parent = btn.parentElement;
+            parent.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
         function setTheme(primary, accent, bg, card) {
@@ -609,6 +679,7 @@
             localStorage.setItem('bb_cloud_invoices', JSON.stringify(savedInvoices));
             localStorage.setItem('bb_cloud_orders', JSON.stringify(orders));
             localStorage.setItem('bb_cloud_chats', JSON.stringify(chatLogs));
+            localStorage.setItem('bb_cloud_gplus_posts', JSON.stringify(gplusPosts));
             
             if(currentUser) {
                 let foundIndex = registeredUsers.findIndex(u => u.phone === currentUser.phone || u.name === currentUser.name);
@@ -623,7 +694,7 @@
             }
             localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
             
-            document.getElementById('syncStatus').innerText = '✅ تم حفظ ومزامنة كافة بيانات الحساب والمخزن سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
+            document.getElementById('syncStatus').innerText = '✅ تم حفظ ومزامنة كافة بيانات الحساب والمخزن وجوجل بلس سحابياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
             updateAdminStats();
             renderAdminUsersManagement();
         }
@@ -636,12 +707,13 @@
                 invoices: savedInvoices,
                 orders: orders,
                 chats: chatLogs,
+                gplusPosts: gplusPosts,
                 exportDate: new Date().toLocaleString()
             };
             let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
             let downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "BlackBull_Backup_" + new Date().toISOString().slice(0,10) + ".json");
+            downloadAnchor.setAttribute("download", "BlackBull_Plus_Backup_" + new Date().toISOString().slice(0,10) + ".json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
@@ -661,6 +733,7 @@
                     if(parsed.invoices) savedInvoices = parsed.invoices;
                     if(parsed.orders) orders = parsed.orders;
                     if(parsed.chats) chatLogs = parsed.chats;
+                    if(parsed.gplusPosts) gplusPosts = parsed.gplusPosts;
 
                     syncDataToCloud();
                     updateAuthUI();
@@ -671,7 +744,8 @@
                     renderOrders();
                     renderChat();
                     renderLocalWholesale();
-                    alert('✅ تم استعادة كافة البيانات والملفات والطلبات من النسخة الاحتياطية بنجاح تام!');
+                    renderGPlusStream();
+                    alert('✅ تم استعادة كافة البيانات والملفات والطلبات بنجاح تام!');
                     switchTab('storeTab');
                 } catch(err) {
                     alert('❌ ملف النسخة الاحتياطية غير صالح أو تالف!');
@@ -680,19 +754,8 @@
             reader.readAsText(file);
         }
 
-        function checkProfileAccess(btnElement = null) {
-            if (!currentUser) {
-                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي المتصل الحقيقي!');
-                switchTab('authSection', btnElement);
-            } else {
-                updateAuthUI();
-                renderUserProfileOrders();
-                switchTab('profileTab', btnElement);
-            }
-        }
-
         function switchTab(tabId, btnElement = null, saveState = true) {
-            ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'backupTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
+            ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'backupTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal', 'streamDetailModal'].forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.classList.add('hidden');
             });
@@ -709,10 +772,6 @@
             }
             if(tabId === 'adminDashboardTab') {
                 renderAdminUsersManagement();
-            }
-            if(tabId === 'profileTab' && currentUser) {
-                updateAuthUI();
-                renderUserProfileOrders();
             }
         }
 
@@ -764,17 +823,16 @@
             let newUser = {
                 name, phone, email: email || '', role, password,
                 title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عضو مسجل متصل 🛒',
-                avatar: 'https://via.placeholder.com/110/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
-                cover: 'https://via.placeholder.com/600x160/111/d4af37?text=Black+Bull+Store',
+                avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + encodeURIComponent(name.charAt(0)),
+                cover: 'https://via.placeholder.com/350x120/111/d4af37?text=Black+Plus+Profile',
                 approved: true
             };
             registeredUsers.push(newUser);
             currentUser = newUser;
             syncDataToCloud();
             updateAuthUI();
-            renderUserProfileOrders();
-            switchTab('profileTab');
-            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي المتصل وتفعيله بنجاح!');
+            toggleGPlusDrawer();
+            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم تسجيل حسابك الحقيقي وتفعيل بروفايل Black Plus (Google+) بنجاح!');
         }
 
         function performLogin() {
@@ -785,9 +843,8 @@
             currentUser = user;
             syncDataToCloud();
             updateAuthUI();
-            renderUserProfileOrders();
-            switchTab('profileTab');
-            alert('✅ مرحباً بك مجدداً في حسابك الشخصي المتصل، ' + currentUser.name);
+            toggleGPlusDrawer();
+            alert('✅ مرحباً بك مجدداً، ' + currentUser.name);
         }
 
         function updateAuthUI() {
@@ -795,116 +852,78 @@
             let greet = document.getElementById('quickUserGreet');
             if(currentUser) {
                 btnTop.innerText = 'خروج'; btnTop.className = 'btn-red';
-                // ربط الاسم وصلاحية حسابي المتصل لتكون مطابقة تماماً للملف الشخصي
-                greet.innerHTML = `مرحباً، ${currentUser.name} <span style="font-size:11px; color:#fff; background:#3182ce; padding:2px 6px; border-radius:4px;">(${currentUser.role})</span>`;
-                
-                document.getElementById('profileNameDisplay').innerText = currentUser.name;
-                document.getElementById('profileTitleBadge').innerText = currentUser.title || currentUser.role;
-                document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone + (currentUser.email ? ' | ' + currentUser.email : '');
-                document.getElementById('userAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/110/000/d4af37?text=Bull';
-                document.getElementById('userCoverImg').src = currentUser.cover || 'https://via.placeholder.com/600x160/111/d4af37?text=Cover';
-                document.getElementById('editName').value = currentUser.name;
-                document.getElementById('editPhone').value = currentUser.phone;
-                document.getElementById('editEmail').value = currentUser.email || '';
+                greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
+                document.getElementById('gpNameDisplay').innerText = currentUser.name;
+                document.getElementById('gpRoleBadge').innerText = currentUser.title || currentUser.role;
+                document.getElementById('gpContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
+                document.getElementById('gpAvatarImg').src = currentUser.avatar || 'https://via.placeholder.com/85/000/d4af37?text=User';
+                document.getElementById('gpCoverImg').src = currentUser.cover || 'https://via.placeholder.com/350x120/111/d4af37?text=Cover';
             } else {
                 btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
-                greet.innerText = 'مرحباً بك زائرنا الكريم (انقر هنا لتسجيل الدخول)';
+                greet.innerText = 'مرحباً بك زائرنا الكريم';
             }
         }
 
-        function renderUserProfileOrders() {
-            let container = document.getElementById('userProfileOrdersList');
-            if(!container || !currentUser) return;
+        function publishGPlusPost() {
+            if(!currentUser) return alert('يجب تسجيل الدخول أولاً للنشر في الاستريم!');
+            let text = document.getElementById('gpNewPostText').value.trim();
+            if(!text) return alert('اكتب نص المنشور أولاً');
 
-            let userOrders = orders.filter(o => o.phone === currentUser.phone || o.customer === currentUser.name);
-            let userInvoices = savedInvoices.filter(i => i.phone === currentUser.phone || i.customer === currentUser.name);
+            gplusPosts.unshift({
+                id: Date.now(),
+                author: currentUser.name,
+                text: text,
+                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
+            });
+            document.getElementById('gpNewPostText').value = '';
+            syncDataToCloud();
+            renderGPlusStream();
+            alert('✅ تم نشر المنشور في استريم Black Plus بنجاح!');
+        }
 
-            if(userOrders.length === 0 && userInvoices.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted); text-align:center;">لا توجد طلبات أو شحنات متصلة مسجلة باسمك حتى الآن.</p>`;
+        function renderGPlusStream() {
+            let container = document.getElementById('gpStreamContainer');
+            if(!container) return;
+            if(gplusPosts.length === 0) {
+                container.innerHTML = '<p style="font-size:12px; color:var(--text-muted); text-align:center;">لا توجد منشورات في الاستريم بعد.</p>';
                 return;
             }
-
             container.innerHTML = '';
-            
-            if(userOrders.length > 0) {
-                container.innerHTML += `<h4 style="color:var(--accent); margin-bottom:5px;">📋 قائمة طلباتك وأوردراتك المتصلة:</h4>`;
-                userOrders.forEach(o => {
-                    container.innerHTML += `
-                        <div class="item-row" style="background:#111; padding:8px 12px; border-radius:8px; margin-bottom:5px;">
-                            <div>
-                                <b>رقم الطلب: ${o.id}</b> | التاريخ: ${o.date}<br>
-                                <small>الإجمالي: <b style="color:var(--accent);">${o.total} ج.م</b> | الحالة: <span style="color:#48bb78;">${o.status}</span></small>
-                            </div>
-                            <button class="btn-gold" style="width:auto; padding:5px 10px; font-size:11px;" onclick="openInvoiceModalById('INV-${o.id}')">🧾 عرض الفاتورة</button>
-                        </div>
-                    `;
-                });
-            }
-
-            if(userInvoices.length > 0) {
-                container.innerHTML += `<h4 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">🧾 فواتيرك الصادرة ومعاملاتك المتصلة:</h4>`;
-                userInvoices.forEach(inv => {
-                    container.innerHTML += `
-                        <div class="item-row" style="background:#111; padding:8px 12px; border-radius:8px; margin-bottom:5px;">
-                            <div>
-                                <b>الفاتورة: ${inv.id}</b> | التاريخ: ${inv.date}<br>
-                                <small>القيمة الإجمالية: <b style="color:var(--accent);">${inv.total} ج.م</b></small>
-                            </div>
-                            <button class="btn-blue" style="width:auto; padding:5px 10px; font-size:11px;" onclick="openInvoiceModalById('${inv.id}')">📄 معاينة الفاتورة</button>
-                        </div>
-                    `;
-                });
-            }
+            gplusPosts.forEach(post => {
+                container.innerHTML += `
+                    <div class="gplus-stream-item" onclick="openStreamDetail(${post.id})">
+                        <b>${post.author}</b> <span style="font-size:10px; color:var(--text-muted);">(${post.date})</span>
+                        <p style="margin:5px 0; font-size:12px;">${post.text.length > 70 ? post.text.substring(0,70) + '...' : post.text}</p>
+                        <small style="color:var(--accent);">انقر للعرض الكامل 🔍</small>
+                    </div>
+                `;
+            });
         }
 
-        function previewImageFile(event, type) {
-            let file = event.target.files[0];
-            if(file && currentUser) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    if(type === 'avatar') {
-                        currentUser.avatar = e.target.result;
-                        document.getElementById('userAvatarImg').src = currentUser.avatar;
-                    } else if(type === 'cover') {
-                        currentUser.cover = e.target.result;
-                        document.getElementById('userCoverImg').src = currentUser.cover;
-                    }
-                    syncDataToCloud();
-                    alert('✨ تم رفع وتثبيت الصورة بنجاح وحفظها بشكل دائم في حسابك المتصل!');
-                };
-                reader.readAsDataURL(file);
-            }
+        function openStreamDetail(postId) {
+            let post = gplusPosts.find(p => p.id === postId);
+            if(!post) return;
+            
+            document.getElementById('streamDetailContent').innerHTML = `
+                <h3 style="color:var(--accent); margin-top:0;">منشور بواسطة: ${post.author}</h3>
+                <small style="color:var(--text-muted);">التاريخ والوقت: ${post.date}</small>
+                <p style="font-size:14px; margin-top:10px; line-height:1.6; white-space:pre-wrap;">${post.text}</p>
+            `;
+            closeAllDrawers();
+            switchTab('streamDetailModal');
         }
 
-        function saveProfileChanges() {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً');
-            
-            currentUser.name = document.getElementById('editName').value.trim() || currentUser.name;
-            currentUser.phone = document.getElementById('editPhone').value.trim() || currentUser.phone;
-            currentUser.email = document.getElementById('editEmail').value.trim() || currentUser.email;
-            
-            let newPass = document.getElementById('editPassword').value.trim();
-            if(newPass) {
-                currentUser.password = newPass;
-            }
-
-            syncDataToCloud();
-            updateAuthUI();
-            renderUserProfileOrders();
-            alert('✅ تم حفظ وتثبيت كافة تعديلات بياناتك الشخصية وصورك بنجاح تام ولم تعد تختفي عند التحديث!');
+        function closeStreamDetail() {
+            switchTab('storeTab');
         }
 
         function renderAdminUsersManagement() {
             let container = document.getElementById('adminAllUsersList');
             if(!container) return;
-            
             let isManager = currentUser && currentUser.role === 'مدير';
             
             container.innerHTML = `<h3>👥 إدارة كافة حسابات المنصة والأرقام السرية</h3>`;
-            if(registeredUsers.length === 0) {
-                container.innerHTML += `<p>لا توجد حسابات مسجلة.</p>`;
-                return;
-            }
+            if(registeredUsers.length === 0) { container.innerHTML += `<p>لا توجد حسابات مسجلة.</p>`; return; }
 
             registeredUsers.forEach((u, idx) => {
                 container.innerHTML += `
@@ -926,20 +945,15 @@
         }
 
         function adminUpdateUserPassword(idx) {
-            if(!currentUser || currentUser.role !== 'مدير') {
-                return alert('⚠️ عذراً، هذه الصلاحية مخصصة للمدير العام فقط!');
-            }
+            if(!currentUser || currentUser.role !== 'مدير') return alert('للمدير فقط');
             let newPassInput = document.getElementById('adminNewPass_' + idx);
             let newPass = newPassInput ? newPassInput.value.trim() : '';
             if(!newPass) return alert('الرجاء كتابة الرقم السري الجديد أولاً!');
 
             registeredUsers[idx].password = newPass;
-            if(currentUser && currentUser.phone === registeredUsers[idx].phone) {
-                currentUser.password = newPass;
-            }
             syncDataToCloud();
             renderAdminUsersManagement();
-            alert('✅ تم تغيير وتثبيت الرقم السري للحساب (' + registeredUsers[idx].name + ') بنجاح!');
+            alert('✅ تم تغيير الرقم السري بنجاح!');
         }
 
         function adminDeleteUser(idx) {
@@ -965,14 +979,10 @@
             let qty = parseInt(document.getElementById('posQuantity').value) || 1;
             let item = inventory.find(i => i.id === prodId);
             if(!item) return alert('المنتج غير موجود');
-            if(item.qty < qty) return alert('الكمية المطلوبة أكبر من المتاحة بالمخزن! المخزون الحالي: ' + item.qty);
+            if(item.qty < qty) return alert('الكمية المطلوبة أكبر من المتاحة بالمخزن!');
 
             let existing = posCart.find(p => p.id === prodId);
-            if(existing) {
-                existing.qty += qty;
-            } else {
-                posCart.push({ id: item.id, name: item.name, price: item.price, qty: qty });
-            }
+            if(existing) { existing.qty += qty; } else { posCart.push({ id: item.id, name: item.name, price: item.price, qty: qty }); }
             renderPosCart();
         }
 
@@ -998,12 +1008,9 @@
             if(posCart.length === 0) return alert('الفاتورة فارغة!');
 
             let totalVal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
             posCart.forEach(posItem => {
                 let storeItem = inventory.find(i => i.id === posItem.id);
-                if(storeItem) {
-                    storeItem.qty -= posItem.qty;
-                }
+                if(storeItem) { storeItem.qty -= posItem.qty; }
             });
 
             let newInvoice = {
@@ -1024,7 +1031,6 @@
             renderInventory();
             renderWarehouseManagement();
             renderInvoicesArchive();
-            renderUserProfileOrders();
             syncDataToCloud();
 
             alert('✅ تم حفظ الفاتورة بنجاح وخصم الكميات من المخزن!');
@@ -1038,7 +1044,6 @@
 
             let filtered = savedInvoices.filter(inv => inv.id.toLowerCase().includes(query) || inv.customer.toLowerCase().includes(query));
             document.getElementById('invTotalInvoicesDisplay').innerText = savedInvoices.length;
-            
             let totalSales = savedInvoices.reduce((sum, inv) => sum + inv.total, 0);
             document.getElementById('invTotalSalesDisplay').innerText = totalSales + ' ج.م';
 
@@ -1233,7 +1238,6 @@
             if(cart.length === 0) return alert('السلة فارغة!');
 
             let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
-            
             cart.forEach(cartItem => {
                 let st = inventory.find(i => i.id === cartItem.id);
                 if(st) st.qty -= 1;
@@ -1265,7 +1269,6 @@
             renderOrders();
             renderInvoicesArchive();
             renderWarehouseManagement();
-            renderUserProfileOrders();
             alert('✅ تم إرسال الطلب وحفظ الفاتورة الرسمية بنجاح!');
             switchTab('ordersTab');
         }
@@ -1288,9 +1291,7 @@
             });
         }
 
-        function renderInventory() {
-            updateAdminStats();
-        }
+        function renderInventory() { updateAdminStats(); }
 
         function updateAdminStats() {
             let pCount = document.getElementById('statProductsCount');
