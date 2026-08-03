@@ -8,18 +8,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gplus-red: #db4437;
+            --gplus-red: #d34836;
+            --gplus-red-hover: #b53c2b;
             --gplus-blue: #4285f4;
             --gplus-yellow: #f4b400;
             --gplus-green: #0f9d58;
             --gplus-purple: #ab47bc;
-            --gplus-teal: #00acc1;
-            --bg-color: #f1f3f4;
+            --bg-color: #e9eaed;
             --card-bg: #ffffff;
-            --text-main: #202124;
-            --text-muted: #5f6368;
-            --border-color: #dadce0;
-            --toolbar-bg: #f8f9fa;
+            --text-main: #262626;
+            --text-muted: #777777;
+            --border-color: #e2e2e2;
+            --toolbar-bg: #f5f5f5;
         }
 
         /* متغيرات الوضع الليلي (Dark Mode) */
@@ -32,305 +32,322 @@
             --toolbar-bg: #2d2f31;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+        body { font-family: Roboto, 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
 
-        /* شريط التنقل العلوي الرئيسي */
-        .gplus-topbar { background: var(--gplus-red); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; flex-wrap: wrap; gap: 10px;}
-        .gplus-brand { font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
-        .gplus-brand span { background: white; color: var(--gplus-red); padding: 2px 8px; border-radius: 4px; font-size: 13px; }
+        /* شريط التنقل العلوي لجوجل بلس */
+        .gplus-topbar { background: var(--gplus-red); color: white; height: 50px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 1000; }
+        .gplus-brand { font-size: 20px; font-weight: 500; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+        .gplus-brand span { font-size: 12px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 3px; }
         
-        .top-nav-links { display: flex; gap: 6px; overflow-x: auto; max-width: 100%; padding-bottom: 5px; }
-        .top-nav-links button { background: transparent; border: none; color: white; font-weight: bold; cursor: pointer; padding: 6px 10px; border-radius: 4px; transition: 0.2s; font-size: 12px; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
-        .top-nav-links button:hover, .top-nav-links button.active { background: rgba(255,255,255,0.25); }
+        .top-controls { display: flex; align-items: center; gap: 10px; }
+        .top-controls button { background: transparent; border: none; color: white; cursor: pointer; padding: 8px 12px; border-radius: 4px; font-size: 14px; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+        .top-controls button:hover { background: rgba(255,255,255,0.15); }
 
-        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-        .card { background: var(--card-bg); border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border-color); transition: background 0.3s, border 0.3s; }
+        /* هيكل الصفحة الرئيسي بنظام أعمدة جوجل بلس (Google+ Grid Layout) */
+        .gplus-main-layout { max-width: 1150px; margin: 15px auto; display: grid; grid-template-columns: 240px 1fr; gap: 15px; padding: 0 10px; }
+        @media (max-width: 850px) {
+            .gplus-main-layout { grid-template-columns: 1fr; }
+        }
+
+        /* العمود الجانبي الأيمن (القائمة الرئيسية للدوائر والأقسام) */
+        .gplus-sidebar { display: flex; flex-direction: column; gap: 5px; }
+        .sidebar-menu-item { background: var(--card-bg); border: 1px solid var(--border-color); padding: 10px 15px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; color: var(--text-main); transition: 0.2s; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: #f0f1f3; color: var(--gplus-red); border-right: 4px solid var(--gplus-red); }
+        body.dark-mode .sidebar-menu-item:hover, body.dark-mode .sidebar-menu-item.active { background: #2a2d2f; color: #ff8a80; }
+
+        /* منطقة المحتوى الرئيسية */
+        .gplus-content-area { display: flex; flex-direction: column; gap: 15px; }
         
-        /* شريط البحث العلوي السريع داخل المنصة */
-        .global-search-bar { display: flex; gap: 10px; margin-bottom: 20px; background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .global-search-bar input { flex: 1; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-main); font-family: inherit; }
+        .card { background: var(--card-bg); border-radius: 4px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border-color); transition: background 0.3s, border 0.3s; }
+        
+        /* شريط البحث السريع */
+        .global-search-bar { display: flex; gap: 10px; background: var(--card-bg); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color); align-items: center; margin-bottom: 5px; }
+        .global-search-bar input { flex: 1; border: none; background: transparent; color: var(--text-main); font-family: inherit; font-size: 14px; outline: none; }
 
-        /* بروفايل جوجل بلس */
-        .gplus-profile-header { position: relative; margin-bottom: 60px; }
-        .gplus-cover { width: 100%; height: 220px; border-radius: 8px 8px 0 0; object-fit: cover; background: #ddd; }
-        .gplus-avatar-box { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--card-bg); position: absolute; bottom: -50px; right: 30px; overflow: hidden; background: #000; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+        /* بروفايل جوجل بلس الكلاسيكي */
+        .gplus-profile-header { position: relative; margin-bottom: 50px; }
+        .gplus-cover { width: 100%; height: 200px; border-radius: 4px 4px 0 0; object-fit: cover; background: #ddd; }
+        .gplus-avatar-box { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--card-bg); position: absolute; bottom: -40px; right: 25px; overflow: hidden; background: #000; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .gplus-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
-        .gplus-profile-info { padding: 10px 30px 0 30px; }
-        .gplus-profile-info h1 { margin: 0; font-size: 24px; color: var(--text-main); }
-        .gplus-profile-info p { color: var(--text-muted); margin: 5px 0 15px 0; font-size: 14px; }
+        .gplus-profile-info { padding: 5px 20px 0 20px; }
+        .gplus-profile-info h1 { margin: 0; font-size: 22px; color: var(--text-main); }
+        .gplus-profile-info p { color: var(--text-muted); margin: 4px 0 10px 0; font-size: 13px; }
 
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: var(--text-muted); }
-        .input-group input, .input-group textarea, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 14px; background: var(--bg-color); color: var(--text-main); }
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-weight: 500; margin-bottom: 4px; font-size: 12px; color: var(--text-muted); }
+        .input-group input, .input-group textarea, .input-group select { width: 100%; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; font-family: inherit; font-size: 13px; background: var(--bg-color); color: var(--text-main); }
         
-        button.btn-action { background: var(--gplus-blue); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button.btn-action { background: var(--gplus-blue); color: white; border: none; padding: 8px 16px; border-radius: 3px; font-weight: 500; cursor: pointer; transition: 0.2s; font-size: 13px; }
         button.btn-action:hover { opacity: 0.9; }
 
         .hidden { display: none !important; }
 
-        /* مشاركات وتنسيقات */
-        .stream-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        /* مشاركات وتنسيقات الستريم */
+        .stream-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; margin-bottom: 12px; }
         .stream-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .stream-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .stream-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
         
         /* محرر مستندات Word المصغر */
-        .word-editor-toolbar { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; background: var(--toolbar-bg); padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); }
-        .word-editor-toolbar button { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .word-editor-toolbar button:hover { opacity: 0.8; }
-        .word-document-canvas { min-height: 250px; border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; background: var(--card-bg); color: var(--text-main); outline: none; font-size: 15px; line-height: 1.6; }
+        .word-editor-toolbar { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; background: var(--toolbar-bg); padding: 6px; border-radius: 4px; border: 1px solid var(--border-color); }
+        .word-editor-toolbar button { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+        .word-document-canvas { min-height: 220px; border: 1px solid var(--border-color); padding: 15px; border-radius: 4px; background: var(--card-bg); color: var(--text-main); outline: none; font-size: 14px; line-height: 1.5; }
 
-        .circle-badge { display: inline-block; background: var(--toolbar-bg); color: var(--gplus-blue); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin: 3px; }
+        .circle-badge { display: inline-block; background: var(--toolbar-bg); color: var(--gplus-blue); border: 1px solid var(--border-color); padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; margin: 2px; }
         
-        /* شبكة الأقسام المتعددة */
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 15px; }
-        .feature-mini-card { background: var(--toolbar-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; }
-        .feature-mini-card h4 { margin-top: 0; color: var(--gplus-blue); display: flex; align-items: center; gap: 8px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-top: 10px; }
+        .feature-mini-card { background: var(--toolbar-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 12px; }
+        .feature-mini-card h4 { margin-top: 0; margin-bottom: 8px; color: var(--gplus-blue); display: flex; align-items: center; gap: 6px; font-size: 14px; }
         
-        .stats-row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
-        .stat-box { flex: 1; min-width: 120px; background: var(--toolbar-bg); padding: 12px; border-radius: 6px; text-align: center; border: 1px solid var(--border-color); }
-        .stat-box h3 { margin: 0; color: var(--gplus-red); font-size: 20px; }
+        .stats-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .stat-box { flex: 1; min-width: 100px; background: var(--toolbar-bg); padding: 10px; border-radius: 4px; text-align: center; border: 1px solid var(--border-color); }
+        .stat-box h3 { margin: 0; color: var(--gplus-red); font-size: 18px; }
     </style>
 </head>
 <body id="mainBody">
 
-    <!-- الشريط العلوي المطور (يشمل روابط التنقل الشاملة وأزرار التحكم العامة) -->
+    <!-- شريط التنقل العلوي لجوجل بلس -->
     <div class="gplus-topbar">
         <div class="gplus-brand">
-            <i class="fa-solid fa-circle-nodes"><b>Google</b> +</i>
-            <span>Enterprise OS (100+)</span>
+            <i class="fa-solid fa-square-plus" style="color: white;"></i> <b>Google</b>+
+            <span>Enterprise OS</span>
         </div>
-        <div class="top-nav-links">
-            <button onclick="switchTab('profileTab', this)" class="active"><i class="fa-solid fa-user"></i> البروفايل</button>
-            <button onclick="switchTab('streamTab', this)"><i class="fa-solid fa-stream"></i> الستريم</button>
-            <button onclick="switchTab('wordDocTab', this)"><i class="fa-solid fa-file-word"></i> مستند Word</button>
-            <button onclick="switchTab('circlesTab', this)"><i class="fa-solid fa-users"></i> الدوائر</button>
-            <button onclick="switchTab('communitiesTab', this)"><i class="fa-solid fa-people-group"></i> المجتمعات</button>
-            <button onclick="switchTab('photosTab', this)"><i class="fa-solid fa-images"></i> الصور</button>
-            <button onclick="switchTab('eventsTab', this)"><i class="fa-solid fa-calendar-days"></i> المناسبات</button>
-            <button onclick="switchTab('hangoutsTab', this)"><i class="fa-solid fa-video"></i> Hangouts</button>
-            <button onclick="switchTab('collectionsTab', this)"><i class="fa-solid fa-layer-group"></i> المجموعات</button>
-            <button onclick="switchTab('logisticsTab', this)"><i class="fa-solid fa-truck-fast"></i> الشحنات</button>
-            <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database"></i> النسخ الاحتياطي</button>
-            <button onclick="switchTab('analyticsTab', this)"><i class="fa-solid fa-chart-line"></i> الإحصائيات</button>
-            <button onclick="switchTab('more100Tab', this)" style="background: var(--gplus-yellow); color:#000;"><i class="fa-solid fa-star"></i> الـ 100 ميزة</button>
-            <button onclick="toggleDarkMode()" style="background: var(--gplus-purple);" title="تبديل الوضع الليلي"><i class="fa-solid fa-moon"></i></button>
+        <div class="top-controls">
+            <button onclick="toggleDarkMode()" title="الوضع الليلي"><i class="fa-solid fa-moon"></i></button>
             <button onclick="goBackToStore()" style="background: var(--gplus-green);"><i class="fa-solid fa-store"></i> المتجر</button>
         </div>
     </div>
 
-    <div class="container">
+    <!-- التخطيط العام بنظام أعمدة جوجل بلس -->
+    <div class="gplus-main-layout">
 
-        <!-- شريط البحث الفوري داخل المنصة (Global Search) -->
-        <div class="global-search-bar">
-            <i class="fa-solid fa-magnifying-glass" style="align-self: center; color: var(--text-muted);"></i>
-            <input type="text" id="globalSearchInput" onkeyup="globalSearchFilter()" placeholder="ابحث السريع داخل الأقسام، المشاركات، الدوائر، والمستندات...">
+        <!-- القائمة الجانبية اليمنى (نظام الدوائر والأقسام في Google+) -->
+        <div class="gplus-sidebar">
+            <div class="sidebar-menu-item active" onclick="switchTab('profileTab', this)"><i class="fa-solid fa-user" style="color:var(--gplus-red);"></i> البروفايل</div>
+            <div class="sidebar-menu-item" onclick="switchTab('streamTab', this)"><i class="fa-solid fa-stream" style="color:var(--gplus-blue);"></i> الستريم (Home)</div>
+            <div class="sidebar-menu-item" onclick="switchTab('wordDocTab', this)"><i class="fa-solid fa-file-word" style="color:var(--gplus-blue);"></i> مستند Word</div>
+            <div class="sidebar-menu-item" onclick="switchTab('circlesTab', this)"><i class="fa-solid fa-users" style="color:var(--gplus-green);"></i> الدوائر (Circles)</div>
+            <div class="sidebar-menu-item" onclick="switchTab('communitiesTab', this)"><i class="fa-solid fa-people-group" style="color:var(--gplus-yellow);"></i> المجتمعات</div>
+            <div class="sidebar-menu-item" onclick="switchTab('photosTab', this)"><i class="fa-solid fa-images" style="color:var(--gplus-purple);"></i> الصور والألبومات</div>
+            <div class="sidebar-menu-item" onclick="switchTab('eventsTab', this)"><i class="fa-solid fa-calendar-days" style="color:var(--gplus-red);"></i> المناسبات</div>
+            <div class="sidebar-menu-item" onclick="switchTab('hangoutsTab', this)"><i class="fa-solid fa-video" style="color:var(--gplus-green);"></i> Hangouts</div>
+            <div class="sidebar-menu-item" onclick="switchTab('collectionsTab', this)"><i class="fa-solid fa-layer-group" style="color:var(--gplus-blue);"></i> المجموعات</div>
+            <div class="sidebar-menu-item" onclick="switchTab('logisticsTab', this)"><i class="fa-solid fa-truck-fast" style="color:var(--gplus-yellow);"></i> تتبع الشحنات</div>
+            <div class="sidebar-menu-item" onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database" style="color:var(--text-muted);"></i> النسخ الاحتياطي</div>
+            <div class="sidebar-menu-item" onclick="switchTab('analyticsTab', this)"><i class="fa-solid fa-chart-line" style="color:var(--gplus-green);"></i> الإحصائيات</div>
+            <div class="sidebar-menu-item" onclick="switchTab('more100Tab', this)" style="background: #fefcbf; color: #744210;"><i class="fa-solid fa-star"></i> الـ 100 ميزة وقسم</div>
         </div>
 
-        <!-- 1. صفحة البروفايل -->
-        <div id="profileTab" class="card" style="padding: 0; border: none; background: transparent;">
-            <div class="card" style="padding: 0; overflow: hidden;">
-                <div class="gplus-profile-header">
-                    <img id="profileCoverView" class="gplus-cover" src="https://via.placeholder.com/1000x220/4285f4/ffffff?text=Google+Plus+Cover" alt="Cover">
-                    <div class="gplus-avatar-box">
-                        <img id="profileAvatarView" src="https://via.placeholder.com/120/202124/ffffff?text=User" alt="Avatar">
+        <!-- منطقة المحتوى الوسطى -->
+        <div class="gplus-content-area">
+
+            <!-- شريط البحث الفوري -->
+            <div class="global-search-bar">
+                <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                <input type="text" id="globalSearchInput" onkeyup="globalSearchFilter()" placeholder="ابحث في المنصة، المشاركات، الدوائر، والمستندات...">
+            </div>
+
+            <!-- 1. صفحة البروفايل -->
+            <div id="profileTab" class="card" style="padding: 0; border: none; background: transparent;">
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div class="gplus-profile-header">
+                        <img id="profileCoverView" class="gplus-cover" src="https://via.placeholder.com/1000x200/4285f4/ffffff?text=Google+Plus+Cover" alt="Cover">
+                        <div class="gplus-avatar-box">
+                            <img id="profileAvatarView" src="https://via.placeholder.com/100/202124/ffffff?text=User" alt="Avatar">
+                        </div>
+                    </div>
+                    <div class="gplus-profile-info">
+                        <h1 id="profileNameTitle">اسم المستخدم</h1>
+                        <p id="profileTagline">منصة تجارة، توثيق، ومستندات ذكية متكاملة.</p>
+                        <div style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
+                            <span class="circle-badge"><i class="fa-solid fa-check"></i> حساب موثق</span>
+                            <span class="circle-badge" style="background:#ceead6; color:#137333;"><i class="fa-solid fa-shield-halved"></i> آمن</span>
+                            <span class="circle-badge" style="background:#feefc3; color:#b06000;"><i class="fa-solid fa-star"></i> مميز</span>
+                        </div>
                     </div>
                 </div>
-                <div class="gplus-profile-info">
-                    <h1 id="profileNameTitle">اسم المستخدم</h1>
-                    <p id="profileTagline">منصة تجارة، توثيق، ومستندات ذكية متكاملة.</p>
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                        <span class="circle-badge"><i class="fa-solid fa-check"></i> حساب موثق بالكامل</span>
-                        <span class="circle-badge" style="background:#ceead6; color:#137333;"><i class="fa-solid fa-shield-halved"></i> أمان عالٍ</span>
-                        <span class="circle-badge" style="background:#feefc3; color:#b06000;"><i class="fa-solid fa-star"></i> مميز</span>
+                <div class="card" style="margin-top: 15px;">
+                    <h3 style="margin-top:0; font-size:16px;">⚙️ إعدادات وتعديل البروفايل الشامل</h3>
+                    <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="inputProfileName"></div>
+                    <div class="input-group"><label>النبذة التعريفية (Tagline):</label><input type="text" id="inputProfileTagline"></div>
+                    <div class="input-group"><label>رابط الصورة الشخصية:</label><input type="text" id="inputProfileAvatar"></div>
+                    <div class="input-group"><label>رابط صورة الغلاف:</label><input type="text" id="inputProfileCover"></div>
+                    <button class="btn-action" onclick="saveProfileSettings()">حفظ وتحديث البروفايل فوراً ✅</button>
+                </div>
+            </div>
+
+            <!-- 2. المشاركات (Stream) -->
+            <div id="streamTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">💬 مشاركات جوجل بلس ونظام التدوينات</h3>
+                <div class="card" style="background: var(--toolbar-bg); margin-bottom: 15px;">
+                    <div class="input-group">
+                        <textarea id="streamPostText" rows="3" placeholder="مشاركة جديدة مع الدوائر والمجتمعات..."></textarea>
+                    </div>
+                    <button class="btn-action" onclick="publishStreamPost()">نشر في الستريم 📢</button>
+                </div>
+                <div id="streamPostsContainer"></div>
+            </div>
+
+            <!-- 3. مستندات Word -->
+            <div id="wordDocTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">📄 محرر مستندات Word الذكي المتطور</h3>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 10px;">اكتب مستنداتك وتقاريرك التجارية واحتفظ بها محلياً وسحابياً.</p>
+                <div class="word-editor-toolbar">
+                    <button onclick="formatDoc('bold')" title="عريض"><i class="fa-solid fa-bold"></i></button>
+                    <button onclick="formatDoc('italic')" title="مائل"><i class="fa-solid fa-italic"></i></button>
+                    <button onclick="formatDoc('underline')" title="خط تحت النص"><i class="fa-solid fa-underline"></i></button>
+                    <button onclick="formatDoc('justifyRight')" title="يمين"><i class="fa-solid fa-align-right"></i></button>
+                    <button onclick="formatDoc('justifyCenter')" title="توسيط"><i class="fa-solid fa-align-center"></i></button>
+                    <button onclick="formatDoc('justifyLeft')" title="يسار"><i class="fa-solid fa-align-left"></i></button>
+                    <button onclick="saveWordDocumentLocally()" style="background: var(--gplus-green); color: white;"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
+                    <button onclick="window.print()" style="background: var(--gplus-blue); color: white;"><i class="fa-solid fa-print"></i> طباعة</button>
+                </div>
+                <div id="wordCanvas" class="word-document-canvas" contenteditable="true">
+                    أهلاً بك في مستند Word الذكي المرتبط بمنصة Google Plus Hub...
+                </div>
+            </div>
+
+            <!-- 4. الدوائر (Circles) -->
+            <div id="circlesTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">⭕ دوائر التواصل (Google Circles)</h3>
+                <p style="color:var(--text-muted); font-size:12px;">قسم جهات اتصالك بدقة تامة (عائلة، شركاء عمل، عملاء، أصدقاء).</p>
+                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                    <input type="text" id="newCircleName" placeholder="اسم الدائرة الجديدة (مثال: عملاء التصدير)">
+                    <button class="btn-action" onclick="addCircle()" style="width: auto;">إضافة دائرة</button>
+                </div>
+                <div id="circlesContainer">
+                    <span class="circle-badge">الأصدقاء المقربون (12)</span>
+                    <span class="circle-badge">شركاء التجارة والتصدير (8)</span>
+                    <span class="circle-badge">المتابعون والعملاء (142)</span>
+                </div>
+            </div>
+
+            <!-- 5. المجتمعات (Communities) -->
+            <div id="communitiesTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">👥 مجتمعات جوجل بلس (Google Communities)</h3>
+                <p style="color:var(--text-muted); font-size:12px;">انضم وأنشئ مجتمعات متخصصة للنقاش وتبادل الخبرات.</p>
+                <div class="features-grid">
+                    <div class="feature-mini-card">
+                        <h4><i class="fa-solid fa-globe"></i> مجتمع التجارة الدولية</h4>
+                        <p style="font-size: 12px; color:var(--text-muted);">نقاشات حول التصدير، الشحن، والاستيراد.</p>
+                        <button class="btn-action" style="padding: 4px 8px; font-size:11px;">انضمام</button>
+                    </div>
+                    <div class="feature-mini-card">
+                        <h4><i class="fa-solid fa-code"></i> مجتمع تطوير الويب و Acode</h4>
+                        <p style="font-size: 12px; color:var(--text-muted);">مشاركة الأكواد والحلول البرمجية الخفيفة.</p>
+                        <button class="btn-action" style="padding: 4px 8px; font-size:11px;">انضمام</button>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <h3>⚙️ إعدادات وتعديل البروفايل الشامل</h3>
-                <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="inputProfileName"></div>
-                <div class="input-group"><label>النبذة التعريفية (Tagline):</label><input type="text" id="inputProfileTagline"></div>
-                <div class="input-group"><label>رابط الصورة الشخصية:</label><input type="text" id="inputProfileAvatar"></div>
-                <div class="input-group"><label>رابط صورة الغلاف:</label><input type="text" id="inputProfileCover"></div>
-                <button class="btn-action" onclick="saveProfileSettings()">حفظ وتحديث البروفايل فوراً ✅</button>
-            </div>
-        </div>
 
-        <!-- 2. المشاركات (Stream) -->
-        <div id="streamTab" class="card hidden">
-            <h3>💬 مشاركات جوجل بلس ونظام التدوينات</h3>
-            <div class="card" style="background: var(--toolbar-bg);">
+            <!-- 6. الصور والألبومات (Photos) - معدل للرفع والحفظ الدائم -->
+            <div id="photosTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">📸 معرض الصور والألبومات الذكية (Google Photos)</h3>
+                <p style="color:var(--text-muted); font-size:12px;">اختر صوراً من جهازك أو هاتفك لرفعها وحفظها بشكل دائم وثابت داخل التطبيق.</p>
+                
+                <div class="input-group" style="background: var(--toolbar-bg); padding: 12px; border: 1px dashed var(--gplus-blue); border-radius: 4px; text-align: center;">
+                    <label style="cursor: pointer; font-size: 14px; color: var(--gplus-blue); font-weight: bold;">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 20px; display: block; margin-bottom: 5px;"></i>
+                        اضغط لاختيار ورفع صور من جهازك (محفوظة دائماً)
+                        <input type="file" id="imageUploadInput" accept="image/*" multiple style="display: none;" onchange="handleImageUpload(event)">
+                    </label>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                    <span style="font-size: 12px; color: var(--text-muted);">الصور المحفوظة في المعرض:</span>
+                    <button class="btn-action" onclick="clearAllPhotos()" style="background: var(--gplus-red); padding: 4px 8px; font-size: 11px;"><i class="fa-solid fa-trash"></i> تفريغ المعرض</button>
+                </div>
+
+                <div id="photosContainer" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                    <!-- يتم عرض الصور المحفوظة هنا ديناميكياً -->
+                </div>
+            </div>
+
+            <!-- 7. المناسبات (Events) -->
+            <div id="eventsTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">📅 تقويم المناسبات والاجتماعات (Google Events)</h3>
+                <div class="input-group"><label>عنوان المناسبة:</label><input type="text" id="eventTitle" placeholder="مثال: اجتماع مع الموردين"></div>
+                <div class="input-group"><label>التاريخ والوقت:</label><input type="datetime-local" id="eventDate"></div>
+                <button class="btn-action" onclick="addEvent()">جدولة المناسبة ✅</button>
+                <div id="eventsList" style="margin-top: 12px;"></div>
+            </div>
+
+            <!-- 8. دردشة Hangouts -->
+            <div id="hangoutsTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">💬 دردشة Google Hangouts المباشرة</h3>
+                <div class="card" style="height: 180px; overflow-y: auto; background: var(--bg-color); margin-bottom: 10px;" id="chatBox">
+                    <p style="font-size: 13px;"><b>النظام:</b> مرحباً بك في دردشة هانج آوتس المشفرة والمباشرة.</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="chatMsg" placeholder="اكتب رسالتك...">
+                    <button class="btn-action" onclick="sendChat()" style="width: auto;">إرسال</button>
+                </div>
+            </div>
+
+            <!-- 9. المجموعات (Collections) -->
+            <div id="collectionsTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">🗂️ مجموعات جوجل بلس (Google Collections)</h3>
+                <div class="features-grid">
+                    <div class="feature-mini-card">
+                        <h4>📂 مجموعة مشاريع الويب</h4>
+                        <p style="font-size:11px; color:var(--text-muted);">تضم 14 عنصراً محفوظاً.</p>
+                    </div>
+                    <div class="feature-mini-card">
+                        <h4>📂 صور المعالم التاريخية</h4>
+                        <p style="font-size:11px; color:var(--text-muted);">تضم 32 عنصراً محفوظاً.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. تتبع الشحنات والخدمات اللوجستية -->
+            <div id="logisticsTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">🚚 إدارة الشحنات والخطوط اللوجستية</h3>
+                <div class="input-group"><label>رقم أو كود الشحنة:</label><input type="text" id="shipmentCode" placeholder="مثال: EGY-9821"></div>
+                <div class="input-group"><label>وجهة الشحن / الوصف:</label><input type="text" id="shipmentDesc" placeholder="مثال: شحنة ملابس ومنتجات خشبية"></div>
                 <div class="input-group">
-                    <textarea id="streamPostText" rows="3" placeholder="مشاركة جديدة مع الدوائر والمجتمعات..."></textarea>
+                    <label>حالة الشحنة:</label>
+                    <select id="shipmentStatus">
+                        <option value="قيد التجهيز بالمستودع">قيد التجهيز بالمستودع</option>
+                        <option value="في الطريق (خط السير)">في الطريق (خط السير)</option>
+                        <option value="تم التسليم بنجاح">تم التسليم بنجاح</option>
+                    </select>
                 </div>
-                <button class="btn-action" onclick="publishStreamPost()">نشر في الستريم 📢</button>
+                <button class="btn-action" onclick="addShipment()">إضافة ومتابعة الشحنة 📦</button>
+                <div id="shipmentsList" style="margin-top: 12px;"></div>
             </div>
-            <div id="streamPostsContainer"></div>
-        </div>
 
-        <!-- 3. مستندات Word -->
-        <div id="wordDocTab" class="card hidden">
-            <h2>📄 محرر مستندات Word الذكي المتطور</h2>
-            <p style="color: var(--text-muted); font-size: 13px;">اكتب مستنداتك، تقاريرك التجارية، واحتفظ بها محلياً وسحابياً مع ميزة التصدير والطباعة.</p>
-            <div class="word-editor-toolbar">
-                <button onclick="formatDoc('bold')" title="عريض"><i class="fa-solid fa-bold"></i></button>
-                <button onclick="formatDoc('italic')" title="مائل"><i class="fa-solid fa-italic"></i></button>
-                <button onclick="formatDoc('underline')" title="خط تحت النص"><i class="fa-solid fa-underline"></i></button>
-                <button onclick="formatDoc('justifyRight')" title="يمين"><i class="fa-solid fa-align-right"></i></button>
-                <button onclick="formatDoc('justifyCenter')" title="توسيط"><i class="fa-solid fa-align-center"></i></button>
-                <button onclick="formatDoc('justifyLeft')" title="يسار"><i class="fa-solid fa-align-left"></i></button>
-                <button onclick="saveWordDocumentLocally()" style="background: var(--gplus-green); color: white;"><i class="fa-solid fa-floppy-disk"></i> حفظ المستند</button>
-                <button onclick="window.print()" style="background: var(--gplus-blue); color: white;"><i class="fa-solid fa-print"></i> طباعة / PDF</button>
-            </div>
-            <div id="wordCanvas" class="word-document-canvas" contenteditable="true">
-                أهلاً بك في مستند Word الذكي المرتبط بمنصة Google Plus Hub...
-            </div>
-        </div>
-
-        <!-- 4. الدوائر (Circles) -->
-        <div id="circlesTab" class="card hidden">
-            <h3>⭕ دوائر التواصل (Google Circles)</h3>
-            <p style="color:var(--text-muted); font-size:13px;">قسم جهات اتصالك بدقة تامة (عائلة، شركاء عمل، عملاء، أصدقاء).</p>
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="text" id="newCircleName" placeholder="اسم الدائرة الجديدة (مثال: عملاء التصدير)">
-                <button class="btn-action" onclick="addCircle()" style="width: auto;">إضافة دائرة</button>
-            </div>
-            <div id="circlesContainer">
-                <span class="circle-badge">الأصدقاء المقربون (12)</span>
-                <span class="circle-badge">شركاء التجارة والتصدير (8)</span>
-                <span class="circle-badge">المتابعون والعملاء (142)</span>
-            </div>
-        </div>
-
-        <!-- 5. المجتمعات (Communities) -->
-        <div id="communitiesTab" class="card hidden">
-            <h3>👥 مجتمعات جوجل بلس (Google Communities)</h3>
-            <p style="color:var(--text-muted);">انضم وأنشئ مجتمعات متخصصة للنقاش، عرض المنتجات، وتبادل الخبرات.</p>
-            <div class="features-grid">
-                <div class="feature-mini-card">
-                    <h4><i class="fa-solid fa-globe"></i> مجتمع التجارة الدولية</h4>
-                    <p style="font-size: 13px; color:var(--text-muted);">نقاشات حول التصدير، الشحن، والاستيراد.</p>
-                    <button class="btn-action" style="padding: 5px 10px; font-size:12px;">انضمام</button>
-                </div>
-                <div class="feature-mini-card">
-                    <h4><i class="fa-solid fa-code"></i> مجتمع تطوير الويب و Acode</h4>
-                    <p style="font-size: 13px; color:var(--text-muted);">مشاركة الأكواد والحلول البرمجية الخفيفة.</p>
-                    <button class="btn-action" style="padding: 5px 10px; font-size:12px;">انضمام</button>
+            <!-- 11. النسخ الاحتياطي والاستعادة -->
+            <div id="backupTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">💾 النسخ الاحتياطي واستعادة البيانات</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                    <button class="btn-action" onclick="exportAppData()"><i class="fa-solid fa-download"></i> تصدير نسخة JSON</button>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="file" id="importFile" accept=".json" style="font-size:11px;">
+                        <button class="btn-action" onclick="importAppData()" style="background: var(--gplus-green);"><i class="fa-solid fa-upload"></i> استعادة</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 6. الصور والألبومات (Photos) -->
-        <div id="photosTab" class="card hidden">
-            <h3>📸 معرض الصور والألبومات الذكية (Google Photos)</h3>
-            <p style="color:var(--text-muted);">رفع، أرشفة، وتصنيف الصور التاريخية والتجارية.</p>
-            <div class="input-group">
-                <label>رابط صورة جديدة لإضافتها للمعرض:</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="newPhotoUrl" placeholder="https://...">
-                    <button class="btn-action" onclick="addPhoto()" style="width: auto;">إضافة</button>
+            <!-- 12. الإحصائيات -->
+            <div id="analyticsTab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">📊 إحصائيات التفاعل ونشاط المنصة</h3>
+                <div class="stats-row">
+                    <div class="stat-box"><h3 id="statViews">1,420</h3><p style="margin:4px 0 0; font-size:11px;">مشاهدات البروفايل</p></div>
+                    <div class="stat-box"><h3 id="statPosts">28</h3><p style="margin:4px 0 0; font-size:11px;">المشاركات</p></div>
+                    <div class="stat-box"><h3>157</h3><p style="margin:4px 0 0; font-size:11px;">الدوائر والاتصالات</p></div>
                 </div>
             </div>
-            <div id="photosContainer" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
-                <img src="https://via.placeholder.com/150/4285f4/ffffff?text=Photo+1" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px;">
-                <img src="https://via.placeholder.com/150/db4437/ffffff?text=Photo+2" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px;">
-            </div>
-        </div>
 
-        <!-- 7. المناسبات (Events) -->
-        <div id="eventsTab" class="card hidden">
-            <h3>📅 تقويم المناسبات والاجتماعات (Google Events)</h3>
-            <p style="color:var(--text-muted);">جدولة الاجتماعات، مواعيد تسليم الشحنات، والأحداث المهمة.</p>
-            <div class="input-group"><label>عنوان المناسبة:</label><input type="text" id="eventTitle" placeholder="مثال: اجتماع مع الموردين"></div>
-            <div class="input-group"><label>التاريخ والوقت:</label><input type="datetime-local" id="eventDate"></div>
-            <button class="btn-action" onclick="addEvent()">جدولة المناسبة ✅</button>
-            <div id="eventsList" style="margin-top: 15px;"></div>
-        </div>
-
-        <!-- 8. دردشة Hangouts -->
-        <div id="hangoutsTab" class="card hidden">
-            <h3>💬 دردشة Google Hangouts المباشرة</h3>
-            <div class="card" style="height: 200px; overflow-y: auto; background: var(--bg-color);" id="chatBox">
-                <p><b>النظام:</b> مرحباً بك في دردشة هانج آوتس المشفرة والمباشرة.</p>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="chatMsg" placeholder="اكتب رسالتك...">
-                <button class="btn-action" onclick="sendChat()" style="width: auto;">إرسال</button>
-            </div>
-        </div>
-
-        <!-- 9. المجموعات (Collections) -->
-        <div id="collectionsTab" class="card hidden">
-            <h3>🗂️ مجموعات جوجل بلس (Google Collections)</h3>
-            <p style="color:var(--text-muted);">تنظيم مقالاتك وصورك بحسب المواضيع والاهتمامات في مجموعات خاصة وعامة.</p>
-            <div class="features-grid">
-                <div class="feature-mini-card">
-                    <h4>📂 مجموعة مشاريع الويب</h4>
-                    <p style="font-size:12px; color:var(--text-muted);">تضم 14 عنصراً محفوظاً.</p>
-                </div>
-                <div class="feature-mini-card">
-                    <h4>📂 صور المعالم التاريخية</h4>
-                    <p style="font-size:12px; color:var(--text-muted);">تضم 32 عنصراً محفوظاً.</p>
+            <!-- 13. تبويب الـ 100 ميزة -->
+            <div id="more100Tab" class="card hidden">
+                <h3 style="margin-top:0; font-size:16px;">⭐ أرشيف الـ 100 ميزة وقسم من Google Plus</h3>
+                <div class="features-grid" style="font-size: 12px;">
+                    <div class="feature-mini-card"><h4>1-10. الأساسيات</h4><p>1. البروفايل<br>2. الغلاف<br>3. الصورة<br>4. الستريم<br>5. الستريم المخصص<br>6. الدوائر<br>7. التعديل<br>8. الإشعارات<br>9. البحث<br>10. الأمان</p></div>
+                    <div class="feature-mini-card"><h4>11-20. التواصل</h4><p>11. Hangouts<br>12. مكالمات فيديو<br>13. الموقع<br>14. الإشارة<br>15. الردود<br>16. إعادة مشاركة<br>17. +1<br>18. بث مباشر<br>19. رسائل<br>20. دعوات</p></div>
+                    <div class="feature-mini-card"><h4>21-30. المجتمعات</h4><p>21. إنشاء مجتمع<br>22. مجتمعات سرية<br>23. المشرفون<br>24. الأقسام<br>25. التثبيت<br>26. الطلبات<br>27. استطلاعات<br>28. مشاركة ملفات<br>29. التقييم<br>30. الأرشيف</p></div>
+                    <div class="feature-mini-card"><h4>31-100. الخدمات والأقسام</h4><p>مجموعات متكاملة للمستندات، الألبومات، الشحنات اللوجستية، النسخ الاحتياطي، وإدارة الأعمال ضمن بيئة Google Plus OS.</p></div>
                 </div>
             </div>
-        </div>
 
-        <!-- 10. تتبع الشحنات والخدمات اللوجستية (Logistics Tracker - الميزة المضافة الجديدة) -->
-        <div id="logisticsTab" class="card hidden">
-            <h3>🚚 إدارة الشحنات والخطوط اللوجستية (Logistics Tracker)</h3>
-            <p style="color:var(--text-muted);">تتبع حركة البضائع والنقل التجاري والبريد الصادر والوارد.</p>
-            <div class="input-group"><label>رقم أو كود الشحنة:</label><input type="text" id="shipmentCode" placeholder="مثال: EGY-9821"></div>
-            <div class="input-group"><label>وجهة الشحن / الوصف:</label><input type="text" id="shipmentDesc" placeholder="مثال: شحنة ملابس ومنتجات خشبية"></div>
-            <div class="input-group">
-                <label>حالة الشحنة:</label>
-                <select id="shipmentStatus">
-                    <option value="قيد التجهيز بالمستودع">قيد التجهيز بالمستودع</option>
-                    <option value="في الطريق (خط السير)">في الطريق (خط السير)</option>
-                    <option value="تم التسليم بنجاح">تم التسليم بنجاح</option>
-                </select>
-            </div>
-            <button class="btn-action" onclick="addShipment()">إضافة ومتابعة الشحنة 📦</button>
-            <div id="shipmentsList" style="margin-top: 15px;"></div>
-        </div>
-
-        <!-- 11. النسخ الاحتياطي والاستعادة (Backup & Restore - الميزة المضافة الجديدة) -->
-        <div id="backupTab" class="card hidden">
-            <h3>💾 النسخ الاحتياطي واستعادة البيانات (Backup & Restore)</h3>
-            <p style="color:var(--text-muted);">احفظ نسخة كاملة من بياناتك ومشاركاتك محلياً بصيغة JSON أو استرجعها في أي وقت.</p>
-            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
-                <button class="btn-action" onclick="exportAppData()"><i class="fa-solid fa-download"></i> تصدير وحفظ نسخة احتياطية (JSON)</button>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="file" id="importFile" accept=".json" style="font-size:12px;">
-                    <button class="btn-action" onclick="importAppData()" style="background: var(--gplus-green);"><i class="fa-solid fa-upload"></i> استعادة البيانات</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 12. الإحصائيات (Analytics) -->
-        <div id="analyticsTab" class="card hidden">
-            <h3>📊 إحصائيات التفاعل ونشاط المنصة</h3>
-            <div class="stats-row">
-                <div class="stat-box"><h3 id="statViews">1,420</h3><p style="margin:5px 0 0; font-size:12px;">مشاهدات البروفايل</p></div>
-                <div class="stat-box"><h3 id="statPosts">28</h3><p style="margin:5px 0 0; font-size:12px;">المشاركات</p></div>
-                <div class="stat-box"><h3>157</h3><p style="margin:5px 0 0; font-size:12px;">الدوائر والاتصالات</p></div>
-            </div>
-        </div>
-
-        <!-- 13. تبويب الـ 100 ميزة وقسم (100+ Features Matrix) -->
-        <div id="more100Tab" class="card hidden">
-            <h3>⭐ أرشيف الـ 100 ميزة وقسم من مميزات Google Plus الكلاسيكية والحديثة</h3>
-            <p style="color:var(--text-muted); font-size:13px;">تم دمج وتهيئة كافة الأقسام البرمجية والتشغيلية لتشكل منصة متكاملة OS:</p>
-            <div class="features-grid" style="font-size: 13px;">
-                <div class="feature-mini-card"><h4>1-10. الأساسيات</h4><p>1. البروفايل المتكامل<br>2. الغلاف الشخصي<br>3. الصورة الدائرية<br>4. الستريم العام<br>5. الستريم المخصص<br>6. الدوائر (Circles)<br>7. تعديل البيانات<br>8. الإشعارات الفورية<br>9. البحث الذكي<br>10. الأمان المتقدم</p></div>
-                <div class="feature-mini-card"><h4>11-20. التواصل</h4><p>11. Hangouts دردشة<br>12. مكالمات فيديو جماعية<br>13. مشاركة الموقع<br>14. الإشارة (@Mention)<br>15. الردود المتداخلة<br>16. إعادة المشاركة (Reshare)<br>17. زر +1 الشهير<br>18. البث المباشر (Live)<br>19. الرسائل الخاصة<br>20. دعوة الأصدقاء</p></div>
-                <div class="feature-mini-card"><h4>21-30. المجتمعات</h4><p>21. إنشاء مجتمع<br>22. المجتمعات السرية<br>23. مشرفو المجتمع<br>24. الأقسام الداخلية<br>25. تثبيت المشاركات<br>26. طلبات الانضمام<br>27. استطلاعات الرأي<br>28. مشاركة الملفات بالمجتمع<br>29. تقييم المشاركات<br>30. أرشيف المجتمع</p></div>
-                <div class="feature-mini-card"><h4>31-40. الصور والألبومات</h4><p>31. الرفع التلقائي<br>32. ألبومات الصور<br>33. التعديل الفوري للصور<br>34. تأثيرات بصرية<br>35. قص الصور<br>36. صور متحركة (GIF)<br>37. معرض الصور البانورامية<br>38. التعليق على الصور<br>39. مشاركة الألبومات<br>40. تحميل الألبوم كاملاً</p></div>
-                <div class="feature-mini-card"><h4>41-50. المجموعات Collections</h4><p>41. إنشاء مجموعة<br>42. تخصيص الغلاف للمجموعة<br>43. حفظ المقالات<br>44. متابعة المجموعات<br>45. النشر في مجموعة<br>46. مجموعات خاصة<br>47. تصنيف الروابط<br>48. أرشيف الوسائط<br>49. مشاركة مجموعة<br>50. تنبيهات التحديثات</p></div>
-                <div class="feature-mini-card"><h4>51-60. الأحداث والتقويم</h4><p>51. جدولة حدث<br>52. دعوة الدوائر للأحداث<br>53. تأكيد الحضور (RSVP)<br>54. ألبوم الحدث المشترك<br>55. التذكير التلقائي<br>56. ربط التقويم<br>57. عد تنازلي للحدث<br>58. بث الحدث المباشر<br>59. تقارير الحضور<br>60. أرشيف الفعاليات</p></div>
-                <div class="feature-mini-card"><h4>61-70. المستندات والأدوات</h4><p>61. محرر Word تفاعلي<br>62. حفظ سحابي ومحلي<br>63. طباعة فورية للمستند<br>64. تصدير PDF<br>65. تدقيق التنسيق<br>66. حفظ مسودات<br>67. لوحة تحكم الأعمال<br>68. إحصائيات التفاعل<br>69. السجل النشط<br>70. تخصيص الألوان والسمات</p></div>
-                <div class="feature-mini-card"><h4>71-80. الأمان والخصوصية</h4><p>71. إخفاء/إظهار الدوائر<br>72. حظر المستخدمين<br>73. الإبلاغ عن المحتوى<br>74. المصادقة الثنائية<br>75. سجل الأمان<br>76. إدارة الجلسات<br>77. تشفير البيانات المحلية<br>78. صلاحيات المنشورات<br>79. إدارة الأذونات<br>80. حماية الخصوصية المطلقة</p></div>
-                <div class="feature-mini-card"><h4>81-90. التخصيص والمظهر</h4><p>81. الوضع المظلم/الفاتح<br>82. تغيير ثيم الألوان<br>83. تخصيص الخطوط<br>84. واجهة متجاوبة (Responsive)<br>85. دعم الأجهزة الذكية<br>86. اختصارات لوحة المفاتيح<br>87. التمرير اللانهائي<br>88. شريط التنقل السريع<br>89. أيقونات تفاعلية FontAwesome<br>90. تخصيص القوائم الجانبية</p></div>
-                <div class="feature-mini-card"><h4>91-100. التكامل التجاري والخدمي</h4><p>91. الربط مع متجر Black Bull<br>92. إدارة شحن البضائع<br>93. تتبع الطلبات والشحنات<br>94. نظام المحاسبة المصغر<br>95. سجل العملاء والموردين<br>96. تدوين الملاحظات التجارية<br>97. إيرادات ومصروفات<br>98. النسخ الاحتياطي (Backup)<br>99. الوضع الليلي الحقيقي<br>100. البحث الشامل والـ OS</p></div>
-            </div>
         </div>
 
     </div>
@@ -339,20 +356,27 @@
         let gPlusUser = JSON.parse(localStorage.getItem('gplus_user_profile')) || {
             name: 'مستخدم جوجل بلس الذكي',
             tagline: 'منصة متكاملة لإدارة المستندات، البروفايل والتواصل.',
-            avatar: 'https://via.placeholder.com/120/202124/ffffff?text=User',
-            cover: 'https://via.placeholder.com/1000x220/4285f4/ffffff?text=Google+Plus+Cover'
+            avatar: 'https://via.placeholder.com/100/202124/ffffff?text=User',
+            cover: 'https://via.placeholder.com/1000x200/4285f4/ffffff?text=Google+Plus+Cover'
         };
 
         let streamPosts = JSON.parse(localStorage.getItem('gplus_stream_posts')) || [
-            { author: 'إدارة المنصة', text: 'أهلاً بك في النسخة المطورة التي تضم 100 ميزة وقسم من بيئة Google Plus والخدمات اللوجستية!', date: 'منذ ساعة' }
+            { author: 'إدارة المنصة', text: 'أهلاً بك في النسخة المصممة كلياً لتطابق واجهة وبنية Google Plus التقليدية!', date: 'منذ ساعة' }
         ];
 
         let shipments = JSON.parse(localStorage.getItem('gplus_shipments')) || [];
+        
+        // مصفوفة الصور المخفوظة محلياً بشكل دائم
+        let savedPhotos = JSON.parse(localStorage.getItem('gplus_saved_photos')) || [
+            "https://via.placeholder.com/150/4285f4/ffffff?text=Photo+1",
+            "https://via.placeholder.com/150/db4437/ffffff?text=Photo+2"
+        ];
 
         window.onload = function() {
             renderProfileData();
             renderStreamPosts();
             renderShipments();
+            renderPhotos();
             let savedDoc = localStorage.getItem('gplus_word_doc_content');
             if(savedDoc) {
                 document.getElementById('wordCanvas').innerHTML = savedDoc;
@@ -362,7 +386,7 @@
             }
         };
 
-        function switchTab(tabId, btnElement) {
+        function switchTab(tabId, menuElement) {
             ['profileTab', 'streamTab', 'wordDocTab', 'circlesTab', 'communitiesTab', 'photosTab', 'eventsTab', 'hangoutsTab', 'collectionsTab', 'logisticsTab', 'backupTab', 'analyticsTab', 'more100Tab'].forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.classList.add('hidden');
@@ -370,9 +394,9 @@
             let target = document.getElementById(tabId);
             if(target) target.classList.remove('hidden');
 
-            if(btnElement) {
-                document.querySelectorAll('.top-nav-links button').forEach(b => b.classList.remove('active'));
-                if(btnElement.tagName === 'BUTTON') btnElement.classList.add('active');
+            if(menuElement) {
+                document.querySelectorAll('.gplus-sidebar .sidebar-menu-item').forEach(b => b.classList.remove('active'));
+                menuElement.classList.add('active');
             }
         }
 
@@ -442,7 +466,7 @@
                                 <small style="color:var(--text-muted);">${p.date}</small>
                             </div>
                         </div>
-                        <p>${p.text}</p>
+                        <p style="font-size:14px; margin:5px 0 0 0;">${p.text}</p>
                     </div>
                 `;
             });
@@ -458,13 +482,58 @@
             alert('✅ تمت إضافة الدائرة بنجاح!');
         }
 
-        function addPhoto() {
-            let url = document.getElementById('newPhotoUrl').value.trim();
-            if(!url) return;
+        // دالة التعامل مع رفع الصور الحقيقية وحفظها بشكل دائم في localStorage
+        function handleImageUpload(event) {
+            let files = event.target.files;
+            if(!files || files.length === 0) return;
+
+            let loadedCount = 0;
+            Array.from(files).forEach(file => {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    savedPhotos.unshift(e.target.result); // إضافة الصورة الجديدة في المقدمة
+                    loadedCount++;
+                    if(loadedCount === files.length) {
+                        localStorage.setItem('gplus_saved_photos', JSON.stringify(savedPhotos));
+                        renderPhotos();
+                        alert('📸 تم رفع وحفظ الصور بنجاح ولن تختفي أبداً حتى لو قمت بتحديث الصفحة!');
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+            event.target.value = ''; // إعادة تعيين حقل الرفع
+        }
+
+        function renderPhotos() {
             let container = document.getElementById('photosContainer');
-            container.innerHTML += `<img src="${url}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px;">`;
-            document.getElementById('newPhotoUrl').value = '';
-            alert('📸 تمت إضافة الصورة للمعرض بنجاح!');
+            if(!container) return;
+            container.innerHTML = '';
+            if(savedPhotos.length === 0) {
+                container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted);">لا توجد صور محفوظة حالياً.</p>`;
+                return;
+            }
+            savedPhotos.forEach((photoUrl, index) => {
+                container.innerHTML += `
+                    <div style="position: relative; display: inline-block;">
+                        <img src="${photoUrl}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-color);" alt="Saved Photo">
+                        <button onclick="deletePhoto(${index})" title="حذف الصورة" style="position: absolute; top: 2px; left: 2px; background: rgba(211,72,54,0.8); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        function deletePhoto(index) {
+            savedPhotos.splice(index, 1);
+            localStorage.setItem('gplus_saved_photos', JSON.stringify(savedPhotos));
+            renderPhotos();
+        }
+
+        function clearAllPhotos() {
+            if(confirm('هل أنت متأكد من تفريغ كافة الصور المحفوظة؟')) {
+                savedPhotos = [];
+                localStorage.removeItem('gplus_saved_photos');
+                renderPhotos();
+            }
         }
 
         function addEvent() {
@@ -472,7 +541,7 @@
             let date = document.getElementById('eventDate').value;
             if(!title || !date) return;
             let list = document.getElementById('eventsList');
-            list.innerHTML += `<div style="background:var(--toolbar-bg); padding:10px; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);"><b>📅 ${title}</b> - موعدها: ${date}</div>`;
+            list.innerHTML += `<div style="background:var(--toolbar-bg); padding:10px; border-radius:4px; margin-bottom:8px; border:1px solid var(--border-color); font-size:13px;"><b>📅 ${title}</b> - موعدها: ${date}</div>`;
             document.getElementById('eventTitle').value = '';
             document.getElementById('eventDate').value = '';
             alert('📅 تم جدولة المناسبة بنجاح!');
@@ -497,9 +566,9 @@
             list.innerHTML = '';
             shipments.forEach(s => {
                 list.innerHTML += `
-                    <div style="background:var(--toolbar-bg); padding:12px; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                    <div style="background:var(--toolbar-bg); padding:10px; border-radius:4px; margin-bottom:8px; border:1px solid var(--border-color); font-size:13px;">
                         <b>📦 كود الشحنة: ${s.code}</b><br>
-                        <span style="font-size:13px; color:var(--text-muted);">${s.desc}</span><br>
+                        <span style="color:var(--text-muted);">${s.desc}</span><br>
                         <span class="circle-badge" style="margin-top:5px;">الحالة: ${s.status}</span>
                     </div>
                 `;
@@ -510,27 +579,26 @@
             let msg = document.getElementById('chatMsg').value.trim();
             if(!msg) return;
             let box = document.getElementById('chatBox');
-            box.innerHTML += `<p><b>أنت:</b> ${msg}</p>`;
+            box.innerHTML += `<p style="font-size:13px;"><b>أنت:</b> ${msg}</p>`;
             document.getElementById('chatMsg').value = '';
             box.scrollTop = box.scrollHeight;
         }
 
-        // أداة البحث الفوري الشامل (Global Search)
         function globalSearchFilter() {
             let query = document.getElementById('globalSearchInput').value.toLowerCase();
             if(!query) return;
-            // إذا كتب المستخدم كلمة مفتاحية، يتم فتح تبويب المشاركات أو التبويب المناسب تلقائياً لتسهيل الوصول
             if(query.includes('شحن') || query.includes('لوجستية')) switchTab('logisticsTab');
             else if(query.includes('مستند') || query.includes('word')) switchTab('wordDocTab');
             else if(query.includes('دائرة')) switchTab('circlesTab');
+            else if(query.includes('صور') || query.includes('معرض')) switchTab('photosTab');
         }
 
-        // أدوات النسخ الاحتياطي والاستعادة الشاملة (Backup & Restore)
         function exportAppData() {
             let backupData = {
                 profile: gPlusUser,
                 posts: streamPosts,
                 shipments: shipments,
+                photos: savedPhotos,
                 wordDoc: localStorage.getItem('gplus_word_doc_content')
             };
             let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
@@ -540,7 +608,7 @@
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
-            alert('💾 تم تصدير النسخة الاحتياطية بنجاح!');
+            alert('💾 تم تصدير النسخة الاحتياطية (متضمنة الصور) بنجاح!');
         }
 
         function importAppData() {
@@ -557,8 +625,9 @@
                     if(imported.profile) localStorage.setItem('gplus_user_profile', JSON.stringify(imported.profile));
                     if(imported.posts) localStorage.setItem('gplus_stream_posts', JSON.stringify(imported.posts));
                     if(imported.shipments) localStorage.setItem('gplus_shipments', JSON.stringify(imported.shipments));
+                    if(imported.photos) localStorage.setItem('gplus_saved_photos', JSON.stringify(imported.photos));
                     if(imported.wordDoc) localStorage.setItem('gplus_word_doc_content', imported.wordDoc);
-                    alert('✅ تمت استعادة كافة البيانات بنجاح تام! يتم إعادة تحميل الصفحة...');
+                    alert('✅ تمت استعادة كافة البيانات والسيستم بالكامل! يتم إعادة التحميل...');
                     location.reload();
                 } catch(err) {
                     alert('❌ ملف النسخ الاحتياطي غير صالح!');
