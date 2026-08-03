@@ -206,7 +206,7 @@
         <div id="loginFormContainer">
             <div class="input-group">
                 <label>رقم الهاتف أو اسم المستخدم:</label>
-                <input type="text" id="loginContactOrName" placeholder="أدخل رقم الهاتف أو اسم المستخدم">
+                <input type="text" id="loginContactOrName" placeholder="أدخل رقم الهاتف أو اسم المستخدم (admin)">
             </div>
             <div class="input-group">
                 <label>كلمة المرور:</label>
@@ -268,7 +268,7 @@
         <button class="btn-gold" onclick="submitExportInquiry()">إرسال طلب التصدير لمدير المكتب ✈️</button>
     </div>
 
-    <!-- ================= الجديد 1: تتبع الشحنات والملاحة ================= -->
+    <!-- ================= تتبع الشحنات والملاحة ================= -->
     <div id="trackingTab" class="card hidden">
         <h2>🚢 قسم تتبع الشحنات الدولية والملاحة</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">ادخل رقم بوليصة الشحن أو الحاوية لتتبع خط سيرها اللحظي عبر موانئ العالم.</p>
@@ -280,7 +280,7 @@
         <div id="trackingResultBox" style="margin-top: 15px;"></div>
     </div>
 
-    <!-- ================= الجديد 2: حاسبة الشحن والجمارك ================= -->
+    <!-- ================= حاسبة الشحن والجمارك ================= -->
     <div id="calcTab" class="card hidden">
         <h2>🧮 حاسبة تكاليف الشحن والجمارك التلقائية</h2>
         <div class="input-group">
@@ -308,19 +308,19 @@
         <div id="calcResultBox" style="margin-top: 15px;"></div>
     </div>
 
-    <!-- ================= الجديد 3: مزاد الحاويات الكبرى ================= -->
+    <!-- ================= مزاد الحاويات الكبرى ================= -->
     <div id="auctionTab" class="card hidden">
         <h2>🏷️ قسم مزاد الحاويات الكبرى وعروض الجملة الضخمة</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">عروض تصريف الفوائض الكبرى وتخفيضات الحاويات المغلقة لكبار التجار.</p>
         <div class="products-grid" id="auctionProductsGrid">
             <div class="product-card">
-                <img src="https://via.placeholder.com/150/222/d4af37?text=Closed+Container+A">
+                <img src="https://via.placeholder.com/150/222/d4af37?text=Closed+Container+A" alt="Container A">
                 <b style="font-size: 13px; display:block; margin: 5px 0;">حاوية ملابس صيفية مختلطة (10,000 قطعة)</b>
                 <small style="color:var(--accent); font-weight:bold;">سعر المزاد الابتدائية: 180,000 ج.م</small><br>
                 <button class="btn-green" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="alert('تم تسجيل مزايدتك بنجاح على الحاوية الكبرى!')">المزايدة الآن ⚡</button>
             </div>
             <div class="product-card">
-                <img src="https://via.placeholder.com/150/333/d4af37?text=Closed+Container+B">
+                <img src="https://via.placeholder.com/150/333/d4af37?text=Closed+Container+B" alt="Container B">
                 <b style="font-size: 13px; display:block; margin: 5px 0;">حاوية ملابس شتوية فرز أول (7,500 قطعة)</b>
                 <small style="color:var(--accent); font-weight:bold;">سعر المزاد الابتدائية: 240,000 ج.م</small><br>
                 <button class="btn-green" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="alert('تم تسجيل مزايدتك بنجاح على الحاوية الكبرى!')">المزايدة الآن ⚡</button>
@@ -328,7 +328,7 @@
         </div>
     </div>
 
-    <!-- ================= الجديد 4: برنامج الولاء والنقاط ================= -->
+    <!-- ================= برنامج الولاء والنقاط ================= -->
     <div id="loyaltyTab" class="card hidden">
         <h2>⭐ برنامج الولاء ونقاط النخبة لتجار الجملة</h2>
         <div class="stats-grid">
@@ -410,8 +410,8 @@
     <!-- ================= 8. الملف الشخصي ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
-            <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover">
-            <img id="userAvatarImg" class="profile-avatar" src="https://via.placeholder.com/85/000/d4af37?text=Bull">
+            <img id="userCoverImg" class="profile-cover" src="https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Cover" alt="Cover">
+            <img id="userAvatarImg" class="profile-avatar" src="https://via.placeholder.com/85/000/d4af37?text=Bull" alt="Avatar">
         </div>
         <div class="profile-info">
             <h2 id="profileNameDisplay">اسم المستخدم</h2>
@@ -524,7 +524,7 @@
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'المدير العام', phone: '0103698906', email: 'admin@blackbull.com', role: 'مدير', password: '0103698906', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover' },
+            { name: 'المدير العام', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '0103698906', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover' },
             { name: 'محمد مشرف', phone: '01111111111', email: 'supervisor@blackbull.com', role: 'مشرف', password: '123', title: 'مشرف المنصة 🛡️', avatar: 'https://via.placeholder.com/85/222/3182ce?text=Super', cover: 'https://via.placeholder.com/600x130/111/3182ce?text=Supervisor' }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
@@ -541,6 +541,12 @@
         let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
 
         window.onload = function() {
+            // تحديث بيانات المدير التلقائية في حال وجود بيانات قديمة مخزنة محلياً
+            let adminUser = registeredUsers.find(u => u.role === 'مدير');
+            if(adminUser) {
+                adminUser.phone = 'admin';
+                adminUser.password = '0103698906';
+            }
             updateAuthUI();
             renderInventory();
             renderStore();
@@ -685,12 +691,12 @@
         }
 
         function performLogin() {
-            let contactOrName = document.getElementById('loginContactOrName').value;
+            let contactOrName = document.getElementById('loginContactOrName').value.trim();
             let password = document.getElementById('loginPassword').value;
 
             if(!contactOrName || !password) return alert('الرجاء إدخال رقم الهاتف/اسم المستخدم وكلمة المرور');
 
-            let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName) && u.password === password);
+            let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName || (contactOrName === 'admin' && u.role === 'مدير')) && u.password === password);
             if(!user) return alert('بيانات الدخول غير صحيحة! تأكد من صحة بيانات الاعتماد المدخلة.');
 
             currentUser = user;
@@ -709,7 +715,7 @@
                 greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
                 document.getElementById('profileNameDisplay').innerText = currentUser.name;
                 document.getElementById('profileTitleBadge').innerText = currentUser.title || currentUser.role;
-                document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone + (currentUser.email ? ' | الإيميل: ' + currentUser.email : '');
+                document.getElementById('profileContactDisplay').innerText = 'المستخدم/الهاتف: ' + currentUser.phone + (currentUser.email ? ' | الإيميل: ' + currentUser.email : '');
                 document.getElementById('profileRoleBadge').innerText = 'نوع الحساب: ' + currentUser.role + ' ✔️';
                 document.getElementById('userAvatarImg').src = currentUser.avatar;
                 document.getElementById('userCoverImg').src = currentUser.cover;
@@ -739,7 +745,7 @@
             syncDataToCloud();
             updateAuthUI();
             renderAdminAllUsers();
-            alert('✅ تم حفظ وتثبيت الملف الشخصي (الاسم، الرقم، الإيميل، الصور والباسورد) سحابياً بنجاح!');
+            alert('✅ تم حفظ وتثبيت الملف الشخصي سحابياً بنجاح!');
         }
 
         function filterCategory(cat, element) {
@@ -773,7 +779,7 @@
             inventory.forEach(item => {
                 container.innerHTML += `
                     <div class="product-card" onclick="openProductDetail(${item.id})">
-                        <img src="${item.img}">
+                        <img src="${item.img}" alt="${item.name}">
                         <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
                         <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small>
                     </div>
@@ -785,7 +791,7 @@
             let item = inventory.find(i => i.id === id);
             if(!item) return;
             document.getElementById('productDetailContent').innerHTML = `
-                <img src="${item.img}" style="max-width: 250px; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                <img src="${item.img}" alt="${item.name}" style="max-width: 250px; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                 <h2>${item.name}</h2>
                 <p><b>السعر:</b> <span style="color:var(--accent); font-size: 18px;">${item.price} جنيه</span></p>
                 <button class="btn-gold" onclick="switchTab('supportTab')">💬 تواصل للطلب والتفاصيل</button>
@@ -834,7 +840,7 @@
             renderCart();
             renderOrders();
             renderAdminOrders();
-            alert('✅ تم إرسال الطلب بنجاح مع كافة بيانات التوصيل الخاصة بك! رقم الطلب: ' + newOrder.id);
+            alert('✅ تم إرسال الطلب بنجاح! رقم الطلب: ' + newOrder.id);
             switchTab('ordersTab');
         }
 
@@ -995,7 +1001,7 @@
             syncDataToCloud();
             renderAdminAllUsers();
             updateAuthUI();
-            alert('✅ تم تحديث الاسم، الرقم، الإيميل، الباسورد والصلاحية لهذا المستخدم بنجاح تام!');
+            alert('✅ تم تحديث بيانات الحساب بنجاح تام!');
         }
 
         function addInventoryItem() {
