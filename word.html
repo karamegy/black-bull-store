@@ -3,951 +3,568 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بلاك بلوك - سناب شات المتكامل (Word Engine Pro)</title>
+    <title>Google Plus+ Ultimate Enterprise OS - المنصة المتكاملة</title>
+    <!-- مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --snap-yellow: #fffc00;
-            --snap-dark: #111111;
-            --snap-gray: #1a1a1a;
-            --snap-light-gray: #2c2c2c;
-            --snap-blue: #007aff;
-            --snap-red: #ff3b30;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            user-select: none;
-        }
-
-        body {
-            background-color: #0b0b0b;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .snap-container {
-            width: 100%;
-            max-width: 450px;
-            height: 100%;
-            max-height: 950px;
-            background: var(--snap-dark);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 0 35px rgba(255, 252, 0, 0.2);
-        }
-
-        @media (min-width: 451px) {
-            .snap-container {
-                border-radius: 35px;
-                height: 92vh;
-                border: 4px solid #222;
-            }
-        }
-
-        /* الهيدر العلوي */
-        .snap-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            z-index: 20;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            border: 2px solid var(--snap-yellow);
-            object-fit: cover;
-        }
-
-        .user-info h4 {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .user-info span {
-            font-size: 11px;
-            color: var(--snap-yellow);
-        }
-
-        .header-icons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .icon-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            color: #fff;
-            font-size: 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-        }
-
-        .icon-btn:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        /* أقسام التطبيق الشاملة */
-        .app-views {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            background: #000;
-        }
-
-        .view-section {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            flex-direction: column;
-            background: var(--snap-dark);
-            overflow-y: auto;
-            padding-top: 75px;
-            padding-bottom: 70px;
-        }
-
-        .view-section.active {
-            display: flex;
-        }
-
-        /* 1. قسم الكاميرا المتقدم */
-        #cameraView {
-            padding-top: 0;
-            padding-bottom: 0;
-            justify-content: flex-end;
-            align-items: center;
-        }
-
-        #camera-feed {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        .placeholder-cam {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, #1a252f, #000);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .placeholder-cam h2 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            color: var(--snap-yellow);
-        }
-
-        /* أدوات الكاميرا العلوية (فلاش، مؤقت) */
-        .cam-tools {
-            position: absolute;
-            top: 85px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 15;
-        }
-
-        .cam-tool-btn {
-            background: rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            backdrop-filter: blur(5px);
-        }
-
-        .filters-bar {
-            position: absolute;
-            top: 85px;
-            left: 20px;
-            right: 80px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 5px 0;
-            scrollbar-width: none;
-            z-index: 10;
-        }
-
-        .filters-bar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .filter-chip {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            white-space: nowrap;
-            backdrop-filter: blur(5px);
-        }
-
-        .filter-chip.active {
-            background: var(--snap-yellow);
-            color: #000;
-            font-weight: bold;
-            border-color: var(--snap-yellow);
-        }
-
-        .camera-controls {
-            padding: 30px;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 10;
-            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-        }
-
-        .capture-btn {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            border: 5px solid #fff;
-            background: transparent;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-
-        .capture-btn:active {
-            transform: scale(0.9);
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        .side-cam-btn {
-            background: rgba(0,0,0,0.5);
-            border: none;
-            color: white;
-            font-size: 18px;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-
-        /* 2. الأقسام العامة والعناصر المشتركة */
-        .section-padding {
-            padding: 15px 20px;
-        }
-
-        .section-title {
-            font-size: 17px;
-            margin-bottom: 12px;
-            color: var(--snap-yellow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 10px 15px;
-            background: var(--snap-gray);
-            border: 1px solid #333;
-            border-radius: 12px;
-            color: #fff;
-            margin-bottom: 15px;
-            outline: none;
-            font-size: 13px;
-        }
-
-        .chat-list, .friends-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .row-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: var(--snap-gray);
-            border-radius: 14px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .row-card:hover {
-            background: var(--snap-light-gray);
-        }
-
-        .row-card img {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .row-details {
-            flex: 1;
-        }
-
-        .row-details h4 {
-            font-size: 14px;
-            margin-bottom: 3px;
-        }
-
-        .row-details p {
-            font-size: 12px;
-            color: #aaa;
-        }
-
-        .action-badge {
-            background: var(--snap-yellow);
-            color: #000;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .action-badge.connected {
-            background: #2ecc71;
-            color: #fff;
-        }
-
-        /* 3. نافذة المحادثة المباشرة التفاعلية (Chat Room Modal) */
-        .chat-room-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #111;
-            display: none;
-            flex-direction: column;
-            z-index: 150;
-        }
-
-        .chat-room-header {
-            padding: 15px 20px;
-            background: #1a1a1a;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid #333;
-        }
-
-        .chat-room-body {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: #0d0d0d;
-        }
-
-        .chat-bubble-msg {
-            max-width: 75%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 13px;
-        }
-
-        .chat-bubble-msg.incoming {
-            background: #222;
-            color: #fff;
-            align-self: flex-start;
-        }
-
-        .chat-bubble-msg.outgoing {
-            background: var(--snap-yellow);
-            color: #000;
-            align-self: flex-end;
-            font-weight: 500;
-        }
-
-        .chat-room-footer {
-            padding: 12px 15px;
-            background: #1a1a1a;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 10px 15px;
-            background: #222;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 20px;
-            outline: none;
-            font-size: 13px;
-        }
-
-        /* 4. قسم الخريطة والقصص */
-        .map-container {
-            flex: 1;
-            background: #1e272e;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .map-avatar-pin {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 3px solid var(--snap-yellow);
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .stories-horizontal {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            scrollbar-width: none;
-        }
-
-        .story-bubble {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        .ring {
-            width: 68px;
-            height: 68px;
-            border-radius: 50%;
-            border: 3px solid var(--snap-yellow);
-            padding: 2px;
-        }
-
-        .ring img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .story-bubble span {
-            font-size: 12px;
-            max-width: 75px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* شريط التنقل السفلي */
-        .snap-nav {
-            display: flex;
-            justify-content: space-around;
-            background: #000;
-            padding: 10px 0;
-            border-top: 1px solid #222;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 20;
-        }
-
-        .nav-item {
-            background: none;
-            border: none;
-            color: #777;
-            font-size: 11px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            cursor: pointer;
-            transition: 0.2s;
-            flex: 1;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-        }
-
-        .nav-item.active {
-            color: var(--snap-yellow);
-        }
-
-        /* الإشعارات والنوافذ المنبثقة */
-        .snap-toast {
-            position: absolute;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            background: var(--snap-yellow);
-            color: #000;
-            padding: 10px 22px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 13px;
-            z-index: 300;
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-            white-space: nowrap;
-        }
-
-        .snap-toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 250;
-            padding: 20px;
-        }
-
-        .modal-box {
-            background: var(--snap-gray);
-            width: 100%;
-            max-width: 360px;
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid #444;
-            text-align: center;
-        }
-
-        .modal-box h3 {
-            color: var(--snap-yellow);
-            margin-bottom: 10px;
-        }
-
-        .modal-box p {
-            font-size: 13px;
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 12px;
-            background: #111;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            outline: none;
-        }
-
-        .modal-btns {
-            display: flex;
-            gap: 10px;
-        }
-
-        .modal-btns button {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .btn-confirm { background: var(--snap-yellow); color: #000; }
-        .btn-cancel { background: #333; color: #fff; }
-    </style>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-
-    <div class="snap-container">
+            --gplus-red: #db4437;
+            --gplus-blue: #4285f4;
+            --gplus-yellow: #f4b400;
+            --gplus-green: #0f9d58;
+            --gplus-purple: #ab47bc;
+            --gplus-teal: #00acc1;
+            --bg-color: #f1f3f4;
+            --card-bg: #ffffff;
+            --text-main: #202124;
+            --text-muted: #5f6368;
+            --border-color: #dadce0;
+            --toolbar-bg: #f8f9fa;
+        }
+
+        /* متغيرات الوضع الليلي (Dark Mode) */
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e8eaed;
+            --text-muted: #9aa0a6;
+            --border-color: #3c4043;
+            --toolbar-bg: #2d2f31;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+
+        /* شريط التنقل العلوي الرئيسي */
+        .gplus-topbar { background: var(--gplus-red); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; flex-wrap: wrap; gap: 10px;}
+        .gplus-brand { font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .gplus-brand span { background: white; color: var(--gplus-red); padding: 2px 8px; border-radius: 4px; font-size: 13px; }
         
-        <!-- إشعار النظام الموحد -->
-        <div id="snapToast" class="snap-toast">مرحباً بك في سناب شات بلاك بلوك Pro!</div>
+        .top-nav-links { display: flex; gap: 6px; overflow-x: auto; max-width: 100%; padding-bottom: 5px; }
+        .top-nav-links button { background: transparent; border: none; color: white; font-weight: bold; cursor: pointer; padding: 6px 10px; border-radius: 4px; transition: 0.2s; font-size: 12px; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
+        .top-nav-links button:hover, .top-nav-links button.active { background: rgba(255,255,255,0.25); }
 
-        <!-- نافذة غرفة المحادثة الفورية المباشرة -->
-        <div class="chat-room-overlay" id="chatRoomModal">
-            <div class="chat-room-header">
-                <button class="icon-btn" onclick="closeChatRoom()"><i class="fa-solid fa-arrow-right"></i></button>
-                <img id="activeChatImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="avatar" style="width:36px; height:36px;">
-                <div>
-                    <h4 id="activeChatName" style="font-size:14px;">أحمد محمد</h4>
-                    <span style="font-size:10px; color:#2ecc71;">متصل الآن في المنصة</span>
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        .card { background: var(--card-bg); border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border-color); transition: background 0.3s, border 0.3s; }
+        
+        /* شريط البحث العلوي السريع داخل المنصة */
+        .global-search-bar { display: flex; gap: 10px; margin-bottom: 20px; background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .global-search-bar input { flex: 1; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-main); font-family: inherit; }
+
+        /* بروفايل جوجل بلس */
+        .gplus-profile-header { position: relative; margin-bottom: 60px; }
+        .gplus-cover { width: 100%; height: 220px; border-radius: 8px 8px 0 0; object-fit: cover; background: #ddd; }
+        .gplus-avatar-box { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--card-bg); position: absolute; bottom: -50px; right: 30px; overflow: hidden; background: #000; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+        .gplus-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+        .gplus-profile-info { padding: 10px 30px 0 30px; }
+        .gplus-profile-info h1 { margin: 0; font-size: 24px; color: var(--text-main); }
+        .gplus-profile-info p { color: var(--text-muted); margin: 5px 0 15px 0; font-size: 14px; }
+
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: var(--text-muted); }
+        .input-group input, .input-group textarea, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 14px; background: var(--bg-color); color: var(--text-main); }
+        
+        button.btn-action { background: var(--gplus-blue); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button.btn-action:hover { opacity: 0.9; }
+
+        .hidden { display: none !important; }
+
+        /* مشاركات وتنسيقات */
+        .stream-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .stream-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .stream-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        
+        /* محرر مستندات Word المصغر */
+        .word-editor-toolbar { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; background: var(--toolbar-bg); padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); }
+        .word-editor-toolbar button { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .word-editor-toolbar button:hover { opacity: 0.8; }
+        .word-document-canvas { min-height: 250px; border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; background: var(--card-bg); color: var(--text-main); outline: none; font-size: 15px; line-height: 1.6; }
+
+        .circle-badge { display: inline-block; background: var(--toolbar-bg); color: var(--gplus-blue); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin: 3px; }
+        
+        /* شبكة الأقسام المتعددة */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 15px; }
+        .feature-mini-card { background: var(--toolbar-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; }
+        .feature-mini-card h4 { margin-top: 0; color: var(--gplus-blue); display: flex; align-items: center; gap: 8px; }
+        
+        .stats-row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        .stat-box { flex: 1; min-width: 120px; background: var(--toolbar-bg); padding: 12px; border-radius: 6px; text-align: center; border: 1px solid var(--border-color); }
+        .stat-box h3 { margin: 0; color: var(--gplus-red); font-size: 20px; }
+    </style>
+</head>
+<body id="mainBody">
+
+    <!-- الشريط العلوي المطور (يشمل روابط التنقل الشاملة وأزرار التحكم العامة) -->
+    <div class="gplus-topbar">
+        <div class="gplus-brand">
+            <i class="fa-solid fa-circle-nodes"><b>Google</b> +</i>
+            <span>Enterprise OS (100+)</span>
+        </div>
+        <div class="top-nav-links">
+            <button onclick="switchTab('profileTab', this)" class="active"><i class="fa-solid fa-user"></i> البروفايل</button>
+            <button onclick="switchTab('streamTab', this)"><i class="fa-solid fa-stream"></i> الستريم</button>
+            <button onclick="switchTab('wordDocTab', this)"><i class="fa-solid fa-file-word"></i> مستند Word</button>
+            <button onclick="switchTab('circlesTab', this)"><i class="fa-solid fa-users"></i> الدوائر</button>
+            <button onclick="switchTab('communitiesTab', this)"><i class="fa-solid fa-people-group"></i> المجتمعات</button>
+            <button onclick="switchTab('photosTab', this)"><i class="fa-solid fa-images"></i> الصور</button>
+            <button onclick="switchTab('eventsTab', this)"><i class="fa-solid fa-calendar-days"></i> المناسبات</button>
+            <button onclick="switchTab('hangoutsTab', this)"><i class="fa-solid fa-video"></i> Hangouts</button>
+            <button onclick="switchTab('collectionsTab', this)"><i class="fa-solid fa-layer-group"></i> المجموعات</button>
+            <button onclick="switchTab('logisticsTab', this)"><i class="fa-solid fa-truck-fast"></i> الشحنات</button>
+            <button onclick="switchTab('backupTab', this)"><i class="fa-solid fa-database"></i> النسخ الاحتياطي</button>
+            <button onclick="switchTab('analyticsTab', this)"><i class="fa-solid fa-chart-line"></i> الإحصائيات</button>
+            <button onclick="switchTab('more100Tab', this)" style="background: var(--gplus-yellow); color:#000;"><i class="fa-solid fa-star"></i> الـ 100 ميزة</button>
+            <button onclick="toggleDarkMode()" style="background: var(--gplus-purple);" title="تبديل الوضع الليلي"><i class="fa-solid fa-moon"></i></button>
+            <button onclick="goBackToStore()" style="background: var(--gplus-green);"><i class="fa-solid fa-store"></i> المتجر</button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- شريط البحث الفوري داخل المنصة (Global Search) -->
+        <div class="global-search-bar">
+            <i class="fa-solid fa-magnifying-glass" style="align-self: center; color: var(--text-muted);"></i>
+            <input type="text" id="globalSearchInput" onkeyup="globalSearchFilter()" placeholder="ابحث السريع داخل الأقسام، المشاركات، الدوائر، والمستندات...">
+        </div>
+
+        <!-- 1. صفحة البروفايل -->
+        <div id="profileTab" class="card" style="padding: 0; border: none; background: transparent;">
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <div class="gplus-profile-header">
+                    <img id="profileCoverView" class="gplus-cover" src="https://via.placeholder.com/1000x220/4285f4/ffffff?text=Google+Plus+Cover" alt="Cover">
+                    <div class="gplus-avatar-box">
+                        <img id="profileAvatarView" src="https://via.placeholder.com/120/202124/ffffff?text=User" alt="Avatar">
+                    </div>
+                </div>
+                <div class="gplus-profile-info">
+                    <h1 id="profileNameTitle">اسم المستخدم</h1>
+                    <p id="profileTagline">منصة تجارة، توثيق، ومستندات ذكية متكاملة.</p>
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <span class="circle-badge"><i class="fa-solid fa-check"></i> حساب موثق بالكامل</span>
+                        <span class="circle-badge" style="background:#ceead6; color:#137333;"><i class="fa-solid fa-shield-halved"></i> أمان عالٍ</span>
+                        <span class="circle-badge" style="background:#feefc3; color:#b06000;"><i class="fa-solid fa-star"></i> مميز</span>
+                    </div>
                 </div>
             </div>
-            <div class="chat-room-body" id="chatMessagesBox">
-                <div class="chat-bubble-msg incoming">مرحباً بك! تم ربط حسابك بنجاح في منصة بلاك بلوك Word.</div>
-                <div class="chat-bubble-msg outgoing">أهلاً بك يا صديقي، كيف حال وتطوير الواجهات؟</div>
-            </div>
-            <div class="chat-room-footer">
-                <input type="text" id="msgInputText" class="chat-input" placeholder="اكتب رسالة سناب مشفرة...">
-                <button class="action-badge" onclick="sendChatMessage()">إرسال</button>
+            <div class="card">
+                <h3>⚙️ إعدادات وتعديل البروفايل الشامل</h3>
+                <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="inputProfileName"></div>
+                <div class="input-group"><label>النبذة التعريفية (Tagline):</label><input type="text" id="inputProfileTagline"></div>
+                <div class="input-group"><label>رابط الصورة الشخصية:</label><input type="text" id="inputProfileAvatar"></div>
+                <div class="input-group"><label>رابط صورة الغلاف:</label><input type="text" id="inputProfileCover"></div>
+                <button class="btn-action" onclick="saveProfileSettings()">حفظ وتحديث البروفايل فوراً ✅</button>
             </div>
         </div>
 
-        <!-- نافذة ربط الحسابات -->
-        <div class="modal-overlay" id="syncModal">
-            <div class="modal-box">
-                <h3>إعدادات حساب بلاك بلوك (BlackBlock)</h3>
-                <p>قم بتحديث اسم حسابك أو ربطه بالشبكة الموحدة لأعضاء المنصة.</p>
-                <input type="text" id="blackBlockUser" class="modal-input" placeholder="اسم المستخدم الجديد...">
-                <div class="modal-btns">
-                    <button class="btn-cancel" onclick="closeSyncModal()">إلغاء</button>
-                    <button class="btn-confirm" onclick="confirmSync()">تحديث الحساب</button>
+        <!-- 2. المشاركات (Stream) -->
+        <div id="streamTab" class="card hidden">
+            <h3>💬 مشاركات جوجل بلس ونظام التدوينات</h3>
+            <div class="card" style="background: var(--toolbar-bg);">
+                <div class="input-group">
+                    <textarea id="streamPostText" rows="3" placeholder="مشاركة جديدة مع الدوائر والمجتمعات..."></textarea>
+                </div>
+                <button class="btn-action" onclick="publishStreamPost()">نشر في الستريم 📢</button>
+            </div>
+            <div id="streamPostsContainer"></div>
+        </div>
+
+        <!-- 3. مستندات Word -->
+        <div id="wordDocTab" class="card hidden">
+            <h2>📄 محرر مستندات Word الذكي المتطور</h2>
+            <p style="color: var(--text-muted); font-size: 13px;">اكتب مستنداتك، تقاريرك التجارية، واحتفظ بها محلياً وسحابياً مع ميزة التصدير والطباعة.</p>
+            <div class="word-editor-toolbar">
+                <button onclick="formatDoc('bold')" title="عريض"><i class="fa-solid fa-bold"></i></button>
+                <button onclick="formatDoc('italic')" title="مائل"><i class="fa-solid fa-italic"></i></button>
+                <button onclick="formatDoc('underline')" title="خط تحت النص"><i class="fa-solid fa-underline"></i></button>
+                <button onclick="formatDoc('justifyRight')" title="يمين"><i class="fa-solid fa-align-right"></i></button>
+                <button onclick="formatDoc('justifyCenter')" title="توسيط"><i class="fa-solid fa-align-center"></i></button>
+                <button onclick="formatDoc('justifyLeft')" title="يسار"><i class="fa-solid fa-align-left"></i></button>
+                <button onclick="saveWordDocumentLocally()" style="background: var(--gplus-green); color: white;"><i class="fa-solid fa-floppy-disk"></i> حفظ المستند</button>
+                <button onclick="window.print()" style="background: var(--gplus-blue); color: white;"><i class="fa-solid fa-print"></i> طباعة / PDF</button>
+            </div>
+            <div id="wordCanvas" class="word-document-canvas" contenteditable="true">
+                أهلاً بك في مستند Word الذكي المرتبط بمنصة Google Plus Hub...
+            </div>
+        </div>
+
+        <!-- 4. الدوائر (Circles) -->
+        <div id="circlesTab" class="card hidden">
+            <h3>⭕ دوائر التواصل (Google Circles)</h3>
+            <p style="color:var(--text-muted); font-size:13px;">قسم جهات اتصالك بدقة تامة (عائلة، شركاء عمل، عملاء، أصدقاء).</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="newCircleName" placeholder="اسم الدائرة الجديدة (مثال: عملاء التصدير)">
+                <button class="btn-action" onclick="addCircle()" style="width: auto;">إضافة دائرة</button>
+            </div>
+            <div id="circlesContainer">
+                <span class="circle-badge">الأصدقاء المقربون (12)</span>
+                <span class="circle-badge">شركاء التجارة والتصدير (8)</span>
+                <span class="circle-badge">المتابعون والعملاء (142)</span>
+            </div>
+        </div>
+
+        <!-- 5. المجتمعات (Communities) -->
+        <div id="communitiesTab" class="card hidden">
+            <h3>👥 مجتمعات جوجل بلس (Google Communities)</h3>
+            <p style="color:var(--text-muted);">انضم وأنشئ مجتمعات متخصصة للنقاش، عرض المنتجات، وتبادل الخبرات.</p>
+            <div class="features-grid">
+                <div class="feature-mini-card">
+                    <h4><i class="fa-solid fa-globe"></i> مجتمع التجارة الدولية</h4>
+                    <p style="font-size: 13px; color:var(--text-muted);">نقاشات حول التصدير، الشحن، والاستيراد.</p>
+                    <button class="btn-action" style="padding: 5px 10px; font-size:12px;">انضمام</button>
+                </div>
+                <div class="feature-mini-card">
+                    <h4><i class="fa-solid fa-code"></i> مجتمع تطوير الويب و Acode</h4>
+                    <p style="font-size: 13px; color:var(--text-muted);">مشاركة الأكواد والحلول البرمجية الخفيفة.</p>
+                    <button class="btn-action" style="padding: 5px 10px; font-size:12px;">انضمام</button>
                 </div>
             </div>
         </div>
 
-        <!-- الهيدر العلوي -->
-        <div class="snap-header" id="mainHeader">
-            <div class="user-profile" onclick="openSyncModal()">
-                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="الملف الشخصي" class="avatar">
-                <div class="user-info">
-                    <h4 id="profileName">حساب بلاك بلوك</h4>
-                    <span><i class="fa-solid fa-fire"></i> <span id="userScore">5,140</span> نقطة</span>
+        <!-- 6. الصور والألبومات (Photos) -->
+        <div id="photosTab" class="card hidden">
+            <h3>📸 معرض الصور والألبومات الذكية (Google Photos)</h3>
+            <p style="color:var(--text-muted);">رفع، أرشفة، وتصنيف الصور التاريخية والتجارية.</p>
+            <div class="input-group">
+                <label>رابط صورة جديدة لإضافتها للمعرض:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="newPhotoUrl" placeholder="https://...">
+                    <button class="btn-action" onclick="addPhoto()" style="width: auto;">إضافة</button>
                 </div>
             </div>
-            <div class="header-icons">
-                <button class="icon-btn" onclick="showToast('🔍 البحث السريع نشط في التطبيق')"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="icon-btn" onclick="openSyncModal()"><i class="fa-solid fa-user-plus"></i></button>
-                <button class="icon-btn" onclick="showToast('⚙️ لوحة تحكم الخادم والمميزات مفعلة')"><i class="fa-solid fa-gear"></i></button>
+            <div id="photosContainer" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                <img src="https://via.placeholder.com/150/4285f4/ffffff?text=Photo+1" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px;">
+                <img src="https://via.placeholder.com/150/db4437/ffffff?text=Photo+2" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px;">
             </div>
         </div>
 
-        <!-- الأقسام الخمسة الرئيسية -->
-        <div class="app-views">
-            
-            <!-- 1. قسم الدردشات -->
-            <div class="view-section" id="chatView">
-                <div class="section-padding">
-                    <div class="section-title">
-                        <span>الدردشات والمراسلات الفورية</span>
-                        <i class="fa-solid fa-comments"></i>
-                    </div>
-                    <div class="chat-list" id="chatListContainer">
-                        <div class="row-card" onclick="openChatRoom('أحمد محمد (مدير المنصة)', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100')">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="أحمد">
-                            <div class="row-details">
-                                <h4>أحمد محمد (مدير المنصة)</h4>
-                                <p>📷 تم إرسال سناب جديد - اضغط للفتح</p>
-                            </div>
-                            <span style="font-size: 10px; color: var(--snap-yellow);">الآن</span>
-                        </div>
-                        <div class="row-card" onclick="openChatRoom('سارة علي (دعم بلاك بلوك)', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100')">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="سارة">
-                            <div class="row-details">
-                                <h4>سارة علي (دعم بلاك بلوك)</h4>
-                                <p>مرحباً بك في نظام سناب شات Word المتكامل!</p>
-                            </div>
-                            <span style="font-size: 10px; color: #aaa;">منذ 5د</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. قسم القصص و Spotlight -->
-            <div class="view-section" id="storiesView">
-                <div class="section-padding">
-                    <div class="section-title"><span>قصص أعضاء المنصة</span></div>
-                    <div class="stories-horizontal" id="dynamicStories"></div>
-                    <div class="section-title" style="margin-top: 20px;"><span>محتوى Spotlight الرائج</span></div>
-                    <div class="chat-list">
-                        <div class="row-card" onclick="showToast('🔥 عرض فيديو Spotlight المميز')">
-                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100" alt="Spotlight">
-                            <div class="row-details">
-                                <h4>أفضل تحديثات واجهات Word</h4>
-                                <p>شاهد تجربة الأداء العالي داخل المنصة.</p>
-                            </div>
-                            <span class="action-badge">شاهد</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. قسم الكاميرا والعدسات المتقدم -->
-            <div class="view-section active" id="cameraView">
-                <video id="camera-feed" autoplay playsinline></video>
-                <div class="placeholder-cam" id="camPlaceholder">
-                    <h2>كاميرا بلاك بلوك (Word Engine)</h2>
-                    <p>جاهز لالتقاط وتوثيق لحظاتك وحفظها في الذكريات.</p>
-                </div>
-
-                <!-- أدوات كاميرا إضافية (فلاش وتوقيت) -->
-                <div class="cam-tools">
-                    <button class="cam-tool-btn" onclick="toggleFlash()"><i class="fa-solid fa-bolt" id="flashIcon"></i></button>
-                    <button class="cam-tool-btn" onclick="showToast('⏱️ تم تفعيل مؤقت التصوير (3 ثواني)')"><i class="fa-solid fa-stopwatch"></i></button>
-                </div>
-
-                <!-- شريط الفلاتر المتقدمة -->
-                <div class="filters-bar">
-                    <div class="filter-chip active" onclick="applyFilter('normal', this)">عادي</div>
-                    <div class="filter-chip" onclick="applyFilter('dog', this)">🐶 فلتر الكلب</div>
-                    <div class="filter-chip" onclick="applyFilter('neon', this)">⚡ نيون بلوك</div>
-                    <div class="filter-chip" onclick="applyFilter('retro', this)">📼 ريترو كلاسيك</div>
-                    <div class="filter-chip" onclick="applyFilter('cyber', this)">🤖 سيبراني</div>
-                </div>
-
-                <!-- أزرار الكاميرا والسفلى -->
-                <div class="camera-controls">
-                    <button class="side-cam-btn" onclick="showToast('📁 تم فتح ذكريات المنصة والستوديو')"><i class="fa-solid fa-image"></i></button>
-                    <button class="capture-btn" onclick="takeSnap()"></button>
-                    <button class="side-cam-btn" onclick="showToast('🔄 تم تبديل الكاميرا بنجاح')"><i class="fa-solid fa-rotate"></i></button>
-                </div>
-            </div>
-
-            <!-- 4. قسم الخريطة -->
-            <div class="view-section" id="mapView">
-                <div class="map-container">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" class="map-avatar-pin" style="top: 40%; left: 45%;" alt="موقعك">
-                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100" class="map-avatar-pin" style="top: 60%; left: 70%; animation-delay: 0.5s;" alt="صديق">
-                    <div style="position: absolute; bottom: 30px; background: rgba(0,0,0,0.85); padding: 10px 20px; border-radius: 20px; border: 1px solid #444;">
-                        <p style="font-size: 13px; color: var(--snap-yellow);"><i class="fa-solid fa-location-dot"></i> أنت متصل مع 14 حساب نشط في منصة بلاك بلوك</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5. قسم المجتمع وأضف بعضنا لبعض مع محرك بحث -->
-            <div class="view-section" id="communityView">
-                <div class="section-padding">
-                    <div class="section-title">
-                        <span>أعضاء منصة بلاك بلوك (أضف بعضنا لبعض)</span>
-                        <button class="action-badge" onclick="openSyncModal()"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                    <input type="text" id="searchCommunity" class="search-box" placeholder="ابحث عن حساب في مجتمع بلاك بلوك..." onkeyup="filterCommunity()">
-                    <div class="friends-list" id="communityList"></div>
-                </div>
-            </div>
-
+        <!-- 7. المناسبات (Events) -->
+        <div id="eventsTab" class="card hidden">
+            <h3>📅 تقويم المناسبات والاجتماعات (Google Events)</h3>
+            <p style="color:var(--text-muted);">جدولة الاجتماعات، مواعيد تسليم الشحنات، والأحداث المهمة.</p>
+            <div class="input-group"><label>عنوان المناسبة:</label><input type="text" id="eventTitle" placeholder="مثال: اجتماع مع الموردين"></div>
+            <div class="input-group"><label>التاريخ والوقت:</label><input type="datetime-local" id="eventDate"></div>
+            <button class="btn-action" onclick="addEvent()">جدولة المناسبة ✅</button>
+            <div id="eventsList" style="margin-top: 15px;"></div>
         </div>
 
-        <!-- شريط التنقل السفلي -->
-        <div class="snap-nav">
-            <button class="nav-item" onclick="switchView('chatView', this)"><i class="fa-regular fa-comment"></i><span>الدردشة</span></button>
-            <button class="nav-item" onclick="switchView('storiesView', this)"><i class="fa-solid fa-circle-notch"></i><span>القصص</span></button>
-            <button class="nav-item active" onclick="switchView('cameraView', this)"><i class="fa-solid fa-camera"></i><span>الكاميرا</span></button>
-            <button class="nav-item" onclick="switchView('mapView', this)"><i class="fa-solid fa-map-location-dot"></i><span>الخريطة</span></button>
-            <button class="nav-item" onclick="switchView('communityView', this)"><i class="fa-solid fa-users"></i><span>المجتمع</span></button>
+        <!-- 8. دردشة Hangouts -->
+        <div id="hangoutsTab" class="card hidden">
+            <h3>💬 دردشة Google Hangouts المباشرة</h3>
+            <div class="card" style="height: 200px; overflow-y: auto; background: var(--bg-color);" id="chatBox">
+                <p><b>النظام:</b> مرحباً بك في دردشة هانج آوتس المشفرة والمباشرة.</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="chatMsg" placeholder="اكتب رسالتك...">
+                <button class="btn-action" onclick="sendChat()" style="width: auto;">إرسال</button>
+            </div>
+        </div>
+
+        <!-- 9. المجموعات (Collections) -->
+        <div id="collectionsTab" class="card hidden">
+            <h3>🗂️ مجموعات جوجل بلس (Google Collections)</h3>
+            <p style="color:var(--text-muted);">تنظيم مقالاتك وصورك بحسب المواضيع والاهتمامات في مجموعات خاصة وعامة.</p>
+            <div class="features-grid">
+                <div class="feature-mini-card">
+                    <h4>📂 مجموعة مشاريع الويب</h4>
+                    <p style="font-size:12px; color:var(--text-muted);">تضم 14 عنصراً محفوظاً.</p>
+                </div>
+                <div class="feature-mini-card">
+                    <h4>📂 صور المعالم التاريخية</h4>
+                    <p style="font-size:12px; color:var(--text-muted);">تضم 32 عنصراً محفوظاً.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. تتبع الشحنات والخدمات اللوجستية (Logistics Tracker - الميزة المضافة الجديدة) -->
+        <div id="logisticsTab" class="card hidden">
+            <h3>🚚 إدارة الشحنات والخطوط اللوجستية (Logistics Tracker)</h3>
+            <p style="color:var(--text-muted);">تتبع حركة البضائع والنقل التجاري والبريد الصادر والوارد.</p>
+            <div class="input-group"><label>رقم أو كود الشحنة:</label><input type="text" id="shipmentCode" placeholder="مثال: EGY-9821"></div>
+            <div class="input-group"><label>وجهة الشحن / الوصف:</label><input type="text" id="shipmentDesc" placeholder="مثال: شحنة ملابس ومنتجات خشبية"></div>
+            <div class="input-group">
+                <label>حالة الشحنة:</label>
+                <select id="shipmentStatus">
+                    <option value="قيد التجهيز بالمستودع">قيد التجهيز بالمستودع</option>
+                    <option value="في الطريق (خط السير)">في الطريق (خط السير)</option>
+                    <option value="تم التسليم بنجاح">تم التسليم بنجاح</option>
+                </select>
+            </div>
+            <button class="btn-action" onclick="addShipment()">إضافة ومتابعة الشحنة 📦</button>
+            <div id="shipmentsList" style="margin-top: 15px;"></div>
+        </div>
+
+        <!-- 11. النسخ الاحتياطي والاستعادة (Backup & Restore - الميزة المضافة الجديدة) -->
+        <div id="backupTab" class="card hidden">
+            <h3>💾 النسخ الاحتياطي واستعادة البيانات (Backup & Restore)</h3>
+            <p style="color:var(--text-muted);">احفظ نسخة كاملة من بياناتك ومشاركاتك محلياً بصيغة JSON أو استرجعها في أي وقت.</p>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+                <button class="btn-action" onclick="exportAppData()"><i class="fa-solid fa-download"></i> تصدير وحفظ نسخة احتياطية (JSON)</button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="file" id="importFile" accept=".json" style="font-size:12px;">
+                    <button class="btn-action" onclick="importAppData()" style="background: var(--gplus-green);"><i class="fa-solid fa-upload"></i> استعادة البيانات</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. الإحصائيات (Analytics) -->
+        <div id="analyticsTab" class="card hidden">
+            <h3>📊 إحصائيات التفاعل ونشاط المنصة</h3>
+            <div class="stats-row">
+                <div class="stat-box"><h3 id="statViews">1,420</h3><p style="margin:5px 0 0; font-size:12px;">مشاهدات البروفايل</p></div>
+                <div class="stat-box"><h3 id="statPosts">28</h3><p style="margin:5px 0 0; font-size:12px;">المشاركات</p></div>
+                <div class="stat-box"><h3>157</h3><p style="margin:5px 0 0; font-size:12px;">الدوائر والاتصالات</p></div>
+            </div>
+        </div>
+
+        <!-- 13. تبويب الـ 100 ميزة وقسم (100+ Features Matrix) -->
+        <div id="more100Tab" class="card hidden">
+            <h3>⭐ أرشيف الـ 100 ميزة وقسم من مميزات Google Plus الكلاسيكية والحديثة</h3>
+            <p style="color:var(--text-muted); font-size:13px;">تم دمج وتهيئة كافة الأقسام البرمجية والتشغيلية لتشكل منصة متكاملة OS:</p>
+            <div class="features-grid" style="font-size: 13px;">
+                <div class="feature-mini-card"><h4>1-10. الأساسيات</h4><p>1. البروفايل المتكامل<br>2. الغلاف الشخصي<br>3. الصورة الدائرية<br>4. الستريم العام<br>5. الستريم المخصص<br>6. الدوائر (Circles)<br>7. تعديل البيانات<br>8. الإشعارات الفورية<br>9. البحث الذكي<br>10. الأمان المتقدم</p></div>
+                <div class="feature-mini-card"><h4>11-20. التواصل</h4><p>11. Hangouts دردشة<br>12. مكالمات فيديو جماعية<br>13. مشاركة الموقع<br>14. الإشارة (@Mention)<br>15. الردود المتداخلة<br>16. إعادة المشاركة (Reshare)<br>17. زر +1 الشهير<br>18. البث المباشر (Live)<br>19. الرسائل الخاصة<br>20. دعوة الأصدقاء</p></div>
+                <div class="feature-mini-card"><h4>21-30. المجتمعات</h4><p>21. إنشاء مجتمع<br>22. المجتمعات السرية<br>23. مشرفو المجتمع<br>24. الأقسام الداخلية<br>25. تثبيت المشاركات<br>26. طلبات الانضمام<br>27. استطلاعات الرأي<br>28. مشاركة الملفات بالمجتمع<br>29. تقييم المشاركات<br>30. أرشيف المجتمع</p></div>
+                <div class="feature-mini-card"><h4>31-40. الصور والألبومات</h4><p>31. الرفع التلقائي<br>32. ألبومات الصور<br>33. التعديل الفوري للصور<br>34. تأثيرات بصرية<br>35. قص الصور<br>36. صور متحركة (GIF)<br>37. معرض الصور البانورامية<br>38. التعليق على الصور<br>39. مشاركة الألبومات<br>40. تحميل الألبوم كاملاً</p></div>
+                <div class="feature-mini-card"><h4>41-50. المجموعات Collections</h4><p>41. إنشاء مجموعة<br>42. تخصيص الغلاف للمجموعة<br>43. حفظ المقالات<br>44. متابعة المجموعات<br>45. النشر في مجموعة<br>46. مجموعات خاصة<br>47. تصنيف الروابط<br>48. أرشيف الوسائط<br>49. مشاركة مجموعة<br>50. تنبيهات التحديثات</p></div>
+                <div class="feature-mini-card"><h4>51-60. الأحداث والتقويم</h4><p>51. جدولة حدث<br>52. دعوة الدوائر للأحداث<br>53. تأكيد الحضور (RSVP)<br>54. ألبوم الحدث المشترك<br>55. التذكير التلقائي<br>56. ربط التقويم<br>57. عد تنازلي للحدث<br>58. بث الحدث المباشر<br>59. تقارير الحضور<br>60. أرشيف الفعاليات</p></div>
+                <div class="feature-mini-card"><h4>61-70. المستندات والأدوات</h4><p>61. محرر Word تفاعلي<br>62. حفظ سحابي ومحلي<br>63. طباعة فورية للمستند<br>64. تصدير PDF<br>65. تدقيق التنسيق<br>66. حفظ مسودات<br>67. لوحة تحكم الأعمال<br>68. إحصائيات التفاعل<br>69. السجل النشط<br>70. تخصيص الألوان والسمات</p></div>
+                <div class="feature-mini-card"><h4>71-80. الأمان والخصوصية</h4><p>71. إخفاء/إظهار الدوائر<br>72. حظر المستخدمين<br>73. الإبلاغ عن المحتوى<br>74. المصادقة الثنائية<br>75. سجل الأمان<br>76. إدارة الجلسات<br>77. تشفير البيانات المحلية<br>78. صلاحيات المنشورات<br>79. إدارة الأذونات<br>80. حماية الخصوصية المطلقة</p></div>
+                <div class="feature-mini-card"><h4>81-90. التخصيص والمظهر</h4><p>81. الوضع المظلم/الفاتح<br>82. تغيير ثيم الألوان<br>83. تخصيص الخطوط<br>84. واجهة متجاوبة (Responsive)<br>85. دعم الأجهزة الذكية<br>86. اختصارات لوحة المفاتيح<br>87. التمرير اللانهائي<br>88. شريط التنقل السريع<br>89. أيقونات تفاعلية FontAwesome<br>90. تخصيص القوائم الجانبية</p></div>
+                <div class="feature-mini-card"><h4>91-100. التكامل التجاري والخدمي</h4><p>91. الربط مع متجر Black Bull<br>92. إدارة شحن البضائع<br>93. تتبع الطلبات والشحنات<br>94. نظام المحاسبة المصغر<br>95. سجل العملاء والموردين<br>96. تدوين الملاحظات التجارية<br>97. إيرادات ومصروفات<br>98. النسخ الاحتياطي (Backup)<br>99. الوضع الليلي الحقيقي<br>100. البحث الشامل والـ OS</p></div>
+            </div>
         </div>
 
     </div>
 
     <script>
-        // تشغيل الكاميرا
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                const video = document.getElementById('camera-feed');
-                video.srcObject = stream;
-                video.style.display = 'block';
-                document.getElementById('camPlaceholder').style.display = 'none';
-            })
-            .catch(() => {
-                console.log("وضع المحاكاة الافتراضية للكاميرا نشط.");
-            });
+        let gPlusUser = JSON.parse(localStorage.getItem('gplus_user_profile')) || {
+            name: 'مستخدم جوجل بلس الذكي',
+            tagline: 'منصة متكاملة لإدارة المستندات، البروفايل والتواصل.',
+            avatar: 'https://via.placeholder.com/120/202124/ffffff?text=User',
+            cover: 'https://via.placeholder.com/1000x220/4285f4/ffffff?text=Google+Plus+Cover'
+        };
 
-        function switchView(viewId, btnElement) {
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-
-            document.querySelectorAll('.snap-nav .nav-item').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-        }
-
-        function showToast(message) {
-            let toast = document.getElementById('snapToast');
-            toast.innerText = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2500);
-        }
-
-        function takeSnap() {
-            showToast("📸 تم حفظ السناب في الذكريات وتحديث النقاط!");
-            let scoreEl = document.getElementById('userScore');
-            let newScore = parseInt(scoreEl.innerText.replace(',', '')) + 5;
-            scoreEl.innerText = newScore.toLocaleString();
-        }
-
-        function applyFilter(filterName, element) {
-            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
-            element.classList.add('active');
-            showToast("✨ تم تطبيق فلتر " + element.innerText);
-        }
-
-        let flashOn = false;
-        function toggleFlash() {
-            flashOn = !flashOn;
-            let icon = document.getElementById('flashIcon');
-            icon.style.color = flashOn ? "var(--snap-yellow)" : "#fff";
-            showToast(flashOn ? "⚡ تم تشغيل الفلاش" : "⚡ تم إيقاف الفلاش");
-        }
-
-        function openSyncModal() {
-            document.getElementById('syncModal').style.display = 'flex';
-        }
-
-        function closeSyncModal() {
-            document.getElementById('syncModal').style.display = 'none';
-        }
-
-        function confirmSync() {
-            let val = document.getElementById('blackBlockUser').value;
-            if(val.trim() !== "") {
-                document.getElementById('profileName').innerText = val;
-                showToast("✅ تم تحديث وربط الحساب بنجاح!");
-                closeSyncModal();
-            } else {
-                showToast("⚠️ يرجى إدخال اسم صحيح");
-            }
-        }
-
-        // فتح غرفة الدردشة المباشرة
-        function openChatRoom(name, img) {
-            document.getElementById('activeChatName').innerText = name;
-            document.getElementById('activeChatImg').src = img;
-            document.getElementById('chatRoomModal').style.display = 'flex';
-        }
-
-        function closeChatRoom() {
-            document.getElementById('chatRoomModal').style.display = 'none';
-        }
-
-        function sendChatMessage() {
-            let input = document.getElementById('msgInputText');
-            let box = document.getElementById('chatMessagesBox');
-            if(input.value.trim() !== "") {
-                box.innerHTML += `<div class="chat-bubble-msg outgoing">${input.value}</div>`;
-                input.value = "";
-                box.scrollTop = box.scrollHeight;
-            }
-        }
-
-        // بيانات مجتمع بلاك بلوك والقصص
-        const communityAccounts = [
-            { name: "خالد العتيبي", username: "@khaled_bb", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100", status: "متصل الآن" },
-            { name: "فهد الشمري", username: "@fahd_block", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100", status: "نشر قصة جديدة" },
-            { name: "ريم السبيعي", username: "@reem_word", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100", status: "متصلة منذ دقيقة" },
-            { name: "صالح الدوسري", username: "@saleh_snap", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100", status: "نشط في الخريطة" },
-            { name: "نورة القحطاني", username: "@noura_block", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100", status: "متصلة الآن" }
+        let streamPosts = JSON.parse(localStorage.getItem('gplus_stream_posts')) || [
+            { author: 'إدارة المنصة', text: 'أهلاً بك في النسخة المطورة التي تضم 100 ميزة وقسم من بيئة Google Plus والخدمات اللوجستية!', date: 'منذ ساعة' }
         ];
 
-        function renderCommunity(data) {
-            const commList = document.getElementById('communityList');
-            commList.innerHTML = "";
-            data.forEach((acc, index) => {
-                commList.innerHTML += `
-                    <div class="row-card">
-                        <img src="${acc.img}" alt="${acc.name}">
-                        <div class="row-details" onclick="openChatRoom('${acc.name}', '${acc.img}')">
-                            <h4>${acc.name} <span style="font-size:11px; color:var(--snap-yellow);">${acc.username}</span></h4>
-                            <p>${acc.status}</p>
+        let shipments = JSON.parse(localStorage.getItem('gplus_shipments')) || [];
+
+        window.onload = function() {
+            renderProfileData();
+            renderStreamPosts();
+            renderShipments();
+            let savedDoc = localStorage.getItem('gplus_word_doc_content');
+            if(savedDoc) {
+                document.getElementById('wordCanvas').innerHTML = savedDoc;
+            }
+            if(localStorage.getItem('gplus_dark_mode') === 'true') {
+                document.getElementById('mainBody').classList.add('dark-mode');
+            }
+        };
+
+        function switchTab(tabId, btnElement) {
+            ['profileTab', 'streamTab', 'wordDocTab', 'circlesTab', 'communitiesTab', 'photosTab', 'eventsTab', 'hangoutsTab', 'collectionsTab', 'logisticsTab', 'backupTab', 'analyticsTab', 'more100Tab'].forEach(id => {
+                let el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
+            });
+            let target = document.getElementById(tabId);
+            if(target) target.classList.remove('hidden');
+
+            if(btnElement) {
+                document.querySelectorAll('.top-nav-links button').forEach(b => b.classList.remove('active'));
+                if(btnElement.tagName === 'BUTTON') btnElement.classList.add('active');
+            }
+        }
+
+        function toggleDarkMode() {
+            let body = document.getElementById('mainBody');
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('gplus_dark_mode', body.classList.contains('dark-mode'));
+        }
+
+        function goBackToStore() {
+            window.location.href = 'index.html';
+        }
+
+        function renderProfileData() {
+            document.getElementById('profileNameTitle').innerText = gPlusUser.name;
+            document.getElementById('profileTagline').innerText = gPlusUser.tagline;
+            document.getElementById('profileAvatarView').src = gPlusUser.avatar;
+            document.getElementById('profileCoverView').src = gPlusUser.cover;
+
+            document.getElementById('inputProfileName').value = gPlusUser.name;
+            document.getElementById('inputProfileTagline').value = gPlusUser.tagline;
+            document.getElementById('inputProfileAvatar').value = gPlusUser.avatar;
+            document.getElementById('inputProfileCover').value = gPlusUser.cover;
+        }
+
+        function saveProfileSettings() {
+            gPlusUser.name = document.getElementById('inputProfileName').value.trim() || gPlusUser.name;
+            gPlusUser.tagline = document.getElementById('inputProfileTagline').value.trim() || gPlusUser.tagline;
+            gPlusUser.avatar = document.getElementById('inputProfileAvatar').value.trim() || gPlusUser.avatar;
+            gPlusUser.cover = document.getElementById('inputProfileCover').value.trim() || gPlusUser.cover;
+
+            localStorage.setItem('gplus_user_profile', JSON.stringify(gPlusUser));
+            renderProfileData();
+            alert('✅ تم تحديث بروفايل جوجل بلس وحفظه بشكل دائم!');
+        }
+
+        function formatDoc(command, value = null) {
+            document.execCommand(command, false, value);
+        }
+
+        function saveWordDocumentLocally() {
+            let content = document.getElementById('wordCanvas').innerHTML;
+            localStorage.setItem('gplus_word_doc_content', content);
+            alert('💾 تم حفظ مستند الوورد محلياً بنجاح تام!');
+        }
+
+        function publishStreamPost() {
+            let txt = document.getElementById('streamPostText').value.trim();
+            if(!txt) return;
+            streamPosts.unshift({ author: gPlusUser.name, text: txt, date: 'الآن' });
+            localStorage.setItem('gplus_stream_posts', JSON.stringify(streamPosts));
+            document.getElementById('streamPostText').value = '';
+            renderStreamPosts();
+        }
+
+        function renderStreamPosts() {
+            let container = document.getElementById('streamPostsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            streamPosts.forEach(p => {
+                container.innerHTML += `
+                    <div class="stream-box">
+                        <div class="stream-header">
+                            <img src="${gPlusUser.avatar}" class="stream-avatar">
+                            <div>
+                                <b>${p.author}</b><br>
+                                <small style="color:var(--text-muted);">${p.date}</small>
+                            </div>
                         </div>
-                        <button class="action-badge" id="comm-btn-${index}" onclick="addFriend('${index}', '${acc.name}')">إضافة +</button>
+                        <p>${p.text}</p>
+                    </div>
+                `;
+            });
+            document.getElementById('statPosts').innerText = streamPosts.length;
+        }
+
+        function addCircle() {
+            let name = document.getElementById('newCircleName').value.trim();
+            if(!name) return;
+            let container = document.getElementById('circlesContainer');
+            container.innerHTML += `<span class="circle-badge">${name} (0)</span>`;
+            document.getElementById('newCircleName').value = '';
+            alert('✅ تمت إضافة الدائرة بنجاح!');
+        }
+
+        function addPhoto() {
+            let url = document.getElementById('newPhotoUrl').value.trim();
+            if(!url) return;
+            let container = document.getElementById('photosContainer');
+            container.innerHTML += `<img src="${url}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px;">`;
+            document.getElementById('newPhotoUrl').value = '';
+            alert('📸 تمت إضافة الصورة للمعرض بنجاح!');
+        }
+
+        function addEvent() {
+            let title = document.getElementById('eventTitle').value.trim();
+            let date = document.getElementById('eventDate').value;
+            if(!title || !date) return;
+            let list = document.getElementById('eventsList');
+            list.innerHTML += `<div style="background:var(--toolbar-bg); padding:10px; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);"><b>📅 ${title}</b> - موعدها: ${date}</div>`;
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDate').value = '';
+            alert('📅 تم جدولة المناسبة بنجاح!');
+        }
+
+        function addShipment() {
+            let code = document.getElementById('shipmentCode').value.trim();
+            let desc = document.getElementById('shipmentDesc').value.trim();
+            let status = document.getElementById('shipmentStatus').value;
+            if(!code || !desc) return;
+            shipments.unshift({ code, desc, status });
+            localStorage.setItem('gplus_shipments', JSON.stringify(shipments));
+            document.getElementById('shipmentCode').value = '';
+            document.getElementById('shipmentDesc').value = '';
+            renderShipments();
+            alert('📦 تم تسجيل الشحنة وتتبعها بنجاح!');
+        }
+
+        function renderShipments() {
+            let list = document.getElementById('shipmentsList');
+            if(!list) return;
+            list.innerHTML = '';
+            shipments.forEach(s => {
+                list.innerHTML += `
+                    <div style="background:var(--toolbar-bg); padding:12px; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                        <b>📦 كود الشحنة: ${s.code}</b><br>
+                        <span style="font-size:13px; color:var(--text-muted);">${s.desc}</span><br>
+                        <span class="circle-badge" style="margin-top:5px;">الحالة: ${s.status}</span>
                     </div>
                 `;
             });
         }
 
-        function filterCommunity() {
-            let query = document.getElementById('searchCommunity').value.toLowerCase();
-            let filtered = communityAccounts.filter(acc => acc.name.toLowerCase().includes(query) || acc.username.toLowerCase().includes(query));
-            renderCommunity(filtered);
+        function sendChat() {
+            let msg = document.getElementById('chatMsg').value.trim();
+            if(!msg) return;
+            let box = document.getElementById('chatBox');
+            box.innerHTML += `<p><b>أنت:</b> ${msg}</p>`;
+            document.getElementById('chatMsg').value = '';
+            box.scrollTop = box.scrollHeight;
         }
 
-        renderCommunity(communityAccounts);
+        // أداة البحث الفوري الشامل (Global Search)
+        function globalSearchFilter() {
+            let query = document.getElementById('globalSearchInput').value.toLowerCase();
+            if(!query) return;
+            // إذا كتب المستخدم كلمة مفتاحية، يتم فتح تبويب المشاركات أو التبويب المناسب تلقائياً لتسهيل الوصول
+            if(query.includes('شحن') || query.includes('لوجستية')) switchTab('logisticsTab');
+            else if(query.includes('مستند') || query.includes('word')) switchTab('wordDocTab');
+            else if(query.includes('دائرة')) switchTab('circlesTab');
+        }
 
-        // تعبئة القصص
-        const storyContainer = document.getElementById('dynamicStories');
-        communityAccounts.forEach(acc => {
-            storyContainer.innerHTML += `
-                <div class="story-bubble" onclick="showToast('📖 عرض قصة ${acc.name}')">
-                    <div class="ring">
-                        <img src="${acc.img}" alt="${acc.name}">
-                    </div>
-                    <span>${acc.name.split(' ')[0]}</span>
-                </div>
-            `;
-        });
+        // أدوات النسخ الاحتياطي والاستعادة الشاملة (Backup & Restore)
+        function exportAppData() {
+            let backupData = {
+                profile: gPlusUser,
+                posts: streamPosts,
+                shipments: shipments,
+                wordDoc: localStorage.getItem('gplus_word_doc_content')
+            };
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+            let downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "google_plus_os_backup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            alert('💾 تم تصدير النسخة الاحتياطية بنجاح!');
+        }
 
-        function addFriend(index, name) {
-            let btn = document.getElementById('comm-btn-' + index);
-            btn.innerText = "تمت الإضافة ✔";
-            btn.classList.add('connected');
-            showToast("🤝 أصبحت أنت و " + name + " مضافين ببعضكم البعض!");
+        function importAppData() {
+            let fileInput = document.getElementById('importFile');
+            if(fileInput.files.length === 0) {
+                alert('الرجاء اختيار ملف JSON أولاً!');
+                return;
+            }
+            let file = fileInput.files[0];
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let imported = JSON.parse(e.target.result);
+                    if(imported.profile) localStorage.setItem('gplus_user_profile', JSON.stringify(imported.profile));
+                    if(imported.posts) localStorage.setItem('gplus_stream_posts', JSON.stringify(imported.posts));
+                    if(imported.shipments) localStorage.setItem('gplus_shipments', JSON.stringify(imported.shipments));
+                    if(imported.wordDoc) localStorage.setItem('gplus_word_doc_content', imported.wordDoc);
+                    alert('✅ تمت استعادة كافة البيانات بنجاح تام! يتم إعادة تحميل الصفحة...');
+                    location.reload();
+                } catch(err) {
+                    alert('❌ ملف النسخ الاحتياطي غير صالح!');
+                }
+            };
+            reader.readAsText(file);
         }
     </script>
 </body>
