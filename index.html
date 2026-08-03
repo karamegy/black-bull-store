@@ -110,9 +110,8 @@
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(212,175,55,0.2); border-color: var(--accent); }
         .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #000; }
 
-        /* ستايل بروفايل جوجل بلس المثبت والمحدث */
         .profile-header { position: relative; text-align: center; margin-bottom: 45px; }
-        .profile-cover-container { width: 100%; height: 150px; border-radius: 12px; overflow: hidden; border: 1px solid var(--accent); position: relative; }
+        .profile-cover-container { width: 100%; height: 150px; border-radius: 12px; overflow: hidden; border: 1px solid var(--accent); position: relative; background: #000; }
         .profile-cover { width: 100%; height: 100%; object-fit: cover; }
         .profile-avatar-container { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--accent); position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); overflow: hidden; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
         .profile-avatar { width: 100%; height: 100%; object-fit: cover; }
@@ -143,6 +142,7 @@
     <div class="side-drawer" id="sideDrawer">
         <h3>قائمة الأقسام 🐂 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
         <button onclick="switchTab('storeTab'); toggleSidebar()">🏪 المتجر الرئيسي</button>
+        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()">🧾 قسم الفواتير والمخزن الشامل 🌟</button>
         <button onclick="switchTab('exportTab'); toggleSidebar()">🌍 التصدير الدولي</button>
         <button onclick="switchTab('localWholesaleTab'); toggleSidebar()">📦 جملة محلي</button>
         <button onclick="switchTab('customOrderTab'); toggleSidebar()">✂️ تفصيل خاص</button>
@@ -169,7 +169,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.4.2)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -184,16 +184,15 @@
     <!-- شريط التنقل الرئيسي الأفقي -->
     <div class="nav-bar" id="mainNavBar">
         <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
+        <button onclick="switchTab('advancedInvoicesStoreTab', this)">🧾 الفواتير والمخزن</button>
         <button onclick="switchTab('exportTab', this)">🌍 التصدير</button>
         <button onclick="switchTab('trackingTab', this)">🚢 التتبع</button>
         <button onclick="switchTab('calcTab', this)">🧮 الحاسبة</button>
-        <button onclick="switchTab('auctionTab', this)">🏷️ المزاد</button>
-        <button onclick="switchTab('loyaltyTab', this)">⭐ الولاء</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
         <button onclick="checkProfileAccess(this)">👤 حسابي</button>
     </div>
 
-    <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات (آمن ومخفي البيانات) ================= -->
+    <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات ================= -->
     <div id="authSection" class="card hidden">
         <div style="text-align: center; margin-bottom: 15px;">
             <div class="bull-logo-3d" style="width: 110px; height: 110px; font-size: 50px;">🐂</div>
@@ -225,8 +224,8 @@
             <div class="input-group"><label>نوع الحساب:</label>
                 <select id="regRole">
                     <option value="عميل">عميل (Customer) 🛒</option>
-                    <option value="مشرف">مشرف (Supervisor) 🛡️ (يحتاج موافقة المدير المؤسس)</option>
-                    <option value="مدير">مدير (Manager) 🔐 (يحتاج موافقة المدير المؤسس)</option>
+                    <option value="مشرف">مشرف (Supervisor) 🛡️</option>
+                    <option value="مدير">مدير (Manager) 🔐</option>
                 </select>
             </div>
             <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية" autocomplete="new-password"></div>
@@ -234,7 +233,108 @@
         </div>
     </div>
 
-    <!-- ================= 2. المتجر الرئيسي ================= -->
+    <!-- ================= 2. قسم الفواتير والمخزن الشامل والمتطور ================= -->
+    <div id="advancedInvoicesStoreTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🧾 قسم الفواتير وإدارة المخزن الشامل (الأرشفة، التصدير والواتساب)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">حفظ شامل لكافة الحركات، خصم تلقائي من المخزن، إصدار الفواتير الرسمية، معاينتها، تنزيلها صور/PDF، أو إرسالها للعميل عبر واتساب بضغطة زر.</p>
+
+        <div class="stats-grid">
+            <div class="stat-card"><h4>إجمالي أصناف المخزن</h4><p id="invCountDisplay">0</p></div>
+            <div class="stat-card"><h4>إجمالي الفواتير المحفوظة</h4><p id="invTotalInvoicesDisplay">0</p></div>
+            <div class="stat-card"><h4>إجمالي مبيعات الفواتير</h4><p id="invTotalSalesDisplay">0 ج.م</p></div>
+        </div>
+
+        <!-- أزرار التنقل الفرعية للقسم -->
+        <div style="display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;">
+            <button class="btn-gold" onclick="switchInvSubTab('pos')" style="flex:1;">🛒 إنشاء فاتورة جديدة وبيع</button>
+            <button class="btn-blue" onclick="switchInvSubTab('archive')" style="flex:1;">🗂️ أرشيف الفواتير الشامل</button>
+            <button class="btn-purple" onclick="switchInvSubTab('warehouse')" style="flex:1;">📦 إدارة المخزن والأصناف</button>
+        </div>
+
+        <!-- فرع 1: إنشاء فاتورة جديدة (POS) -->
+        <div id="invSubPos">
+            <div class="card" style="background:#111;">
+                <h3>➕ إصدار فاتورة جديدة للعميل</h3>
+                <div class="input-group"><label>اسم العميل / جهة التصدير:</label><input type="text" id="posCustomerName" placeholder="مثال: شركة النور للتجارة"></div>
+                <div class="input-group"><label>رقم هاتف العميل (لواتساب):</label><input type="text" id="posCustomerPhone" placeholder="010xxxxxxxx"></div>
+                
+                <div class="input-group">
+                    <label>اختر المنتج من المخزن:</label>
+                    <select id="posSelectProduct" onchange="updatePosProductPrice()"></select>
+                </div>
+                <div class="input-group"><label>الكمية المطلوبة:</label><input type="number" id="posQuantity" value="1" min="1"></div>
+                <button class="btn-green" onclick="addPosItemToCart()">➕ إضافة الصنف لفاتورة الإصدار</button>
+
+                <hr style="border-color:var(--border-color); margin: 15px 0;">
+                <h4>محتويات الفاتورة الحالية:</h4>
+                <div id="posCartItemsList" style="margin-bottom: 10px;">لا توجد أصناف مضافة بالفاتورة بعد.</div>
+                <p><b>الإجمالي الكلي للفاتورة: <span id="posCartTotal" style="color:var(--accent);">0</span> جنيه</b></p>
+                <button class="btn-gold" onclick="finalizeAndSaveInvoice()">💾 حفظ الفاتورة، خصم المخزن وإصدار السند 🚀</button>
+            </div>
+        </div>
+
+        <!-- فرع 2: أرشيف الفواتير -->
+        <div id="invSubArchive" class="hidden">
+            <div class="card" style="background:#111;">
+                <h3>🗂️ أرشيف الفواتير المحفوظة (معاينة، تصدير، واتساب)</h3>
+                <div class="input-group">
+                    <input type="text" id="searchInvoiceInput" placeholder="بحث برقم الفاتورة أو اسم العميل..." oninput="renderInvoicesArchive()">
+                </div>
+                <div id="invoicesArchiveList">لا توجد فواتير محفوظة.</div>
+            </div>
+        </div>
+
+        <!-- فرع 3: إدارة المخزن -->
+        <div id="invSubWarehouse" class="hidden">
+            <div class="card" style="background:#111;">
+                <h3>📦 إضافة منتج جديد للمخزن</h3>
+                <div class="input-group"><label>اسم المنتج:</label><input type="text" id="whName" placeholder="مثال: حاوية تيشرتات قطن"></div>
+                <div class="input-group"><label>الكمية المتاحة بالمخزن:</label><input type="number" id="whQty" placeholder="100"></div>
+                <div class="input-group"><label>سعر القطعة / الوحدة (ج.م):</label><input type="number" id="whPrice" placeholder="350"></div>
+                <div class="input-group"><label>رابط الصورة:</label><input type="text" id="whImg" placeholder="https://via.placeholder.com/150"></div>
+                <button class="btn-gold" onclick="addNewWarehouseItem()">حفظ وإضافة للمخزن ✅</button>
+            </div>
+            <div class="card" style="background:#111;">
+                <h3>📋 قائمة أصناف المخزن الحالية</h3>
+                <div id="warehouseItemsList">لا توجد أصناف.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة معاينة الفاتورة الرسمية (للطباعة والتحميل والواتساب) -->
+    <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🧾 معاينة فاتورة البيع والتصدير الرسمية</h2>
+        <div id="printableInvoice" class="invoice-box">
+            <div class="invoice-header">
+                <div>
+                    <h2 style="margin:0; color:#111;">BLACK BULL STORE</h2>
+                    <small style="color:#555;">لتجارة وتصدير الملابس جملة - محلياً ودولياً</small>
+                </div>
+                <div style="text-align: left;">
+                    <b id="invModalId">رقم الفاتورة: #BB-INV-000</b><br>
+                    <small id="invModalDate">التاريخ: 2026/08/03</small>
+                </div>
+            </div>
+            <p><b>بيانات العميل والتوصيل:</b><br>
+               • اسم العميل: <span id="invModalClient">اسم العميل</span><br>
+               • هاتف التواصل: <span id="invModalPhone">الهاتف</span><br>
+               • حالة التوثيق: <span style="color:#27ae60; font-weight:bold;">معتمدة ومحفوظة بالمخزن السحابي ✔️</span>
+            </p>
+            <table class="invoice-table">
+                <thead><tr><th>المنتج / الصنف</th><th>الكمية</th><th>السعر الفردي</th><th>الإجمالي</th></tr></thead>
+                <tbody id="invModalItems"></tbody>
+            </table>
+            <h3 style="text-align: left; color:#111;">الإجمالي الكلي: <span id="invModalTotal" style="color:#d4af37;">0</span> جنيه</h3>
+        </div>
+        <div style="display: flex; gap: 5px; margin-top: 15px; flex-wrap: wrap;">
+            <button class="btn-green" onclick="downloadInvoiceImage()" style="flex:1;">📷 تحميل صوره (PNG)</button>
+            <button class="btn-purple" onclick="downloadInvoicePDF()" style="flex:1;">📄 فتح وطباعة PDF</button>
+            <button class="btn-gold" onclick="shareInvoiceWhatsAppDirect()" style="flex:1;">🔗 إرسال واتساب للعميل</button>
+            <button class="btn-red" onclick="closeInvoiceModal()" style="flex:1;">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- ================= 3. المتجر الرئيسي ================= -->
     <div id="storeTab">
         <div class="card">
             <h3>📂 أقسام المنصة للتوسع والانتشار</h3>
@@ -259,11 +359,11 @@
             <div id="cartItems">السلة فارغة</div>
             <hr style="border-color:var(--border-color)">
             <p><b>الإجمالي الكلي: </b><span id="cartTotal">0</span> جنيه</p>
-            <button class="btn-green" onclick="placeOrder()">إرسال الطلب مع إرفاق كافة بيانات التوصيل 🚀</button>
+            <button class="btn-green" onclick="placeOrder()">إرسال الطلب وإصدار فاتورة رسمية 🚀</button>
         </div>
     </div>
 
-    <!-- ================= 3. التصدير الدولي ================= -->
+    <!-- ================= 4. التصدير الدولي ================= -->
     <div id="exportTab" class="card hidden">
         <h2>🌍 قسم التصدير الدولي والشحن للخارج</h2>
         <div class="input-group"><label>الدولة المستهدفة للاستيراد:</label><input type="text" id="exportCountry" placeholder="مثال: السعودية، الإمارات، إيطاليا..."></div>
@@ -311,48 +411,13 @@
         <div id="calcResultBox" style="margin-top: 15px;"></div>
     </div>
 
-    <!-- ================= مزاد الحاويات الكبرى ================= -->
-    <div id="auctionTab" class="card hidden">
-        <h2>🏷️ قسم مزاد الحاويات الكبرى وعروض الجملة الضخمة</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">عروض تصريف الفوائض الكبرى وتخفيضات الحاويات المغلقة لكبار التجار.</p>
-        <div class="products-grid" id="auctionProductsGrid">
-            <div class="product-card">
-                <img src="https://via.placeholder.com/150/222/d4af37?text=Closed+Container+A" alt="Container A">
-                <b style="font-size: 13px; display:block; margin: 5px 0;">حاوية ملابس صيفية مختلطة (10,000 قطعة)</b>
-                <small style="color:var(--accent); font-weight:bold;">سعر المزاد الابتدائية: 180,000 ج.م</small><br>
-                <button class="btn-green" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="alert('تم تسجيل مزايدتك بنجاح على الحاوية الكبرى!')">المزايدة الآن ⚡</button>
-            </div>
-            <div class="product-card">
-                <img src="https://via.placeholder.com/150/333/d4af37?text=Closed+Container+B" alt="Container B">
-                <b style="font-size: 13px; display:block; margin: 5px 0;">حاوية ملابس شتوية فرز أول (7,500 قطعة)</b>
-                <small style="color:var(--accent); font-weight:bold;">سعر المزاد الابتدائية: 240,000 ج.م</small><br>
-                <button class="btn-green" style="padding: 5px; font-size: 11px; margin-top:5px;" onclick="alert('تم تسجيل مزايدتك بنجاح على الحاوية الكبرى!')">المزايدة الآن ⚡</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= برنامج الولاء والنقاط ================= -->
-    <div id="loyaltyTab" class="card hidden">
-        <h2>⭐ برنامج الولاء ونقاط النخبة لتجار الجملة</h2>
-        <div class="stats-grid">
-            <div class="stat-card"><h4>نقاطك المتاحة</h4><p id="loyaltyPointsDisplay">1,250 نقطة</p></div>
-            <div class="stat-card"><h4>مستوى العضوية</h4><p style="color:#d4af37;">VIP Diamond 💎</p></div>
-            <div class="stat-card"><h4>نسبة خصم الشحن</h4><p>15% مدى الحياة</p></div>
-        </div>
-        <div class="card" style="background:#111;">
-            <h3>🎁 استبدال النقاط بخصومات نقدية</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">كل 500 نقطة تمنحك قسيمة خصم بقيمة 250 جنيه على شحنتك القادمة.</p>
-            <button class="btn-gold" onclick="alert('✅ تم استبدال 500 نقطة بنجاح! تم إضافة قسيمة خصم 250 جنيه إلى رصيد حسابك.')">استبدال 500 نقطة بخصم 250 ج.م 🎟️</button>
-        </div>
-    </div>
-
-    <!-- ================= 4. جملة محلي ================= -->
+    <!-- ================= جملة محلي ================= -->
     <div id="localWholesaleTab" class="card hidden">
         <h2>📦 قسم الجملة المحلية وتجار المكاتب</h2>
         <div id="localWholesaleProducts" class="products-grid"></div>
     </div>
 
-    <!-- ================= 5. تفصيل خاص ================= -->
+    <!-- ================= تفصيل خاص ================= -->
     <div id="customOrderTab" class="card hidden">
         <h2>✂️ قسم التصنيع الخاص وتفصيل العلامات التجارية (Private Label)</h2>
         <div class="input-group"><label>اسم العلامة التجارية (Brand Name):</label><input type="text" id="customBrandName" placeholder="Your Brand"></div>
@@ -362,55 +427,24 @@
         <button class="btn-gold" onclick="submitCustomOrder()">إرسال طلب التصنيع 🏭</button>
     </div>
 
-    <!-- ================= 6. تفاصيل المنتج ================= -->
+    <!-- ================= تفاصيل المنتج ================= -->
     <div id="productDetailTab" class="card hidden">
         <button class="btn-blue" style="width: auto; margin-bottom: 10px;" onclick="switchTab('storeTab')">⬅ عودة للمتجر</button>
         <div id="productDetailContent" style="text-align: center;"></div>
     </div>
 
-    <!-- ================= 7. بروفايل التصدير الشامل ================= -->
+    <!-- ================= بروفايل التصدير الشامل ================= -->
     <div id="exportProfileTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.4)</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">مخصص بالكامل لشحنات الملابس المصدرة للخارج، استعراض الحاويات الدولية، وطلب بضائع التصدير مع تفعيل بوابات الدفع.</p>
-        
         <div class="stats-grid">
             <div class="stat-card"><h4>الشحنات المصدرة</h4><p>142 حاوية</p></div>
             <div class="stat-card"><h4>الدولة المستوردة</h4><p>28 دولة</p></div>
             <div class="stat-card"><h4>معيار الجودة</h4><p>ISO 9001 / A+</p></div>
         </div>
-
-        <div class="card" style="background:#111;">
-            <h3>🚢 أرشيف شحنات الملابس المصدرة للخارج</h3>
-            <div id="exportShipmentsArchiveList">
-                <div class="item-row">
-                    <div><b>حاوية ملابس شتوية فاخرة #EXP-901</b><br><small>وجهة الشحن: ميناء جدة الإسلامي (المملكة العربية السعودية) 🇸🇦 | الكمية: 5000 قطعة</small></div>
-                    <span class="status-badge">تم التسليم بنجاح ✔️</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" style="background:#111;">
-            <h3>📦 طلبية تصدير جديدة (تفعيل نظام الجيل السابع)</h3>
-            <div class="input-group"><label>اختر صنف التصدير:</label>
-                <select id="gen7ExportItem">
-                    <option value="حاوية ملابس شتوية متكاملة">حاوية ملابس شتوية متكاملة (جاكيتات وهوديز)</option>
-                    <option value="حاوية ملابس صيفية وقطنية">حاوية ملابس صيفية وقطنية (تيشرتات وبنطلونات)</option>
-                </select>
-            </div>
-            <div class="input-group"><label>الكمية المطلوبة:</label><input type="number" id="gen7ExportQty" placeholder="مثال: 5000 قطعة"></div>
-            <div class="input-group"><label>ميناء الوصول / بلد الاستيراد:</label><input type="text" id="gen7ExportPort" placeholder="مثال: ميناء جبل علي، دبي"></div>
-            <div class="input-group"><label style="color:var(--accent);">💳 طريقة الدفع:</label>
-                <select id="gen7PaymentMethod">
-                    <option value="اعتماد مستندي بنكي L/C">اعتماد مستندي بنكي L/C</option>
-                    <option value="تحويل بنكي مباشر SWIFT / IBAN">تحويل بنكي مباشر SWIFT / IBAN</option>
-                    <option value="انستا باي Instapay">انستا باي Instapay / تحويل محلي سريع</option>
-                </select>
-            </div>
-            <button class="btn-gold" onclick="submitGen7ExportOrder()">إرسال وتوثيق طلب التصدير سحابياً 🌍🚀</button>
-        </div>
     </div>
 
-    <!-- ================= 8. الملف الشخصي (تصميم شبيه بجوجل بلس + رفع صور) ================= -->
+    <!-- ================= الملف الشخصي ================= -->
     <div id="profileTab" class="card hidden">
         <div class="profile-header">
             <div class="profile-cover-container">
@@ -427,66 +461,23 @@
             <span class="status-badge" id="profileRoleBadge">حساب مسجل وموثق سحابياً ✔️</span>
         </div>
         <hr style="margin: 20px 0; border-color:var(--border-color);">
-        <h3>👤 تعديل الملف الشخصي وصور الحساب (Google Plus Style)</h3>
-        
+        <h3>👤 تعديل الملف الشخصي وصور الحساب</h3>
         <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="editName"></div>
         <div class="input-group"><label>رقم الهاتف / اسم المستخدم:</label><input type="text" id="editPhone"></div>
         <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="editEmail"></div>
-        
-        <!-- حقول رفع الصور من الهاتف أو الكمبيوتر -->
-        <div class="input-group">
-            <label>🖼️ تحميل الصورة الشخصية من الجهاز:</label>
-            <input type="file" id="uploadAvatarFile" accept="image/*" onchange="previewImageFile(event, 'avatar')">
-        </div>
-        <div class="input-group">
-            <label>🌄 تحميل صورة الغلاف من الجهاز:</label>
-            <input type="file" id="uploadCoverFile" accept="image/*" onchange="previewImageFile(event, 'cover')">
-        </div>
-
+        <div class="input-group"><label>🖼️ تحميل الصورة الشخصية:</label><input type="file" id="uploadAvatarFile" accept="image/*" onchange="previewImageFile(event, 'avatar')"></div>
+        <div class="input-group"><label>🌄 تحميل صورة الغلاف:</label><input type="file" id="uploadCoverFile" accept="image/*" onchange="previewImageFile(event, 'cover')"></div>
         <div class="input-group"><label>كلمة المرور الجديدة:</label><input type="password" id="editPassword" placeholder="اتركه فارغاً إذا لم ترغب بتغييره"></div>
         <button class="btn-blue" onclick="saveProfileChanges()">حفظ وتثبيت التعديلات والصور سحابياً 💾</button>
     </div>
 
-    <!-- ================= 9. مراقبة الطلبات والفواتير ================= -->
+    <!-- ================= مراقبة الطلبات والفواتير ================= -->
     <div id="ordersTab" class="card hidden">
         <h2>📋 قسم مراقبة الطلبات وإصدار الفواتير وبيانات التوصيل</h2>
         <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
     </div>
 
-    <!-- نافذة معاينة الفاتورة للطباعة والحفظ والمشاركة -->
-    <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🧾 معاينة فاتورة الطلب الرسمية وبيانات التوصيل</h2>
-        <div id="printableInvoice" class="invoice-box">
-            <div class="invoice-header">
-                <div>
-                    <h2 style="margin:0; color:#111;">BLACK BULL STORE</h2>
-                    <small style="color:#555;">لتجارة وتصدير الملابس جملة</small>
-                </div>
-                <div style="text-align: left;">
-                    <b id="invModalId">رقم الفاتورة: #BB-000</b><br>
-                    <small id="invModalDate">التاريخ: 2026/08/03</small>
-                </div>
-            </div>
-            <p><b>بيانات العميل والتوصيل:</b><br>
-               • الاسم: <span id="invModalClient">اسم العميل</span><br>
-               • الهاتف الأساسي: <span id="invModalPhone">الهاتف</span><br>
-               • حالة الشحن والتوصيل: <span style="color:#27ae60; font-weight:bold;">جاهز للتوصيل والشحن</span>
-            </p>
-            <table class="invoice-table">
-                <thead><tr><th>المنتج / الصنف</th><th>السعر</th></tr></thead>
-                <tbody id="invModalItems"></tbody>
-            </table>
-            <h3 style="text-align: left; color:#111;">الإجمالي الكلي: <span id="invModalTotal" style="color:#d4af37;">0</span> جنيه</h3>
-        </div>
-        <div style="display: flex; gap: 5px; margin-top: 15px; flex-wrap: wrap;">
-            <button class="btn-green" onclick="downloadInvoiceImage()" style="flex:1;">📷 تحميل كصورة</button>
-            <button class="btn-purple" onclick="downloadInvoicePDF()" style="flex:1;">📄 طباعة PDF</button>
-            <button class="btn-gold" onclick="shareInvoiceWhatsApp()" style="flex:1;">🔗 واتساب</button>
-            <button class="btn-red" onclick="closeInvoiceModal()" style="flex:1;">إغلاق</button>
-        </div>
-    </div>
-
-    <!-- ================= 10. الدعم المباشر ================= -->
+    <!-- ================= الدعم المباشر ================= -->
     <div id="supportTab" class="card hidden">
         <h2>💬 الدعم الفني والتواصل المباشر</h2>
         <div class="chat-box" id="chatMessages">
@@ -498,7 +489,7 @@
         </div>
     </div>
 
-    <!-- ================= 11. لوحة الإدارة الشاملة ================= -->
+    <!-- ================= لوحة الإدارة الشاملة ================= -->
     <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2 style="color: var(--accent);">🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات وصلاحيات الدخول</h2>
         <div class="stats-grid">
@@ -506,43 +497,12 @@
             <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
             <div class="stat-card"><h4>إجمالي الحسابات</h4><p id="statUsersCount">0</p></div>
         </div>
-        <div style="display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;">
-            <button class="btn-blue" onclick="switchAdminSubTab('manageProducts')" style="flex:1;">📦 المنتجات</button>
-            <button class="btn-blue" onclick="switchAdminSubTab('manageOrders')" style="flex:1;">📋 الطلبات والتوصيل</button>
-            <button class="btn-purple" onclick="switchAdminSubTab('manageUsers')" style="flex:1;">👑 إدارة الحسابات ومفاتيح الدخول</button>
-        </div>
-
-        <div id="adminSubProducts">
-            <h3>➕ إضافة منتج جديد</h3>
-            <div class="input-group"><label>اسم المنتج:</label><input type="text" id="invName" placeholder="حاوية تيشرتات"></div>
-            <div class="input-group"><label>القسم:</label>
-                <select id="invCategory">
-                    <option value="تصدير دولي">تصدير دولي 🌍</option>
-                    <option value="جملة محلي">جملة محلي 📦</option>
-                    <option value="ملابس رجالي">ملابس رجالي 👔</option>
-                </select>
-            </div>
-            <div class="input-group"><label>السعر:</label><input type="number" id="invPrice" placeholder="350"></div>
-            <div class="input-group"><label>رابط الصورة:</label><input type="text" id="invImg" placeholder="https://via.placeholder.com/150"></div>
-            <button class="btn-gold" onclick="addInventoryItem()">حفظ ونشر المنتج</button>
-            <div id="inventoryList" style="margin-top:15px;"></div>
-        </div>
-
-        <div id="adminSubOrders" class="hidden">
-            <h3>📋 متابعة الطلبات وكافة بيانات التوصيل للعملاء</h3>
-            <div id="adminOrdersList">لا توجد طلبات لعرضها.</div>
-        </div>
-
-        <div id="adminSubUsers" class="hidden">
-            <h3>👑 إدارة الحسابات ومنح مفاتيح الدخول للمشرفين والمديرين (من قِبل المدير المؤسس)</h3>
-            <div id="adminAllUsersList" style="margin-top: 15px;"></div>
-        </div>
+        <div id="adminAllUsersList" style="margin-top: 15px;"></div>
     </div>
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'المدير المؤسس', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '1234', title: 'المدير المؤسس 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover', approved: true },
-            { name: 'محمد مشرف', phone: '01111111111', email: 'supervisor@blackbull.com', role: 'مشرف', password: '123', title: 'مشرف المنصة 🛡️', avatar: 'https://via.placeholder.com/85/222/3182ce?text=Super', cover: 'https://via.placeholder.com/600x130/111/3182ce?text=Supervisor', approved: false }
+            { name: 'admin', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '1234', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover', approved: true }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
         let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
@@ -550,33 +510,28 @@
             { id: 2, name: 'طقم بنطلون وتيشرت جملة', category: 'جملة محلي', price: 300, qty: 80, img: 'https://via.placeholder.com/150/222/d4af37?text=Local+Set' },
             { id: 3, name: 'قميص رجالي كلاسيك قطن', category: 'ملابس رجالي', price: 250, qty: 50, img: 'https://via.placeholder.com/150/333/d4af37?text=Mens+Shirt' }
         ];
+        let savedInvoices = JSON.parse(localStorage.getItem('bb_cloud_invoices')) || [];
         let orders = JSON.parse(localStorage.getItem('bb_cloud_orders')) || [];
-        let exportRequests = JSON.parse(localStorage.getItem('bb_cloud_exports')) || [];
         let chatLogs = JSON.parse(localStorage.getItem('bb_cloud_chats')) || [];
         let cart = [];
+        let posCart = [];
         let currentFilter = 'all';
         let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
-
-        // متغيرات مؤقتة لحفظ الصور المرفوعة محلياً
-        let tempAvatarData = '';
-        let tempCoverData = '';
+        let activeInvoiceForAction = null;
 
         window.onload = function() {
             let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
-            if(adminUser) {
-                adminUser.phone = 'admin';
-                adminUser.password = '1234';
-                adminUser.approved = true;
-            }
+            if(adminUser) { adminUser.phone = 'admin'; adminUser.password = adminUser.password || '1234'; adminUser.approved = true; }
             updateAuthUI();
             renderInventory();
             renderStore();
+            renderWarehouseManagement();
+            renderInvoicesArchive();
             renderOrders();
             renderChat();
             renderLocalWholesale();
             updateAdminStats();
-            renderAdminOrders();
-            renderAdminAllUsers();
+            populatePosDropdown();
             switchTab(lastActiveTab, null, false);
         };
 
@@ -595,32 +550,25 @@
 
         function syncDataToCloud() {
             localStorage.setItem('bb_cloud_inventory', JSON.stringify(inventory));
+            localStorage.setItem('bb_cloud_invoices', JSON.stringify(savedInvoices));
             localStorage.setItem('bb_cloud_orders', JSON.stringify(orders));
-            localStorage.setItem('bb_cloud_exports', JSON.stringify(exportRequests));
             localStorage.setItem('bb_cloud_chats', JSON.stringify(chatLogs));
             localStorage.setItem('bb_cloud_all_users', JSON.stringify(registeredUsers));
             if(currentUser) {
                 localStorage.setItem('bb_cloud_user', JSON.stringify(currentUser));
-                let found = registeredUsers.find(u => u.phone === currentUser.phone || u.role === currentUser.role);
+                let found = registeredUsers.find(u => u.phone === currentUser.phone || u.name === currentUser.name);
                 if(found) {
-                    found.name = currentUser.name;
-                    found.email = currentUser.email;
-                    found.avatar = currentUser.avatar;
-                    found.cover = currentUser.cover;
-                    found.title = currentUser.title;
-                    found.role = currentUser.role;
-                    found.password = currentUser.password;
-                    found.approved = found.approved;
+                    found.name = currentUser.name; found.email = currentUser.email; found.avatar = currentUser.avatar;
+                    found.cover = currentUser.cover; found.title = currentUser.title; found.role = currentUser.role; found.password = currentUser.password;
                 }
             }
-            let status = document.getElementById('syncStatus');
-            status.innerText = '✅ تم مزامنة وحفظ البيانات سحابياً ومحلياً بنجاح (' + new Date().toLocaleTimeString('ar-EG') + ')';
+            document.getElementById('syncStatus').innerText = '✅ تم مزامنة وحفظ البيانات سحابياً ومحلياً (' + new Date().toLocaleTimeString('ar-EG') + ')';
             updateAdminStats();
         }
 
         function checkProfileAccess(btnElement = null) {
             if(!currentUser) {
-                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي المسجل!');
+                alert('⚠️ عذراً، يجب تسجيل الدخول أولاً لتتمكن من استعراض حسابك الشخصي!');
                 switchTab('authSection', btnElement);
             } else {
                 switchTab('profileTab', btnElement);
@@ -628,18 +576,10 @@
         }
 
         function switchTab(tabId, btnElement = null, saveState = true) {
-            if(tabId === 'adminDashboardTab') {
-                if(!currentUser || currentUser.role !== 'مدير' || currentUser.phone !== 'admin') {
-                    alert('عذراً، لوحة التحكم الإدارية الشاملة مخصصة للمدير المؤسس (admin) فقط!');
-                    return;
-                }
-            }
-
-            ['storeTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'auctionTab', 'loyaltyTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
+            ['storeTab', 'advancedInvoicesStoreTab', 'exportTab', 'localWholesaleTab', 'customOrderTab', 'trackingTab', 'calcTab', 'ordersTab', 'exportProfileTab', 'profileTab', 'supportTab', 'adminDashboardTab', 'authSection', 'productDetailTab', 'invoiceModal'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
             document.getElementById(tabId).classList.remove('hidden');
-            
             if(saveState) { localStorage.setItem('bb_active_tab', tabId); }
             if(btnElement && btnElement.tagName === 'BUTTON') {
                 document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
@@ -647,11 +587,11 @@
             }
         }
 
-        function switchAdminSubTab(subId) {
-            ['adminSubProducts', 'adminSubOrders', 'adminSubUsers'].forEach(id => {
+        function switchInvSubTab(subId) {
+            ['invSubPos', 'invSubArchive', 'invSubWarehouse'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
-            document.getElementById('adminSub' + (subId === 'manageProducts' ? 'Products' : subId === 'manageOrders' ? 'Orders' : 'Users')).classList.remove('hidden');
+            document.getElementById('invSub' + (subId === 'pos' ? 'Pos' : subId === 'archive' ? 'Archive' : 'Warehouse')).classList.remove('hidden');
         }
 
         function switchAuthMode(mode) {
@@ -677,66 +617,41 @@
                     switchTab('storeTab');
                 }
             } else {
-                document.getElementById('loginContactOrName').value = '';
-                document.getElementById('loginPassword').value = '';
                 switchTab('authSection');
             }
         }
 
         function performRegister() {
-            let name = document.getElementById('regName').value;
-            let phone = document.getElementById('regPhone').value;
-            let email = document.getElementById('regEmail').value;
+            let name = document.getElementById('regName').value.trim();
+            let phone = document.getElementById('regPhone').value.trim();
+            let email = document.getElementById('regEmail').value.trim();
             let role = document.getElementById('regRole').value;
             let password = document.getElementById('regPassword').value;
 
-            if(!name || !phone || !password) return alert('الرجاء إدخال كافة بيانات التسجيل المطلوبة');
-
-            let exists = registeredUsers.find(u => u.phone === phone);
+            if(!name || !phone || !password) return alert('الرجاء إدخال كافة بيانات التسجيل');
+            let exists = registeredUsers.find(u => u.phone === phone || u.name === name);
             if(exists) return alert('رقم الهاتف أو اسم المستخدم مسجل مسبقاً!');
 
             let newUser = {
-                name: name,
-                phone: phone,
-                email: email || '',
-                role: role,
-                password: password,
+                name, phone, email: email || '', role, password,
                 title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒',
                 avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + name.charAt(0),
                 cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Store',
-                approved: role === 'عميل' ? true : false
+                approved: true
             };
-
             registeredUsers.push(newUser);
+            currentUser = newUser;
             syncDataToCloud();
-            renderAdminAllUsers();
-            
-            if(role !== 'عميل') {
-                alert('✅ تم إنشاء الحساب بنجاح. نظراً لأن حسابك (' + role + ')، يلزم منحك مفتاح الدخول (الصلاحية) من قِبل المدير المؤسس لتتمكن من تسجيل الدخول.');
-                switchTab('storeTab');
-            } else {
-                currentUser = newUser;
-                updateAuthUI();
-                switchTab('profileTab');
-                alert('✅ أهلاً بك يا ' + currentUser.name + ' تم إنشاء وتثبيت الحساب بنجاح!');
-            }
+            updateAuthUI();
+            switchTab('profileTab');
+            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم إنشاء الحساب بنجاح!');
         }
 
         function performLogin() {
             let contactOrName = document.getElementById('loginContactOrName').value.trim();
             let password = document.getElementById('loginPassword').value;
-
-            if(!contactOrName || !password) return alert('الرجاء إدخال رقم الهاتف/اسم المستخدم وكلمة المرور');
-
-            let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName || (contactOrName === 'admin' && u.role === 'مدير')) && u.password === password);
-            if(!user) return alert('بيانات الدخول غير صحيحة! تأكد من صحة بيانات الاعتماد المدخلة.');
-
-            if((user.role === 'مشرف' || user.role === 'مدير') && user.phone !== 'admin') {
-                if(!user.approved) {
-                    return alert('🔒 عذراً، لا يمكنك تسجيل الدخول بصفتك (' + user.role + ') إلا بعد أن يقوم المدير المؤسس بمنحك مفتاح التفعيل والصلاحية من لوحة الإدارة.');
-                }
-            }
-
+            let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName) && u.password === password);
+            if(!user) return alert('بيانات الدخول غير صحيحة!');
             currentUser = user;
             syncDataToCloud();
             updateAuthUI();
@@ -748,42 +663,30 @@
             let btnTop = document.getElementById('authBtnTop');
             let greet = document.getElementById('quickUserGreet');
             if(currentUser) {
-                btnTop.innerText = 'خروج';
-                btnTop.className = 'btn-red';
+                btnTop.innerText = 'خروج'; btnTop.className = 'btn-red';
                 greet.innerText = 'مرحباً، ' + currentUser.name + ' (' + currentUser.role + ')';
                 document.getElementById('profileNameDisplay').innerText = currentUser.name;
                 document.getElementById('profileTitleBadge').innerText = currentUser.title || currentUser.role;
-                document.getElementById('profileContactDisplay').innerText = 'المستخدم/الهاتف: ' + currentUser.phone + (currentUser.email ? ' | الإيميل: ' + currentUser.email : '');
-                document.getElementById('profileRoleBadge').innerText = 'نوع الحساب: ' + currentUser.role + ' ✔️';
-                document.getElementById('userAvatarImg').src = currentUser.avatar;
-                document.getElementById('userCoverImg').src = currentUser.cover;
-                
+                document.getElementById('profileContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
+                document.getElementById('userAvatarImg').src = currentUser.avatar || '';
+                document.getElementById('userCoverImg').src = currentUser.cover || '';
                 document.getElementById('editName').value = currentUser.name;
                 document.getElementById('editPhone').value = currentUser.phone;
                 document.getElementById('editEmail').value = currentUser.email || '';
-                
-                tempAvatarData = currentUser.avatar;
-                tempCoverData = currentUser.cover;
             } else {
-                btnTop.innerText = 'تسجيل الدخول';
-                btnTop.className = 'btn-gold';
+                btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
                 greet.innerText = 'مرحباً بك زائرنا الكريم';
             }
         }
 
-        // دالة لمعاينة ورفع الصور من الهاتف أو الكمبيوتر وتحويلها إلى Base64
         function previewImageFile(event, type) {
             let file = event.target.files[0];
-            if(file) {
+            if(file && currentUser) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    if(type === 'avatar') {
-                        tempAvatarData = e.target.result;
-                        document.getElementById('userAvatarImg').src = tempAvatarData;
-                    } else if(type === 'cover') {
-                        tempCoverData = e.target.result;
-                        document.getElementById('userCoverImg').src = tempCoverData;
-                    }
+                    if(type === 'avatar') { currentUser.avatar = e.target.result; document.getElementById('userAvatarImg').src = currentUser.avatar; }
+                    else if(type === 'cover') { currentUser.cover = e.target.result; document.getElementById('userCoverImg').src = currentUser.cover; }
+                    syncDataToCloud();
                 };
                 reader.readAsDataURL(file);
             }
@@ -794,19 +697,219 @@
             currentUser.name = document.getElementById('editName').value || currentUser.name;
             currentUser.phone = document.getElementById('editPhone').value || currentUser.phone;
             currentUser.email = document.getElementById('editEmail').value || currentUser.email;
-            
-            if(tempAvatarData) currentUser.avatar = tempAvatarData;
-            if(tempCoverData) currentUser.cover = tempCoverData;
-
             let newPass = document.getElementById('editPassword').value;
-            if(newPass) { currentUser.password = newPass; }
-
+            if(newPass) currentUser.password = newPass;
             syncDataToCloud();
             updateAuthUI();
-            renderAdminAllUsers();
-            alert('✅ تم حفظ وتثبيت الملف الشخصي والصور بشكل مثبت ودائم سحابياً بنجاح!');
+            alert('✅ تم حفظ التعديلات والصور بنجاح!');
         }
 
+        // ================= الوظائف المتقدمة لقسم الفواتير والمخزن =================
+        function populatePosDropdown() {
+            let select = document.getElementById('posSelectProduct');
+            if(!select) return;
+            select.innerHTML = '';
+            inventory.forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.name} - السعر: ${item.price} ج.م (المخزون: ${item.qty})</option>`;
+            });
+        }
+
+        function addPosItemToCart() {
+            let prodId = parseInt(document.getElementById('posSelectProduct').value);
+            let qty = parseInt(document.getElementById('posQuantity').value) || 1;
+            let item = inventory.find(i => i.id === prodId);
+            if(!item) return alert('المنتج غير موجود');
+            if(item.qty < qty) return alert('الكمية المطلوبة أكبر من المتاحة بالمخزن! المخزون الحالي: ' + item.qty);
+
+            let existing = posCart.find(p => p.id === prodId);
+            if(existing) {
+                existing.qty += qty;
+            } else {
+                posCart.push({ id: item.id, name: item.name, price: item.price, qty: qty });
+            }
+            renderPosCart();
+        }
+
+        function renderPosCart() {
+            let container = document.getElementById('posCartItemsList');
+            let total = 0;
+            if(posCart.length === 0) { container.innerHTML = 'لا توجد أصناف مضافة بالفاتورة بعد.'; document.getElementById('posCartTotal').innerText = '0'; return; }
+            container.innerHTML = '';
+            posCart.forEach((item, index) => {
+                let subTotal = item.price * item.qty;
+                total += subTotal;
+                container.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom:1px dashed #333; padding-bottom:4px;">
+                    <span>• ${item.name} (×${item.qty})</span> 
+                    <span><b>${subTotal} ج.م</b> <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto;" onclick="posCart.splice(${index},1); renderPosCart();">حذف</button></span>
+                </div>`;
+            });
+            document.getElementById('posCartTotal').innerText = total;
+        }
+
+        function finalizeAndSaveInvoice() {
+            let custName = document.getElementById('posCustomerName').value.trim() || 'عميل نقدي';
+            let custPhone = document.getElementById('posCustomerPhone').value.trim() || '01000000000';
+            if(posCart.length === 0) return alert('الفاتورة فارغة!');
+
+            let totalVal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            // خصم الكميات من المخزن الرئيسي تلقائياً
+            posCart.forEach(posItem => {
+                let storeItem = inventory.find(i => i.id === posItem.id);
+                if(storeItem) {
+                    storeItem.qty -= posItem.qty;
+                }
+            });
+
+            let newInvoice = {
+                id: 'BB-INV-' + Math.floor(1000 + Math.random() * 9000),
+                customer: custName,
+                phone: custPhone,
+                items: [...posCart],
+                total: totalVal,
+                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'})
+            };
+
+            savedInvoices.push(newInvoice);
+            posCart = [];
+            document.getElementById('posCustomerName').value = '';
+            document.getElementById('posCustomerPhone').value = '';
+            renderPosCart();
+            populatePosDropdown();
+            renderInventory();
+            renderWarehouseManagement();
+            renderInvoicesArchive();
+            syncDataToCloud();
+
+            alert('✅ تم حفظ الفاتورة بنجاح وخصم الكميات من المخزن!');
+            openInvoiceModalDirect(newInvoice);
+        }
+
+        function renderInvoicesArchive() {
+            let container = document.getElementById('invoicesArchiveList');
+            let query = document.getElementById('searchInvoiceInput') ? document.getElementById('searchInvoiceInput').value.toLowerCase() : '';
+            if(!container) return;
+
+            let filtered = savedInvoices.filter(inv => inv.id.toLowerCase().includes(query) || inv.customer.toLowerCase().includes(query));
+            document.getElementById('invTotalInvoicesDisplay').innerText = savedInvoices.length;
+            
+            let totalSales = savedInvoices.reduce((sum, inv) => sum + inv.total, 0);
+            document.getElementById('invTotalSalesDisplay').innerText = totalSales + ' ج.م';
+
+            if(filtered.length === 0) { container.innerHTML = 'لا توجد فواتير محفوظة في الأرشيف.'; return; }
+            container.innerHTML = '';
+            filtered.forEach(inv => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div>
+                            <b>رقم الفاتورة: ${inv.id}</b> | العميل: ${inv.customer} (${inv.phone})<br>
+                            <small>التاريخ: ${inv.date} | الإجمالي: <b style="color:var(--accent);">${inv.total} ج.م</b></small>
+                        </div>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn-gold" style="width:auto; padding:6px 10px; font-size:11px;" onclick="openInvoiceModalById('${inv.id}')">🧾 عرض</button>
+                            <button class="btn-green" style="width:auto; padding:6px 10px; font-size:11px;" onclick="shareInvoiceWhatsAppByObj('${inv.id}')">🔗 واتساب</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openInvoiceModalById(invId) {
+            let inv = savedInvoices.find(i => i.id === invId);
+            if(inv) openInvoiceModalDirect(inv);
+        }
+
+        function openInvoiceModalDirect(inv) {
+            activeInvoiceForAction = inv;
+            document.getElementById('invModalId').innerText = 'رقم الفاتورة: #' + inv.id;
+            document.getElementById('invModalDate').innerText = 'التاريخ: ' + inv.date;
+            document.getElementById('invModalClient').innerText = inv.customer;
+            document.getElementById('invModalPhone').innerText = inv.phone;
+            document.getElementById('invModalTotal').innerText = inv.total;
+
+            let tbody = document.getElementById('invModalItems');
+            tbody.innerHTML = '';
+            inv.items.forEach(it => {
+                tbody.innerHTML += `<tr><td>${it.name}</td><td>${it.qty}</td><td>${it.price} ج.م</td><td>${it.price * it.qty} ج.م</td></tr>`;
+            });
+            switchTab('invoiceModal');
+        }
+
+        function closeInvoiceModal() { switchTab('advancedInvoicesStoreTab'); }
+
+        function downloadInvoiceImage() {
+            let element = document.getElementById('printableInvoice');
+            html2canvas(element).then(canvas => {
+                let link = document.createElement('a');
+                link.download = (activeInvoiceForAction ? activeInvoiceForAction.id : 'Invoice') + '.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function downloadInvoicePDF() { window.print(); }
+
+        function shareInvoiceWhatsAppDirect() {
+            if(!activeInvoiceForAction) return;
+            let inv = activeInvoiceForAction;
+            let itemsText = inv.items.map(i => `- ${i.name} (الكمية: ${i.qty}) = ${i.price * i.qty} ج.م`).join('\n');
+            let msg = `مرحباً بك يا ${inv.customer} 🐂\nإليك تفاصيل فاتورة الشراء والتصدير الرسمية من Black Bull Store:\n\nرقم الفاتورة: #${inv.id}\nالتاريخ: ${inv.date}\n\nالأصناف:\n${itemsText}\n\nالإجمالي الكلي: ${inv.total} جنيه\n\nشكراً لتعاملك معنا!`;
+            let phone = inv.phone.startsWith('0') ? '2' + inv.phone : inv.phone;
+            window.open(`https://wa.me/${phone}?text=` + encodeURIComponent(msg), '_blank');
+        }
+
+        function shareInvoiceWhatsAppByObj(invId) {
+            let inv = savedInvoices.find(i => i.id === invId);
+            if(inv) { activeInvoiceForAction = inv; shareInvoiceWhatsAppDirect(); }
+        }
+
+        function addNewWarehouseItem() {
+            let name = document.getElementById('whName').value.trim();
+            let qty = parseInt(document.getElementById('whQty').value) || 0;
+            let price = parseFloat(document.getElementById('whPrice').value) || 0;
+            let img = document.getElementById('whImg').value.trim();
+
+            if(!name || !price) return alert('الرجاء إدخال اسم المنتج والسعر');
+            inventory.push({ id: Date.now(), name, category: 'جملة محلي', price, qty, img: img || 'https://via.placeholder.com/150' });
+            document.getElementById('whName').value = '';
+            document.getElementById('whQty').value = '';
+            document.getElementById('whPrice').value = '';
+            document.getElementById('whImg').value = '';
+
+            syncDataToCloud();
+            renderInventory();
+            renderWarehouseManagement();
+            populatePosDropdown();
+            renderStore();
+            alert('✅ تمت إضافة المنتج للمخزن بنجاح!');
+        }
+
+        function renderWarehouseManagement() {
+            let container = document.getElementById('warehouseItemsList');
+            if(!container) return;
+            document.getElementById('invCountDisplay').innerText = inventory.length;
+            if(inventory.length === 0) { container.innerHTML = 'المخزن فارغ.'; return; }
+            container.innerHTML = '';
+            inventory.forEach(item => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div><b>${item.name}</b><br><small>السعر: ${item.price} ج.م | المخزون المتاح: <b style="color:${item.qty > 10 ? '#48bb78':'#e53e3e'}">${item.qty} قطعة</b></small></div>
+                        <button class="btn-red" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteWarehouseItem(${item.id})">حذف الصنف</button>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteWarehouseItem(id) {
+            inventory = inventory.filter(i => i.id !== id);
+            syncDataToCloud();
+            renderInventory();
+            renderWarehouseManagement();
+            populatePosDropdown();
+            renderStore();
+        }
+
+        // ================= المتجر والطلبات العادية =================
         function filterCategory(cat, element) {
             currentFilter = cat;
             document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
@@ -816,6 +919,7 @@
 
         function renderStore() {
             let container = document.getElementById('storeProductsList');
+            if(!container) return;
             container.innerHTML = '';
             let filtered = inventory.filter(item => currentFilter === 'all' || item.category === currentFilter);
             if(filtered.length === 0) { container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">لا توجد منتجات.</p>'; return; }
@@ -853,6 +957,7 @@
                 <img src="${item.img}" alt="${item.name}" style="max-width: 250px; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                 <h2>${item.name}</h2>
                 <p><b>السعر:</b> <span style="color:var(--accent); font-size: 18px;">${item.price} جنيه</span></p>
+                <p><b>المخزون المتاح:</b> ${item.qty} قطعة</p>
                 <button class="btn-gold" onclick="switchTab('supportTab')">💬 تواصل للطلب والتفاصيل</button>
             `;
             switchTab('productDetailTab');
@@ -860,6 +965,7 @@
 
         function addToCart(id) {
             let item = inventory.find(i => i.id === id);
+            if(item.qty <= 0) return alert('عذراً، هذا المنتج نفد من المخزن!');
             cart.push(item);
             renderCart();
             alert('تمت الإضافة للسلة');
@@ -878,267 +984,107 @@
         }
 
         function placeOrder() {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً لإرسال الطلب وإرفاق بيانات التوصيل!');
+            if(!currentUser) return alert('يجب تسجيل الدخول أولاً لإرسال الطلب!');
             if(cart.length === 0) return alert('السلة فارغة!');
 
             let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
+            
+            // خصم المخزن للطلب السريع
+            cart.forEach(cartItem => {
+                let st = inventory.find(i => i.id === cartItem.id);
+                if(st) st.qty -= 1;
+            });
+
             let newOrder = {
                 id: 'BB-' + Math.floor(1000 + Math.random() * 9000),
                 customer: currentUser.name,
                 phone: currentUser.phone,
-                role: currentUser.role,
                 items: [...cart],
                 total: totalVal,
                 status: 'قيد المراجعة والتوصيل ⏳',
                 date: new Date().toLocaleDateString('ar-EG')
             };
 
+            // حفظ الطلب أيضاً كفاتورة رسمية في الأرشيف
+            savedInvoices.push({
+                id: 'INV-' + newOrder.id,
+                customer: newOrder.customer,
+                phone: newOrder.phone,
+                items: cart.map(c => ({ name: c.name, price: c.price, qty: 1 })),
+                total: totalVal,
+                date: newOrder.date
+            });
+
             orders.push(newOrder);
             cart = [];
             syncDataToCloud();
             renderCart();
             renderOrders();
-            renderAdminOrders();
-            alert('✅ تم إرسال الطلب بنجاح! رقم الطلب: ' + newOrder.id);
+            renderInvoicesArchive();
+            renderWarehouseManagement();
+            alert('✅ تم إرسال الطلب وحفظ الفاتورة الرسمية بنجاح!');
             switchTab('ordersTab');
-        }
-
-        function submitGen7ExportOrder() {
-            if(!currentUser) return alert('يجب تسجيل الدخول أولاً لإتمام طلبات التصدير الدولية!');
-            let itemType = document.getElementById('gen7ExportItem').value;
-            let qty = document.getElementById('gen7ExportQty').value;
-            let port = document.getElementById('gen7ExportPort').value;
-            let payment = document.getElementById('gen7PaymentMethod').value;
-
-            if(!qty || !port) return alert('الرجاء إكمال كافة بيانات شحنة التصدير');
-
-            let exportOrder = {
-                id: 'EXP-G7-' + Math.floor(1000 + Math.random() * 9000),
-                customer: currentUser.name,
-                phone: currentUser.phone,
-                role: currentUser.role,
-                items: [{ name: `[تصدير دولي] ${itemType} - الكمية: ${qty} - الميناء: ${port}`, price: 0 }],
-                total: 'حسب الاعتماد المالي',
-                status: `قيد المعالجة (الدفع: ${payment}) 🌐`,
-                date: new Date().toLocaleDateString('ar-EG')
-            };
-
-            orders.push(exportOrder);
-            exportRequests.push(exportOrder);
-            syncDataToCloud();
-            renderOrders();
-            renderAdminOrders();
-            alert('✅ تم تقديم طلب التصدير بنجاح! رقم الشحنة: ' + exportOrder.id);
-            switchTab('ordersTab');
-        }
-
-        function performTrackingSearch() {
-            let code = document.getElementById('trackInputCode').value;
-            let box = document.getElementById('trackingResultBox');
-            if(!code) return alert('الرجاء إدخال رقم بوليصة أو حاوية صحيحة');
-            box.innerHTML = `
-                <div class="card" style="background:#111; border-color:var(--accent);">
-                    <h4>📌 نتائج تتبع الشحنة: ${code}</h4>
-                    <p>• الحالة الحالية: <span style="color:#48bb78; font-weight:bold;">في عرض البحر / في طريقه لميناء الوصول 🚢</span></p>
-                    <p>• تاريخ التحرك: 2026/08/01 | الميناء المُصدر: ميناء الإسكندرية 🇪🇬</p>
-                    <p>• الميناء المستهدف: ميناء الوجهة المُحدد | التوقع الوصول خلال 4 أيام.</p>
-                </div>
-            `;
-        }
-
-        function calculateShippingAndCustoms() {
-            let country = document.getElementById('calcCountry').value;
-            let size = document.getElementById('calcContainerSize').value;
-            let val = parseFloat(document.getElementById('calcGoodsValue').value) || 0;
-            let box = document.getElementById('calcResultBox');
-
-            let freightCost = size === '40' ? 45000 : size === '20' ? 28000 : 8000;
-            let customDuty = val * 0.12; 
-            let totalEstimated = val + freightCost + customDuty;
-
-            box.innerHTML = `
-                <div class="card" style="background:#111; border-color:var(--accent);">
-                    <h4>📊 التقرير التقديري للتكلفة والشحن إلى (${country})</h4>
-                    <p>• قيمة البضاعة: <b>${val} ج.م</b></p>
-                    <p>• تكلفة الشحن والملاحة: <b>${freightCost} ج.م</b></p>
-                    <p>• الرسوم الجمركية والضرائب التقديرية: <b>${customDuty.toFixed(2)} ج.م</b></p>
-                    <hr style="border-color:var(--border-color)">
-                    <p style="color:var(--accent); font-size:16px;"><b>التكلفة الإجمالية الواصلة: ${totalEstimated.toFixed(2)} جنيه</b></p>
-                </div>
-            `;
         }
 
         function renderOrders() {
             let container = document.getElementById('ordersList');
+            if(!container) return;
             if(orders.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
             container.innerHTML = '';
             orders.forEach(o => {
                 container.innerHTML += `
                     <div class="item-row">
                         <div>
-                            <b>طلب/شحنة: ${o.id}</b> - الإجمالي: ${o.total}<br>
+                            <b>طلب/شحنة: ${o.id}</b> - الإجمالي: ${o.total} ج.م<br>
                             <small>العميل: ${o.customer} | الهاتف: ${o.phone} | الحالة: <span style="color:var(--accent);">${o.status}</span></small>
                         </div>
-                        <button class="btn-gold" style="width:auto; padding:6px 12px; font-size:12px;" onclick="openInvoice('${o.id}')">🧾 عرض الفاتورة</button>
+                        <button class="btn-gold" style="width:auto; padding:6px 12px; font-size:12px;" onclick="openInvoiceModalById('INV-${o.id}')">🧾 عرض الفاتورة</button>
                     </div>
                 `;
             });
-        }
-
-        function openInvoice(orderId) {
-            let o = orders.find(x => x.id === orderId);
-            if(!o) return;
-            document.getElementById('invModalId').innerText = 'رقم الفاتورة: #' + o.id;
-            document.getElementById('invModalDate').innerText = 'التاريخ: ' + o.date;
-            document.getElementById('invModalClient').innerText = o.customer;
-            document.getElementById('invModalPhone').innerText = o.phone;
-            document.getElementById('invModalTotal').innerText = o.total;
-
-            let tbody = document.getElementById('invModalItems');
-            tbody.innerHTML = '';
-            o.items.forEach(it => {
-                tbody.innerHTML += `<tr><td>${it.name}</td><td>${it.price !== 0 ? it.price + ' ج.م' : 'حسب التعاقد'}</td></tr>`;
-            });
-            switchTab('invoiceModal');
-        }
-
-        function closeInvoiceModal() { switchTab('ordersTab'); }
-        function downloadInvoiceImage() {
-            let element = document.getElementById('printableInvoice');
-            html2canvas(element).then(canvas => {
-                let link = document.createElement('a');
-                link.download = 'Black-Bull-Invoice.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-        function downloadInvoicePDF() { window.print(); }
-        function shareInvoiceWhatsApp() {
-            let text = encodeURIComponent('مرحباً، إليك تفاصيل فاتورة وشحنة التصدير من منصة بلاك بول للشحن والتجارة الدولية 🐂');
-            window.open('https://wa.me/?text=' + text, '_blank');
-        }
-
-        function renderAdminAllUsers() {
-            let container = document.getElementById('adminAllUsersList');
-            if(!container) return;
-            container.innerHTML = '';
-            registeredUsers.forEach((u, index) => {
-                let isManagerOrSuper = (u.role === 'مشرف' || u.role === 'مدير');
-                container.innerHTML += `
-                    <div class="card" style="background:#111; margin-bottom:10px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                            <b>المستخدم #${index + 1}</b> <span class="title-badge">${u.role}</span>
-                        </div>
-                        <div class="input-group"><label>الاسم:</label><input type="text" id="admName_${index}" value="${u.name}"></div>
-                        <div class="input-group"><label>الهاتف / اسم المستخدم:</label><input type="text" id="admPhone_${index}" value="${u.phone}"></div>
-                        <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="admEmail_${index}" value="${u.email || ''}"></div>
-                        <div class="input-group"><label>كلمة المرور:</label><input type="text" id="admPass_${index}" value="${u.password}"></div>
-                        <div class="input-group"><label>الصلاحية:</label>
-                            <select id="admRole_${index}">
-                                <option value="عميل" ${u.role === 'عميل' ? 'selected' : ''}>عميل</option>
-                                <option value="مشرف" ${u.role === 'مشرف' ? 'selected' : ''}>مشرف</option>
-                                <option value="مدير" ${u.role === 'مدير' ? 'selected' : ''}>مدير</option>
-                            </select>
-                        </div>
-                        ${isManagerOrSuper && u.phone !== 'admin' ? `
-                        <div class="input-group" style="display:flex; align-items:center; gap:10px; background:#1a1d24; padding:10px; border-radius:8px;">
-                            <label style="margin:0; color:var(--accent);">🔑 منح مفتاح الدخول (من المدير المؤسس):</label>
-                            <input type="checkbox" id="admApproved_${index}" ${u.approved ? 'checked' : ''} style="width:22px; height:22px; cursor:pointer;">
-                            <span style="font-size:12px; font-weight:bold; color:${u.approved ? '#48bb78' : '#e53e3e'}">${u.approved ? 'مفعل ومصرح له بالدخول ✔️' : 'مغلق (يحتاج تفعيل) 🔒'}</span>
-                        </div>` : ''}
-                        <button class="btn-gold" onclick="adminUpdateUser(${index})">حفظ وتحديث بيانات وحساب المستخدم 🔐</button>
-                    </div>
-                `;
-            });
-        }
-
-        function adminUpdateUser(index) {
-            registeredUsers[index].name = document.getElementById(`admName_${index}`).value;
-            registeredUsers[index].phone = document.getElementById(`admPhone_${index}`).value;
-            registeredUsers[index].email = document.getElementById(`admEmail_${index}`).value;
-            registeredUsers[index].password = document.getElementById(`admPass_${index}`).value;
-            registeredUsers[index].role = document.getElementById(`admRole_${index}`).value;
-            registeredUsers[index].title = registeredUsers[index].role === 'مدير' ? 'المدير العام 🔐' : registeredUsers[index].role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒';
-            
-            let approvedCheck = document.getElementById(`admApproved_${index}`);
-            if(approvedCheck) {
-                registeredUsers[index].approved = approvedCheck.checked;
-            } else if(registeredUsers[index].phone === 'admin' || registeredUsers[index].role === 'مدير') {
-                registeredUsers[index].approved = true;
-            }
-
-            if(currentUser && (currentUser.phone === registeredUsers[index].phone || currentUser.role === registeredUsers[index].role)) {
-                currentUser = registeredUsers[index];
-            }
-
-            syncDataToCloud();
-            renderAdminAllUsers();
-            updateAuthUI();
-            alert('✅ تم تحديث بيانات وحالة مفتاح الدخول للحساب بنجاح تام!');
-        }
-
-        function addInventoryItem() {
-            let name = document.getElementById('invName').value;
-            let category = document.getElementById('invCategory').value;
-            let price = parseFloat(document.getElementById('invPrice').value);
-            let img = document.getElementById('invImg').value;
-            if(!name || !price) return alert('أدخل البيانات الأساسية');
-            inventory.push({ id: Date.now(), name, category, price, qty: 100, img: img || 'https://via.placeholder.com/150' });
-            syncDataToCloud();
-            renderInventory();
-            renderStore();
-            alert('تمت الإضافة بنجاح');
         }
 
         function renderInventory() {
-            let container = document.getElementById('inventoryList');
-            if(!container) return;
-            container.innerHTML = '';
-            inventory.forEach(item => {
-                container.innerHTML += `<div class="item-row"><div><b>${item.name}</b> - ${item.price} ج.م</div><button class="btn-red" style="width:auto; padding:4px 8px;" onclick="deleteInventoryItem(${item.id})">حذف</button></div>`;
-            });
-        }
-
-        function deleteInventoryItem(id) {
-            inventory = inventory.filter(i => i.id !== id);
-            syncDataToCloud();
-            renderInventory();
-            renderStore();
+            updateAdminStats();
         }
 
         function updateAdminStats() {
-            document.getElementById('statProductsCount').innerText = inventory.length;
-            document.getElementById('statOrdersCount').innerText = orders.length;
-            document.getElementById('statUsersCount').innerText = registeredUsers.length;
+            let pCount = document.getElementById('statProductsCount');
+            let oCount = document.getElementById('statOrdersCount');
+            let uCount = document.getElementById('statUsersCount');
+            if(pCount) pCount.innerText = inventory.length;
+            if(oCount) oCount.innerText = orders.length;
+            if(uCount) uCount.innerText = registeredUsers.length;
         }
 
-        function renderAdminOrders() {
-            let container = document.getElementById('adminOrdersList');
-            if(!container) return;
-            if(orders.length === 0) { container.innerHTML = 'لا توجد طلبات.'; return; }
-            container.innerHTML = '';
-            orders.forEach(o => {
-                container.innerHTML += `
-                    <div class="item-row" style="flex-direction:column; align-items:flex-start;">
-                        <div><b>طلب #${o.id}</b> | الإجمالي: ${o.total} ج.م</div>
-                        <div style="color:var(--text-muted); font-size:12px;">
-                            • اسم العميل: <b>${o.customer}</b><br>
-                            • رقم الهاتف للتوصيل: <b style="color:var(--accent);">${o.phone}</b><br>
-                            • الحالة: ${o.status}
-                        </div>
-                        <button class="btn-green" style="width:auto; padding:5px 10px; margin-top:5px;" onclick="updateOrderStatus('${o.id}', 'تم اعتماد وقبول الطلب وجاري التوصيل ✅')">قبول وتأكيد الطلب</button>
-                    </div>
-                `;
-            });
+        function performTrackingSearch() {
+            let code = document.getElementById('trackInputCode').value;
+            let box = document.getElementById('trackingResultBox');
+            if(!code) return alert('الرجاء إدخال رقم بوليصة أو حاوية صحيحة');
+            box.innerHTML = `<div class="card" style="background:#111; border-color:var(--accent);">
+                <h4>📌 نتائج تتبع الشحنة: ${code}</h4>
+                <p>• الحالة الحالية: <span style="color:#48bb78; font-weight:bold;">في عرض البحر / في طريقه لميناء الوصول 🚢</span></p>
+                <p>• الميناء المُصدر: ميناء الإسكندرية 🇪🇬 | التوقع الوصول خلال 4 أيام.</p>
+            </div>`;
         }
 
-        function updateOrderStatus(id, status) {
-            let o = orders.find(x => x.id === id);
-            if(o) { o.status = status; syncDataToCloud(); renderOrders(); renderAdminOrders(); alert('تم التحديث'); }
+        function calculateShippingAndCustoms() {
+            let country = document.getElementById('calcCountry').value;
+            let size = document.getElementById('calcContainerSize').value;
+            let val = parseFloat(document.getElementById('calcGoodsValue').value) || 0;
+            let freightCost = size === '40' ? 45000 : size === '20' ? 28000 : 8000;
+            let customDuty = val * 0.12; 
+            let totalEstimated = val + freightCost + customDuty;
+            document.getElementById('calcResultBox').innerHTML = `<div class="card" style="background:#111; border-color:var(--accent);">
+                <h4>📊 التقرير التقديري للتكلفة والشحن إلى (${country})</h4>
+                <p>• قيمة البضاعة: <b>${val} ج.م</b> | الشحن: <b>${freightCost} ج.م</b> | الجمارك: <b>${customDuty.toFixed(2)} ج.م</b></p>
+                <p style="color:var(--accent); font-size:16px;"><b>الإجمالي التقديري: ${totalEstimated.toFixed(2)} جنيه</b></p>
+            </div>`;
         }
 
         function submitExportInquiry() { alert('تم إرسال طلب التصدير بنجاح'); }
         function submitCustomOrder() { alert('تم إرسال طلب التفصيل بنجاح'); }
+        
         function sendChatMessage() {
             let txt = document.getElementById('chatInput').value;
             if(!txt) return;
