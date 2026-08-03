@@ -166,7 +166,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🐂</div>
         <h1>BLACK BULL STORE</h1>
-        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المتطور 7.2)</small>
+        <small>المنصة العالمية لتجارة وتصدير الملابس جملة - محلياً ودولياً (الإصدار الجيل السابع المطور 7.3)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -190,12 +190,12 @@
         <button onclick="checkProfileAccess(this)">👤 حسابي</button>
     </div>
 
-    <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات ================= -->
+    <!-- ================= 1. تسجيل الدخول وإنشاء الحسابات (آمن ومخفي البيانات) ================= -->
     <div id="authSection" class="card hidden">
         <div style="text-align: center; margin-bottom: 15px;">
             <div class="bull-logo-3d" style="width: 110px; height: 110px; font-size: 50px;">🐂</div>
             <h3 style="margin-bottom: 2px;">بوابة الدخول الموحدة (عملاء - مشرفين - مديرين)</h3>
-            <small style="color: var(--text-muted);">يرجى أدخل بيانات الاعتماد الخاصة بك للمتابعة</small>
+            <small style="color: var(--text-muted);">يرجى إدخال بيانات الاعتماد الخاصة بك للمتابعة</small>
         </div>
         
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
@@ -206,27 +206,27 @@
         <div id="loginFormContainer">
             <div class="input-group">
                 <label>رقم الهاتف أو اسم المستخدم:</label>
-                <input type="text" id="loginContactOrName" placeholder="أدخل رقم الهاتف أو اسم المستخدم (admin)">
+                <input type="text" id="loginContactOrName" placeholder="أدخل رقم الهاتف أو اسم المستخدم" autocomplete="off">
             </div>
             <div class="input-group">
                 <label>كلمة المرور:</label>
-                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور (1234)">
+                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" autocomplete="new-password">
             </div>
             <button class="btn-green" onclick="performLogin()">تسجيل الدخول للمنصة 🚀</button>
         </div>
 
         <div id="registerFormContainer" class="hidden">
-            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName" placeholder="اكتب اسمك الكامل"></div>
-            <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="regPhone" placeholder="01xxxxxxxxx"></div>
-            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="regEmail" placeholder="name@domain.com"></div>
+            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName" placeholder="اكتب اسمك الكامل" autocomplete="off"></div>
+            <div class="input-group"><label>رقم الهاتف الأساسي / اسم المستخدم:</label><input type="text" id="regPhone" placeholder="01xxxxxxxxx" autocomplete="off"></div>
+            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="regEmail" placeholder="name@domain.com" autocomplete="off"></div>
             <div class="input-group"><label>نوع الحساب:</label>
                 <select id="regRole">
                     <option value="عميل">عميل (Customer) 🛒</option>
-                    <option value="مشرف">مشرف (Supervisor) 🛡️</option>
-                    <option value="مدير">مدير (Manager) 🔐</option>
+                    <option value="مشرف">مشرف (Supervisor) 🛡️ (يحتاج موافقة المدير المؤسس)</option>
+                    <option value="مدير">مدير (Manager) 🔐 (يحتاج موافقة المدير المؤسس)</option>
                 </select>
             </div>
-            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية"></div>
+            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية" autocomplete="new-password"></div>
             <button class="btn-gold" onclick="performRegister()">إنشاء حساب جديد وتفعيل الحساب ✅</button>
         </div>
     </div>
@@ -367,7 +367,7 @@
 
     <!-- ================= 7. بروفايل التصدير الشامل ================= -->
     <div id="exportProfileTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.2)</h2>
+        <h2>🌐 بروفايل التصدير الدولي الشامل - الجيل السابع (Generation 7.3)</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">مخصص بالكامل لشحنات الملابس المصدرة للخارج، استعراض الحاويات الدولية، وطلب بضائع التصدير مع تفعيل بوابات الدفع.</p>
         
         <div class="stats-grid">
@@ -483,7 +483,7 @@
 
     <!-- ================= 11. لوحة الإدارة الشاملة ================= -->
     <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2 style="color: var(--accent);">🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات</h2>
+        <h2 style="color: var(--accent);">🔐 لوحة التحكم الإدارية والتحكم بكافة الحسابات وصلاحيات الدخول</h2>
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
             <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
@@ -492,7 +492,7 @@
         <div style="display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;">
             <button class="btn-blue" onclick="switchAdminSubTab('manageProducts')" style="flex:1;">📦 المنتجات</button>
             <button class="btn-blue" onclick="switchAdminSubTab('manageOrders')" style="flex:1;">📋 الطلبات والتوصيل</button>
-            <button class="btn-purple" onclick="switchAdminSubTab('manageUsers')" style="flex:1;">👑 إدارة كافة الحسابات والباسورد</button>
+            <button class="btn-purple" onclick="switchAdminSubTab('manageUsers')" style="flex:1;">👑 إدارة الحسابات ومفاتيح الدخول</button>
         </div>
 
         <div id="adminSubProducts">
@@ -517,15 +517,15 @@
         </div>
 
         <div id="adminSubUsers" class="hidden">
-            <h3>👑 إدارة كافة الحسابات (تغيير الاسم، الرقم، الإيميل، والباسورد والصلاحيات)</h3>
+            <h3>👑 إدارة الحسابات ومنح مفاتيح الدخول للمشرفين والمديرين (من قِبل المدير المؤسس)</h3>
             <div id="adminAllUsersList" style="margin-top: 15px;"></div>
         </div>
     </div>
 
     <script>
         let registeredUsers = JSON.parse(localStorage.getItem('bb_cloud_all_users')) || [
-            { name: 'المدير العام', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '1234', title: 'المدير العام 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover' },
-            { name: 'محمد مشرف', phone: '01111111111', email: 'supervisor@blackbull.com', role: 'مشرف', password: '123', title: 'مشرف المنصة 🛡️', avatar: 'https://via.placeholder.com/85/222/3182ce?text=Super', cover: 'https://via.placeholder.com/600x130/111/3182ce?text=Supervisor' }
+            { name: 'المدير المؤسس', phone: 'admin', email: 'admin@blackbull.com', role: 'مدير', password: '1234', title: 'المدير المؤسس 🔐', avatar: 'https://via.placeholder.com/85/111/d4af37?text=Admin', cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Manager+Cover', approved: true },
+            { name: 'محمد مشرف', phone: '01111111111', email: 'supervisor@blackbull.com', role: 'مشرف', password: '123', title: 'مشرف المنصة 🛡️', avatar: 'https://via.placeholder.com/85/222/3182ce?text=Super', cover: 'https://via.placeholder.com/600x130/111/3182ce?text=Supervisor', approved: false }
         ];
         let currentUser = JSON.parse(localStorage.getItem('bb_cloud_user')) || null;
         let inventory = JSON.parse(localStorage.getItem('bb_cloud_inventory')) || [
@@ -541,11 +541,11 @@
         let lastActiveTab = localStorage.getItem('bb_active_tab') || 'storeTab';
 
         window.onload = function() {
-            // تحديث بيانات المدير التلقائية للتأكد من مطابقتها لـ admin و 1234 دائماً
-            let adminUser = registeredUsers.find(u => u.role === 'مدير');
+            let adminUser = registeredUsers.find(u => u.role === 'مدير' || u.phone === 'admin');
             if(adminUser) {
                 adminUser.phone = 'admin';
                 adminUser.password = '1234';
+                adminUser.approved = true;
             }
             updateAuthUI();
             renderInventory();
@@ -589,6 +589,7 @@
                     found.title = currentUser.title;
                     found.role = currentUser.role;
                     found.password = currentUser.password;
+                    found.approved = found.approved;
                 }
             }
             let status = document.getElementById('syncStatus');
@@ -607,8 +608,8 @@
 
         function switchTab(tabId, btnElement = null, saveState = true) {
             if(tabId === 'adminDashboardTab') {
-                if(!currentUser || currentUser.role !== 'مدير') {
-                    alert('عذراً، لوحة التحكم الإدارية الشاملة مخصصة للمدير العام فقط!');
+                if(!currentUser || currentUser.role !== 'مدير' || currentUser.phone !== 'admin') {
+                    alert('عذراً، لوحة التحكم الإدارية الشاملة مخصصة للمدير المؤسс (admin) فقط!');
                     return;
                 }
             }
@@ -655,6 +656,9 @@
                     switchTab('storeTab');
                 }
             } else {
+                // تفريغ حقول الدخول تماماً عند فتح النافذة لحفظ خصوصية المنصة
+                document.getElementById('loginContactOrName').value = '';
+                document.getElementById('loginPassword').value = '';
                 switchTab('authSection');
             }
         }
@@ -679,16 +683,23 @@
                 password: password,
                 title: role === 'مدير' ? 'المدير العام 🔐' : role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒',
                 avatar: 'https://via.placeholder.com/85/111/d4af37?text=' + name.charAt(0),
-                cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Store'
+                cover: 'https://via.placeholder.com/600x130/111/d4af37?text=Black+Bull+Store',
+                approved: role === 'عميل' ? true : false // المشرفون والمديرون الجدد يحتاجون موافقة المدير المؤسس
             };
 
             registeredUsers.push(newUser);
-            currentUser = newUser;
             syncDataToCloud();
-            updateAuthUI();
             renderAdminAllUsers();
-            switchTab('profileTab');
-            alert('✅ أهلاً بك يا ' + currentUser.name + ' تم إنشاء وتثبيت الحساب بنجاح!');
+            
+            if(role !== 'عميل') {
+                alert('✅ تم إنشاء الحساب بنجاح. نظراً لأن حسابك (' + role + ')، يلزم منحك مفتاح الدخول (الصلاحية) من قِبل المدير المؤسس لتتمكن من تسجيل الدخول.');
+                switchTab('storeTab');
+            } else {
+                currentUser = newUser;
+                updateAuthUI();
+                switchTab('profileTab');
+                alert('✅ أهلاً بك يا ' + currentUser.name + ' تم إنشاء وتثبيت الحساب بنجاح!');
+            }
         }
 
         function performLogin() {
@@ -699,6 +710,13 @@
 
             let user = registeredUsers.find(u => (u.phone === contactOrName || u.name === contactOrName || (contactOrName === 'admin' && u.role === 'مدير')) && u.password === password);
             if(!user) return alert('بيانات الدخول غير صحيحة! تأكد من صحة بيانات الاعتماد المدخلة.');
+
+            // شرط عدم السماح لأي مدير أو مشرف بالدخول إلا بعد حصوله على مفتاح التفعيل من المدير المؤسس
+            if((user.role === 'مشرف' || user.role === 'مدير') && user.phone !== 'admin') {
+                if(!user.approved) {
+                    return alert('🔒 عذراً، لا يمكنك تسجيل الدخول بصفتك (' + user.role + ') إلا بعد أن يقوم المدير المؤسс بمنحك مفتاح التفعيل والصلاحية من لوحة الإدارة.');
+                }
+            }
 
             currentUser = user;
             syncDataToCloud();
@@ -965,6 +983,7 @@
             if(!container) return;
             container.innerHTML = '';
             registeredUsers.forEach((u, index) => {
+                let isManagerOrSuper = (u.role === 'مشرف' || u.role === 'مدير');
                 container.innerHTML += `
                     <div class="card" style="background:#111; margin-bottom:10px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -981,6 +1000,12 @@
                                 <option value="مدير" ${u.role === 'مدير' ? 'selected' : ''}>مدير</option>
                             </select>
                         </div>
+                        ${isManagerOrSuper && u.phone !== 'admin' ? `
+                        <div class="input-group" style="display:flex; align-items:center; gap:10px; background:#1a1d24; padding:10px; border-radius:8px;">
+                            <label style="margin:0; color:var(--accent);">🔑 منح مفتاح الدخول (من المدير المؤسس):</label>
+                            <input type="checkbox" id="admApproved_${index}" ${u.approved ? 'checked' : ''} style="width:22px; height:22px; cursor:pointer;">
+                            <span style="font-size:12px; font-weight:bold; color:${u.approved ? '#48bb78' : '#e53e3e'}">${u.approved ? 'مفعل ومصرح له بالدخول ✔️' : 'مغلق (يحتاج تفعيل) 🔒'}</span>
+                        </div>` : ''}
                         <button class="btn-gold" onclick="adminUpdateUser(${index})">حفظ وتحديث بيانات وحساب المستخدم 🔐</button>
                     </div>
                 `;
@@ -995,6 +1020,13 @@
             registeredUsers[index].role = document.getElementById(`admRole_${index}`).value;
             registeredUsers[index].title = registeredUsers[index].role === 'مدير' ? 'المدير العام 🔐' : registeredUsers[index].role === 'مشرف' ? 'مشرف المنصة 🛡️' : 'عميل معتمد 🛒';
             
+            let approvedCheck = document.getElementById(`admApproved_${index}`);
+            if(approvedCheck) {
+                registeredUsers[index].approved = approvedCheck.checked;
+            } else if(registeredUsers[index].phone === 'admin' || registeredUsers[index].role === 'مدير') {
+                registeredUsers[index].approved = true;
+            }
+
             if(currentUser && (currentUser.phone === registeredUsers[index].phone || currentUser.role === registeredUsers[index].role)) {
                 currentUser = registeredUsers[index];
             }
@@ -1002,7 +1034,7 @@
             syncDataToCloud();
             renderAdminAllUsers();
             updateAuthUI();
-            alert('✅ تم تحديث بيانات الحساب بنجاح تام!');
+            alert('✅ تم تحديث بيانات وحالة مفتاح الدخول للحساب بنجاح تام!');
         }
 
         function addInventoryItem() {
