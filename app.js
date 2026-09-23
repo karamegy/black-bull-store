@@ -2,7 +2,7 @@ let currentUser = JSON.parse(localStorage.getItem('giti_export_user')) || null;
 let inventory = [
     { id: 1, name: 'جاكيت شتوي تصدير فاخر', category: 'تصدير دولي', price: 650, qty: 150, type: 'image', mediaUrl: 'https://via.placeholder.com/150/0f172a/00a4ef?text=Jacket' },
     { id: 2, name: 'طقم بنطلون وتيشرت جملة', category: 'جملة محلي', price: 300, qty: 80, type: 'image', mediaUrl: 'https://via.placeholder.com/150/1e293b/00a4ef?text=Set' },
-    { id: 3, name: 'أقمشة قطنية فاخرة للبيع بالجملة', category: 'أقمشة ومنسوجات', price: 1200, qty: 200, type: 'image', mediaUrl: 'https://via.placeholder.com/150/111827/00a4ef?text=Fabrics'
+    { id: 3, name: 'أقمشة قطنية فاخرة للبيع بالجملة', category: 'أقمشة ومنسوجات', price: 1200, qty: 200, type: 'image', mediaUrl: 'https://via.placeholder.com/150/111827/00a4ef?text=Fabrics' }
 ];
 let orders = [];
 let invoicesArchive = [];
@@ -40,7 +40,7 @@ window.onload = function() {
     }
 };
 
-// الاستماع للبيانات السحابية الحية عبر Firestore وإنشاء المجموعات تلقائياً عند حدوث أي تغيير
+// الاستماع للبيانات السحابية الحية عبر Firestore
 function initCloudListeners() {
     if(!window.db || !window.firebaseFns) return;
     const { collection, onSnapshot } = window.firebaseFns;
@@ -84,7 +84,7 @@ function initCloudListeners() {
     }, (error) => { console.error("Chats sync error:", error); });
 }
 
-// دالة عامة لرفع وحفظ البيانات سحابياً في Firestore (تقوم بإنشاء المجموعة والوثيقة تلقائياً)
+// دالة عامة لرفع وحفظ البيانات سحابياً في Firestore
 async function syncDataToCloud(collectionName, dataObj, docId = null) {
     if(!window.db || !window.firebaseFns) return;
     try {
@@ -99,37 +99,37 @@ async function syncDataToCloud(collectionName, dataObj, docId = null) {
     }
 }
 
-function toggleSidebar() {
+window.toggleSidebar = function() {
     document.getElementById('sideDrawer').classList.toggle('open');
     document.getElementById('sidebarOverlay').classList.toggle('active');
 }
 
-function toggleGPlusDrawer() {
+window.toggleGPlusDrawer = function() {
     if(!currentUser) {
         alert('⚠️ يرجى تسجيل الدخول أولاً!');
-        switchTab('authSection');
+        window.switchTab('authSection');
         return;
     }
     document.getElementById('gplusProfileDrawer').classList.toggle('open');
     document.getElementById('sidebarOverlay').classList.toggle('active');
 }
 
-function closeAllDrawers() {
+window.closeAllDrawers = function() {
     document.getElementById('sideDrawer').classList.remove('open');
     document.getElementById('gplusProfileDrawer').classList.remove('open');
     document.getElementById('sidebarOverlay').classList.remove('active');
 }
 
-function checkProfileDrawerAccess() {
+window.checkProfileDrawerAccess = function() {
     if (!currentUser) {
         alert('⚠️ يرجى تسجيل الدخول أولاً للتمتع بالحساب!');
-        switchTab('authSection');
+        window.switchTab('authSection');
     } else {
-        toggleGPlusDrawer();
+        window.toggleGPlusDrawer();
     }
 }
 
-function openLightbox(url, type) {
+window.openLightbox = function(url, type) {
     let lightbox = document.getElementById('mediaLightbox');
     let container = document.getElementById('lightboxContainer');
     if(type === 'video') {
@@ -140,22 +140,22 @@ function openLightbox(url, type) {
     lightbox.classList.add('active');
 }
 
-function closeLightbox() {
+window.closeLightbox = function() {
     document.getElementById('mediaLightbox').classList.remove('active');
     document.getElementById('lightboxContainer').innerHTML = '';
 }
 
-function setTheme(primary, accent, bg, card) {
+window.setTheme = function(primary, accent, bg, card) {
     document.documentElement.style.setProperty('--primary', primary);
     document.documentElement.style.setProperty('--accent', accent);
     document.documentElement.style.setProperty('--bg-color', bg);
     document.documentElement.style.setProperty('--card-bg', card);
 }
 
-function switchTab(tabId, btnElement = null) {
+window.switchTab = function(tabId, btnElement = null) {
     if(!currentUser && tabId !== 'authSection') {
         alert('⚠️ لا يمكن استعراض الأقسام إلا بعد تسجيل الدخول السحابي!');
-        switchTab('authSection');
+        window.switchTab('authSection');
         return;
     }
 
@@ -169,7 +169,7 @@ function switchTab(tabId, btnElement = null) {
         document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
         btnElement.classList.add('active-nav');
     }
-    closeAllDrawers();
+    window.closeAllDrawers();
 }
 
 window.updateAuthUI = function() {
@@ -221,37 +221,37 @@ window.updateAuthUI = function() {
         menuToggleBtn.style.display = 'none';
         profileBtnTop.style.display = 'none';
         notifTopBtn.style.display = 'none';
-        switchTab('authSection');
+        window.switchTab('authSection');
     }
 };
 
-function handleAvatarUpload(event) {
+window.handleAvatarUpload = function(event) {
     let file = event.target.files[0];
     if(!file || !currentUser) return;
     let reader = new FileReader();
     reader.onload = function(e) {
         currentUser.avatar = e.target.result;
         localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
-        updateAuthUI();
+        window.updateAuthUI();
         alert('✅ تم تحديث الصورة الشخصية بنجاح!');
     };
     reader.readAsDataURL(file);
 }
 
-function handleCoverUpload(event) {
+window.handleCoverUpload = function(event) {
     let file = event.target.files[0];
     if(!file || !currentUser) return;
     let reader = new FileReader();
     reader.onload = function(e) {
         currentUser.cover = e.target.result;
         localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
-        updateAuthUI();
+        window.updateAuthUI();
         alert('✅ تم تحديث الغلاف بنجاح!');
     };
     reader.readAsDataURL(file);
 }
 
-function previewNewProductMedia(event) {
+window.previewNewProductMedia = function(event) {
     let file = event.target.files[0];
     if(!file) return;
     let reader = new FileReader();
@@ -268,7 +268,7 @@ function previewNewProductMedia(event) {
     reader.readAsDataURL(file);
 }
 
-async function saveNewProductToStore() {
+window.saveNewProductToStore = async function() {
     let name = document.getElementById('newProdName').value.trim();
     let price = parseFloat(document.getElementById('newProdPrice').value) || 0;
     let qty = parseInt(document.getElementById('newProdQty').value) || 1;
@@ -287,9 +287,8 @@ async function saveNewProductToStore() {
         addedBy: currentUser ? currentUser.name : 'إدارة النظام'
     };
 
-    // حفظ المنتج سحابياً في مجموعة inventory (تنشأ تلقائياً)
     await syncDataToCloud("inventory", newProduct, prodId);
-    addNotification(`📦 تمت إضافة منتج جديد: ${name} (${price} ج.م)`);
+    window.addNotification(`📦 تمت إضافة منتج جديد: ${name} (${price} ج.م)`);
 
     document.getElementById('newProdName').value = '';
     document.getElementById('newProdPrice').value = '';
@@ -298,17 +297,17 @@ async function saveNewProductToStore() {
     tempNewProdMedia = null;
 
     alert('✅ تمت إضافة المنتج ونشره سحابياً في المتجر بنجاح!');
-    switchTab('storeTab');
+    window.switchTab('storeTab');
 }
 
-function filterCategory(cat, element) {
+window.filterCategory = function(cat, element) {
     currentFilter = cat;
     document.querySelectorAll('#storeTab .categories-grid .cat-chip').forEach(c => c.classList.remove('active'));
     element.classList.add('active');
     renderStore();
 }
 
-function filterCartCategory(cat, element) {
+window.filterCartCategory = function(cat, element) {
     currentCartFilter = cat;
     let container = document.getElementById('cartCardSection');
     container.querySelectorAll('.categories-grid .cat-chip').forEach(c => c.classList.remove('active'));
@@ -345,7 +344,7 @@ function renderStore() {
     });
 }
 
-function shareProduct(name, price) {
+window.shareProduct = function(name, price) {
     let shareText = `🚢 منصة Giti Export\n📦 منتج: ${name}\n💰 السعر: ${price} جنيه`;
     if (navigator.share) {
         navigator.share({ title: name, text: shareText, url: window.location.href }).catch(() => {});
@@ -355,7 +354,7 @@ function shareProduct(name, price) {
     }
 }
 
-function addToCart(id) {
+window.addToCart = function(id) {
     if(!currentUser) return alert('⚠️ يرجى تسجيل الدخول أولاً لإضافة منتجات إلى سلتك!');
     let item = inventory.find(i => i.id == id);
     if(!item) return alert('عذراً، المنتج غير متوفر!');
@@ -400,14 +399,14 @@ function renderCart() {
     document.getElementById('cartTotal').innerText = total.toFixed(currency === 'USD' ? 2 : 0);
 }
 
-function updateCartCurrency() {
+window.updateCartCurrency = function() {
     let currency = document.getElementById('currencySelector').value;
     let symbolEl = document.getElementById('currencyUnitSymbol');
     if(symbolEl) symbolEl.innerText = currency === 'USD' ? 'دولار' : 'جنيه';
     renderCart();
 }
 
-function toggleWalletInput() {
+window.toggleWalletInput = function() {
     let method = document.getElementById('paymentMethodSelect').value;
     let walletContainer = document.getElementById('walletPhoneContainer');
     if(walletContainer) {
@@ -419,7 +418,7 @@ function toggleWalletInput() {
     }
 }
 
-async function checkoutCart() {
+window.checkoutCart = async function() {
     if(currentCart.length === 0) return alert('⚠️ سلة المشتريات فارغة!');
 
     let totalVal = document.getElementById('cartTotal').innerText;
@@ -438,9 +437,8 @@ async function checkoutCart() {
         date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
     };
 
-    // حفظ الطلب سحابياً في مجموعة orders (تنشأ تلقائياً)
     await syncDataToCloud("orders", newOrder, orderId);
-    addNotification(`🛒 تم تسجيل طلب جديد برقم #${newOrder.id} بقيمة ${newOrder.total}`);
+    window.addNotification(`🛒 تم تسجيل طلب جديد برقم #${newOrder.id} بقيمة ${newOrder.total}`);
 
     activeInvoice = newOrder;
     currentCart = [];
@@ -451,10 +449,10 @@ async function checkoutCart() {
     renderFinancialReports();
 
     alert('✅ تم تأكيد طلبك سحابياً بنجاح وإصدار الفاتورة الرسمية!');
-    openInvoiceModal(newOrder);
+    window.openInvoiceModal(newOrder);
 }
 
-async function submitRFQ() {
+window.submitRFQ = async function() {
     let comp = document.getElementById('rfqCompanyName').value.trim();
     let specs = document.getElementById('rfqSpecs').value.trim();
     let qty = document.getElementById('rfqQty').value.trim();
@@ -462,16 +460,16 @@ async function submitRFQ() {
     
     let rfqData = { comp, specs, qty, date: new Date().toLocaleDateString('ar-EG') };
     await syncDataToCloud("rfqs", rfqData);
-    addNotification(`📋 تم استلام طلب عرض سعر (RFQ) من: ${comp}`);
+    window.addNotification(`📋 تم استلام طلب عرض سعر (RFQ) من: ${comp}`);
     alert('✅ تم إرسال طلب عروض الأسعار سحابياً بنجاح وسيتم الرد خلال 24 ساعة.');
     
     document.getElementById('rfqCompanyName').value = '';
     document.getElementById('rfqSpecs').value = '';
     document.getElementById('rfqQty').value = '';
-    switchTab('storeTab');
+    window.switchTab('storeTab');
 }
 
-async function submitB2BVerification() {
+window.submitB2BVerification = async function() {
     let name = document.getElementById('b2bName').value.trim();
     let cr = document.getElementById('b2bCR').value.trim();
     let tax = document.getElementById('b2bTax').value.trim();
@@ -479,16 +477,16 @@ async function submitB2BVerification() {
     
     let verData = { name, cr, tax, date: new Date().toLocaleDateString('ar-EG') };
     await syncDataToCloud("b2b_verifications", verData);
-    addNotification(`🔐 قدمت شركة (${name}) طلب توثيق تجاري جديد.`);
+    window.addNotification(`🔐 قدمت شركة (${name}) طلب توثيق تجاري جديد.`);
     alert('✅ تم تقديم طلب التوثيق سحابياً بنجاح!');
     
     document.getElementById('b2bName').value = '';
     document.getElementById('b2bCR').value = '';
     document.getElementById('b2bTax').value = '';
-    switchTab('storeTab');
+    window.switchTab('storeTab');
 }
 
-function openInvoiceModal(order) {
+window.openInvoiceModal = function(order) {
     document.getElementById('invModalId').innerText = 'رقم الفاتورة: #' + order.id;
     document.getElementById('invModalDate').innerText = 'التاريخ: ' + order.date;
     document.getElementById('invModalClient').innerText = order.customer;
@@ -503,11 +501,11 @@ function openInvoiceModal(order) {
             tbody.innerHTML += `<tr><td>${it.name}</td><td>1</td><td>${it.price}</td><td>${it.price}</td></tr>`;
         });
     }
-    switchTab('invoiceModal');
+    window.switchTab('invoiceModal');
     activeInvoice = order;
 }
 
-function downloadInvoiceImage() {
+window.downloadInvoiceImage = function() {
     let element = document.getElementById('printableInvoice');
     if(!element) return;
     html2canvas(element).then(canvas => {
@@ -518,7 +516,7 @@ function downloadInvoiceImage() {
     });
 }
 
-function downloadInvoiceWord() {
+window.downloadInvoiceWord = function() {
     if(!activeInvoice) return alert('لا توجد فاتورة نشطة حالياً!');
     
     let htmlContent = `
@@ -598,7 +596,7 @@ function renderWarehouseManagement() {
     });
 }
 
-function deleteWarehouseItem(id) {
+window.deleteWarehouseItem = function(id) {
     inventory = inventory.filter(i => i.id != id);
     renderStore();
     renderWarehouseManagement();
@@ -659,7 +657,7 @@ function renderFinancialReports() {
     }
 }
 
-async function addNotification(text) {
+window.addNotification = async function(text) {
     let notifObj = { id: Date.now(), text, date: new Date().toLocaleDateString('ar-EG') };
     notifications.unshift(notifObj);
     await syncDataToCloud("notifications", notifObj);
@@ -685,7 +683,7 @@ function renderNotifications() {
     });
 }
 
-function clearNotifications() {
+window.clearNotifications = function() {
     notifications = [];
     renderNotifications();
 }
@@ -699,7 +697,7 @@ function updateStats() {
     if(iCount) iCount.innerText = invoicesArchive.length;
 }
 
-async function sendChatMessage() {
+window.sendChatMessage = async function() {
     let txt = document.getElementById('chatInput').value.trim();
     if(!txt || !currentUser) return;
     let senderName = currentUser.name;
@@ -715,7 +713,6 @@ async function sendChatMessage() {
         time: Date.now()
     };
     
-    // حفظ الرسالة سحابياً في مجموعة chats (تنشأ تلقائياً)
     await syncDataToCloud("chats", chatMsg);
     let chatInput = document.getElementById('chatInput');
     if(chatInput) chatInput.value = '';
