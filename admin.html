@@ -30,7 +30,7 @@
     <div class="stats-grid" style="margin-bottom: 20px;">
         <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
         <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
-        <div class="stat-card"><h4>إجمالي الفواتير</h4><p id="statInvoicesCount">0</p></div>
+        <div class="stat-card"><h4>إجمالي الإيرادات المسجلة</h4><p id="statTotalRevenueAdmin">0 ج.م</p></div>
     </div>
 
     <!-- 1. قسم إدارة وحذف منتجات المتجر والمستودع -->
@@ -40,7 +40,7 @@
         <div id="adminInventoryList" style="max-height: 280px; overflow-y: auto;">جاري تحميل المنتجات...</div>
     </div>
 
-    <!-- 2. قسم إدارة ومتابعة الطلبات التجارية -->
+    <!-- 2. قسم إدارة ومتابعة الطلبات التجارية والفواتير -->
     <div class="card" style="border: 2px solid var(--accent); margin-bottom: 20px;">
         <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-receipt"></i> متابعة طلبات العملاء والفواتير التجارية</h3>
         <div id="adminOrdersList" style="max-height: 280px; overflow-y: auto;">لا توجد طلبات مسجلة حتى الآن.</div>
@@ -48,7 +48,7 @@
 
     <!-- 3. قسم عروض الأسعار (RFQ) وتوثيق الشركات (B2B) -->
     <div class="card" style="border: 2px solid var(--accent);">
-        <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-file-contract"></i> طلبات عروض الأسعار (RFQs) وتوثيق الشركات</h3>
+        <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-file-contract"></i> طلبات عروض الأسعار (RFQs) وتوثيق الشركات (B2B)</h3>
         <div id="adminRfqsList" style="max-height: 220px; overflow-y: auto; font-size: 13px;">لا توجد طلبات جديدة.</div>
     </div>
 
@@ -72,7 +72,7 @@
         const auth = getAuth();
         const db = getFirestore(app);
 
-        // التحقق الأمني: السماح حصرياً للبريد الإلكتروني للإدارة
+        // التحقق الأمني: السماح حصرياً للبريد الإلكتروني للإدارة (haretg@gmail.com)
         onAuthStateChanged(auth, (user) => {
             if (!user || user.email !== 'haretg@gmail.com') {
                 alert('⚠️ عذراً، هذه الصفحة مخصصة لمدير المنصة Master Admin فقط!');
@@ -85,7 +85,7 @@
 
         // الاستماع الفوري للبيانات السحابية وعرضها
         function initAdminDataListeners() {
-            // 1. مراقبة المنتجات
+            // 1. مراقبة المنتجات والمخزون
             onSnapshot(collection(db, "inventory"), (snapshot) => {
                 let inventory = [];
                 snapshot.forEach((docSnap) => {
@@ -98,29 +98,35 @@
                 } else {
                     invList.innerHTML = inventory.map(item => `
                         <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:8px; background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
-                            <span>📦 <b>${item.name}</b> (${item.price} ج.م) - المخزون: ${item.qty}</span>
+                            <span>📦 <b>${item.name}</b> (${item.price} ج.م) - المخزون: ${item.qty} قطعة</span>
                             <button class="btn-red" style="padding:4px 10px; font-size:11px; width:auto; cursor:pointer;" onclick="deleteCloudItem('inventory', '${item.id}')">حذف نهائي</button>
                         </div>
                     `).join('');
                 }
             });
 
-            // 2. مراقبة الطلبات
+            // 2. مراقبة الطلبات والإيرادات
             onSnapshot(collection(db, "orders"), (snapshot) => {
                 let orders = [];
+                let totalRev = 0;
                 snapshot.forEach((docSnap) => {
-                    orders.push({ id: docSnap.id, ...docSnap.data() });
+                    let ord = { id: docSnap.id, ...docSnap.data() };
+                    orders.push(ord);
+                    let num = parseFloat(ord.total) || 0;
+                    totalRev += num;
                 });
                 document.getElementById('statOrdersCount').innerText = orders.length;
                 document.getElementById('statInvoicesCount').innerText = orders.length;
+                document.getElementById('statTotalRevenueAdmin').innerText = totalRev.toLocaleString() + ' ج.م';
+                
                 let ordList = document.getElementById('adminOrdersList');
                 if(orders.length === 0) {
                     ordList.innerHTML = 'لا توجد طلبات مسجلة.';
                 } else {
                     ordList.innerHTML = orders.map(o => `
                         <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:8px; background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
-                            <span>🧾 طلب #${o.id} - العميل: <b>${o.customer}</b> (${o.total})</span>
-                            <span style="color:var(--accent); font-size:12px;">${o.date}</span>
+                            <span>🧾 طلب #${o.id} - العميل: <b>${o.customer}</b> (${o.total}) - الدفع: ${o.payment}</span>
+                            <button class="btn-red" style="padding:3px 8px; font-size:10px; width:auto;" onclick="deleteCloudItem('orders', '${o.id}')">حذف الطلب</button>
                         </div>
                     `).join('');
                 }
@@ -129,13 +135,13 @@
             // 3. مراقبة الـ RFQ وتوثيق الشركات
             onSnapshot(collection(db, "rfqs"), (snapshot) => {
                 let rfqs = [];
-                snapshot.forEach((docSnap) => { rfqs.push(docSnap.data()); });
+                snapshot.forEach((docSnap) => { rfqs.push({ id: docSnap.id, ...docSnap.data() }); });
                 updateRfqsAndB2BView(rfqs, null);
             });
 
             onSnapshot(collection(db, "b2b_verifications"), (snapshot) => {
                 let b2b = [];
-                snapshot.forEach((docSnap) => { b2b.push(docSnap.data()); });
+                snapshot.forEach((docSnap) => { b2b.push({ id: docSnap.id, ...docSnap.data() }); });
                 updateRfqsAndB2BView(null, b2b);
             });
         }
@@ -146,14 +152,15 @@
             if(rfqs) cachedRfqs = rfqs;
             if(b2b) cachedB2b = b2b;
             let container = document.getElementById('adminRfqsList');
-            let rfqHtml = cachedRfqs.map(r => `<div style="background:#090d16; padding:6px; margin-bottom:4px; border-radius:4px; border:1px solid var(--border-color);">📋 RFQ من: <b>${r.comp}</b> | المواصفات: ${r.specs} | الكمية: ${r.qty}</div>`).join('');
-            let b2bHtml = cachedB2b.map(b => `<div style="background:#090d16; padding:6px; margin-bottom:4px; border-radius:4px; border:1px solid var(--border-color);">🔐 توثيق شركة: <b>${b.name}</b> | سجل تجاري: ${b.cr} | ضريبي: ${b.tax}</div>`).join('');
+            let rfqHtml = cachedRfqs.map(r => `<div style="background:#090d16; padding:8px; margin-bottom:6px; border-radius:6px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;"><span>📋 RFQ من: <b>${r.comp}</b> | المواصفات: ${r.specs} | الكمية: ${r.qty}</span> <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto;" onclick="deleteCloudItem('rfqs', '${r.id}')">حذف</button></div>`).join('');
+            let b2bHtml = cachedB2b.map(b => `<div style="background:#090d16; padding:8px; margin-bottom:6px; border-radius:6px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;"><span>🔐 توثيق شركة: <b>${b.name}</b> | سجل تجاري: ${b.cr} | ضريبي: ${b.tax}</span> <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto;" onclick="deleteCloudItem('b2b_verifications', '${b.id}')">حذف</button></div>`).join('');
+            
             container.innerHTML = (rfqHtml + b2bHtml) || 'لا توجد طلبات عروض أسعار أو توثيق حالياً.';
         }
 
-        // دالة الحذف السحابي لأي عنصر
+        // دالة الحذف السحابي لأي عنصر أو طلب من قاعدة البيانات
         window.deleteCloudItem = async function(collectionName, docId) {
-            if(confirm('هل أنت متأكد من الحذف النهائي من السحابة؟')) {
+            if(confirm('هل أنت متأكد من الحذف النهائي لهذا العنصر من السحابة؟')) {
                 try {
                     await deleteDoc(doc(db, collectionName, String(docId)));
                     alert('✅ تم الحذف بنجاح!');
