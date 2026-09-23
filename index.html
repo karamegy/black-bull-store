@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giti Export - منصة B2B والتجارة المحلية والدولية</title>
+    <title>Giti Export - منصة B2B والتجارة المحلية والدولية الذكية</title>
     <!-- مكتبة لطباعة وتحويل الفواتير إلى صور مباشرة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- مكتبة الأيقونات FontAwesome -->
@@ -26,8 +26,15 @@
     <div class="side-drawer" id="sideDrawer">
         <h3>قائمة الأقسام والتحكم 🚢 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
         <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> المتجر الرئيسي وسلة المشتريات</button>
+        <button onclick="switchTab('virtualShowroomTab'); toggleSidebar()"><i class="fa-solid fa-cube" style="color:var(--accent)"></i> المعرض الافتراضي ثلاثي الأبعاد (3D) 🌐</button>
+        <button onclick="switchTab('auctionsTab'); toggleSidebar()"><i class="fa-solid fa-gavel" style="color:#ffb900"></i> المزادات والبورصة السلعية الحية ⚖️</button>
+        <button onclick="switchTab('liveGpsTab'); toggleSidebar()"><i class="fa-solid fa-map-location-dot" style="color:#27ae60"></i> التتبع الجغرافي الحي للحاويات 🗺️</button>
+        <button onclick="switchTab('walletTab'); toggleSidebar()"><i class="fa-solid fa-wallet" style="color:#00ffcc"></i> المحفظة الرقمية وإدارة السيولة 💳</button>
+        <button onclick="switchTab('ratingsTab'); toggleSidebar()"><i class="fa-solid fa-star" style="color:#f25022"></i> السمعة التجارية والتقييمات الموثقة ⭐</button>
+        <button onclick="switchTab('shippingCalculatorTab'); toggleSidebar()"><i class="fa-solid fa-calculator"></i> حاسبة الشحن والجمارك الذكية 🧮</button>
         <button onclick="switchTab('rfqTab'); toggleSidebar()"><i class="fa-solid fa-file-contract"></i> طلب عروض أسعار (RFQ) 📋</button>
         <button onclick="switchTab('b2bVerifyTab'); toggleSidebar()"><i class="fa-solid fa-shield-halved"></i> توثيق حسابات الشركات (B2B) 🔐</button>
+        <button onclick="switchTab('smartContractsTab'); toggleSidebar()"><i class="fa-solid fa-file-signature"></i> عقود الضمان التجاري الذكية 🛡️</button>
         <button onclick="switchTab('shippingDocsTab'); toggleSidebar()"><i class="fa-solid fa-file-invoice"></i> مستندات الشحن والحاويات 🌍</button>
         <button onclick="switchTab('addProductTab'); toggleSidebar()"><i class="fa-solid fa-cart-plus"></i> إضافة منتج جديد (صورة/فيديو) ➕</button>
         <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()"><i class="fa-solid fa-warehouse"></i> المستودعات وإدارة المخزون 🌟</button>
@@ -39,7 +46,7 @@
         <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle" style="color:var(--accent);"></i> بروفايل حسابي (Giti Plus)</button>
         <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني والمراسلات</button>
         
-        <!-- زر لوحة الآدمن المنفصلة (يظهر حصرياً للماستر آدمن haretg@gmail.com) -->
+        <!-- زر لوحة الآدمن المنفصلة -->
         <button id="adminPageBtn" onclick="window.location.href='admin.html'" style="background:var(--accent); color:#111; display:none;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة (Admin)</button>
         
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
@@ -72,18 +79,19 @@
         <button class="btn-purple" style="font-size:12px; padding:8px;" onclick="switchTab('supportTab'); toggleGPlusDrawer()">💬 المراسلات الخاصة</button>
     </div>
 
-    <!-- شريط الثيمات -->
+    <!-- شريط الثيمات المتطور مع ثيمات ثري دي -->
     <div class="theme-selector">
-        <span style="font-size:12px; align-self:center; color:var(--text-muted);">ثيم المنصة:</span>
-        <div class="theme-btn" style="background: #00a4ef;" onclick="setTheme('#0f172a', '#00a4ef', '#090d16', '#111827')" title="أزرق تفاعلي"></div>
-        <div class="theme-btn" style="background: #d4af37;" onclick="setTheme('#111111', '#d4af37', '#0f1115', '#1a1d24')" title="أسود وذهبي"></div>
-        <div class="theme-btn" style="background: #27ae60;" onclick="setTheme('#064e3b', '#34d399', '#022c22', '#065f46')" title="أخضر"></div>
+        <span style="font-size:12px; align-self:center; color:var(--text-muted);">ثيمات المنصة الثلاثية الأبعاد:</span>
+        <div class="theme-btn" style="background: #00a4ef;" onclick="setTheme('#0f172a', '#00a4ef', '#090d16', '#111827')" title="أزرق تفاعلي كلاسيكي"></div>
+        <div class="theme-btn" style="background: #d4af37;" onclick="setTheme('#111111', '#d4af37', '#0f1115', '#1a1d24')" title="أسود وذهبي فاخر"></div>
+        <div class="theme-btn" style="background: #00ffcc; box-shadow: 0 0 10px #00ffcc;" onclick="setTheme('#050505', '#00ffcc', '#0a0a1a', '#121226')" title="سايبربانك هولوجرام (3D)"></div>
+        <div class="theme-btn" style="background: #38bdf8; box-shadow: 0 0 10px #38bdf8;" onclick="setTheme('#021526', '#38bdf8', '#03346e', '#6eacda')" title="المحيط العميق (3D Ocean)"></div>
     </div>
 
     <div class="brand-header">
         <div class="bull-logo-3d">🚢</div>
         <h1>GITI EXPORT B2B</h1>
-        <small>منصة التجارة الإلكترونية المحلية والدولية الآمنة عبر سحابة Firebase</small>
+        <small>منصة التجارة الإلكترونية المحلية والدولية الآمنة عبر سحابة Firebase (مع تقنيات 3D والمميزات الشاملة)</small>
     </div>
 
     <!-- شريط علوي -->
@@ -107,12 +115,12 @@
     <!-- شريط التنقل السريع -->
     <div class="nav-bar hidden" id="mainNavBar">
         <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
-        <button onclick="switchTab('rfqTab', this)">📋 عروض الأسعار</button>
-        <button onclick="switchTab('b2bVerifyTab', this)">🔐 توثيق الشركات</button>
-        <button onclick="switchTab('shippingDocsTab', this)">🌍 مستندات الشحن</button>
-        <button onclick="switchTab('invoicesViewerTab', this)">📑 الفواتير</button>
-        <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
-        <button onclick="switchTab('financialReportsTab', this)">📊 الأرباح</button>
+        <button onclick="switchTab('virtualShowroomTab', this)">🌐 معرض 3D</button>
+        <button onclick="switchTab('auctionsTab', this)">⚖️ المزادات</button>
+        <button onclick="switchTab('liveGpsTab', this)">🗺️ تتبع GPS</button>
+        <button onclick="switchTab('walletTab', this)">💳 المحفظة</button>
+        <button onclick="switchTab('ratingsTab', this)">⭐ التقييمات</button>
+        <button onclick="switchTab('shippingCalculatorTab', this)">🧮 حاسبة الشحن</button>
         <button onclick="switchTab('supportTab', this)"><i class="fa-solid fa-headset"></i> الدعم</button>
     </div>
 
@@ -142,6 +150,107 @@
                 <button class="btn-blue" onclick="window.registerWithEmail()" style="flex: 1;">إنشاء حساب جديد ✨</button>
             </div>
         </div>
+    </div>
+
+    <!-- قسم المزادات والبورصة السلعية الحية -->
+    <div id="auctionsTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>⚖️ المزادات الحية والبورصة السلعية (B2B Live Auctions)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">زايد فورياً على الحبوب، المنسوجات، والسلع الاستراتيجية بكميات الجملة.</p>
+        <div id="auctionsListContainer">
+            <div style="background:#090d16; padding:12px; border-radius:8px; border:1px solid var(--border-color); margin-bottom:10px;">
+                <b>🌾 مزاد علني: توريد 500 طن حبوب قمح فاخر</b><br>
+                <small style="color:var(--accent);">السعر الحالي: <b>12,500 ج.م / للطن</b> | المزايد الحالي: شركة النيل الدولية</small>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <input type="number" id="bidAmount1" placeholder="أدخل سعر المزايدة الأعلى..." style="flex:1; padding:6px; background:#111; color:#fff; border:1px solid #333; border-radius:5px;">
+                    <button class="btn-green" style="width:auto; padding:6px 12px; font-size:12px;" onclick="placeBid('مزاد قمح فاخر', 12500, 'bidAmount1')">تقديم مزايدة 🚀</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم التتبع الجغرافي الحي للحاويات والشاحنات -->
+    <div id="liveGpsTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🗺️ التتبع الجغرافي الحي للحاويات والشاحنات (Live GPS Fleet)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">متابعة خط سير الشحنات البحرية والبرية لحظة بلحظة عبر الخريطة الذكية.</p>
+        <div style="background:#090d16; height:200px; border-radius:8px; border:1px solid var(--border-color); display:flex; align-items:center; justify-content:center; flex-direction:column; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:10px; right:10px; background:rgba(0,164,239,0.2); padding:4px 8px; border-radius:5px; font-size:11px; color:var(--accent);">🛰️ متصل بالأقمار الصناعية</div>
+            <i class="fa-solid fa-ship" style="font-size:40px; color:var(--accent); animation: floatAndGlow 3s infinite;"></i>
+            <p style="margin:10px 0 0; font-weight:bold;">الحاوية #BL-9820 يتحرك حالياً في البحر الأبيض المتوسط (متجه لميناء الإسكندرية)</p>
+            <small style="color:#27ae60;">السرعة: 22 عقدة | الحالة: منتظم وفي الموعد ✅</small>
+        </div>
+    </div>
+
+    <!-- قسم المحفظة الرقمية الذكية وإدارة السيولة -->
+    <div id="walletTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>💳 المحفظة الرقمية الذكية وإدارة السيولة المالية</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><h4>الرصيد المتاح</h4><p id="walletAvailableBalance">45,000 ج.م</p></div>
+            <div class="stat-card"><h4>المبالغ المعلقة (عقود ضمان)</h4><p id="walletEscrowBalance">120,000 ج.م</p></div>
+            <div class="stat-card"><h4>إجمالي مسحوبات المنصة</h4><p>15,200 ج.م</p></div>
+        </div>
+        <div class="input-group"><label>قيمة الإيداع أو التحويل (ج.م):</label><input type="number" id="walletAddAmount" placeholder="10000"></div>
+        <button class="btn-green" onclick="depositToWallet()">إيداع وتعبئة الرصيد فوراً 💰</button>
+    </div>
+
+    <!-- قسم السمعة التجارية والتقييمات الموثقة -->
+    <div id="ratingsTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>⭐ السمعة التجارية والتقييمات الموثقة (Corporate Trust)</h2>
+        <div style="text-align:center; padding:10px;">
+            <div style="font-size:32px; color:#ffb900; margin-bottom:5px;">★★★★★</div>
+            <h3 style="margin:0;">التقييم العام للمنصة والشركات: 4.9 / 5.0</h3>
+            <p style="color:var(--text-muted); font-size:12px;">بناءً على أكثر من 340 صفقة تصدير وتوريد ناجحة.</p>
+        </div>
+        <hr style="border-color:var(--border-color)">
+        <div class="input-group"><label>قيم تجربتك مع المنصة أو إحدى الشركات:</label><textarea id="userReviewText" placeholder="اكتب تقييمك وملاحظاتك حول سرعة التوريد..."></textarea></div>
+        <button class="btn-gold" onclick="submitUserReview()">نشر التقييم الموثق ✍️</button>
+        <div id="reviewsListContainer" style="margin-top:15px;"></div>
+    </div>
+
+    <!-- قسم معرض المنتجات الافتراضي ثلاثي الأبعاد 3D Virtual Showroom -->
+    <div id="virtualShowroomTab" class="card hidden" style="border: 2px solid var(--accent); background: linear-gradient(135deg, var(--card-bg), #050510);">
+        <h2>🌐 المعرض الافتراضي ثلاثي الأبعاد (3D Showroom)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">استعرض المنتجات داخل بيئة عرض افتراضية مجسمة تفاعلية.</p>
+        <div class="showroom-3d-stage">
+            <div class="cube-3d-wrapper">
+                <div class="cube-face front">📦 تصدير فاخر</div>
+                <div class="cube-face back">🌍 شحن دولي</div>
+                <div class="cube-face right">👔 منسوجات</div>
+                <div class="cube-face left">⚡ جودة عالية</div>
+                <div class="cube-face top">🚢 GITI B2B</div>
+                <div class="cube-face bottom">🔒 ضمان سحابي</div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:15px;">
+            <button class="btn-gold" style="max-width:250px; margin:0 auto;" onclick="switchTab('storeTab')">تصفح المنتجات بالحجم الكامل 🏪</button>
+        </div>
+    </div>
+
+    <!-- قسم حاسبة الشحن والجمارك الذكية -->
+    <div id="shippingCalculatorTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🧮 حاسبة تكاليف الشحن والجمارك الذكية</h2>
+        <div class="input-group">
+            <label>نوع حاوية الشحن:</label>
+            <select id="calcContainerType">
+                <option value="20">حاوية 20 قدم (Standard 20ft)</option>
+                <option value="40">حاوية 40 قدم (High Cube 40ft)</option>
+                <option value="air">شحن جوي سريع (Air Cargo)</option>
+            </select>
+        </div>
+        <div class="input-group"><label>الوزن التقريبي (كيلوجرام):</label><input type="number" id="calcWeight" placeholder="1500"></div>
+        <div class="input-group"><label>دولة الوجهة (ميناء الوصول):</label><input type="text" id="calcDestination" placeholder="مثال: ميناء جدة / دبي / روتردام"></div>
+        <button class="btn-blue" onclick="calculateFreightCost()">احساب التكلفة الإجمالية والجمارك 🚀</button>
+        <div id="calcResultBox" style="margin-top:15px; background:#090d16; padding:12px; border-radius:8px; border:1px solid var(--border-color); display:none;"></div>
+    </div>
+
+    <!-- قسم عقود الضمان الذكية Smart Contracts -->
+    <div id="smartContractsTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🛡️ عقود الضمان التجاري الذكية (Escrow Contracts)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">تأمين صفقات التصدير عبر عقود ذكية مشفرة تضمن حقوق المورد والمستورد.</p>
+        <div class="input-group"><label>اسم الطرف الثاني (المستورد / المصدر):</label><input type="text" id="contractPartner" placeholder="اسم الشركة أو المستورد"></div>
+        <div class="input-group"><label>قيمة الصفقة (بالجنيه / الدولار):</label><input type="text" id="contractAmount" placeholder="50000 ج.م"></div>
+        <div class="input-group"><label>شروط تسليم الشحنة:</label><textarea id="contractTerms" placeholder="شروط التسليم FOB / CIF والتفتيش الجمركي..."></textarea></div>
+        <button class="btn-gold" onclick="generateSmartContract()">إصدار وتوقيع العقد الرقمي الموثق ✍️</button>
+        <div id="contractResultView" style="margin-top:15px;"></div>
     </div>
 
     <!-- 2. طلبات عروض الأسعار RFQ -->
@@ -329,7 +438,7 @@
         </div>
     </div>
 
-    <!-- تهيئة ملف السكريبت الخارجي أولاً لضمان توفر دوال مثل switchTab -->
+    <!-- تهيئة ملف السكريبت الخارجي أولاً -->
     <script src="app.js"></script>
 
     <!-- تهيئة Firebase Authentication و Firestore -->
@@ -456,7 +565,6 @@
                     cover: ''
                 };
                 
-                // إظهار زر لوحة الآدمن المنفصلة حصرياً لبريد المدير
                 if (user.email === 'haretg@gmail.com') {
                     if(adminBtn) adminBtn.style.display = 'block';
                 } else {
