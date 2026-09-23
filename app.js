@@ -1,4 +1,4 @@
-// حساب الآدمن الرئيسي بكلمة المرور 01036
+// حساب الآدمن الرئيسي 
 let registeredUsers = JSON.parse(localStorage.getItem('giti_export_all_users')) || [
     { name: 'admin', phone: 'admin', role: 'مدير', password: '01036', avatar: '', cover: '' }
 ];
@@ -18,7 +18,6 @@ let notifications = JSON.parse(localStorage.getItem('giti_export_notifications')
 ];
 let rfqs = JSON.parse(localStorage.getItem('giti_b2b_rfqs')) || [];
 
-// سلة المشتريات الخاصة بالمستخدم الحالي
 let currentCart = [];
 if(currentUser) {
     let savedUserCart = localStorage.getItem('giti_cart_' + currentUser.phone);
@@ -185,7 +184,6 @@ function loginWithGoogle() {
         registeredUsers.push(currentUser);
     }
     
-    // تحميل سلة المستخدم
     let savedCart = localStorage.getItem('giti_cart_' + currentUser.phone);
     currentCart = savedCart ? JSON.parse(savedCart) : [];
 
