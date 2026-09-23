@@ -38,7 +38,8 @@
         <button onclick="switchTab('notificationsTab'); toggleSidebar()"><i class="fa-solid fa-bell"></i> إشعارات المنصة والتنبيهات 🔔</button>
         <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle" style="color:var(--accent);"></i> بروفايل حسابي (Giti Plus)</button>
         <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني والمراسلات</button>
-        <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة (Admin)</button>
+        <!-- زر لوحة الآدمن المنفصلة (يظهر حصرياً للماستر آدمن) -->
+        <button id="adminMenuBtn" onclick="window.location.href='admin.html'" style="background:var(--accent); color:#111; display:none;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة (Admin)</button>
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
 
@@ -326,16 +327,6 @@
         </div>
     </div>
 
-    <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🔐 لوحة التحكم الشاملة للآدمن الماستر (Master Admin)</h2>
-        <p style="text-align:center; color:var(--accent); font-size:12px;">متاحة حصرياً للمدير المسجل بالبريد (`haretg@gmail.com`).</p>
-        <div class="stats-grid">
-            <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
-            <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
-            <div class="stat-card"><h4>إجمالي الفواتير</h4><p id="statInvoicesCount">0</p></div>
-        </div>
-    </div>
-
     <!-- تهيئة Firebase Authentication و Firestore -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -444,6 +435,7 @@
         };
 
         onAuthStateChanged(auth, (user) => {
+            let adminBtn = document.getElementById('adminMenuBtn');
             if (user) {
                 window.currentUser = JSON.parse(localStorage.getItem('giti_export_user')) || {
                     name: user.displayName || user.email.split('@')[0],
@@ -452,8 +444,16 @@
                     avatar: user.photoURL || '',
                     cover: ''
                 };
+                
+                // إظهار زر لوحة الآدمن حصرياً للبريد المطلوب
+                if (user.email === 'haretg@gmail.com') {
+                    if(adminBtn) adminBtn.style.display = 'block';
+                } else {
+                    if(adminBtn) adminBtn.style.display = 'none';
+                }
             } else {
                 window.currentUser = null;
+                if(adminBtn) adminBtn.style.display = 'none';
             }
             if(typeof window.updateAuthUI === 'function') {
                 window.updateAuthUI();
