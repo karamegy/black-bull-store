@@ -10,10 +10,10 @@ let inventory = JSON.parse(localStorage.getItem('giti_export_inventory')) || [
 let orders = JSON.parse(localStorage.getItem('giti_export_orders')) || [];
 let invoicesArchive = JSON.parse(localStorage.getItem('giti_export_invoices')) || [];
 let chatLogs = JSON.parse(localStorage.getItem('giti_export_chats')) || [
-    { sender: 'admin', role: 'مدير', avatar: '', text: 'أهلاً بك في دعم Giti Export B2B. نحن هنا لمساعدتك في أي استفسار تجاري أو لوجستي.' }
+    { sender: 'admin', role: 'مدير', avatar: '', text: 'أهلاً بك في دعم Giti Export. نحن هنا لمساعدتك في أي استفسار تجاري أو لوجستي.' }
 ];
 let notifications = JSON.parse(localStorage.getItem('giti_export_notifications')) || [
-    { id: 1, text: '🎉 أهلاً بك في منصة Giti Export للتجارة والتصدير الدولي B2B!', date: 'اليوم' }
+    { id: 1, text: '🎉 أهلاً بك في منصة Giti Export للتجارة المحلية والدولية!', date: 'اليوم' }
 ];
 let rfqs = JSON.parse(localStorage.getItem('giti_b2b_rfqs')) || [];
 
@@ -33,6 +33,7 @@ window.onload = function() {
     renderFinancialReports();
     renderNotifications();
     updateStats();
+    renderCart();
 };
 
 function toggleSidebar() {
@@ -143,7 +144,6 @@ function toggleAuthModal() {
     }
 }
 
-// دالة تسجيل الدخول السريع بحساب جوجل
 function loginWithGoogle() {
     let googleName = prompt("أدخل اسم حساب جوجل الخاص بك:", "مستثمر تجاري");
     if(!googleName) return;
@@ -354,8 +354,8 @@ function renderStore() {
                 <div>
                     ${mediaElement}
                     <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
-                    <small style="color:var(--accent); font-weight:bold;">سعر الجملة: ${item.price} ج.م</small><br>
-                    <small style="display:block; color:var(--text-muted);">المتوفر بالمستودع: ${item.qty}</small>
+                    <small style="color:var(--accent); font-weight:bold;">السعر: ${item.price} ج.م</small><br>
+                    <small style="display:block; color:var(--text-muted);">المتوفر: ${item.qty}</small>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:4px; margin-top:5px;">
                     <button class="btn-blue" style="padding: 5px; font-size: 11px; margin:0;" onclick="addToCart(${item.id})">أضف للسلة 🛒</button>
@@ -367,7 +367,7 @@ function renderStore() {
 }
 
 function shareProduct(name, price) {
-    let shareText = `🚢 منصة Giti Export B2B للتجارة والتصدير الدولي\n📦 تسوق الآن منتج الجملة المميز: ${name}\n💰 السعر التجاري حصرياً: ${price} جنيه\n✨ اطلب الآن عبر المنصة وتواصل معنا مباشرة!`;
+    let shareText = `🚢 منصة Giti Export للتجارة المحلية والدولية\n📦 تسوق الآن منتجنا المميز: ${name}\n💰 السعر: ${price} جنيه\n✨ اطلب الآن عبر المنصة!`;
     if (navigator.share) {
         navigator.share({ title: name, text: shareText, url: window.location.href }).catch(() => {});
     } else {
@@ -381,48 +381,98 @@ function addToCart(id) {
     if(!item || item.qty <= 0) return alert('عذراً، المنتج نفد من المستودع!');
     cart.push(item);
     renderCart();
-    alert('✅ تمت إضافة المنتج إلى سلة طلبات الجملة بنجاح');
+    alert('✅ تمت إضافة المنتج إلى سلة المشتريات والحجوزات بنجاح');
 }
 
 function renderCart() {
     let container = document.getElementById('cartItems');
     let total = 0;
-    if(cart.length === 0) { container.innerHTML = 'السلة فارغة حالياً'; document.getElementById('cartTotal').innerText = '0'; return; }
+    if(!container) return;
+    
+    if(cart.length === 0) { 
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">السلة فارغة حالياً. تصفح المنتجات وأضف ما يناسبك للحجز والشراء!</p>'; 
+        document.getElementById('cartTotal').innerText = '0'; 
+        return; 
+    }
+
     container.innerHTML = '';
+    let currency = document.getElementById('currencySelector') ? document.getElementById('currencySelector').value : 'EGP';
+    let rate = currency === 'USD' ? 0.021 : 1; 
+    let symbol = currency === 'USD' ? '$' : 'جنيه';
+
     cart.forEach((item, index) => {
-        total += item.price;
+        let itemPrice = item.price * rate;
+        total += itemPrice;
         container.innerHTML += `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; border-bottom:1px dashed #333; padding-bottom:4px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px dashed #333; padding-bottom:6px;">
                 <span>• ${item.name}</span> 
-                <span><b>${item.price} ج.م</b> <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto;" onclick="cart.splice(${index},1); renderCart();">حذف</button></span>
+                <span><b>${itemPrice.toFixed(currency === 'USD' ? 2 : 0)} ${symbol}</b> 
+                <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto; margin-right:8px;" onclick="removeFromCart(${index})">حذف</button></span>
             </div>`;
     });
-    document.getElementById('cartTotal').innerText = total;
+    document.getElementById('cartTotal').innerText = total.toFixed(currency === 'USD' ? 2 : 0);
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
+}
+
+function updateCartCurrency() {
+    let currency = document.getElementById('currencySelector').value;
+    document.getElementById('currencyUnitSymbol').innerText = currency === 'USD' ? 'دولار' : 'جنيه';
+    renderCart();
+}
+
+function toggleWalletInput() {
+    let method = document.getElementById('paymentMethodSelect').value;
+    let walletContainer = document.getElementById('walletPhoneContainer');
+    if(method.includes('كاش') || method.includes('إنستاباي')) {
+        walletContainer.style.display = 'block';
+    } else {
+        walletContainer.style.display = 'none';
+    }
 }
 
 function checkoutCart() {
+    if(cart.length === 0) return alert('⚠️ سلة المشتريات فارغة، يرجى إضافة منتجات أولاً!');
+
+    // دعم الطلب المباشر للزوار أو الأعضاء المسجلين
+    let activeClientName = currentUser ? currentUser.name : '';
+    let activeClientPhone = currentUser ? currentUser.phone : '';
+
     if(!currentUser) {
-        alert('⚠️ يرجى تسجيل الدخول أولاً لإتمام طلبات الجملة وإصدار الفاتورة التجارية!');
-        switchTab('authSection');
+        let guestName = prompt("أنت تطلب كزائر. يرجى إدخال اسمك الكريم أو اسم شركتك:", "العميل الزائر");
+        if(!guestName) return;
+        let guestPhone = prompt("أدخل رقم هاتفك لتأكيد الحجز والدفع وتفعيل الفاتورة:", "010xxxxxxxx");
+        if(!guestPhone) return;
+
+        activeClientName = guestName;
+        activeClientPhone = guestPhone;
+    }
+
+    let totalVal = document.getElementById('cartTotal').innerText;
+    let currency = document.getElementById('currencySelector').value;
+    let paymentMethod = document.getElementById('paymentMethodSelect').value;
+    let walletPhone = document.getElementById('walletSenderPhone') ? document.getElementById('walletSenderPhone').value : '';
+
+    if((paymentMethod.includes('كاش') || paymentMethod.includes('إنستاباي')) && !walletPhone) {
+        alert('⚠️ يرجى إدخال رقم الهاتف المحول منه عبر المحفظة أو إنستاباي لتأكيد الدفع!');
         return;
     }
-    if(cart.length === 0) return alert('السلة فارغة!');
 
-    let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
-    let paymentMethod = document.getElementById('paymentMethodSelect').value;
-    
     cart.forEach(cartItem => {
         let st = inventory.find(i => i.id === cartItem.id);
-        if(st) st.qty -= 1;
+        if(st && st.qty > 0) st.qty -= 1;
     });
 
     let newOrder = {
-        id: 'B2B-' + Math.floor(1000 + Math.random() * 9000),
-        customer: currentUser.name,
-        phone: currentUser.phone,
+        id: 'GITI-' + Math.floor(1000 + Math.random() * 9000),
+        customer: activeClientName,
+        phone: activeClientPhone,
         items: [...cart],
-        total: totalVal,
-        payment: paymentMethod,
+        total: totalVal + ' ' + (currency === 'USD' ? 'دولار' : 'جنيه'),
+        payment: paymentMethod + (walletPhone ? ` (من رقم: ${walletPhone})` : ''),
         date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
     };
 
@@ -438,9 +488,9 @@ function checkoutCart() {
     renderOrders();
     renderInvoicesArchive();
     renderFinancialReports();
-    addNotification(`🛒 تم إصدار طلب جملة جديد برقم #${newOrder.id} بقيمة ${totalVal} ج.م عبر (${paymentMethod})`);
+    addNotification(`🛒 تم تسجيل طلب جديد برقم #${newOrder.id} بقيمة ${newOrder.total} عبر (${paymentMethod})`);
 
-    alert('✅ تم إتمام طلب الجملة بنجاح وتم إصدار الفاتورة التجارية الفورية!');
+    alert('✅ تم تأكيد طلبك بنجاح! تم إصدار الفاتورة الرسمية لعقد الشراء.');
     openInvoiceModal(newOrder);
 }
 
@@ -452,8 +502,8 @@ function submitRFQ() {
     
     rfqs.push({ comp, specs, qty, date: new Date().toLocaleDateString('ar-EG') });
     syncData();
-    addNotification(`📋 تم استلام طلب عرض سعر (RFQ) جديد من شركة: ${comp}`);
-    alert('✅ تم إرسال طلب عروض الأسعار بنجاح وسيتم الرد من قسم المبيعات والتصدير خلال 24 ساعة.');
+    addNotification(`📋 تم استلام طلب عرض سعر (RFQ) من: ${comp}`);
+    alert('✅ تم إرسال طلب عروض الأسعار بنجاح وسيتم الرد خلال 24 ساعة.');
     document.getElementById('rfqCompanyName').value = '';
     document.getElementById('rfqSpecs').value = '';
     document.getElementById('rfqQty').value = '';
@@ -467,7 +517,7 @@ function submitB2BVerification() {
     if(!name || !cr || !tax) return alert('يرجى إدخال بيانات السجل التجاري والبطاقة الضريبية بالكامل!');
     
     addNotification(`🔐 قدمت شركة (${name}) طلب توثيق تجاري جديد.`);
-    alert('✅ تم تقديم طلب التوثيق بنجاح! سيتم مراجعة المستندات وتفعيل حساب الشركات واعتماد أسعار الجملة قريباً.');
+    alert('✅ تم تقديم طلب التوثيق بنجاح! سيتم مراجعة المستندات واعتماد الحساب قريباً.');
     document.getElementById('b2bName').value = '';
     document.getElementById('b2bCR').value = '';
     document.getElementById('b2bTax').value = '';
@@ -485,7 +535,7 @@ function openInvoiceModal(order) {
     let tbody = document.getElementById('invModalItems');
     tbody.innerHTML = '';
     order.items.forEach(it => {
-        tbody.innerHTML += `<tr><td>${it.name}</td><td>1</td><td>${it.price} ج.م</td><td>${it.price} ج.م</td></tr>`;
+        tbody.innerHTML += `<tr><td>${it.name}</td><td>1</td><td>${it.price}</td><td>${it.price}</td></tr>`;
     });
     switchTab('invoiceModal');
     activeInvoice = order;
@@ -509,11 +559,11 @@ function downloadInvoiceWord() {
         <head><meta charset='utf-8'><title>Invoice B2B</title></head>
         <body style="direction: rtl; font-family: 'Segoe UI', Tahoma, sans-serif;">
             <h1 style="color: #00a4ef; text-align: center;">GITI EXPORT B2B</h1>
-            <h3 style="text-align: center;">فاتورة تجارية وعقد توريد جملة رسمي</h3>
+            <h3 style="text-align: center;">فاتورة تجارية وعقد توريد رسمي</h3>
             <p><b>رقم الفاتورة:</b> #${activeInvoice.id}</p>
             <p><b>التاريخ:</b> ${activeInvoice.date}</p>
-            <p><b>اسم الشركة / العميل:</b> ${activeInvoice.customer} (${activeInvoice.phone})</p>
-            <p><b>طريقة الدفع B2B:</b> ${activeInvoice.payment || 'تحويل بنكي'}</p>
+            <p><b>اسم العميل / الشركة:</b> ${activeInvoice.customer} (${activeInvoice.phone})</p>
+            <p><b>طريقة الدفع:</b> ${activeInvoice.payment}</p>
             <table border="1" style="width: 100%; border-collapse: collapse; text-align: right;">
                 <thead>
                     <tr style="background: #0f172a; color: #00a4ef;">
@@ -524,10 +574,10 @@ function downloadInvoiceWord() {
                     </tr>
                 </thead>
                 <tbody>
-                    ${activeInvoice.items.map(it => `<tr><td style="padding: 8px;">${it.name}</td><td style="padding: 8px;">1</td><td style="padding: 8px;">${it.price} ج.م</td><td style="padding: 8px;">${it.price} ج.م</td></tr>`).join('')}
+                    ${activeInvoice.items.map(it => `<tr><td style="padding: 8px;">${it.name}</td><td style="padding: 8px;">1</td><td style="padding: 8px;">${it.price}</td><td style="padding: 8px;">${it.price}</td></tr>`).join('')}
                 </tbody>
             </table>
-            <h3 style="text-align: left; margin-top: 20px;">الإجمالي الكلي: ${activeInvoice.total} جنيه</h3>
+            <h3 style="text-align: left; margin-top: 20px;">الإجمالي الكلي: ${activeInvoice.total}</h3>
         </body>
         </html>
     `;
@@ -549,14 +599,14 @@ function renderInvoicesArchive() {
     if(currentUser && currentUser.role !== 'مدير') {
         list = invoicesArchive.filter(i => i.customer === currentUser.name);
     }
-    if(list.length === 0) { container.innerHTML = 'لا توجد فواتير تجارية مسجلة في الأرشيف حالياً.'; return; }
+    if(list.length === 0) { container.innerHTML = 'لا توجد فواتير مسجلة في الأرشيف حالياً.'; return; }
     container.innerHTML = '';
     list.forEach(inv => {
         container.innerHTML += `
             <div class="item-row">
                 <div>
-                    <b>فاتورة رقم: #${inv.id}</b> - الإجمالي: <b style="color:var(--accent);">${inv.total} ج.م</b><br>
-                    <small>العميل: ${inv.customer} | التاريخ: ${inv.date} | الدفع: ${inv.payment || 'تحويل بنكي'}</small>
+                    <b>فاتورة رقم: #${inv.id}</b> - الإجمالي: <b style="color:var(--accent);">${inv.total}</b><br>
+                    <small>العميل: ${inv.customer} | التاريخ: ${inv.date} | الدفع: ${inv.payment}</small>
                 </div>
                 <div style="display:flex; gap:5px;">
                     <button class="btn-gold" style="width:auto; padding:5px 8px; font-size:11px;" onclick="openInvoiceModal(invoicesArchive.find(x => x.id === '${inv.id}'))">👁️ مشاهدة</button>
@@ -595,14 +645,14 @@ function renderOrders() {
     if(currentUser && currentUser.role !== 'مدير') {
         list = orders.filter(o => o.customer === currentUser.name);
     }
-    if(list.length === 0) { container.innerHTML = 'لا توجد طلبات جملة مسجلة بعد.'; return; }
+    if(list.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
     container.innerHTML = '';
     list.forEach(o => {
         container.innerHTML += `
             <div class="item-row">
                 <div>
-                    <b>طلب جملة: ${o.id}</b> - الإجمالي: <b style="color:var(--accent);">${o.total} ج.م</b><br>
-                    <small>العميل/الشركة: ${o.customer} (${o.phone}) | التاريخ: ${o.date}</small>
+                    <b>طلب: ${o.id}</b> - الإجمالي: <b style="color:var(--accent);">${o.total}</b><br>
+                    <small>العميل: ${o.customer} (${o.phone}) | التاريخ: ${o.date}</small>
                 </div>
                 <button class="btn-gold" style="width:auto; padding:6px 10px; font-size:11px;" onclick="openInvoiceModal(orders.find(x => x.id === '${o.id}'))">🧾 عرض الفاتورة</button>
             </div>
@@ -611,7 +661,10 @@ function renderOrders() {
 }
 
 function renderFinancialReports() {
-    let totalRev = invoicesArchive.reduce((acc, inv) => acc + (inv.total || 0), 0);
+    let totalRev = invoicesArchive.reduce((acc, inv) => {
+        let num = parseFloat(inv.total) || 0;
+        return acc + num;
+    }, 0);
     let netProfit = totalRev * 0.25; 
     let avgOrder = invoicesArchive.length > 0 ? (totalRev / invoicesArchive.length).toFixed(2) : 0;
 
@@ -632,8 +685,8 @@ function renderFinancialReports() {
             invoicesArchive.slice(-5).reverse().forEach(inv => {
                 txList.innerHTML += `
                     <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #333; padding:6px 0; font-size:12px;">
-                        <span>🧾 فاتورة B2B #${inv.id} (${inv.customer})</span>
-                        <span style="color:#48bb78; font-weight:bold;">+${inv.total} ج.م</span>
+                        <span>🧾 فاتورة #${inv.id} (${inv.customer})</span>
+                        <span style="color:#48bb78; font-weight:bold;">+${inv.total}</span>
                     </div>`;
             });
         }
@@ -682,7 +735,7 @@ function sendChatMessage() {
     let txt = document.getElementById('chatInput').value.trim();
     if(!txt) return;
     let senderName = currentUser ? currentUser.name : 'زائرنا التجاري';
-    let senderRole = currentUser ? (currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : (currentUser.role === 'شركة / مستورد' ? 'شركة معتمدة B2B 🏢' : 'عضو موثق 🛒')) : 'زائر';
+    let senderRole = currentUser ? (currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : (currentUser.role === 'شركة / مستورد' ? 'شركة معتمدة 🏢' : 'عضو موثق 🛒')) : 'زائر';
     let senderAvatar = currentUser && currentUser.avatar ? currentUser.avatar : '';
     
     chatLogs.push({ 
