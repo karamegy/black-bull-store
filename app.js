@@ -1,5 +1,6 @@
+// حساب الآدمن الرئيسي بكلمة المرور 01036
 let registeredUsers = JSON.parse(localStorage.getItem('giti_export_all_users')) || [
-    { name: 'admin', phone: 'admin', role: 'مدير', password: '123', avatar: '', cover: '' }
+    { name: 'admin', phone: 'admin', role: 'مدير', password: '01036', avatar: '', cover: '' }
 ];
 let currentUser = JSON.parse(localStorage.getItem('giti_export_user')) || null;
 let inventory = JSON.parse(localStorage.getItem('giti_export_inventory')) || [
@@ -17,23 +18,32 @@ let notifications = JSON.parse(localStorage.getItem('giti_export_notifications')
 ];
 let rfqs = JSON.parse(localStorage.getItem('giti_b2b_rfqs')) || [];
 
-let cart = [];
+// سلة المشتريات الخاصة بالمستخدم الحالي
+let currentCart = [];
+if(currentUser) {
+    let savedUserCart = localStorage.getItem('giti_cart_' + currentUser.phone);
+    if(savedUserCart) currentCart = JSON.parse(savedUserCart);
+}
+
 let currentFilter = 'all';
+let currentCartFilter = 'all';
 let tempNewProdMedia = null;
 let tempNewProdMediaType = 'image';
 let activeInvoice = null;
 
 window.onload = function() {
     updateAuthUI();
-    renderStore();
-    renderWarehouseManagement();
-    renderOrders();
-    renderInvoicesArchive();
-    renderChat();
-    renderFinancialReports();
-    renderNotifications();
-    updateStats();
-    renderCart();
+    if(currentUser) {
+        renderStore();
+        renderWarehouseManagement();
+        renderOrders();
+        renderInvoicesArchive();
+        renderChat();
+        renderFinancialReports();
+        renderNotifications();
+        updateStats();
+        renderCart();
+    }
 };
 
 function toggleSidebar() {
@@ -59,7 +69,7 @@ function closeAllDrawers() {
 
 function checkProfileDrawerAccess() {
     if (!currentUser) {
-        alert('⚠️ يرجى تسجيل الدخول أولاً!');
+        alert('⚠️ يرجى تسجيل الدخول أولاً للتمتع بالحساب!');
         switchTab('authSection');
     } else {
         toggleGPlusDrawer();
@@ -96,7 +106,10 @@ function syncData() {
     localStorage.setItem('giti_export_chats', JSON.stringify(chatLogs));
     localStorage.setItem('giti_export_notifications', JSON.stringify(notifications));
     localStorage.setItem('giti_b2b_rfqs', JSON.stringify(rfqs));
-    if(currentUser) localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
+    if(currentUser) {
+        localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
+        localStorage.setItem('giti_cart_' + currentUser.phone, JSON.stringify(currentCart));
+    }
     localStorage.setItem('giti_export_all_users', JSON.stringify(registeredUsers));
     updateStats();
     renderFinancialReports();
@@ -104,6 +117,12 @@ function syncData() {
 }
 
 function switchTab(tabId, btnElement = null) {
+    if(!currentUser && tabId !== 'authSection') {
+        alert('⚠️ لا يمكن استعراض الأقسام إلا بعد تسجيل الدخول!');
+        switchTab('authSection');
+        return;
+    }
+
     ['storeTab', 'addProductTab', 'advancedInvoicesStoreTab', 'exportTab', 'logisticsTab', 'invoicesViewerTab', 'ordersTab', 'financialReportsTab', 'notificationsTab', 'rfqTab', 'b2bVerifyTab', 'shippingDocsTab', 'supportTab', 'adminDashboardTab', 'authSection', 'invoiceModal'].forEach(id => {
         let el = document.getElementById(id);
         if(el) el.classList.add('hidden');
@@ -133,11 +152,12 @@ function switchAuthMode(mode) {
 
 function toggleAuthModal() {
     if(currentUser) {
-        if(confirm('هل تريد تسجيل الخروج؟')) {
+        if(confirm('هل تريد تسجيل الخروج من الحساب؟')) {
             currentUser = null;
+            currentCart = [];
             localStorage.removeItem('giti_export_user');
             updateAuthUI();
-            switchTab('storeTab');
+            switchTab('authSection');
         }
     } else {
         switchTab('authSection');
@@ -164,10 +184,15 @@ function loginWithGoogle() {
         };
         registeredUsers.push(currentUser);
     }
+    
+    // تحميل سلة المستخدم
+    let savedCart = localStorage.getItem('giti_cart_' + currentUser.phone);
+    currentCart = savedCart ? JSON.parse(savedCart) : [];
+
     syncData();
     updateAuthUI();
     addNotification(`🌍 تم تسجيل الدخول بنجاح عبر حساب جوجل: ${currentUser.name}`);
-    alert('✅ مرحباً بك، ' + currentUser.name + ' (تم تسجيل الدخول بحساب جوجل بنجاح)');
+    alert('✅ مرحباً بك، ' + currentUser.name);
     switchTab('storeTab');
 }
 
@@ -193,6 +218,7 @@ function performRegister() {
     
     registeredUsers.push(newUser);
     currentUser = newUser;
+    currentCart = [];
     syncData();
     updateAuthUI();
     addNotification(`👤 تم إنشاء حساب جديد بنجاح باسم: ${name}`);
@@ -207,9 +233,12 @@ function performLogin() {
     if(!contact || !password) return alert('يرجى إدخال بيانات الدخول وكلمة المرور!');
 
     let user = registeredUsers.find(u => (u.phone === contact || u.name === contact) && u.password === password);
-    if(!user) return alert('⚠️ بيانات الدخول غير صحيحة، تأكد من البريد/الهاتف وكلمة المرور!');
+    if(!user) return alert('⚠️ بيانات الدخول غير صحيحة، تأكد من البيانات وكلمة المرور (كلمة مرور الآدمن: 01036)!');
     
     currentUser = user;
+    let savedCart = localStorage.getItem('giti_cart_' + currentUser.phone);
+    currentCart = savedCart ? JSON.parse(savedCart) : [];
+
     syncData();
     updateAuthUI();
     alert('✅ أهلاً بك مجدداً، ' + currentUser.name);
@@ -220,6 +249,10 @@ function updateAuthUI() {
     let btnTop = document.getElementById('authBtnTop');
     let greet = document.getElementById('quickUserGreet');
     let topAvatar = document.getElementById('topNavAvatar');
+    let mainNavBar = document.getElementById('mainNavBar');
+    let menuToggleBtn = document.getElementById('menuToggleBtn');
+    let profileBtnTop = document.getElementById('profileBtnTop');
+    let notifTopBtn = document.getElementById('notifTopBtn');
     
     if(currentUser) {
         btnTop.innerText = 'خروج'; btnTop.className = 'btn-red';
@@ -234,17 +267,30 @@ function updateAuthUI() {
             document.getElementById('gpAvatarImg').src = defaultAv;
         }
         topAvatar.style.display = 'block';
+        mainNavBar.classList.remove('hidden');
+        menuToggleBtn.style.display = 'inline-block';
+        profileBtnTop.style.display = 'inline-block';
+        notifTopBtn.style.display = 'inline-block';
 
         document.getElementById('gpNameDisplay').innerText = currentUser.name;
         document.getElementById('gpContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
-        document.getElementById('gpRoleBadge').innerText = currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : (currentUser.role === 'شركة / مستورد' ? 'شركة معتمدة B2B 🏢' : 'عضو موثق 🛒');
+        document.getElementById('gpRoleBadge').innerText = currentUser.role === 'مدير' ? 'مدير المنصة Master Admin 🔐' : (currentUser.role === 'شركة / مستورد' ? 'شركة معتمدة B2B 🏢' : 'عضو موثق 🛒');
 
         if(currentUser.cover) document.getElementById('gpCoverImg').src = currentUser.cover;
         else document.getElementById('gpCoverImg').src = 'https://via.placeholder.com/350x120/0f172a/00a4ef?text=Giti+Export+Cover';
+
+        renderStore();
+        renderCart();
+        renderAdminUsers();
     } else {
         btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
-        greet.innerText = 'زائرنا التجاري';
+        greet.innerText = 'يرجى تسجيل الدخول للتمتع بالخدمات';
         topAvatar.style.display = 'none';
+        mainNavBar.classList.add('hidden');
+        menuToggleBtn.style.display = 'none';
+        profileBtnTop.style.display = 'none';
+        notifTopBtn.style.display = 'none';
+        switchTab('authSection');
     }
 }
 
@@ -258,7 +304,7 @@ function handleAvatarUpload(event) {
         if(masterUser) masterUser.avatar = currentUser.avatar;
         syncData();
         updateAuthUI();
-        alert('✅ تم تحديث الصورة الشخصية للبروفايل بنجاح!');
+        alert('✅ تم تحديث الصورة الشخصية بنجاح!');
     };
     reader.readAsDataURL(file);
 }
@@ -273,7 +319,7 @@ function handleCoverUpload(event) {
         if(masterUser) masterUser.cover = currentUser.cover;
         syncData();
         updateAuthUI();
-        alert('✅ تم تحديث غلاف بروفايل Giti Plus بنجاح!');
+        alert('✅ تم تحديث الغلاف بنجاح!');
     };
     reader.readAsDataURL(file);
 }
@@ -326,20 +372,28 @@ function saveNewProductToStore() {
     document.getElementById('newProdMediaPreview').innerHTML = '';
     tempNewProdMedia = null;
 
-    alert('✅ تمت إضافة المنتج ونشره في المتجر بنجاح تام!');
+    alert('✅ تمت إضافة المنتج ونشره في المتجر بنجاح!');
     switchTab('storeTab');
 }
 
 function filterCategory(cat, element) {
     currentFilter = cat;
-    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('#storeTab .categories-grid .cat-chip').forEach(c => c.classList.remove('active'));
     element.classList.add('active');
     renderStore();
 }
 
+function filterCartCategory(cat, element) {
+    currentCartFilter = cat;
+    let container = document.getElementById('cartCardSection');
+    container.querySelectorAll('.categories-grid .cat-chip').forEach(c => c.classList.remove('active'));
+    element.classList.add('active');
+    renderCart();
+}
+
 function renderStore() {
     let container = document.getElementById('storeProductsList');
-    if(!container) return;
+    if(!container || !currentUser) return;
     container.innerHTML = '';
     let filtered = inventory.filter(item => currentFilter === 'all' || item.category === currentFilter);
     if(filtered.length === 0) { container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">لا توجد منتجات متاحة في هذا القسم.</p>'; return; }
@@ -367,30 +421,39 @@ function renderStore() {
 }
 
 function shareProduct(name, price) {
-    let shareText = `🚢 منصة Giti Export للتجارة المحلية والدولية\n📦 تسوق الآن منتجنا المميز: ${name}\n💰 السعر: ${price} جنيه\n✨ اطلب الآن عبر المنصة!`;
+    let shareText = `🚢 منصة Giti Export\n📦 منتج: ${name}\n💰 السعر: ${price} جنيه`;
     if (navigator.share) {
         navigator.share({ title: name, text: shareText, url: window.location.href }).catch(() => {});
     } else {
         navigator.clipboard.writeText(shareText);
-        alert('✅ تم نسخ رابط تفاصيل المنتج ونص المشاركة إلى الحافظة بنجاح!');
+        alert('✅ تم نسخ تفاصيل المنتج بنجاح!');
     }
 }
 
 function addToCart(id) {
+    if(!currentUser) return alert('⚠️ يرجى تسجيل الدخول أولاً لإضافة منتجات إلى سلتك!');
     let item = inventory.find(i => i.id === id);
     if(!item || item.qty <= 0) return alert('عذراً، المنتج نفد من المستودع!');
-    cart.push(item);
+    
+    currentCart.push(item);
+    syncData();
     renderCart();
-    alert('✅ تمت إضافة المنتج إلى سلة المشتريات والحجوزات بنجاح');
+    alert('✅ تمت إضافة المنتج إلى سلت الخاصة بنجاح!');
 }
 
 function renderCart() {
     let container = document.getElementById('cartItems');
     let total = 0;
-    if(!container) return;
+    if(!container || !currentUser) return;
     
-    if(cart.length === 0) { 
-        container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">السلة فارغة حالياً. تصفح المنتجات وأضف ما يناسبك للحجز والشراء!</p>'; 
+    let filteredCart = currentCart.filter(item => {
+        if(currentCartFilter === 'all') return true;
+        if(currentCartFilter === 'ملابس') return item.category.includes('ملابس');
+        return item.category === currentCartFilter;
+    });
+
+    if(filteredCart.length === 0) { 
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">سلتك فارغة في هذا القسم. تصفح المنتجات وأضف ما يناسبك!</p>'; 
         document.getElementById('cartTotal').innerText = '0'; 
         return; 
     }
@@ -400,12 +463,12 @@ function renderCart() {
     let rate = currency === 'USD' ? 0.021 : 1; 
     let symbol = currency === 'USD' ? '$' : 'جنيه';
 
-    cart.forEach((item, index) => {
+    filteredCart.forEach((item, index) => {
         let itemPrice = item.price * rate;
         total += itemPrice;
         container.innerHTML += `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px dashed #333; padding-bottom:6px;">
-                <span>• ${item.name}</span> 
+                <span>• ${item.name} <small style="color:var(--accent);">(${item.category})</small></span> 
                 <span><b>${itemPrice.toFixed(currency === 'USD' ? 2 : 0)} ${symbol}</b> 
                 <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto; margin-right:8px;" onclick="removeFromCart(${index})">حذف</button></span>
             </div>`;
@@ -414,7 +477,8 @@ function renderCart() {
 }
 
 function removeFromCart(index) {
-    cart.splice(index, 1);
+    currentCart.splice(index, 1);
+    syncData();
     renderCart();
 }
 
@@ -435,21 +499,7 @@ function toggleWalletInput() {
 }
 
 function checkoutCart() {
-    if(cart.length === 0) return alert('⚠️ سلة المشتريات فارغة، يرجى إضافة منتجات أولاً!');
-
-    // دعم الطلب المباشر للزوار أو الأعضاء المسجلين
-    let activeClientName = currentUser ? currentUser.name : '';
-    let activeClientPhone = currentUser ? currentUser.phone : '';
-
-    if(!currentUser) {
-        let guestName = prompt("أنت تطلب كزائر. يرجى إدخال اسمك الكريم أو اسم شركتك:", "العميل الزائر");
-        if(!guestName) return;
-        let guestPhone = prompt("أدخل رقم هاتفك لتأكيد الحجز والدفع وتفعيل الفاتورة:", "010xxxxxxxx");
-        if(!guestPhone) return;
-
-        activeClientName = guestName;
-        activeClientPhone = guestPhone;
-    }
+    if(currentCart.length === 0) return alert('⚠️ سلة المشتريات فارغة!');
 
     let totalVal = document.getElementById('cartTotal').innerText;
     let currency = document.getElementById('currencySelector').value;
@@ -457,20 +507,20 @@ function checkoutCart() {
     let walletPhone = document.getElementById('walletSenderPhone') ? document.getElementById('walletSenderPhone').value : '';
 
     if((paymentMethod.includes('كاش') || paymentMethod.includes('إنستاباي')) && !walletPhone) {
-        alert('⚠️ يرجى إدخال رقم الهاتف المحول منه عبر المحفظة أو إنستاباي لتأكيد الدفع!');
+        alert('⚠️ يرجى إدخال رقم الهاتف المحول منه لتأكيد الدفع!');
         return;
     }
 
-    cart.forEach(cartItem => {
+    currentCart.forEach(cartItem => {
         let st = inventory.find(i => i.id === cartItem.id);
         if(st && st.qty > 0) st.qty -= 1;
     });
 
     let newOrder = {
         id: 'GITI-' + Math.floor(1000 + Math.random() * 9000),
-        customer: activeClientName,
-        phone: activeClientPhone,
-        items: [...cart],
+        customer: currentUser.name,
+        phone: currentUser.phone,
+        items: [...currentCart],
         total: totalVal + ' ' + (currency === 'USD' ? 'دولار' : 'جنيه'),
         payment: paymentMethod + (walletPhone ? ` (من رقم: ${walletPhone})` : ''),
         date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
@@ -478,19 +528,20 @@ function checkoutCart() {
 
     orders.push(newOrder);
     invoicesArchive.push(newOrder);
-    syncData();
     
     activeInvoice = newOrder;
-    cart = [];
+    currentCart = [];
+    syncData();
+    
     renderCart();
     renderStore();
     renderWarehouseManagement();
     renderOrders();
     renderInvoicesArchive();
     renderFinancialReports();
-    addNotification(`🛒 تم تسجيل طلب جديد برقم #${newOrder.id} بقيمة ${newOrder.total} عبر (${paymentMethod})`);
+    addNotification(`🛒 تم تسجيل طلب جديد برقم #${newOrder.id} بقيمة ${newOrder.total}`);
 
-    alert('✅ تم تأكيد طلبك بنجاح! تم إصدار الفاتورة الرسمية لعقد الشراء.');
+    alert('✅ تم تأكيد طلبك بنجاح وإصدار الفاتورة الرسمية!');
     openInvoiceModal(newOrder);
 }
 
@@ -517,7 +568,7 @@ function submitB2BVerification() {
     if(!name || !cr || !tax) return alert('يرجى إدخال بيانات السجل التجاري والبطاقة الضريبية بالكامل!');
     
     addNotification(`🔐 قدمت شركة (${name}) طلب توثيق تجاري جديد.`);
-    alert('✅ تم تقديم طلب التوثيق بنجاح! سيتم مراجعة المستندات واعتماد الحساب قريباً.');
+    alert('✅ تم تقديم طلب التوثيق بنجاح!');
     document.getElementById('b2bName').value = '';
     document.getElementById('b2bCR').value = '';
     document.getElementById('b2bTax').value = '';
@@ -594,9 +645,9 @@ function downloadInvoiceWord() {
 
 function renderInvoicesArchive() {
     let container = document.getElementById('invoicesArchiveList');
-    if(!container) return;
+    if(!container || !currentUser) return;
     let list = invoicesArchive;
-    if(currentUser && currentUser.role !== 'مدير') {
+    if(currentUser.role !== 'مدير') {
         list = invoicesArchive.filter(i => i.customer === currentUser.name);
     }
     if(list.length === 0) { container.innerHTML = 'لا توجد فواتير مسجلة في الأرشيف حالياً.'; return; }
@@ -640,9 +691,9 @@ function deleteWarehouseItem(id) {
 
 function renderOrders() {
     let container = document.getElementById('ordersList');
-    if(!container) return;
+    if(!container || !currentUser) return;
     let list = orders;
-    if(currentUser && currentUser.role !== 'مدير') {
+    if(currentUser.role !== 'مدير') {
         list = orders.filter(o => o.customer === currentUser.name);
     }
     if(list.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
@@ -729,6 +780,19 @@ function updateStats() {
     if(pCount) pCount.innerText = inventory.length;
     if(oCount) oCount.innerText = orders.length;
     if(iCount) iCount.innerText = invoicesArchive.length;
+}
+
+function renderAdminUsers() {
+    let container = document.getElementById('adminUsersListContainer');
+    if(!container) return;
+    container.innerHTML = '';
+    registeredUsers.forEach(u => {
+        container.innerHTML += `
+            <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #333; padding:6px 0; font-size:12px;">
+                <span>👤 <b>${u.name}</b> (${u.phone})</span>
+                <span style="color:var(--accent);">${u.role}</span>
+            </div>`;
+    });
 }
 
 function sendChatMessage() {
