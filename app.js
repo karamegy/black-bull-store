@@ -143,19 +143,59 @@ function toggleAuthModal() {
     }
 }
 
+// دالة تسجيل الدخول السريع بحساب جوجل
+function loginWithGoogle() {
+    let googleName = prompt("أدخل اسم حساب جوجل الخاص بك:", "مستثمر تجاري");
+    if(!googleName) return;
+    let googleEmail = prompt("أدخل البريد الإلكتروني لحساب جوجل:", "user@gmail.com");
+    if(!googleEmail) return;
+
+    let existingUser = registeredUsers.find(u => u.phone === googleEmail || u.name === googleName);
+    if(existingUser) {
+        currentUser = existingUser;
+    } else {
+        currentUser = {
+            name: googleName,
+            phone: googleEmail,
+            role: 'شركة / مستورد',
+            password: 'google_secure_pass',
+            avatar: 'https://via.placeholder.com/85/00a4ef/fff?text=' + encodeURIComponent(googleName.charAt(0)),
+            cover: ''
+        };
+        registeredUsers.push(currentUser);
+    }
+    syncData();
+    updateAuthUI();
+    addNotification(`🌍 تم تسجيل الدخول بنجاح عبر حساب جوجل: ${currentUser.name}`);
+    alert('✅ مرحباً بك، ' + currentUser.name + ' (تم تسجيل الدخول بحساب جوجل بنجاح)');
+    switchTab('storeTab');
+}
+
 function performRegister() {
     let name = document.getElementById('regName').value.trim();
-    let phone = document.getElementById('regPhone').value.trim();
+    let phoneOrEmail = document.getElementById('regPhone').value.trim();
     let role = document.getElementById('regRole').value;
     let password = document.getElementById('regPassword').value;
 
-    if(!name || !phone || !password) return alert('الرجاء إدخال كافة البيانات');
-    let newUser = { name, phone, role, password, avatar: '', cover: '' };
+    if(!name || !phoneOrEmail || !password) return alert('الرجاء إدخال كافة بيانات التسجيل بدقة!');
+    
+    let existing = registeredUsers.find(u => u.phone === phoneOrEmail || u.name === name);
+    if(existing) return alert('⚠️ هذا المستخدم أو البريد/الهاتف مسجل مسبقاً!');
+
+    let newUser = { 
+        name, 
+        phone: phoneOrEmail, 
+        role, 
+        password, 
+        avatar: 'https://via.placeholder.com/85/000/00a4ef?text=' + encodeURIComponent(name.charAt(0)), 
+        cover: '' 
+    };
+    
     registeredUsers.push(newUser);
     currentUser = newUser;
     syncData();
     updateAuthUI();
-    addNotification(`👤 تم إنشاء حساب شركة/عضو جديد بنجاح باسم: ${name}`);
+    addNotification(`👤 تم إنشاء حساب جديد بنجاح باسم: ${name}`);
     alert('✅ تم إنشاء الحساب وتسجيل الدخول بنجاح!');
     switchTab('storeTab');
 }
@@ -163,12 +203,16 @@ function performRegister() {
 function performLogin() {
     let contact = document.getElementById('loginContactOrName').value.trim();
     let password = document.getElementById('loginPassword').value;
+    
+    if(!contact || !password) return alert('يرجى إدخال بيانات الدخول وكلمة المرور!');
+
     let user = registeredUsers.find(u => (u.phone === contact || u.name === contact) && u.password === password);
-    if(!user) return alert('بيانات الدخول غير صحيحة!');
+    if(!user) return alert('⚠️ بيانات الدخول غير صحيحة، تأكد من البريد/الهاتف وكلمة المرور!');
+    
     currentUser = user;
     syncData();
     updateAuthUI();
-    alert('✅ مرحباً بك، ' + currentUser.name);
+    alert('✅ أهلاً بك مجدداً، ' + currentUser.name);
     switchTab('storeTab');
 }
 
