@@ -1,0 +1,21 @@
+{
+  "name": "Giti Export B2B",
+  "short_name": "Giti Export",
+  "description": "منصة التجارة الإلكترونية المحلية والدولية، التصدير، وحلول الدفع الذكية",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#00a4ef",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/00a4ef/fff?text=G",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512/00a4ef/fff?text=G",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
