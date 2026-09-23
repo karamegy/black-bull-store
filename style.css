@@ -70,6 +70,7 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
 .btn-gold { background-color: var(--accent); color: #090d16; }
 .btn-purple { background-color: #805ad5; color: white; }
 .btn-orange { background-color: #dd6b20; color: white; }
+.btn-google:hover { background: #f1f5f9 !important; }
 
 .hidden { display: none !important; }
 
