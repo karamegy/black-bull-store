@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الشاملة للآدمن الماستر - Giti Export</title>
+    <!-- مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#00a4ef">
+</head>
+<body style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+
+    <!-- رأس الصفحة والشعار -->
+    <div class="brand-header">
+        <div class="bull-logo-3d">🚢</div>
+        <h1>لوحة التحكم الشاملة للآدمن الماستر</h1>
+        <small>إدارة وتدقيق كافة عمليات المنصة سحابياً عبر Firebase</small>
+    </div>
+
+    <!-- زر العودة للمتجر الرئيسي -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <span id="adminWelcomeUser" style="color: var(--accent); font-weight: bold;">جاري التحقق من صلاحيات المدير...</span>
+        <a href="index.html" class="btn-blue" style="text-decoration: none; padding: 8px 15px; display: inline-block; width: auto; font-size: 13px;">
+            <i class="fa-solid fa-store"></i> العودة للمتجر الرئيسي 🏪
+        </a>
+    </div>
+
+    <!-- إحصائيات عامة للمنصة -->
+    <div class="stats-grid" style="margin-bottom: 20px;">
+        <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
+        <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
+        <div class="stat-card"><h4>إجمالي الفواتير</h4><p id="statInvoicesCount">0</p></div>
+    </div>
+
+    <!-- 1. قسم إدارة وحذف منتجات المتجر والمستودع -->
+    <div class="card" style="border: 2px solid var(--accent); margin-bottom: 20px;">
+        <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-boxes-stacked"></i> إدارة ومراقبة منتجات المتجر والمستودع</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">يمكنك هنا استعراض كافة المنتجات المضافة وحذف أي منتج نهائياً من السحابة.</p>
+        <div id="adminInventoryList" style="max-height: 280px; overflow-y: auto;">جاري تحميل المنتجات...</div>
+    </div>
+
+    <!-- 2. قسم إدارة ومتابعة الطلبات التجارية -->
+    <div class="card" style="border: 2px solid var(--accent); margin-bottom: 20px;">
+        <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-receipt"></i> متابعة طلبات العملاء والفواتير التجارية</h3>
+        <div id="adminOrdersList" style="max-height: 280px; overflow-y: auto;">لا توجد طلبات مسجلة حتى الآن.</div>
+    </div>
+
+    <!-- 3. قسم عروض الأسعار (RFQ) وتوثيق الشركات (B2B) -->
+    <div class="card" style="border: 2px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-file-contract"></i> طلبات عروض الأسعار (RFQs) وتوثيق الشركات</h3>
+        <div id="adminRfqsList" style="max-height: 220px; overflow-y: auto; font-size: 13px;">لا توجد طلبات جديدة.</div>
+    </div>
+
+    <!-- ربط Firebase والتحقق الأمني وجلب البيانات تلقائياً -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBnY2QBAr1ZpBpE6Leol7blQseR4Qq_AaY",
+          authDomain: "export-ed5ca.firebaseapp.com",
+          projectId: "export-ed5ca",
+          storageBucket: "export-ed5ca.firebasestorage.app",
+          messagingSenderId: "574541533473",
+          appId: "1:574541533473:web:16f9cefca28a1264f5ae60",
+          measurementId: "G-M9MWDM6DGM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore(app);
+
+        // التحقق الأمني: السماح حصرياً للبريد الإلكتروني للإدارة
+        onAuthStateChanged(auth, (user) => {
+            if (!user || user.email !== 'haretg@gmail.com') {
+                alert('⚠️ عذراً، هذه الصفحة مخصصة لمدير المنصة Master Admin فقط!');
+                window.location.href = 'index.html';
+                return;
+            }
+            document.getElementById('adminWelcomeUser').innerText = `أهلاً بك يا مدير المنصة (${user.email}) 🔐`;
+            initAdminDataListeners();
+        });
+
+        // الاستماع الفوري للبيانات السحابية وعرضها
+        function initAdminDataListeners() {
+            // 1. مراقبة المنتجات
+            onSnapshot(collection(db, "inventory"), (snapshot) => {
+                let inventory = [];
+                snapshot.forEach((docSnap) => {
+                    inventory.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                document.getElementById('statProductsCount').innerText = inventory.length;
+                let invList = document.getElementById('adminInventoryList');
+                if(inventory.length === 0) {
+                    invList.innerHTML = 'لا توجد منتجات مسجلة.';
+                } else {
+                    invList.innerHTML = inventory.map(item => `
+                        <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:8px; background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
+                            <span>📦 <b>${item.name}</b> (${item.price} ج.م) - المخزون: ${item.qty}</span>
+                            <button class="btn-red" style="padding:4px 10px; font-size:11px; width:auto; cursor:pointer;" onclick="deleteCloudItem('inventory', '${item.id}')">حذف نهائي</button>
+                        </div>
+                    `).join('');
+                }
+            });
+
+            // 2. مراقبة الطلبات
+            onSnapshot(collection(db, "orders"), (snapshot) => {
+                let orders = [];
+                snapshot.forEach((docSnap) => {
+                    orders.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                document.getElementById('statOrdersCount').innerText = orders.length;
+                document.getElementById('statInvoicesCount').innerText = orders.length;
+                let ordList = document.getElementById('adminOrdersList');
+                if(orders.length === 0) {
+                    ordList.innerHTML = 'لا توجد طلبات مسجلة.';
+                } else {
+                    ordList.innerHTML = orders.map(o => `
+                        <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:8px; background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
+                            <span>🧾 طلب #${o.id} - العميل: <b>${o.customer}</b> (${o.total})</span>
+                            <span style="color:var(--accent); font-size:12px;">${o.date}</span>
+                        </div>
+                    `).join('');
+                }
+            });
+
+            // 3. مراقبة الـ RFQ وتوثيق الشركات
+            onSnapshot(collection(db, "rfqs"), (snapshot) => {
+                let rfqs = [];
+                snapshot.forEach((docSnap) => { rfqs.push(docSnap.data()); });
+                updateRfqsAndB2BView(rfqs, null);
+            });
+
+            onSnapshot(collection(db, "b2b_verifications"), (snapshot) => {
+                let b2b = [];
+                snapshot.forEach((docSnap) => { b2b.push(docSnap.data()); });
+                updateRfqsAndB2BView(null, b2b);
+            });
+        }
+
+        let cachedRfqs = [];
+        let cachedB2b = [];
+        function updateRfqsAndB2BView(rfqs, b2b) {
+            if(rfqs) cachedRfqs = rfqs;
+            if(b2b) cachedB2b = b2b;
+            let container = document.getElementById('adminRfqsList');
+            let rfqHtml = cachedRfqs.map(r => `<div style="background:#090d16; padding:6px; margin-bottom:4px; border-radius:4px; border:1px solid var(--border-color);">📋 RFQ من: <b>${r.comp}</b> | المواصفات: ${r.specs} | الكمية: ${r.qty}</div>`).join('');
+            let b2bHtml = cachedB2b.map(b => `<div style="background:#090d16; padding:6px; margin-bottom:4px; border-radius:4px; border:1px solid var(--border-color);">🔐 توثيق شركة: <b>${b.name}</b> | سجل تجاري: ${b.cr} | ضريبي: ${b.tax}</div>`).join('');
+            container.innerHTML = (rfqHtml + b2bHtml) || 'لا توجد طلبات عروض أسعار أو توثيق حالياً.';
+        }
+
+        // دالة الحذف السحابي لأي عنصر
+        window.deleteCloudItem = async function(collectionName, docId) {
+            if(confirm('هل أنت متأكد من الحذف النهائي من السحابة؟')) {
+                try {
+                    await deleteDoc(doc(db, collectionName, String(docId)));
+                    alert('✅ تم الحذف بنجاح!');
+                } catch(e) {
+                    alert('⚠️ خطأ أثناء الحذف: ' + e.message);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
