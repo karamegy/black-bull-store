@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم الشاملة للآدمن الماستر - Giti Export</title>
+    <!-- مكتبة تحويل الفواتير لصور -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- مكتبة الأيقونات FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -42,7 +44,7 @@
 
     <!-- 2. قسم إدارة ومتابعة الطلبات التجارية والفواتير -->
     <div class="card" style="border: 2px solid var(--accent); margin-bottom: 20px;">
-        <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-receipt"></i> متابعة طلبات العملاء والفواتير التجارية</h3>
+        <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-receipt"></i> متابعة طلبات العملاء والفواتير التجارية (انقر على الطلب لعرضه)</h3>
         <div id="adminOrdersList" style="max-height: 280px; overflow-y: auto;">لا توجد طلبات مسجلة حتى الآن.</div>
     </div>
 
@@ -50,6 +52,40 @@
     <div class="card" style="border: 2px solid var(--accent);">
         <h3 style="color: var(--accent); margin-bottom: 10px;"><i class="fa-solid fa-file-contract"></i> طلبات عروض الأسعار (RFQs) وتوثيق الشركات (B2B)</h3>
         <div id="adminRfqsList" style="max-height: 220px; overflow-y: auto; font-size: 13px;">لا توجد طلبات جديدة.</div>
+    </div>
+
+    <!-- نافذة منبثقة (Modal) لعرض تفاصيل الفاتورة عند النقر على أي طلب -->
+    <div id="adminInvoiceModal" class="card hidden" style="border: 2px solid var(--accent); margin-top: 20px; background: #0f172a;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="color:var(--accent); margin:0;">📄 تفاصيل الفاتورة والطلب المختار</h3>
+            <button class="btn-red" style="width:auto; padding:4px 10px; font-size:12px;" onclick="closeAdminInvoiceModal()">إغلاق ✕</button>
+        </div>
+        <div id="printableAdminInvoice" style="background:#111827; padding:20px; border-radius:8px; color:#fff;">
+            <div style="text-align:center; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:15px;">
+                <h2 style="color:var(--accent); margin:0;">GITI EXPORT B2B</h2>
+                <p style="font-size:12px; color:var(--text-muted); margin:5px 0;">فاتورة تجارية وعقد توريد رسمي - تدقيق الإدارة</p>
+            </div>
+            <p id="admInvId"><b>رقم الطلب:</b> #--</p>
+            <p id="admInvDate"><b>التاريخ:</b> --</p>
+            <p id="admInvClient"><b>اسم العميل / الشركة:</b> --</p>
+            <p id="admInvPhone"><b>البريد / الهاتف:</b> --</p>
+            <p id="admInvPayment"><b>طريقة الدفع:</b> --</p>
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: right; margin-top:10px; border-color:#333;">
+                <thead>
+                    <tr style="background: #0f172a; color: var(--accent);">
+                        <th style="padding: 6px;">المنتج</th>
+                        <th style="padding: 6px;">الكمية</th>
+                        <th style="padding: 6px;">السعر</th>
+                        <th style="padding: 6px;">الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody id="admInvItems"></tbody>
+            </table>
+            <h3 style="text-align: left; margin-top: 15px;">الإجمالي الكلي: <span id="admInvTotal" style="color:var(--accent);">0</span></h3>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+            <button class="btn-blue" onclick="downloadAdminInvoiceImage()" style="flex:1;">تحميل الفاتورة صورة (PNG) 📷</button>
+        </div>
     </div>
 
     <!-- ربط Firebase والتحقق وجلب كافة بيانات التطبيق -->
@@ -71,6 +107,9 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth();
         const db = getFirestore(app);
+
+        let cachedOrdersMap = {};
+        let activeAdminOrder = null;
 
         // التحقق المزدوج للأمان (Firebase Auth أو الذاكرة المحلية)
         function checkAdminAccess() {
@@ -120,15 +159,16 @@
                 }
             });
 
-            // 2. مراقبة الطلبات وحساب إجمالي الإيرادات بدقة
+            // 2. مراقبة الطلبات وحساب إجمالي الإيرادات بدقة + تفعيل النقر لعرض الفاتورة
             onSnapshot(collection(db, "orders"), (snapshot) => {
                 let orders = [];
                 let totalRev = 0;
+                cachedOrdersMap = {};
                 snapshot.forEach((docSnap) => {
                     let ord = { id: docSnap.id, ...docSnap.data() };
                     orders.push(ord);
+                    cachedOrdersMap[ord.id] = ord;
                     
-                    // استخراج الأرقام من قيمة الطلب لتجميع الإيرادات بدقة
                     let cleanNum = parseFloat(String(ord.total).replace(/[^0-9.]/g, '')) || 0;
                     totalRev += cleanNum;
                 });
@@ -141,9 +181,12 @@
                     ordList.innerHTML = 'لا توجد طلبات مسجلة حتى الآن.';
                 } else {
                     ordList.innerHTML = orders.map(o => `
-                        <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:8px; background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
+                        <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:8px; background:#090d16; border-radius:6px; border:1px solid var(--border-color); cursor:pointer;" onclick="openAdminOrderDetails('${o.id}')" title="انقر لعرض تفاصيل الطلب والفاتورة">
                             <span>🧾 طلب #${o.id} - العميل: <b>${o.customer}</b> (${o.total}) - الدفع: ${o.payment || 'نقداً'}</span>
-                            <button class="btn-red" style="padding:3px 8px; font-size:10px; width:auto;" onclick="deleteCloudItem('orders', '${o.id}')">حذف الطلب</button>
+                            <div style="display:flex; gap:5px;">
+                                <button class="btn-gold" style="padding:3px 8px; font-size:10px; width:auto;" onclick="event.stopPropagation(); openAdminOrderDetails('${o.id}')">👁️ عرض</button>
+                                <button class="btn-red" style="padding:3px 8px; font-size:10px; width:auto;" onclick="event.stopPropagation(); deleteCloudItem('orders', '${o.id}')">حذف</button>
+                            </div>
                         </div>
                     `).join('');
                 }
@@ -160,6 +203,51 @@
                 let b2b = [];
                 snapshot.forEach((docSnap) => { b2b.push({ id: docSnap.id, ...docSnap.data() }); });
                 updateRfqsAndB2BView(null, b2b);
+            });
+        }
+
+        // دالة فتح تفاصيل الطلب عند النقر عليه
+        window.openAdminOrderDetails = function(orderId) {
+            let order = cachedOrdersMap[orderId];
+            if(!order) return alert('عذراً، تفاصيل الطلب غير موجودة!');
+            activeAdminOrder = order;
+
+            document.getElementById('admInvId').innerText = 'رقم الطلب: #' + order.id;
+            document.getElementById('admInvDate').innerText = 'التاريخ: ' + (order.date || 'غير محدد');
+            document.getElementById('admInvClient').innerText = order.customer || 'عميل غير معروف';
+            document.getElementById('admInvPhone').innerText = order.phone || '--';
+            document.getElementById('admInvPayment').innerText = order.payment || 'نقداً';
+            document.getElementById('admInvTotal').innerText = order.total || '0';
+
+            let tbody = document.getElementById('admInvItems');
+            if(tbody) {
+                tbody.innerHTML = '';
+                if(order.items && Array.isArray(order.items)) {
+                    order.items.forEach(it => {
+                        tbody.innerHTML += `<tr><td style="padding:6px;">${it.name}</td><td style="padding:6px;">1</td><td style="padding:6px;">${it.price}</td><td style="padding:6px;">${it.price}</td></tr>`;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:6px;">طلب تجاري شامل</td></tr>`;
+                }
+            }
+
+            let modal = document.getElementById('adminInvoiceModal');
+            modal.classList.remove('hidden');
+            modal.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.closeAdminInvoiceModal = function() {
+            document.getElementById('adminInvoiceModal').classList.add('hidden');
+        }
+
+        window.downloadAdminInvoiceImage = function() {
+            let element = document.getElementById('printableAdminInvoice');
+            if(!element) return;
+            html2canvas(element).then(canvas => {
+                let link = document.createElement('a');
+                link.download = (activeAdminOrder ? activeAdminOrder.id : 'Invoice') + '.png';
+                link.href = canvas.toDataURL();
+                link.click();
             });
         }
 
