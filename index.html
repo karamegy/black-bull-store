@@ -108,24 +108,39 @@
         <button onclick="switchTab('supportTab', this)"><i class="fa-solid fa-headset"></i> الدعم</button>
     </div>
 
-    <!-- ================= 1. تسجيل الدخول ================= -->
+    <!-- ================= 1. تسجيل الدخول والإنشاء بـ Google أو الحساب المحلي ================= -->
     <div id="authSection" class="card hidden">
         <div style="text-align: center; margin-bottom: 15px;">
-            <div class="bull-logo-3d" style="width: 100px; height: 100px; font-size: 45px;">🚢</div>
-            <h3 style="margin-bottom: 2px;">بوابة دخول الشركات وإنشاء الحسابات B2B</h3>
+            <div class="bull-logo-3d" style="width: 90px; height: 90px; font-size: 40px;">🚢</div>
+            <h2 style="color: var(--accent); margin: 5px 0;">GITI EXPORT B2B</h2>
+            <small style="color: var(--text-muted);">بوابة تسجيل الدخول والاعتماد التجاري للشركات والمستوردين</small>
         </div>
+
+        <!-- زر تسجيل الدخول بحساب جوجل -->
+        <button class="btn-google" onclick="loginWithGoogle()" style="background: #ffffff; color: #222; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); font-weight: bold; width:100%; padding:10px; border-radius:8px; cursor:pointer;">
+            <i class="fa-brands fa-google" style="color: #ea4335; font-size: 16px;"></i> تسجيل الدخول بواسطة حساب جوجل (Google)
+        </button>
+
+        <div style="display: flex; align-items: center; text-align: center; margin: 15px 0; color: var(--text-muted); font-size: 12px;">
+            <hr style="flex: 1; border-color: var(--border-color);">
+            <span style="padding: 0 10px;">أو التسجيل بالطريقة التقليدية</span>
+            <hr style="flex: 1; border-color: var(--border-color);">
+        </div>
+
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
             <button class="btn-gold" id="tabBtnLogin" onclick="switchAuthMode('login')">تسجيل الدخول</button>
             <button class="btn-blue" id="tabBtnRegister" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
         </div>
+
         <div id="loginFormContainer">
-            <div class="input-group"><label>رقم الهاتف أو اسم المستخدم:</label><input type="text" id="loginContactOrName" placeholder="مثال: 01012345678 أو admin"></div>
-            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="loginPassword"></div>
+            <div class="input-group"><label>رقم الهاتف، البريد الإلكتروني أو اسم المستخدم:</label><input type="text" id="loginContactOrName" placeholder="مثال: user@gmail.com أو admin"></div>
+            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
             <button class="btn-green" onclick="performLogin()">دخول الشركات 🚀</button>
         </div>
+
         <div id="registerFormContainer" class="hidden">
-            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName"></div>
-            <div class="input-group"><label>رقم الهاتف:</label><input type="text" id="regPhone"></div>
+            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName" placeholder="اسم الشركة أو المسؤول"></div>
+            <div class="input-group"><label>رقم الهاتف أو البريد الإلكتروني:</label><input type="text" id="regPhone" placeholder="01012345678 أو email@domain.com"></div>
             <div class="input-group"><label>نوع الحساب:</label>
                 <select id="regRole">
                     <option value="شركة / مستورد">شركة تجارية / مستورد (B2B) 🏢</option>
@@ -133,7 +148,7 @@
                     <option value="مدير">مدير النظام (Manager) 🔐</option>
                 </select>
             </div>
-            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword"></div>
+            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="••••••••"></div>
             <button class="btn-gold" onclick="performRegister()">تسجيل حساب جديد ✅</button>
         </div>
     </div>
