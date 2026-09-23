@@ -38,8 +38,10 @@
         <button onclick="switchTab('notificationsTab'); toggleSidebar()"><i class="fa-solid fa-bell"></i> إشعارات المنصة والتنبيهات 🔔</button>
         <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle" style="color:var(--accent);"></i> بروفايل حسابي (Giti Plus)</button>
         <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني والمراسلات</button>
-        <!-- زر لوحة الآدمن المنفصلة (يظهر حصرياً للماستر آدمن) -->
-        <button id="adminMenuBtn" onclick="window.location.href='admin.html'" style="background:var(--accent); color:#111; display:none;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة (Admin)</button>
+        
+        <!-- زر لوحة الآدمن المنفصلة (يظهر حصرياً للماستر آدمن haretg@gmail.com) -->
+        <button id="adminPageBtn" onclick="window.location.href='admin.html'" style="background:var(--accent); color:#111; display:none;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة (Admin)</button>
+        
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
 
@@ -327,6 +329,9 @@
         </div>
     </div>
 
+    <!-- تهيئة ملف السكريبت الخارجي أولاً لضمان توفر دوال مثل switchTab -->
+    <script src="app.js"></script>
+
     <!-- تهيئة Firebase Authentication و Firestore -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -418,7 +423,9 @@
                 window.initPlatformAfterLogin();
             }
             alert('✅ أهلاً بك، ' + window.currentUser.name);
-            switchTab('storeTab');
+            if(typeof window.switchTab === 'function') {
+                window.switchTab('storeTab');
+            }
         }
 
         window.toggleAuthModal = function() {
@@ -427,15 +434,19 @@
                     window.currentUser = null;
                     localStorage.removeItem('giti_export_user');
                     window.updateAuthUI();
-                    switchTab('authSection');
+                    if(typeof window.switchTab === 'function') {
+                        window.switchTab('authSection');
+                    }
                 });
             } else {
-                switchTab('authSection');
+                if(typeof window.switchTab === 'function') {
+                    window.switchTab('authSection');
+                }
             }
         };
 
         onAuthStateChanged(auth, (user) => {
-            let adminBtn = document.getElementById('adminMenuBtn');
+            let adminBtn = document.getElementById('adminPageBtn');
             if (user) {
                 window.currentUser = JSON.parse(localStorage.getItem('giti_export_user')) || {
                     name: user.displayName || user.email.split('@')[0],
@@ -445,7 +456,7 @@
                     cover: ''
                 };
                 
-                // إظهار زر لوحة الآدمن حصرياً للبريد المطلوب
+                // إظهار زر لوحة الآدمن المنفصلة حصرياً لبريد المدير
                 if (user.email === 'haretg@gmail.com') {
                     if(adminBtn) adminBtn.style.display = 'block';
                 } else {
@@ -460,7 +471,6 @@
             }
         });
     </script>
-    <script src="app.js"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
