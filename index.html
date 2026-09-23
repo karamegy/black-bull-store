@@ -18,7 +18,7 @@
         <div id="lightboxContainer" onclick="event.stopPropagation()"></div>
     </div>
 
-    <!-- القائمة الجانبية الموسعة B2B (تظهر بعد تسجيل الدخول) -->
+    <!-- القائمة الجانبية الموسعة B2B -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeAllDrawers()"></div>
     <div class="side-drawer" id="sideDrawer">
         <h3>قائمة الأقسام والتحكم 🚢 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
@@ -39,7 +39,7 @@
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
 
-    <!-- بروفايل Giti Plus المرتبط بالحساب -->
+    <!-- بروفايل Giti Plus -->
     <div class="gplus-profile-drawer" id="gplusProfileDrawer">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:12px;">
             <h3 style="margin:0; color:var(--accent);">بروفايل Giti Plus (G+) 🚢</h3>
@@ -48,7 +48,6 @@
         <div class="gplus-header">
             <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/00a4ef?text=Cover" alt="Cover" onclick="document.getElementById('uploadCoverInput').click()" title="انقر لتغيير صورة الغلاف">
             <input type="file" id="uploadCoverInput" class="hidden" accept="image/*" onchange="handleCoverUpload(event)">
-            
             <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/00a4ef?text=User" alt="Avatar" onclick="document.getElementById('uploadAvatarInput').click()" title="انقر لتغيير الصورة الشخصية">
             <input type="file" id="uploadAvatarInput" class="hidden" accept="image/*" onchange="handleAvatarUpload(event)">
         </div>
@@ -96,7 +95,7 @@
 
     <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: الحساب محمي، الأقسام مغلقة حتى تسجيل الدخول (Secure & Synced)</div>
 
-    <!-- شريط التنقل السريع (مخفي حتى تسجيل الدخول) -->
+    <!-- شريط التنقل السريع -->
     <div class="nav-bar hidden" id="mainNavBar">
         <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
         <button onclick="switchTab('rfqTab', this)">📋 عروض الأسعار</button>
@@ -108,7 +107,7 @@
         <button onclick="switchTab('supportTab', this)"><i class="fa-solid fa-headset"></i> الدعم</button>
     </div>
 
-    <!-- ================= 1. تسجيل الدخول والإنشاء ================= -->
+    <!-- 1. تسجيل الدخول والإنشاء -->
     <div id="authSection" class="card">
         <div style="text-align: center; margin-bottom: 15px;">
             <div class="bull-logo-3d" style="width: 90px; height: 90px; font-size: 40px;">🚢</div>
@@ -153,7 +152,7 @@
         </div>
     </div>
 
-    <!-- ================= 2. طلبات عروض الأسعار RFQ ================= -->
+    <!-- 2. طلبات عروض الأسعار RFQ -->
     <div id="rfqTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>📋 طلب عروض الأسعار المخصصة (RFQ)</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">أرسل مواصفات التصنيع والكميات الضخمة لتلقي عرض سعر تجاري مخصص.</p>
@@ -163,7 +162,7 @@
         <button class="btn-gold" onclick="submitRFQ()">إرسال طلب عروض الأسعار للإدارة 📤</button>
     </div>
 
-    <!-- ================= 3. توثيق حسابات الشركات ================= -->
+    <!-- 3. توثيق حسابات الشركات -->
     <div id="b2bVerifyTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🔐 توثيق حسابات الشركات والاعتماد التجاري</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">قم برفع المستندات التجارية للحصول على أسعار الجملة المخفضة وصلاحيات التصدير.</p>
@@ -173,7 +172,7 @@
         <button class="btn-blue" onclick="submitB2BVerification()">تقديم طلب الاعتماد التجاري ✅</button>
     </div>
 
-    <!-- ================= 4. مستندات الشحن والحاويات ================= -->
+    <!-- 4. مستندات الشحن والحاويات -->
     <div id="shippingDocsTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🌍 إدارة مستندات الشحن والحاويات البحرية</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">متابعة بوالص الشحن الجمركي وشهادات المنشأ للحاويات المصدرة محلياً ودولياً.</p>
@@ -181,11 +180,10 @@
         <button class="btn-gold" onclick="alert('✅ مستندات الشحن مطابقة وجاهزة للتخليص الجمركي.')">استعلام عن مستندات الحاوية 🔍</button>
     </div>
 
-    <!-- ================= 5. قسم إضافة منتج جديد ================= -->
+    <!-- 5. قسم إضافة منتج جديد -->
     <div id="addProductTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>➕ إضافة منتج جديد للمتجر والمستودع</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">رفع صور أو فيديوهات المنتجات، تحديد السعر، الكمية، والقسم لكي يتم عرضه مباشرة.</p>
-        
         <div class="input-group"><label>اسم المنتج:</label><input type="text" id="newProdName" placeholder="مثال: جاكيت شتوي تصدير فاخر"></div>
         <div class="input-group"><label>السعر (بالجنيه):</label><input type="number" id="newProdPrice" placeholder="500"></div>
         <div class="input-group"><label>الكمية المتاحة بالمخزن:</label><input type="number" id="newProdQty" value="100" min="1"></div>
@@ -212,7 +210,7 @@
         <button class="btn-gold" onclick="saveNewProductToStore()">حفظ ونشر المنتج في المتجر فوراً 🚀</button>
     </div>
 
-    <!-- ================= 6. المتجر الرئيسي وسلة المشتريات (متاحة للمسجلين فقط) ================= -->
+    <!-- 6. المتجر الرئيسي وسلة المشتريات -->
     <div id="storeTab" class="hidden">
         <div class="card">
             <h3>📂 أقسام المتجر والتجارة المحلية والدولية</h3>
@@ -236,11 +234,8 @@
             <div class="products-grid" id="storeProductsList"></div>
         </div>
 
-        <!-- سلة المشتريات الخاصة بالمستخدم + أقسام معروضات السلة -->
         <div class="card" style="border: 2px solid var(--accent);" id="cartCardSection">
             <h3>🛒 سلة المشتريات وحجز الطلبات الخاصة بك</h3>
-            
-            <!-- أقسام معروضات السلة المتقدمة -->
             <div class="categories-grid" style="margin-bottom:10px;">
                 <div class="cat-chip active" onclick="filterCartCategory('all', this)">كل سلة المستخدم</div>
                 <div class="cat-chip" onclick="filterCartCategory('تصدير دولي', this)">تصدير دولي في السلة</div>
@@ -283,40 +278,34 @@
         </div>
     </div>
 
-    <!-- ================= 7. المخزن والمستودعات ================= -->
+    <!-- بقية الأقسام (المخزن، التصدير، اللوجستيات، الفواتير، التقارير، الإشعارات، الطلبات، الدعم، الآدمن) -->
     <div id="advancedInvoicesStoreTab" class="card hidden">
         <h2>🧾 إدارة المخزن والمستودعات والأصناف</h2>
         <div id="warehouseItemsList">لا توجد أصناف مسجلة.</div>
     </div>
 
-    <!-- ================= 8. التصدير الدولي ================= -->
     <div id="exportTab" class="card hidden">
         <h2>🌍 إدارة التصدير التجاري والتجارة المحلية</h2>
         <p style="color:var(--text-muted); font-size:13px; text-align:center;">إعداد شحنات البضائع والملابس للتصدير الدولي والمحلي.</p>
-        <div class="input-group"><label>دولة أو مدينة الوجهة:</label><input type="text" id="exportDestination" placeholder="مثال: القاهرة / السعودية / الإمارات / ألمانيا"></div>
+        <div class="input-group"><label>دولة أو مدينة الوجهة:</label><input type="text" id="exportDestination" placeholder="مثال: القاهرة / السعودية / الإمارات"></div>
         <div class="input-group"><label>نوع البضاعة:</label><input type="text" id="exportGoodsType" placeholder="ملابس جاهزة / أقمشة / فحم"></div>
         <div class="input-group"><label>الوزن أو الكمية:</label><input type="text" id="exportWeight" placeholder="5 طن أو 1000 قطعة"></div>
         <button class="btn-blue" onclick="alert('✅ تم حفظ طلب التصدير والشحن بنجاح.')">تأكيد طلب الشحن 🚢</button>
     </div>
 
-    <!-- ================= 9. تتبع اللوجستيات ================= -->
     <div id="logisticsTab" class="card hidden">
         <h2>🚚 تتبع الشحنات واللوجستيات</h2>
         <div class="input-group"><label>بحث برقم الشحنة أو بوليصة الحاوية:</label><input type="text" id="trackQuery" placeholder="مثال: GITI-LOG-9821"></div>
         <button class="btn-gold" onclick="alert('الشحنة قيد التحرك وتتبع خط سيرها بنجاح.')">بحث عن الشحنة 🔍</button>
     </div>
 
-    <!-- ================= 10. الفواتير وعقود B2B ================= -->
     <div id="invoicesViewerTab" class="card hidden">
-        <h2>📑 أرشيف واستعراض الفواتير والعقود (صورة، PDF، Word)</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">استعرض كافة فواتير المشتريات والحجوزات السابقة.</p>
+        <h2>📑 أرشيف واستعراض الفواتير والعقود</h2>
         <div id="invoicesArchiveList">لا توجد فواتير مسجلة في الأرشيف حالياً.</div>
     </div>
 
-    <!-- ================= 11. تقارير الأرباح والمبيعات ================= -->
     <div id="financialReportsTab" class="card hidden">
         <h2>📊 تقارير الأرباح والمبيعات المالية المتقدمة</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">تحليل مالي شامل لإجمالي المبيعات وحركة السيولة المالية.</p>
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي الإيرادات</h4><p id="reportTotalRevenue">0 ج.م</p></div>
             <div class="stat-card"><h4>صافي الأرباح التقديرية (25%)</h4><p id="reportNetProfit">0 ج.م</p></div>
@@ -328,21 +317,17 @@
         </div>
     </div>
 
-    <!-- ================= 12. الإشعارات ================= -->
     <div id="notificationsTab" class="card hidden">
         <h2>🔔 إشعارات المنصة والتنبيهات الفورية</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">متابعة حالة الطلبات وعمليات الشحن.</p>
         <div id="notificationsListContainer">لا توجد إشعارات جديدة.</div>
         <button class="btn-red" style="margin-top:10px; font-size:12px;" onclick="clearNotifications()">مسح كافة الإشعارات</button>
     </div>
 
-    <!-- ================= 13. إدارة الطلبات ================= -->
     <div id="ordersTab" class="card hidden">
         <h2>📋 سجل المشتريات والطلبات التجارية</h2>
         <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
     </div>
 
-    <!-- ================= الفاتورة الرسمية الحالية ================= -->
     <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🧾 فاتورة المشتريات والبيع الرسمية</h2>
         <div id="printableInvoice" class="invoice-box">
@@ -367,7 +352,6 @@
             </table>
             <h3 style="text-align: left; color:#111;">الإجمالي الكلي: <span id="invModalTotal" style="color:#00a4ef;">0</span></h3>
         </div>
-        
         <div style="display: flex; gap: 5px; margin-top: 15px; flex-wrap: wrap;">
             <button class="btn-green" onclick="downloadInvoiceImage()" style="flex:1;">📷 صورة الفاتورة (PNG)</button>
             <button class="btn-orange" onclick="downloadInvoiceWord()" style="flex:1;"><i class="fa-solid fa-file-word"></i> تحميل ملف الورد (Word)</button>
@@ -376,10 +360,8 @@
         </div>
     </div>
 
-    <!-- ================= الدعم الفني ================= -->
     <div id="supportTab" class="card hidden">
         <h2>💬 الدعم الفني المباشر والمراسلات</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:12px;">تظهر في المراسلات الحسابات المسجلة والزوار في قنوات الدعم والمحادثات.</p>
         <div class="chat-box" id="chatMessages"></div>
         <div class="input-group" style="display: flex; gap: 5px; margin: 0;">
             <input type="text" id="chatInput" placeholder="اكتب رسالتك الموجهة للإدارة..." style="margin:0;">
@@ -387,7 +369,6 @@
         </div>
     </div>
 
-    <!-- ================= لوحة الإدارة (Master Admin 01036) ================= -->
     <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🔐 لوحة التحكم الشاملة للآدمن الماستر (Master Admin)</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:12px;">متاحة فقط للمدير الحاصل على صلاحيات الآدمن (كلمة المرور: 01036).</p>
@@ -401,6 +382,28 @@
             <div id="adminUsersListContainer">لا توجد بيانات مستخدمين إضافية.</div>
         </div>
     </div>
+
+    <!-- تهيئة Firebase Web SDK في النهاية -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBnY2QBAr1ZpBpE6Leol7blQseR4Qq_AaY",
+          authDomain: "export-ed5ca.firebaseapp.com",
+          projectId: "export-ed5ca",
+          storageBucket: "export-ed5ca.firebasestorage.app",
+          messagingSenderId: "574541533473",
+          appId: "1:574541533473:web:16f9cefca28a1264f5ae60",
+          measurementId: "G-M9MWDM6DGM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        
+        // مفتاح VAPID للتنبيهات المتاحة في مشروعك
+        window.FCM_VAPID_KEY = "BLgrdsrIjIfgNamGJqUWY5o4vUx5atDpgGQ-aDQSc-p7daXlE7d3r-tDNiP8-xYDwXl10al-LHcL0FGUkcn1Qhs";
+    </script>
 
     <script src="app.js"></script>
 </body>
