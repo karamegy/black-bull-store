@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giti Export - منصة التصدير الدولي المتكاملة لتجارة الملابس + Giti Plus</title>
+    <title>Giti Export - منصة B2B للتصدير التجاري الدولي والمستودعات</title>
     <!-- مكتبة لطباعة وتحويل الفواتير إلى PDF وصور مباشرة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- مكتبة الأيقونات FontAwesome -->
@@ -18,19 +18,23 @@
         <div id="lightboxContainer" onclick="event.stopPropagation()"></div>
     </div>
 
-    <!-- القائمة الجانبية الموسعة -->
+    <!-- القائمة الجانبية الموسعة B2B -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeAllDrawers()"></div>
     <div class="side-drawer" id="sideDrawer">
-        <h3>قائمة الأقسام الموسعة 🚢 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
-        <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> المتجر الرئيسي والتسوق</button>
+        <h3>قائمة الأقسام والشركات B2B 🚢 <span style="cursor:pointer; font-size:18px;" onclick="toggleSidebar()">✕</span></h3>
+        <button onclick="switchTab('storeTab'); toggleSidebar()"><i class="fa-solid fa-store"></i> متجر الجملة والتصدير الرئيسي</button>
+        <button onclick="switchTab('rfqTab'); toggleSidebar()"><i class="fa-solid fa-file-contract"></i> طلب عروض أسعار (RFQ) 📋</button>
+        <button onclick="switchTab('b2bVerifyTab'); toggleSidebar()"><i class="fa-solid fa-shield-halved"></i> توثيق حسابات الشركات (B2B) 🔐</button>
+        <button onclick="switchTab('shippingDocsTab'); toggleSidebar()"><i class="fa-solid fa-file-invoice"></i> مستندات الشحن والحاويات 🌍</button>
         <button onclick="switchTab('addProductTab'); toggleSidebar()"><i class="fa-solid fa-cart-plus"></i> إضافة منتج جديد (صورة/فيديو) ➕</button>
-        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()"><i class="fa-solid fa-file-invoice-dollar"></i> إدارة المخزن والمستودعات 🌟</button>
-        <button onclick="switchTab('exportTab'); toggleSidebar()"><i class="fa-solid fa-globe"></i> قسم التصدير الدولي والشحن 🌍</button>
+        <button onclick="switchTab('advancedInvoicesStoreTab'); toggleSidebar()"><i class="fa-solid fa-warehouse"></i> المستودعات وإدارة المخزون 🌟</button>
+        <button onclick="switchTab('exportTab'); toggleSidebar()"><i class="fa-solid fa-globe"></i> قسم التصدير الدولي والشحن 🚢</button>
         <button onclick="switchTab('logisticsTab'); toggleSidebar()"><i class="fa-solid fa-truck-fast"></i> تتبع الشحنات واللوجستيات 🚚</button>
-        <button onclick="switchTab('ordersTab'); toggleSidebar()"><i class="fa-solid fa-clipboard-list"></i> إدارة الطلبات والمشتريات 📋</button>
-        <button onclick="switchTab('invoicesViewerTab'); toggleSidebar()"><i class="fa-solid fa-receipt"></i> استعرض ومشاهدة الفواتير السابقة 📑</button>
+        <button onclick="switchTab('invoicesViewerTab'); toggleSidebar()"><i class="fa-solid fa-receipt"></i> الفواتير وعقود B2B السحابية 📑</button>
+        <button onclick="switchTab('financialReportsTab'); toggleSidebar()"><i class="fa-solid fa-chart-line"></i> تقارير الأرباح والمبيعات المتقدمة 📊</button>
+        <button onclick="switchTab('notificationsTab'); toggleSidebar()"><i class="fa-solid fa-bell"></i> إشعارات المنصة والتنبيهات 🔔</button>
         <button onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle" style="color:var(--accent);"></i> بروفايل حسابي (Giti Plus)</button>
-        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني والمراسلات</button>
+        <button onclick="switchTab('supportTab'); toggleSidebar()"><i class="fa-solid fa-headset"></i> الدعم الفني والمراسلات التجارية</button>
         <button onclick="switchTab('adminDashboardTab'); toggleSidebar()" style="background:var(--accent); color:#111;"><i class="fa-solid fa-lock"></i> لوحة الإدارة الشاملة والتقارير</button>
         <button class="close-drawer" onclick="toggleSidebar()">إغلاق القائمة</button>
     </div>
@@ -70,8 +74,8 @@
 
     <div class="brand-header">
         <div class="bull-logo-3d">🚢</div>
-        <h1>GITI EXPORT</h1>
-        <small>منصة التصدير التجاري الدولي للملابس، المستودعات، الشحن البحري والجوي، والفواتير السحابية والمحلية الشاملة</small>
+        <h1>GITI EXPORT B2B</h1>
+        <small>منصة التجارة الإلكترونية بين الشركات، التصدير الدولي، ومستندات الشحن المعتمدة</small>
     </div>
 
     <!-- شريط علوي -->
@@ -81,22 +85,26 @@
             <button class="btn-gold" style="width:auto; padding:6px 12px; margin:0; font-size:12px;" onclick="checkProfileDrawerAccess()"><i class="fa-solid fa-user-circle"></i> حسابي</button>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
+            <button class="btn-blue" style="width:auto; padding:6px 10px; margin:0; font-size:12px; position:relative;" onclick="switchTab('notificationsTab')">
+                <i class="fa-solid fa-bell"></i> <span id="notifBadge" style="background:red; color:white; border-radius:50%; padding:1px 5px; font-size:9px;">0</span>
+            </button>
             <img id="topNavAvatar" src="https://via.placeholder.com/30/000/00a4ef?text=U" style="width:30px; height:30px; border-radius:50%; border:1px solid var(--accent); object-fit:cover; display:none;" alt="User">
-            <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">زائرنا الكريم</div>
+            <div id="quickUserGreet" style="font-size: 13px; color: var(--accent);">زائرنا التجاري</div>
         </div>
         <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
     <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: متصل محليا وسحابياً بكامل الحزم والبيانات (LocalStorage & Cloud Synced)</div>
 
-    <!-- شريط التنقل السريع -->
+    <!-- شريط التنقل السريع B2B -->
     <div class="nav-bar" id="mainNavBar">
         <button class="active-nav" onclick="switchTab('storeTab', this)">🏪 المتجر</button>
-        <button onclick="switchTab('addProductTab', this)">➕ إضافة</button>
-        <button onclick="switchTab('advancedInvoicesStoreTab', this)">🧾 المخزن</button>
-        <button onclick="switchTab('exportTab', this)">🌍 التصدير</button>
+        <button onclick="switchTab('rfqTab', this)">📋 عروض الأسعار</button>
+        <button onclick="switchTab('b2bVerifyTab', this)">🔐 توثيق الشركات</button>
+        <button onclick="switchTab('shippingDocsTab', this)">🌍 مستندات الشحن</button>
         <button onclick="switchTab('invoicesViewerTab', this)">📑 الفواتير</button>
         <button onclick="switchTab('ordersTab', this)">📋 الطلبات</button>
+        <button onclick="switchTab('financialReportsTab', this)">📊 الأرباح</button>
         <button onclick="switchTab('supportTab', this)"><i class="fa-solid fa-headset"></i> الدعم</button>
     </div>
 
@@ -104,7 +112,7 @@
     <div id="authSection" class="card hidden">
         <div style="text-align: center; margin-bottom: 15px;">
             <div class="bull-logo-3d" style="width: 100px; height: 100px; font-size: 45px;">🚢</div>
-            <h3 style="margin-bottom: 2px;">بوابة الدخول وإنشاء الحسابات</h3>
+            <h3 style="margin-bottom: 2px;">بوابة دخول الشركات وإنشاء الحسابات B2B</h3>
         </div>
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
             <button class="btn-gold" id="tabBtnLogin" onclick="switchAuthMode('login')">تسجيل الدخول</button>
@@ -113,15 +121,16 @@
         <div id="loginFormContainer">
             <div class="input-group"><label>رقم الهاتف أو اسم المستخدم:</label><input type="text" id="loginContactOrName" placeholder="مثال: 01012345678 أو admin"></div>
             <div class="input-group"><label>كلمة المرور:</label><input type="password" id="loginPassword"></div>
-            <button class="btn-green" onclick="performLogin()">دخول 🚀</button>
+            <button class="btn-green" onclick="performLogin()">دخول الشركات 🚀</button>
         </div>
         <div id="registerFormContainer" class="hidden">
             <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName"></div>
             <div class="input-group"><label>رقم الهاتف:</label><input type="text" id="regPhone"></div>
             <div class="input-group"><label>نوع الحساب:</label>
                 <select id="regRole">
-                    <option value="عميل">عميل (Customer) 🛒</option>
-                    <option value="مدير">مدير (Manager) 🔐</option>
+                    <option value="شركة / مستورد">شركة تجارية / مستورد (B2B) 🏢</option>
+                    <option value="عميل">عميل فردي (Customer) 🛒</option>
+                    <option value="مدير">مدير النظام (Manager) 🔐</option>
                 </select>
             </div>
             <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword"></div>
@@ -129,7 +138,35 @@
         </div>
     </div>
 
-    <!-- ================= 2. قسم إضافة منتج جديد ================= -->
+    <!-- ================= 2. طلبات عروض الأسعار RFQ (B2B) ================= -->
+    <div id="rfqTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>📋 طلب عروض الأسعار المخصصة للشركات (RFQ)</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">أرسل مواصفات التصنيع والكميات الضخمة لتلقي عرض سعر تجاري مخصص ومنافس.</p>
+        <div class="input-group"><label>اسم الشركة / المستورد:</label><input type="text" id="rfqCompanyName" placeholder="اسم شركة التجارة أو المصنع"></div>
+        <div class="input-group"><label>وصف المنتج المطلوب / المواصفات الفنية:</label><textarea id="rfqSpecs" placeholder="تفاصيل المقاسات، الأقمشة، الألوان، ودرجات الجودة..."></textarea></div>
+        <div class="input-group"><label>الكمية المطلوبة (بالقطعة / الطن):</label><input type="text" id="rfqQty" placeholder="5000 قطعة"></div>
+        <button class="btn-gold" onclick="submitRFQ()">إرسال طلب عروض الأسعار للإدارة 📤</button>
+    </div>
+
+    <!-- ================= 3. توثيق حسابات الشركات B2B ================= -->
+    <div id="b2bVerifyTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🔐 توثيق حسابات الشركات والاعتماد التجاري</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">قم برفع المستندات التجارية للحصول على أسعار الجملة المخفضة وصلاحيات التصدير.</p>
+        <div class="input-group"><label>الاسم التجاري للشركة:</label><input type="text" id="b2bName" placeholder="الاسم الرسمي المسجل"></div>
+        <div class="input-group"><label>رقم السجل التجاري:</label><input type="text" id="b2bCR" placeholder="أدخل رقم السجل التجاري"></div>
+        <div class="input-group"><label>الرقم الضريبي:</label><input type="text" id="b2bTax" placeholder="الرقم الضريبي الموحد"></div>
+        <button class="btn-blue" onclick="submitB2BVerification()">تقديم طلب الاعتماد التجاري ✅</button>
+    </div>
+
+    <!-- ================= 4. مستندات الشحن والحاويات (B2B) ================= -->
+    <div id="shippingDocsTab" class="card hidden" style="border: 2px solid var(--accent);">
+        <h2>🌍 إدارة مستندات الشحن والحاويات البحرية</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">متابعة بوالص الشحن الجمركي وشهادات المنشأ للحاويات المصدرة للأسواق العالمية.</p>
+        <div class="input-group"><label>رقم بوليصة الشحن (Bill of Lading):</label><input type="text" id="bolQuery" placeholder="BL-GITI-2026-99"></div>
+        <button class="btn-gold" onclick="alert('✅ مستندات الشحن مطابقة وجاهزة للتخليص الجمركي وتصدير الحاوية.')">استعلام عن مستندات الحاوية 🔍</button>
+    </div>
+
+    <!-- ================= 5. قسم إضافة منتج جديد ================= -->
     <div id="addProductTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>➕ إضافة منتج جديد للمتجر والمستودع</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">رفع صور أو فيديوهات المنتجات، تحديد السعر، الكمية، والقسم لكي يتم عرضه مباشرة.</p>
@@ -160,7 +197,7 @@
         <button class="btn-gold" onclick="saveNewProductToStore()">حفظ ونشر المنتج في المتجر فوراً 🚀</button>
     </div>
 
-    <!-- ================= 3. المتجر الرئيسي ================= -->
+    <!-- ================= 6. المتجر الرئيسي ================= -->
     <div id="storeTab">
         <div class="card">
             <h3>📂 أقسام المتجر والتجارة الموسعة</h3>
@@ -185,21 +222,32 @@
         </div>
 
         <div class="card" style="border: 2px solid var(--accent);">
-            <h3>🛒 سلة المشتريات وإتمام الطلب</h3>
+            <h3>🛒 سلة المشتريات وإتمام الطلب التجاري B2B</h3>
             <div id="cartItems">السلة فارغة حالياً</div>
             <hr style="border-color:var(--border-color)">
             <p><b>الإجمالي الكلي: </b><span id="cartTotal" style="color:var(--accent);">0</span> جنيه</p>
+            
+            <div class="input-group" style="margin-top:10px;">
+                <label>اختر طريقة الدفع B2B / التجاري:</label>
+                <select id="paymentMethodSelect">
+                    <option value="تحويل بنكي مباشر">🏦 تحويل بنكي مباشر (Wire Transfer)</option>
+                    <option value="اعتماد مستندي L/C">📜 اعتماد مستندي (Letter of Credit)</option>
+                    <option value="دفع آجل معتمد">⏳ دفع آجل للشركات الموثقة (Credit Terms)</option>
+                    <option value="الدفع عند الاستلام">💵 الدفع عند الاستلام (Cash on Delivery)</option>
+                </select>
+            </div>
+
             <button class="btn-green" onclick="checkoutCart()">إتمام الشراء وإرسال الطلب وإصدار الفاتورة 🚀</button>
         </div>
     </div>
 
-    <!-- ================= 4. المخزن والمستودعات ================= -->
+    <!-- ================= 7. المخزن والمستودعات ================= -->
     <div id="advancedInvoicesStoreTab" class="card hidden">
         <h2>🧾 إدارة المخزن والمستودعات والأصناف</h2>
         <div id="warehouseItemsList">لا توجد أصناف مسجلة.</div>
     </div>
 
-    <!-- ================= 5. التصدير الدولي ================= -->
+    <!-- ================= 8. التصدير الدولي ================= -->
     <div id="exportTab" class="card hidden">
         <h2>🌍 إدارة التصدير التجاري الدولي</h2>
         <p style="color:var(--text-muted); font-size:13px; text-align:center;">إعداد شحنات الملابس والفحم والأخشاب للتصدير الدولي للأسواق العالمية.</p>
@@ -209,33 +257,56 @@
         <button class="btn-blue" onclick="alert('✅ تم حفظ طلب التصدير وإرساله لقسم اللوجستيات والشحن الدولي.')">تأكيد طلب التصدير 🚢</button>
     </div>
 
-    <!-- ================= 6. تتبع اللوجستيات والشحن ================= -->
+    <!-- ================= 9. تتبع اللوجستيات والشحن ================= -->
     <div id="logisticsTab" class="card hidden">
         <h2>🚚 تتبع الشحنات واللوجستيات</h2>
         <div class="input-group"><label>بحث برقم الشحنة أو بوليصة الحاوية:</label><input type="text" id="trackQuery" placeholder="مثال: GITI-LOG-9821"></div>
         <button class="btn-gold" onclick="alert('الشحنة قيد التحرك وتتبع خط سير التصدير بنجاح.')">بحث عن الشحنة 🔍</button>
     </div>
 
-    <!-- ================= 7. قسم استعراض ومشاهدة الفواتير ================= -->
+    <!-- ================= 10. قسم استعراض ومشاهدة الفواتير ================= -->
     <div id="invoicesViewerTab" class="card hidden">
-        <h2>📑 أرشيف واستعراض الفواتير (صورة، PDF، Word)</h2>
+        <h2>📑 أرشيف واستعراض الفواتير وعقود B2B (صورة، PDF، Word)</h2>
         <p style="text-align:center; color:var(--text-muted); font-size:13px;">استعرض كافة فواتير المبيعات والتصدير السابقة، ومعاينتها أو تحميلها بالأشكال المختلفة.</p>
         <div id="invoicesArchiveList">لا توجد فواتير مسجلة في الأرشيف حالياً.</div>
     </div>
 
-    <!-- ================= 8. إدارة الطلبات ================= -->
+    <!-- ================= 11. تقارير الأرباح والمبيعات المتقدمة ================= -->
+    <div id="financialReportsTab" class="card hidden">
+        <h2>📊 تقارير الأرباح والمبيعات المالية المتقدمة</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">تحليل مالي شامل لإجمالي المبيعات، أرباح التصدير، وحركة السيولة المالية.</p>
+        <div class="stats-grid">
+            <div class="stat-card"><h4>إجمالي الإيرادات</h4><p id="reportTotalRevenue">0 ج.م</p></div>
+            <div class="stat-card"><h4>صافي الأرباح التقديرية (25%)</h4><p id="reportNetProfit">0 ج.م</p></div>
+            <div class="stat-card"><h4>متوسط قيمة الفاتورة</h4><p id="reportAvgOrder">0 ج.م</p></div>
+        </div>
+        <div class="card" style="background:#090d16; margin-top:15px;">
+            <h3 style="font-size:15px; color:var(--accent);">📈 تفاصيل الحركات المالية الأخيرة</h3>
+            <div id="financialTransactionsList">لا توجد معاملات مالية مسجلة بعد.</div>
+        </div>
+    </div>
+
+    <!-- ================= 12. الإشعارات والالتبيهاات ================= -->
+    <div id="notificationsTab" class="card hidden">
+        <h2>🔔 إشعارات المنصة والتنبيهات الفورية</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">متابعة حالة الطلبات، عمليات الشحن، والرسائل الإدارية.</p>
+        <div id="notificationsListContainer">لا توجد إشعارات جديدة.</div>
+        <button class="btn-red" style="margin-top:10px; font-size:12px;" onclick="clearNotifications()">مسح كافة الإشعارات</button>
+    </div>
+
+    <!-- ================= 13. إدارة الطلبات ================= -->
     <div id="ordersTab" class="card hidden">
-        <h2>📋 سجل المشتريات والطلبات</h2>
+        <h2>📋 سجل المشتريات والطلبات التجارية</h2>
         <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
     </div>
 
     <!-- ================= الفاتورة الرسمية الحالية ================= -->
     <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🧾 فاتورة المشتريات والبيع الرسمية</h2>
+        <h2>🧾 فاتورة المشتريات والبيع الرسمية B2B</h2>
         <div id="printableInvoice" class="invoice-box">
             <div class="invoice-header">
                 <div>
-                    <h2 style="margin:0; color:#111;">GITI EXPORT</h2>
+                    <h2 style="margin:0; color:#111;">GITI EXPORT B2B</h2>
                     <small style="color:#555;">منصة التصدير التجاري الدولي للملابس والمستودعات</small>
                 </div>
                 <div style="text-align: left;">
@@ -243,9 +314,10 @@
                     <small id="invModalDate">التاريخ: 2026/09/23</small>
                 </div>
             </div>
-            <p><b>بيانات العميل:</b><br>
+            <p><b>بيانات العميل / الشركة:</b><br>
                • اسم العميل: <span id="invModalClient">العميل</span><br>
-               • هاتف التواصل: <span id="invModalPhone">الهاتف</span>
+               • هاتف التواصل: <span id="invModalPhone">الهاتف</span><br>
+               • طريقة الدفع: <span id="invModalPayment" style="color:var(--accent); font-weight:bold;">نقداً</span>
             </p>
             <table class="invoice-table">
                 <thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead>
@@ -269,7 +341,7 @@
         <p style="text-align:center; color:var(--text-muted); font-size:12px;">تظهر في المراسلات الحسابات المسجلة كافة مع صور البروفايل والأسماء في قنوات الدعم والمحادثات.</p>
         <div class="chat-box" id="chatMessages"></div>
         <div class="input-group" style="display: flex; gap: 5px; margin: 0;">
-            <input type="text" id="chatInput" placeholder="اكتب رسالتك الموجهة للإدارة أو العملاء..." style="margin:0;">
+            <input type="text" id="chatInput" placeholder="اكتب رسالتك الموجهة للإدارة أو الشركات..." style="margin:0;">
             <button class="btn-gold" style="width: 80px; margin:0;" onclick="sendChatMessage()">إرسال</button>
         </div>
     </div>
