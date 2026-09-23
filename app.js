@@ -1,4 +1,8 @@
-let currentUser = JSON.parse(localStorage.getItem('giti_export_user')) || null;
+// دالة لجلب المستخدم المحدث دائماً من الذاكرة أو النافذة العامة
+function getCurrentUser() {
+    return window.currentUser || JSON.parse(localStorage.getItem('giti_export_user')) || null;
+}
+
 let inventory = [
     { id: 1, name: 'جاكيت شتوي تصدير فاخر', category: 'تصدير دولي', price: 650, qty: 150, type: 'image', mediaUrl: 'https://via.placeholder.com/150/0f172a/00a4ef?text=Jacket' },
     { id: 2, name: 'طقم بنطلون وتيشرت جملة', category: 'جملة محلي', price: 300, qty: 80, type: 'image', mediaUrl: 'https://via.placeholder.com/150/1e293b/00a4ef?text=Set' },
@@ -35,7 +39,7 @@ window.initPlatformAfterLogin = function() {
 };
 
 window.onload = function() {
-    if(currentUser) {
+    if(getCurrentUser()) {
         window.initPlatformAfterLogin();
     }
 };
@@ -105,7 +109,7 @@ window.toggleSidebar = function() {
 }
 
 window.toggleGPlusDrawer = function() {
-    if(!currentUser) {
+    if(!getCurrentUser()) {
         alert('⚠️ يرجى تسجيل الدخول أولاً!');
         window.switchTab('authSection');
         return;
@@ -121,7 +125,7 @@ window.closeAllDrawers = function() {
 }
 
 window.checkProfileDrawerAccess = function() {
-    if (!currentUser) {
+    if (!getCurrentUser()) {
         alert('⚠️ يرجى تسجيل الدخول أولاً للتمتع بالحساب!');
         window.switchTab('authSection');
     } else {
@@ -153,7 +157,8 @@ window.setTheme = function(primary, accent, bg, card) {
 }
 
 window.switchTab = function(tabId, btnElement = null) {
-    if(!currentUser && tabId !== 'authSection') {
+    let activeUser = getCurrentUser();
+    if(!activeUser && tabId !== 'authSection') {
         alert('⚠️ لا يمكن استعراض الأقسام إلا بعد تسجيل الدخول السحابي!');
         window.switchTab('authSection');
         return;
@@ -181,17 +186,17 @@ window.updateAuthUI = function() {
     let profileBtnTop = document.getElementById('profileBtnTop');
     let notifTopBtn = document.getElementById('notifTopBtn');
     
-    currentUser = JSON.parse(localStorage.getItem('giti_export_user')) || window.currentUser;
+    let activeUser = getCurrentUser();
 
-    if(currentUser) {
+    if(activeUser) {
         btnTop.innerText = 'خروج'; 
         btnTop.className = 'btn-red';
-        greet.innerText = currentUser.name;
+        greet.innerText = activeUser.name;
         
-        if(currentUser.avatar) {
-            topAvatar.src = currentUser.avatar;
+        if(activeUser.avatar) {
+            topAvatar.src = activeUser.avatar;
             let gpAv = document.getElementById('gpAvatarImg');
-            if(gpAv) gpAv.src = currentUser.avatar;
+            if(gpAv) gpAv.src = activeUser.avatar;
         }
         topAvatar.style.display = 'block';
         mainNavBar.classList.remove('hidden');
@@ -202,13 +207,13 @@ window.updateAuthUI = function() {
         let gpName = document.getElementById('gpNameDisplay');
         let gpContact = document.getElementById('gpContactDisplay');
         let gpRole = document.getElementById('gpRoleBadge');
-        if(gpName) gpName.innerText = currentUser.name;
-        if(gpContact) gpContact.innerText = 'البريد: ' + currentUser.phone;
-        if(gpRole) gpRole.innerText = currentUser.role === 'مدير' ? 'مدير المنصة Master Admin 🔐' : 'شركة معتمدة B2B 🏢';
+        if(gpName) gpName.innerText = activeUser.name;
+        if(gpContact) gpContact.innerText = 'البريد: ' + activeUser.phone;
+        if(gpRole) gpRole.innerText = activeUser.role === 'مدير' ? 'مدير المنصة Master Admin 🔐' : 'شركة معتمدة B2B 🏢';
 
-        if(currentUser.cover) {
+        if(activeUser.cover) {
             let gpCover = document.getElementById('gpCoverImg');
-            if(gpCover) gpCover.src = currentUser.cover;
+            if(gpCover) gpCover.src = activeUser.cover;
         }
 
         window.initPlatformAfterLogin();
@@ -227,11 +232,12 @@ window.updateAuthUI = function() {
 
 window.handleAvatarUpload = function(event) {
     let file = event.target.files[0];
-    if(!file || !currentUser) return;
+    let activeUser = getCurrentUser();
+    if(!file || !activeUser) return;
     let reader = new FileReader();
     reader.onload = function(e) {
-        currentUser.avatar = e.target.result;
-        localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
+        activeUser.avatar = e.target.result;
+        localStorage.setItem('giti_export_user', JSON.stringify(activeUser));
         window.updateAuthUI();
         alert('✅ تم تحديث الصورة الشخصية بنجاح!');
     };
@@ -240,11 +246,12 @@ window.handleAvatarUpload = function(event) {
 
 window.handleCoverUpload = function(event) {
     let file = event.target.files[0];
-    if(!file || !currentUser) return;
+    let activeUser = getCurrentUser();
+    if(!file || !activeUser) return;
     let reader = new FileReader();
     reader.onload = function(e) {
-        currentUser.cover = e.target.result;
-        localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
+        activeUser.cover = e.target.result;
+        localStorage.setItem('giti_export_user', JSON.stringify(activeUser));
         window.updateAuthUI();
         alert('✅ تم تحديث الغلاف بنجاح!');
     };
@@ -273,6 +280,7 @@ window.saveNewProductToStore = async function() {
     let price = parseFloat(document.getElementById('newProdPrice').value) || 0;
     let qty = parseInt(document.getElementById('newProdQty').value) || 1;
     let category = document.getElementById('newProdCategory').value;
+    let activeUser = getCurrentUser();
 
     if(!name || !price) return alert('الرجاء إدخال اسم المنتج والسعر على الأقل!');
     if(!tempNewProdMedia) {
@@ -284,7 +292,7 @@ window.saveNewProductToStore = async function() {
         name, price, qty, category,
         type: tempNewProdMediaType,
         mediaUrl: tempNewProdMedia,
-        addedBy: currentUser ? currentUser.name : 'إدارة النظام'
+        addedBy: activeUser ? activeUser.name : 'إدارة النظام'
     };
 
     await syncDataToCloud("inventory", newProduct, prodId);
@@ -317,7 +325,8 @@ window.filterCartCategory = function(cat, element) {
 
 function renderStore() {
     let container = document.getElementById('storeProductsList');
-    if(!container || !currentUser) return;
+    let activeUser = getCurrentUser();
+    if(!container || !activeUser) return;
     container.innerHTML = '';
     let filtered = inventory.filter(item => currentFilter === 'all' || item.category === currentFilter);
     if(filtered.length === 0) { container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">لا توجد منتجات متاحة في هذا القسم.</p>'; return; }
@@ -355,7 +364,8 @@ window.shareProduct = function(name, price) {
 }
 
 window.addToCart = function(id) {
-    if(!currentUser) return alert('⚠️ يرجى تسجيل الدخول أولاً لإضافة منتجات إلى سلتك!');
+    let activeUser = getCurrentUser();
+    if(!activeUser) return alert('⚠️ يرجى تسجيل الدخول أولاً لإضافة منتجات إلى سلتك!');
     let item = inventory.find(i => i.id == id);
     if(!item) return alert('عذراً، المنتج غير متوفر!');
     
@@ -419,6 +429,7 @@ window.toggleWalletInput = function() {
 }
 
 window.checkoutCart = async function() {
+    let activeUser = getCurrentUser();
     if(currentCart.length === 0) return alert('⚠️ سلة المشتريات فارغة!');
 
     let totalVal = document.getElementById('cartTotal').innerText;
@@ -429,8 +440,8 @@ window.checkoutCart = async function() {
     let orderId = 'GITI-' + Math.floor(1000 + Math.random() * 9000);
     let newOrder = {
         id: orderId,
-        customer: currentUser.name,
-        phone: currentUser.phone,
+        customer: activeUser.name,
+        phone: activeUser.phone,
         items: [...currentCart],
         total: totalVal + ' ' + (currency === 'USD' ? 'دولار' : 'جنيه'),
         payment: paymentMethod + (walletPhone ? ` (من رقم: ${walletPhone})` : ''),
@@ -559,10 +570,11 @@ window.downloadInvoiceWord = function() {
 
 function renderInvoicesArchive() {
     let container = document.getElementById('invoicesArchiveList');
-    if(!container || !currentUser) return;
+    let activeUser = getCurrentUser();
+    if(!container || !activeUser) return;
     let list = invoicesArchive;
-    if(currentUser.role !== 'مدير') {
-        list = invoicesArchive.filter(i => i.customer === currentUser.name);
+    if(activeUser.role !== 'مدير') {
+        list = invoicesArchive.filter(i => i.customer === activeUser.name);
     }
     if(list.length === 0) { container.innerHTML = 'لا توجد فواتير مسجلة في الأرشيف حالياً.'; return; }
     container.innerHTML = '';
@@ -604,10 +616,11 @@ window.deleteWarehouseItem = function(id) {
 
 function renderOrders() {
     let container = document.getElementById('ordersList');
-    if(!container || !currentUser) return;
+    let activeUser = getCurrentUser();
+    if(!container || !activeUser) return;
     let list = orders;
-    if(currentUser.role !== 'مدير') {
-        list = orders.filter(o => o.customer === currentUser.name);
+    if(activeUser.role !== 'مدير') {
+        list = orders.filter(o => o.customer === activeUser.name);
     }
     if(list.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
     container.innerHTML = '';
@@ -674,6 +687,7 @@ function renderNotifications() {
         return;
     }
     container.innerHTML = '';
+    notifications.notifications = notifications || [];
     notifications.forEach(n => {
         container.innerHTML += `
             <div style="background:#090d16; border:1px solid var(--border-color); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px;">
@@ -699,17 +713,18 @@ function updateStats() {
 
 window.sendChatMessage = async function() {
     let txt = document.getElementById('chatInput').value.trim();
-    if(!txt || !currentUser) return;
-    let senderName = currentUser.name;
-    let senderRole = currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'شركة معتمدة 🏢';
-    let senderAvatar = currentUser.avatar || '';
+    let activeUser = getCurrentUser();
+    if(!txt || !activeUser) return;
+    let senderName = activeUser.name;
+    let senderRole = activeUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'شركة معتمدة 🏢';
+    let senderAvatar = activeUser.avatar || '';
     
     let chatMsg = { 
         sender: senderName, 
         role: senderRole, 
         avatar: senderAvatar, 
         text: txt, 
-        type: currentUser.role === 'مدير' ? 'outgoing' : 'incoming',
+        type: activeUser.role === 'مدير' ? 'outgoing' : 'incoming',
         time: Date.now()
     };
     
