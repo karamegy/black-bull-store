@@ -49,8 +49,14 @@
             <span style="cursor:pointer; font-size:18px; color:#fff;" onclick="toggleGPlusDrawer()">✕</span>
         </div>
         <div class="gplus-header">
-            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/00a4ef?text=Cover" alt="Cover">
-            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/00a4ef?text=User" alt="Avatar">
+            <label title="تغيير صورة الغلاف">
+                <input type="file" id="coverUploadInput" accept="image/*" style="display:none;" onchange="handleCoverUpload(event)">
+                <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/00a4ef?text=Cover" alt="Cover">
+            </label>
+            <label title="تغيير الصورة الشخصية">
+                <input type="file" id="avatarUploadInput" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
+                <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/00a4ef?text=User" alt="Avatar">
+            </label>
         </div>
         <div style="text-align:center; margin-top:45px;">
             <h3 id="gpNameDisplay" style="margin:0;">اسم المستخدم</h3>
@@ -93,7 +99,7 @@
         <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
-    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: الحساب محمي عبر Firebase Authentication الحقيقي</div>
+    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: الحساب وقاعدة البيانات مرتبطين عبر Firebase سحابياً</div>
 
     <!-- شريط التنقل السريع -->
     <div class="nav-bar hidden" id="mainNavBar">
@@ -107,7 +113,7 @@
         <button onclick="switchTab('supportTab', this)"><i class="fa-solid fa-headset"></i> الدعم</button>
     </div>
 
-    <!-- ================= بوابة تسجيل الدخول الحقيقية (Firebase Auth) ================= -->
+    <!-- ================= بوابة تسجيل الدخول (Firebase Auth) ================= -->
     <div id="authSection" class="card">
         <div style="text-align: center; margin-bottom: 20px;">
             <div class="bull-logo-3d" style="width: 90px; height: 90px; font-size: 40px;">🚢</div>
@@ -175,6 +181,11 @@
                 <option value="ملابس رجالي">ملابس رجالي 👔</option>
             </select>
         </div>
+        <div class="input-group">
+            <label>صورة المنتج (ملف):</label>
+            <input type="file" id="newProdMediaInput" accept="image/*,video/*" onchange="previewNewProductMedia(event)">
+        </div>
+        <div id="newProdMediaPreview" style="margin-bottom: 10px;"></div>
         <button class="btn-gold" onclick="saveNewProductToStore()">حفظ ونشر المنتج في المتجر فوراً 🚀</button>
     </div>
 
@@ -197,9 +208,35 @@
 
         <div class="card" style="border: 2px solid var(--accent);" id="cartCardSection">
             <h3>🛒 سلة المشتريات وحجز الطلبات الخاصة بك</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <label style="font-size:12px;">اختر العملة:</label>
+                <select id="currencySelector" onchange="updateCartCurrency()" style="width:120px; padding:5px; background:#090d16; color:#fff; border-radius:5px; border:1px solid var(--border-color);">
+                    <option value="EGP">جنيه مصري (EGP)</option>
+                    <option value="USD">دولار أمريكي (USD)</option>
+                </select>
+            </div>
+            <div class="categories-grid" style="margin-bottom:10px;">
+                <div class="cat-chip active" onclick="filterCartCategory('all', this)">كل المنتجات بالسلة</div>
+                <div class="cat-chip" onclick="filterCartCategory('ملابس', this)">ملابس وأقمشة</div>
+            </div>
             <div id="cartItems">سلتك الخاصة فارغة حالياً. تصفح المنتجات وأضف ما يناسبك!</div>
             <hr style="border-color:var(--border-color)">
-            <p><b>الإجمالي الكلي لسلتك: </b><span id="cartTotal" style="color:var(--accent); font-size: 18px;">0</span> جنيه</p>
+            <p><b>الإجمالي الكلي لسلتك: </b><span id="cartTotal" style="color:var(--accent); font-size: 18px;">0</span> <span id="currencyUnitSymbol">جنيه</span></p>
+            
+            <div class="input-group">
+                <label>طريقة الدفع:</label>
+                <select id="paymentMethodSelect" onchange="toggleWalletInput()">
+                    <option value="تحويل بنكي رسمي">تحويل بنكي رسمي 🏦</option>
+                    <option value="فودافون كاش">فودافون كاش 📱</option>
+                    <option value="إنستاباي">إنستاباي (InstaPay) ⚡</option>
+                    <option value="نقداً عند التسليم">نقداً عند التسليم 💵</option>
+                </select>
+            </div>
+            <div class="input-group" id="walletPhoneContainer" style="display:none;">
+                <label>رقم هاتف المحفظة المحول منها:</label>
+                <input type="text" id="walletSenderPhone" placeholder="010xxxxxxxx">
+            </div>
+
             <button class="btn-green" onclick="checkoutCart()" style="font-size: 15px; padding: 12px;">إتمام الشراء وإصدار الفاتورة الرسمية 🚀</button>
         </div>
     </div>
@@ -226,12 +263,47 @@
         <div id="invoicesArchiveList">لا توجد فواتير مسجلة في الأرشيف حالياً.</div>
     </div>
 
+    <!-- نافذة استعراض الفاتورة الرسمية -->
+    <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
+        <div id="printableInvoice" style="background:#111827; padding:20px; border-radius:8px; color:#fff;">
+            <div style="text-align:center; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:15px;">
+                <h2 style="color:var(--accent); margin:0;">GITI EXPORT B2B</h2>
+                <p style="font-size:12px; color:var(--text-muted); margin:5px 0;">فاتورة تجارية وعقد توريد رسمي</p>
+            </div>
+            <p id="invModalId"><b>رقم الفاتورة:</b> #--</p>
+            <p id="invModalDate"><b>التاريخ:</b> --</p>
+            <p id="invModalClient"><b>اسم العميل / الشركة:</b> --</p>
+            <p id="invModalPhone"><b>البريد / الهاتف:</b> --</p>
+            <p id="invModalPayment"><b>طريقة الدفع:</b> --</p>
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: right; margin-top:10px; border-color:#333;">
+                <thead>
+                    <tr style="background: #0f172a; color: var(--accent);">
+                        <th style="padding: 6px;">المنتج</th>
+                        <th style="padding: 6px;">الكمية</th>
+                        <th style="padding: 6px;">السعر</th>
+                        <th style="padding: 6px;">الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody id="invModalItems"></tbody>
+            </table>
+            <h3 style="text-align: left; margin-top: 15px;">الإجمالي الكلي: <span id="invModalTotal" style="color:var(--accent);">0</span></h3>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+            <button class="btn-blue" onclick="downloadInvoiceImage()" style="flex:1;">تحميل الفاتورة صورة (PNG) 📷</button>
+            <button class="btn-purple" onclick="downloadInvoiceWord()" style="flex:1;">تحميل كملف Word 📝</button>
+            <button class="btn-gold" onclick="switchTab('storeTab')" style="flex:1;">العودة للمتجر 🏪</button>
+        </div>
+    </div>
+
     <div id="financialReportsTab" class="card hidden">
         <h2>📊 تقارير الأرباح والمبيعات المالية المتقدمة</h2>
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي الإيرادات</h4><p id="reportTotalRevenue">0 ج.م</p></div>
             <div class="stat-card"><h4>صافي الأرباح التقديرية (25%)</h4><p id="reportNetProfit">0 ج.م</p></div>
+            <div class="stat-card"><h4>متوسط قيمة الطلب</h4><p id="reportAvgOrder">0 ج.م</p></div>
         </div>
+        <h3 style="margin-top:15px; font-size:14px; color:var(--accent);">آخر المعاملات المالية</h3>
+        <div id="financialTransactionsList" style="background:#090d16; padding:10px; border-radius:8px; border:1px solid var(--border-color);">لا توجد معاملات مسجلة بعد.</div>
     </div>
 
     <div id="notificationsTab" class="card hidden">
@@ -247,9 +319,9 @@
 
     <div id="supportTab" class="card hidden">
         <h2>💬 الدعم الفني المباشر والمراسلات</h2>
-        <div class="chat-box" id="chatMessages"></div>
+        <div class="chat-box" id="chatMessages" style="height:250px; overflow-y:auto; background:#090d16; padding:10px; border-radius:8px; border:1px solid var(--border-color); margin-bottom:10px;"></div>
         <div class="input-group" style="display: flex; gap: 5px; margin: 0;">
-            <input type="text" id="chatInput" placeholder="اكتب رسالتك الموجهة للإدارة..." style="margin:0;">
+            <input type="text" id="chatInput" placeholder="اكتب رسالتك الموجهة للإدارة..." style="margin:0; flex:1;">
             <button class="btn-gold" style="width: 80px; margin:0;" onclick="sendChatMessage()">إرسال</button>
         </div>
     </div>
@@ -260,10 +332,11 @@
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
             <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
+            <div class="stat-card"><h4>إجمالي الفواتير</h4><p id="statInvoicesCount">0</p></div>
         </div>
     </div>
 
-    <!-- تهيئة Firebase Authentication الحقيقي -->
+    <!-- تهيئة Firebase Authentication و Firestore -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
@@ -275,6 +348,15 @@
             signOut, 
             onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            getDocs, 
+            addDoc, 
+            onSnapshot, 
+            setDoc, 
+            doc 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyBnY2QBAr1ZpBpE6Leol7blQseR4Qq_AaY",
@@ -288,7 +370,15 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth();
+        const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
+
+        window.db = db;
+        window.auth = auth;
+        window.googleProvider = googleProvider;
+        window.firebaseFns = {
+            collection, getDocs, addDoc, onSnapshot, setDoc, doc
+        };
 
         window.loginWithGoogle = async function() {
             try {
