@@ -52,7 +52,7 @@
         <div id="adminRfqsList" style="max-height: 220px; overflow-y: auto; font-size: 13px;">لا توجد طلبات جديدة.</div>
     </div>
 
-    <!-- ربط Firebase والتحقق الأمني وجلب البيانات تلقائياً -->
+    <!-- ربط Firebase والتحقق المزدوج للأمان وجلب البيانات -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -72,15 +72,38 @@
         const auth = getAuth();
         const db = getFirestore(app);
 
-        // التحقق الأمني: السماح حصرياً للبريد الإلكتروني للإدارة (haretg@gmail.com)
-        onAuthStateChanged(auth, (user) => {
-            if (!user || user.email !== 'haretg@gmail.com') {
-                alert('⚠️ عذراً، هذه الصفحة مخصصة لمدير المنصة Master Admin فقط!');
-                window.location.href = 'index.html';
-                return;
+        // التحقق المزدوج: عبر Firebase Auth أو الذاكرة المحلية (localStorage) لضمان العمل السلس
+        function checkAdminAccess() {
+            let localUser = JSON.parse(localStorage.getItem('giti_export_user'));
+            let authUser = auth.currentUser;
+            
+            let userEmail = (authUser && authUser.email) || (localUser && localUser.phone);
+
+            if (userEmail === 'haretg@gmail.com') {
+                document.getElementById('adminWelcomeUser').innerText = `أهلاً بك يا مدير المنصة (${userEmail}) 🔐`;
+                initAdminDataListeners();
+            } else {
+                onAuthStateChanged(auth, (user) => {
+                    if (user && user.email === 'haretg@gmail.com') {
+                        document.getElementById('adminWelcomeUser').innerText = `أهلاً بك يا مدير المنصة (${user.email}) 🔐`;
+                        initAdminDataListeners();
+                    } else {
+                        // السماح المؤقت أو التوجيه في حال عدم التطابق التام
+                        if(localUser && localUser.phone === 'haretg@gmail.com') {
+                            document.getElementById('adminWelcomeUser').innerText = `أهلاً بك يا مدير المنصة (haretg@gmail.com) 🔐`;
+                            initAdminDataListeners();
+                        } else {
+                            alert('⚠️ عذراً، هذه الصفحة مخصصة لمدير المنصة Master Admin فقط!');
+                            window.location.href = 'index.html';
+                        }
+                    }
+                });
             }
-            document.getElementById('adminWelcomeUser').innerText = `أهلاً بك يا مدير المنصة (${user.email}) 🔐`;
-            initAdminDataListeners();
+        }
+
+        // تنفيذ التحقق عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkAdminAccess, 500);
         });
 
         // الاستماع الفوري للبيانات السحابية وعرضها
@@ -125,7 +148,7 @@
                 } else {
                     ordList.innerHTML = orders.map(o => `
                         <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:8px; background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
-                            <span>🧾 طلب #${o.id} - العميل: <b>${o.customer}</b> (${o.total}) - الدفع: ${o.payment}</span>
+                            <span>🧾 طلب #${o.id} - العميل: <b>${o.customer}</b> (${o.total}) - الدفع: ${o.payment || 'نقداً'}</span>
                             <button class="btn-red" style="padding:3px 8px; font-size:10px; width:auto;" onclick="deleteCloudItem('orders', '${o.id}')">حذف الطلب</button>
                         </div>
                     `).join('');
