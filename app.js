@@ -17,6 +17,10 @@ let notifications = [
     { id: 1, text: '🎉 أهلاً بك في منصة Giti Export للتجارة المحلية والدولية السحابية!', date: 'اليوم' }
 ];
 let rfqs = [];
+let userWalletBalance = 45000;
+let platformReviews = [
+    { user: 'شركة النيل للتجارة', rating: 5, text: 'منصة احترافية وسرعة فائقة في توثيق الصفقات وتصدير البضائع.', date: 'اليوم' }
+];
 
 let currentCart = [];
 let currentFilter = 'all';
@@ -34,6 +38,7 @@ window.initPlatformAfterLogin = function() {
     renderChat();
     renderFinancialReports();
     renderNotifications();
+    renderReviews();
     updateStats();
     renderCart();
 };
@@ -156,6 +161,106 @@ window.setTheme = function(primary, accent, bg, card) {
     document.documentElement.style.setProperty('--card-bg', card);
 }
 
+// دالة تقديم المزايدة في المزادات الحية
+window.placeBid = function(auctionName, currentPrice, inputId) {
+    let val = parseFloat(document.getElementById(inputId).value) || 0;
+    let activeUser = getCurrentUser();
+    if(!activeUser) return alert('⚠️ يرجى تسجيل الدخول للمزايدة!');
+    if(val <= currentPrice) return alert('يجب أن تكون المزايدة أعلى من السعر الحالي!');
+
+    window.addNotification(`⚖️ قام العضو (${activeUser.name}) بالمزايدة بمبلغ ${val} ج.م في ${auctionName}`);
+    alert(`✅ تم قبول مزايدتك بنجاح وأصبحت أعلى مزايد حالياً في ${auctionName}!`);
+}
+
+// دالة إيداع الرصيد في المحفظة الذكية
+window.depositToWallet = function() {
+    let amt = parseFloat(document.getElementById('walletAddAmount').value) || 0;
+    if(amt <= 0) return alert('الرجاء إدخال مبلغ صحيح للإيداع!');
+    userWalletBalance += amt;
+    document.getElementById('walletAvailableBalance').innerText = userWalletBalance.toLocaleString() + ' ج.م';
+    document.getElementById('walletAddAmount').value = '';
+    window.addNotification(`💳 تم إيداع مبلغ ${amt} ج.م بنجاح إلى محفظتك الرقمية.`);
+    alert('✅ تمت عملية الإيداع وتحديث الرصيد سحابياً بنجاح!');
+}
+
+// دالة نشر التقييمات والسمعة التجارية
+window.submitUserReview = function() {
+    let txt = document.getElementById('userReviewText').value.trim();
+    let activeUser = getCurrentUser();
+    if(!txt || !activeUser) return alert('الرجاء كتابة تقييمك أولاً!');
+
+    platformReviews.unshift({ user: activeUser.name, rating: 5, text: txt, date: 'اليوم' });
+    renderReviews();
+    document.getElementById('userReviewText').value = '';
+    alert('✅ شكراً لك! تم نشر تقييمك الموثق في السمعة التجارية بنجاح.');
+}
+
+function renderReviews() {
+    let container = document.getElementById('reviewsListContainer');
+    if(!container) return;
+    container.innerHTML = '';
+    platformReviews.forEach(r => {
+        container.innerHTML += `
+            <div style="background:#090d16; padding:10px; border-radius:8px; border:1px solid var(--border-color); margin-bottom:8px; font-size:12px;">
+                <b>⭐ ${r.user}</b> <span style="color:var(--text-muted); float:left;">${r.date}</span>
+                <p style="margin:5px 0 0; color:#fff;">${r.text}</p>
+            </div>
+        `;
+    });
+}
+
+// دالة حاسبة الشحن والجمارك الذكية الجديدة
+window.calculateFreightCost = function() {
+    let type = document.getElementById('calcContainerType').value;
+    let weight = parseFloat(document.getElementById('calcWeight').value) || 0;
+    let destination = document.getElementById('calcDestination').value.trim();
+    let resultBox = document.getElementById('calcResultBox');
+
+    if(!destination || weight <= 0) {
+        return alert('الرجاء إدخال الوزن وصحيح وجهة الشحن!');
+    }
+
+    let baseRate = type === '20' ? 1200 : (type === '40' ? 2200 : 800);
+    let weightCost = weight * 4;
+    let customsFee = (baseRate + weightCost) * 0.14; 
+    let totalFreight = baseRate + weightCost + customsFee;
+
+    resultBox.style.display = 'block';
+    resultBox.innerHTML = `
+        <h4 style="color:var(--accent); margin-top:0;">📊 نتيجة الحساب اللوجستي للوجهة: ${destination}</h4>
+        <p>• تكلفة حاوية/شحن أساسية: <b>${baseRate} دولار</b></p>
+        <p>• تكلفة الوزن الإضافي: <b>${weightCost} دولار</b></p>
+        <p>• الرسوم الجمركية والضرائب المقدرة: <b>${customsFee.toFixed(2)} دولار</b></p>
+        <hr style="border-color:var(--border-color)">
+        <p style="font-size:16px; color:var(--accent);"><b>التكلفة الإجمالية المقدرة: ${totalFreight.toFixed(2)} دولار</b></p>
+    `;
+}
+
+// دالة إصدار عقود الضمان الذكية
+window.generateSmartContract = function() {
+    let partner = document.getElementById('contractPartner').value.trim();
+    let amount = document.getElementById('contractAmount').value.trim();
+    let terms = document.getElementById('contractTerms').value.trim();
+    let resView = document.getElementById('contractResultView');
+
+    if(!partner || !amount || !terms) {
+        return alert('الرجاء ملء بيانات العقد بالكامل!');
+    }
+
+    let contractId = 'GITI-ESCROW-' + Math.floor(100000 + Math.random() * 900000);
+    resView.innerHTML = `
+        <div style="background:#090d16; padding:15px; border-radius:8px; border:2px dashed var(--accent);">
+            <h3 style="color:var(--accent); margin-top:0;">🛡️ عقد ضمان تجاري رقم #${contractId}</h3>
+            <p><b>الطرف الثاني:</b> ${partner}</p>
+            <p><b>قيمة الصفقة المؤمنة:</b> ${amount}</p>
+            <p><b>الشروط والأحكام:</b> ${terms}</p>
+            <p style="color:#48bb78; font-weight:bold;">✅ تم توثيق العقد سحابياً وحجز القيمة بضمان المنصة لحين الاستلام.</p>
+        </div>
+    `;
+    window.addNotification(`🛡️ تم إبرام عقد ضمان ذكي جديد رقم #${contractId} مع ${partner}`);
+    alert('✅ تم إصدار وتوقيع العقد الذكي بنجاح!');
+}
+
 window.switchTab = function(tabId, btnElement = null) {
     let activeUser = getCurrentUser();
     if(!activeUser && tabId !== 'authSection') {
@@ -164,7 +269,7 @@ window.switchTab = function(tabId, btnElement = null) {
         return;
     }
 
-    ['storeTab', 'addProductTab', 'advancedInvoicesStoreTab', 'exportTab', 'logisticsTab', 'invoicesViewerTab', 'ordersTab', 'financialReportsTab', 'notificationsTab', 'rfqTab', 'b2bVerifyTab', 'shippingDocsTab', 'supportTab', 'adminDashboardTab', 'authSection', 'invoiceModal'].forEach(id => {
+    ['storeTab', 'virtualShowroomTab', 'auctionsTab', 'liveGpsTab', 'walletTab', 'ratingsTab', 'shippingCalculatorTab', 'smartContractsTab', 'addProductTab', 'advancedInvoicesStoreTab', 'exportTab', 'logisticsTab', 'invoicesViewerTab', 'ordersTab', 'financialReportsTab', 'notificationsTab', 'rfqTab', 'b2bVerifyTab', 'shippingDocsTab', 'supportTab', 'adminDashboardTab', 'authSection', 'invoiceModal'].forEach(id => {
         let el = document.getElementById(id);
         if(el) el.classList.add('hidden');
     });
@@ -687,7 +792,6 @@ function renderNotifications() {
         return;
     }
     container.innerHTML = '';
-    notifications.notifications = notifications || [];
     notifications.forEach(n => {
         container.innerHTML += `
             <div style="background:#090d16; border:1px solid var(--border-color); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px;">
