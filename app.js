@@ -1,25 +1,20 @@
 let currentUser = JSON.parse(localStorage.getItem('giti_export_user')) || null;
-let inventory = JSON.parse(localStorage.getItem('giti_export_inventory')) || [
+let inventory = [
     { id: 1, name: 'جاكيت شتوي تصدير فاخر', category: 'تصدير دولي', price: 650, qty: 150, type: 'image', mediaUrl: 'https://via.placeholder.com/150/0f172a/00a4ef?text=Jacket' },
     { id: 2, name: 'طقم بنطلون وتيشرت جملة', category: 'جملة محلي', price: 300, qty: 80, type: 'image', mediaUrl: 'https://via.placeholder.com/150/1e293b/00a4ef?text=Set' },
-    { id: 3, name: 'أقمشة قطنية فاخرة للبيع بالجملة', category: 'أقمشة ومنسوجات', price: 1200, qty: 200, type: 'image', mediaUrl: 'https://via.placeholder.com/150/111827/00a4ef?text=Fabrics' }
+    { id: 3, name: 'أقمشة قطنية فاخرة للبيع بالجملة', category: 'أقمشة ومنسوجات', price: 1200, qty: 200, type: 'image', mediaUrl: 'https://via.placeholder.com/150/111827/00a4ef?text=Fabrics'
 ];
-let orders = JSON.parse(localStorage.getItem('giti_export_orders')) || [];
-let invoicesArchive = JSON.parse(localStorage.getItem('giti_export_invoices')) || [];
-let chatLogs = JSON.parse(localStorage.getItem('giti_export_chats')) || [
+let orders = [];
+let invoicesArchive = [];
+let chatLogs = [
     { sender: 'إدارة المنصة', role: 'مدير', avatar: '', text: 'أهلاً بك في دعم Giti Export B2B السحابي.' }
 ];
-let notifications = JSON.parse(localStorage.getItem('giti_export_notifications')) || [
+let notifications = [
     { id: 1, text: '🎉 أهلاً بك في منصة Giti Export للتجارة المحلية والدولية السحابية!', date: 'اليوم' }
 ];
-let rfqs = JSON.parse(localStorage.getItem('giti_b2b_rfqs')) || [];
+let rfqs = [];
 
 let currentCart = [];
-if(currentUser) {
-    let savedUserCart = localStorage.getItem('giti_cart_' + currentUser.phone);
-    if(savedUserCart) currentCart = JSON.parse(savedUserCart);
-}
-
 let currentFilter = 'all';
 let currentCartFilter = 'all';
 let tempNewProdMedia = null;
@@ -27,6 +22,7 @@ let tempNewProdMediaType = 'image';
 let activeInvoice = null;
 
 window.initPlatformAfterLogin = function() {
+    initCloudListeners();
     renderStore();
     renderWarehouseManagement();
     renderOrders();
@@ -43,6 +39,65 @@ window.onload = function() {
         window.initPlatformAfterLogin();
     }
 };
+
+// الاستماع للبيانات السحابية الحية عبر Firestore وإنشاء المجموعات تلقائياً عند حدوث أي تغيير
+function initCloudListeners() {
+    if(!window.db || !window.firebaseFns) return;
+    const { collection, onSnapshot } = window.firebaseFns;
+
+    onSnapshot(collection(window.db, "inventory"), (snapshot) => {
+        if(!snapshot.empty) {
+            inventory = [];
+            snapshot.forEach((doc) => {
+                inventory.push({ id: doc.id, ...doc.data() });
+            });
+            renderStore();
+            renderWarehouseManagement();
+            updateStats();
+        }
+    }, (error) => { console.error("Inventory sync error:", error); });
+
+    onSnapshot(collection(window.db, "orders"), (snapshot) => {
+        if(!snapshot.empty) {
+            orders = [];
+            invoicesArchive = [];
+            snapshot.forEach((doc) => {
+                let ord = { id: doc.id, ...doc.data() };
+                orders.push(ord);
+                invoicesArchive.push(ord);
+            });
+            renderOrders();
+            renderInvoicesArchive();
+            renderFinancialReports();
+            updateStats();
+        }
+    }, (error) => { console.error("Orders sync error:", error); });
+
+    onSnapshot(collection(window.db, "chats"), (snapshot) => {
+        if(!snapshot.empty) {
+            chatLogs = [];
+            snapshot.forEach((doc) => {
+                chatLogs.push(doc.data());
+            });
+            renderChat();
+        }
+    }, (error) => { console.error("Chats sync error:", error); });
+}
+
+// دالة عامة لرفع وحفظ البيانات سحابياً في Firestore (تقوم بإنشاء المجموعة والوثيقة تلقائياً)
+async function syncDataToCloud(collectionName, dataObj, docId = null) {
+    if(!window.db || !window.firebaseFns) return;
+    try {
+        const { collection, addDoc, setDoc, doc } = window.firebaseFns;
+        if(docId) {
+            await setDoc(doc(window.db, collectionName, String(docId)), dataObj);
+        } else {
+            await addDoc(collection(window.db, collectionName), dataObj);
+        }
+    } catch(e) {
+        console.error("Cloud sync error: ", e);
+    }
+}
 
 function toggleSidebar() {
     document.getElementById('sideDrawer').classList.toggle('open');
@@ -95,22 +150,6 @@ function setTheme(primary, accent, bg, card) {
     document.documentElement.style.setProperty('--accent', accent);
     document.documentElement.style.setProperty('--bg-color', bg);
     document.documentElement.style.setProperty('--card-bg', card);
-}
-
-function syncData() {
-    localStorage.setItem('giti_export_inventory', JSON.stringify(inventory));
-    localStorage.setItem('giti_export_orders', JSON.stringify(orders));
-    localStorage.setItem('giti_export_invoices', JSON.stringify(invoicesArchive));
-    localStorage.setItem('giti_export_chats', JSON.stringify(chatLogs));
-    localStorage.setItem('giti_export_notifications', JSON.stringify(notifications));
-    localStorage.setItem('giti_b2b_rfqs', JSON.stringify(rfqs));
-    if(currentUser) {
-        localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
-        localStorage.setItem('giti_cart_' + currentUser.phone, JSON.stringify(currentCart));
-    }
-    updateStats();
-    renderFinancialReports();
-    renderNotifications();
 }
 
 function switchTab(tabId, btnElement = null) {
@@ -192,7 +231,7 @@ function handleAvatarUpload(event) {
     let reader = new FileReader();
     reader.onload = function(e) {
         currentUser.avatar = e.target.result;
-        syncData();
+        localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
         updateAuthUI();
         alert('✅ تم تحديث الصورة الشخصية بنجاح!');
     };
@@ -205,7 +244,7 @@ function handleCoverUpload(event) {
     let reader = new FileReader();
     reader.onload = function(e) {
         currentUser.cover = e.target.result;
-        syncData();
+        localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
         updateAuthUI();
         alert('✅ تم تحديث الغلاف بنجاح!');
     };
@@ -229,7 +268,7 @@ function previewNewProductMedia(event) {
     reader.readAsDataURL(file);
 }
 
-function saveNewProductToStore() {
+async function saveNewProductToStore() {
     let name = document.getElementById('newProdName').value.trim();
     let price = parseFloat(document.getElementById('newProdPrice').value) || 0;
     let qty = parseInt(document.getElementById('newProdQty').value) || 1;
@@ -240,18 +279,16 @@ function saveNewProductToStore() {
         tempNewProdMedia = 'https://via.placeholder.com/150/0f172a/00a4ef?text=Product';
     }
 
+    let prodId = 'PROD-' + Date.now();
     let newProduct = {
-        id: Date.now(),
         name, price, qty, category,
         type: tempNewProdMediaType,
         mediaUrl: tempNewProdMedia,
         addedBy: currentUser ? currentUser.name : 'إدارة النظام'
     };
 
-    inventory.push(newProduct);
-    syncData();
-    renderStore();
-    renderWarehouseManagement();
+    // حفظ المنتج سحابياً في مجموعة inventory (تنشأ تلقائياً)
+    await syncDataToCloud("inventory", newProduct, prodId);
     addNotification(`📦 تمت إضافة منتج جديد: ${name} (${price} ج.م)`);
 
     document.getElementById('newProdName').value = '';
@@ -260,7 +297,7 @@ function saveNewProductToStore() {
     document.getElementById('newProdMediaPreview').innerHTML = '';
     tempNewProdMedia = null;
 
-    alert('✅ تمت إضافة المنتج ونشره في المتجر بنجاح!');
+    alert('✅ تمت إضافة المنتج ونشره سحابياً في المتجر بنجاح!');
     switchTab('storeTab');
 }
 
@@ -300,7 +337,7 @@ function renderStore() {
                     <small style="display:block; color:var(--text-muted);">المتوفر: ${item.qty}</small>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:4px; margin-top:5px;">
-                    <button class="btn-blue" style="padding: 5px; font-size: 11px; margin:0;" onclick="addToCart(${item.id})">أضف للسلة 🛒</button>
+                    <button class="btn-blue" style="padding: 5px; font-size: 11px; margin:0;" onclick="addToCart('${item.id}')">أضف للسلة 🛒</button>
                     <button class="btn-gold" style="padding: 4px; font-size: 10px; margin:0;" onclick="shareProduct('${item.name}', ${item.price})"><i class="fa-solid fa-share-nodes"></i> مشاركة 🌐</button>
                 </div>
             </div>
@@ -320,11 +357,10 @@ function shareProduct(name, price) {
 
 function addToCart(id) {
     if(!currentUser) return alert('⚠️ يرجى تسجيل الدخول أولاً لإضافة منتجات إلى سلتك!');
-    let item = inventory.find(i => i.id === id);
-    if(!item || item.qty <= 0) return alert('عذراً، المنتج نفد من المستودع!');
+    let item = inventory.find(i => i.id == id);
+    if(!item) return alert('عذراً، المنتج غير متوفر!');
     
     currentCart.push(item);
-    syncData();
     renderCart();
     alert('✅ تمت إضافة المنتج إلى سلتك الخاصة بنجاح!');
 }
@@ -332,7 +368,7 @@ function addToCart(id) {
 function renderCart() {
     let container = document.getElementById('cartItems');
     let total = 0;
-    if(!container || !currentUser) return;
+    if(!container) return;
     
     let filteredCart = currentCart.filter(item => {
         if(currentCartFilter === 'all') return true;
@@ -358,16 +394,10 @@ function renderCart() {
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px dashed #333; padding-bottom:6px;">
                 <span>• ${item.name} <small style="color:var(--accent);">(${item.category})</small></span> 
                 <span><b>${itemPrice.toFixed(currency === 'USD' ? 2 : 0)} ${symbol}</b> 
-                <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto; margin-right:8px;" onclick="removeFromCart(${index})">حذف</button></span>
+                <button class="btn-red" style="padding:2px 6px; font-size:10px; width:auto; margin-right:8px;" onclick="currentCart.splice(${index},1); renderCart();">حذف</button></span>
             </div>`;
     });
     document.getElementById('cartTotal').innerText = total.toFixed(currency === 'USD' ? 2 : 0);
-}
-
-function removeFromCart(index) {
-    currentCart.splice(index, 1);
-    syncData();
-    renderCart();
 }
 
 function updateCartCurrency() {
@@ -389,7 +419,7 @@ function toggleWalletInput() {
     }
 }
 
-function checkoutCart() {
+async function checkoutCart() {
     if(currentCart.length === 0) return alert('⚠️ سلة المشتريات فارغة!');
 
     let totalVal = document.getElementById('cartTotal').innerText;
@@ -397,13 +427,9 @@ function checkoutCart() {
     let paymentMethod = document.getElementById('paymentMethodSelect') ? document.getElementById('paymentMethodSelect').value : 'نقداً';
     let walletPhone = document.getElementById('walletSenderPhone') ? document.getElementById('walletSenderPhone').value : '';
 
-    currentCart.forEach(cartItem => {
-        let st = inventory.find(i => i.id === cartItem.id);
-        if(st && st.qty > 0) st.qty -= 1;
-    });
-
+    let orderId = 'GITI-' + Math.floor(1000 + Math.random() * 9000);
     let newOrder = {
-        id: 'GITI-' + Math.floor(1000 + Math.random() * 9000),
+        id: orderId,
         customer: currentUser.name,
         phone: currentUser.phone,
         items: [...currentCart],
@@ -412,49 +438,50 @@ function checkoutCart() {
         date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
     };
 
-    orders.push(newOrder);
-    invoicesArchive.push(newOrder);
-    
+    // حفظ الطلب سحابياً في مجموعة orders (تنشأ تلقائياً)
+    await syncDataToCloud("orders", newOrder, orderId);
+    addNotification(`🛒 تم تسجيل طلب جديد برقم #${newOrder.id} بقيمة ${newOrder.total}`);
+
     activeInvoice = newOrder;
     currentCart = [];
-    syncData();
     
     renderCart();
-    renderStore();
-    renderWarehouseManagement();
     renderOrders();
     renderInvoicesArchive();
     renderFinancialReports();
-    addNotification(`🛒 تم تسجيل طلب جديد برقم #${newOrder.id} بقيمة ${newOrder.total}`);
 
-    alert('✅ تم تأكيد طلبك بنجاح وإصدار الفاتورة الرسمية!');
+    alert('✅ تم تأكيد طلبك سحابياً بنجاح وإصدار الفاتورة الرسمية!');
     openInvoiceModal(newOrder);
 }
 
-function submitRFQ() {
+async function submitRFQ() {
     let comp = document.getElementById('rfqCompanyName').value.trim();
     let specs = document.getElementById('rfqSpecs').value.trim();
     let qty = document.getElementById('rfqQty').value.trim();
     if(!comp || !specs || !qty) return alert('يرجى ملء كافة تفاصيل طلب عروض الأسعار (RFQ)!');
     
-    rfqs.push({ comp, specs, qty, date: new Date().toLocaleDateString('ar-EG') });
-    syncData();
+    let rfqData = { comp, specs, qty, date: new Date().toLocaleDateString('ar-EG') };
+    await syncDataToCloud("rfqs", rfqData);
     addNotification(`📋 تم استلام طلب عرض سعر (RFQ) من: ${comp}`);
-    alert('✅ تم إرسال طلب عروض الأسعار بنجاح وسيتم الرد خلال 24 ساعة.');
+    alert('✅ تم إرسال طلب عروض الأسعار سحابياً بنجاح وسيتم الرد خلال 24 ساعة.');
+    
     document.getElementById('rfqCompanyName').value = '';
     document.getElementById('rfqSpecs').value = '';
     document.getElementById('rfqQty').value = '';
     switchTab('storeTab');
 }
 
-function submitB2BVerification() {
+async function submitB2BVerification() {
     let name = document.getElementById('b2bName').value.trim();
     let cr = document.getElementById('b2bCR').value.trim();
     let tax = document.getElementById('b2bTax').value.trim();
     if(!name || !cr || !tax) return alert('يرجى إدخال بيانات السجل التجاري والبطاقة الضريبية بالكامل!');
     
+    let verData = { name, cr, tax, date: new Date().toLocaleDateString('ar-EG') };
+    await syncDataToCloud("b2b_verifications", verData);
     addNotification(`🔐 قدمت شركة (${name}) طلب توثيق تجاري جديد.`);
-    alert('✅ تم تقديم طلب التوثيق بنجاح!');
+    alert('✅ تم تقديم طلب التوثيق سحابياً بنجاح!');
+    
     document.getElementById('b2bName').value = '';
     document.getElementById('b2bCR').value = '';
     document.getElementById('b2bTax').value = '';
@@ -565,15 +592,14 @@ function renderWarehouseManagement() {
         container.innerHTML += `
             <div class="item-row">
                 <div><b>${item.name}</b> (${item.category})<br><small>السعر: ${item.price} ج.م | المخزون المتاح: <b>${item.qty} قطعة</b></small></div>
-                <button class="btn-red" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteWarehouseItem(${item.id})">حذف</button>
+                <button class="btn-red" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteWarehouseItem('${item.id}')">حذف</button>
             </div>
         `;
     });
 }
 
 function deleteWarehouseItem(id) {
-    inventory = inventory.filter(i => i.id !== id);
-    syncData();
+    inventory = inventory.filter(i => i.id != id);
     renderStore();
     renderWarehouseManagement();
 }
@@ -633,9 +659,11 @@ function renderFinancialReports() {
     }
 }
 
-function addNotification(text) {
-    notifications.unshift({ id: Date.now(), text, date: new Date().toLocaleDateString('ar-EG') });
-    syncData();
+async function addNotification(text) {
+    let notifObj = { id: Date.now(), text, date: new Date().toLocaleDateString('ar-EG') };
+    notifications.unshift(notifObj);
+    await syncDataToCloud("notifications", notifObj);
+    renderNotifications();
 }
 
 function renderNotifications() {
@@ -659,7 +687,6 @@ function renderNotifications() {
 
 function clearNotifications() {
     notifications = [];
-    syncData();
     renderNotifications();
 }
 
@@ -672,22 +699,24 @@ function updateStats() {
     if(iCount) iCount.innerText = invoicesArchive.length;
 }
 
-function sendChatMessage() {
+async function sendChatMessage() {
     let txt = document.getElementById('chatInput').value.trim();
-    if(!txt) return;
-    let senderName = currentUser ? currentUser.name : 'زائرنا التجاري';
-    let senderRole = currentUser ? (currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'شركة معتمدة 🏢') : 'زائر';
-    let senderAvatar = currentUser && currentUser.avatar ? currentUser.avatar : '';
+    if(!txt || !currentUser) return;
+    let senderName = currentUser.name;
+    let senderRole = currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'شركة معتمدة 🏢';
+    let senderAvatar = currentUser.avatar || '';
     
-    chatLogs.push({ 
+    let chatMsg = { 
         sender: senderName, 
         role: senderRole, 
         avatar: senderAvatar, 
         text: txt, 
-        type: currentUser && currentUser.role === 'مدير' ? 'outgoing' : 'incoming' 
-    });
-    syncData();
-    renderChat();
+        type: currentUser.role === 'مدير' ? 'outgoing' : 'incoming',
+        time: Date.now()
+    };
+    
+    // حفظ الرسالة سحابياً في مجموعة chats (تنشأ تلقائياً)
+    await syncDataToCloud("chats", chatMsg);
     let chatInput = document.getElementById('chatInput');
     if(chatInput) chatInput.value = '';
 }
