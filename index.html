@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giti Export - منصة B2B والتجارة المحلية والدولية</title>
-    <!-- مكتبة لطباعة وتحويل الفواتير إلى PDF وصور مباشرة -->
+    <!-- مكتبة لطباعة وتحويل الفواتير إلى صور مباشرة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- مكتبة الأيقونات FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <!-- ربط ملف المانيفست -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00a4ef">
 </head>
 <body>
 
@@ -46,21 +49,18 @@
             <span style="cursor:pointer; font-size:18px; color:#fff;" onclick="toggleGPlusDrawer()">✕</span>
         </div>
         <div class="gplus-header">
-            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/00a4ef?text=Cover" alt="Cover" onclick="document.getElementById('uploadCoverInput').click()" title="انقر لتغيير صورة الغلاف">
-            <input type="file" id="uploadCoverInput" class="hidden" accept="image/*" onchange="handleCoverUpload(event)">
-            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/00a4ef?text=User" alt="Avatar" onclick="document.getElementById('uploadAvatarInput').click()" title="انقر لتغيير الصورة الشخصية">
-            <input type="file" id="uploadAvatarInput" class="hidden" accept="image/*" onchange="handleAvatarUpload(event)">
+            <img id="gpCoverImg" class="gplus-cover" src="https://via.placeholder.com/350x120/111/00a4ef?text=Cover" alt="Cover">
+            <img id="gpAvatarImg" class="gplus-avatar" src="https://via.placeholder.com/85/000/00a4ef?text=User" alt="Avatar">
         </div>
         <div style="text-align:center; margin-top:45px;">
             <h3 id="gpNameDisplay" style="margin:0;">اسم المستخدم</h3>
-            <span id="gpRoleBadge" class="title-badge" style="background:var(--accent); color:#111; font-weight:bold;">عضو موثق</span>
-            <p id="gpContactDisplay" style="color:var(--text-muted); font-size:12px; margin:5px 0;">الهاتف</p>
+            <span id="gpRoleBadge" class="title-badge" style="background:var(--accent); color:#111; font-weight:bold;">عضو موثق سحابياً</span>
+            <p id="gpContactDisplay" style="color:var(--text-muted); font-size:12px; margin:5px 0;">البريد الإلكتروني</p>
         </div>
         <hr style="border-color:var(--border-color); margin:15px 0;">
-        <h4 style="color:var(--accent); font-size:14px; margin-bottom:8px;">إدارة المحتوى والطلبات الخاصة بي:</h4>
         <button class="btn-blue" style="font-size:12px; padding:8px;" onclick="switchTab('ordersTab'); toggleGPlusDrawer()">📦 طلباتي ومشترياتي السابقة</button>
         <button class="btn-green" style="font-size:12px; padding:8px;" onclick="switchTab('invoicesViewerTab'); toggleGPlusDrawer()">🧾 فواتيري السحابية</button>
-        <button class="btn-purple" style="font-size:12px; padding:8px;" onclick="switchTab('supportTab'); toggleGPlusDrawer()">💬 المراسلات والرسائل الخاصة</button>
+        <button class="btn-purple" style="font-size:12px; padding:8px;" onclick="switchTab('supportTab'); toggleGPlusDrawer()">💬 المراسلات الخاصة</button>
     </div>
 
     <!-- شريط الثيمات -->
@@ -74,7 +74,7 @@
     <div class="brand-header">
         <div class="bull-logo-3d">🚢</div>
         <h1>GITI EXPORT B2B</h1>
-        <small>منصة التجارة الإلكترونية المحلية والدولية، التصدير، وحلول الدفع الذكية</small>
+        <small>منصة التجارة الإلكترونية المحلية والدولية الآمنة عبر سحابة Firebase</small>
     </div>
 
     <!-- شريط علوي -->
@@ -93,7 +93,7 @@
         <button class="btn-red" id="authBtnTop" onclick="toggleAuthModal()" style="width:auto; padding:6px 12px; margin:0; font-size:12px;">تسجيل الدخول</button>
     </div>
 
-    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: الحساب محمي، الأقسام مغلقة حتى تسجيل الدخول (Secure & Synced)</div>
+    <div class="sync-status" id="syncStatus">🔄 حالة المزامنة: الحساب محمي عبر Firebase Authentication الحقيقي</div>
 
     <!-- شريط التنقل السريع -->
     <div class="nav-bar hidden" id="mainNavBar">
@@ -107,57 +107,39 @@
         <button onclick="switchTab('supportTab', this)"><i class="fa-solid fa-headset"></i> الدعم</button>
     </div>
 
-    <!-- 1. تسجيل الدخول والإنشاء -->
+    <!-- ================= بوابة تسجيل الدخول الحقيقية (Firebase Auth) ================= -->
     <div id="authSection" class="card">
-        <div style="text-align: center; margin-bottom: 15px;">
+        <div style="text-align: center; margin-bottom: 20px;">
             <div class="bull-logo-3d" style="width: 90px; height: 90px; font-size: 40px;">🚢</div>
             <h2 style="color: var(--accent); margin: 5px 0;">GITI EXPORT B2B</h2>
-            <small style="color: var(--text-muted);">بوابة تسجيل الدخول الإجباري للتمتع بأقسام المنصة والحسابات</small>
+            <small style="color: var(--text-muted);">بوابة المصادقة السحابية الآمنة</small>
         </div>
 
-        <button class="btn-google" onclick="loginWithGoogle()" style="background: #ffffff; color: #222; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); font-weight: bold; width:100%; padding:10px; border-radius:8px; cursor:pointer;">
-            <i class="fa-brands fa-google" style="color: #ea4335; font-size: 16px;"></i> تسجيل الدخول بواسطة حساب جوجل (Google)
+        <button class="btn-google" onclick="window.loginWithGoogle()" style="background: #ffffff; color: #222; display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px auto; border: 1px solid var(--border-color); font-weight: bold; width:100%; max-width: 400px; padding:12px; border-radius:8px; cursor:pointer; font-size: 15px;">
+            <i class="fa-brands fa-google" style="color: #ea4335; font-size: 18px;"></i> تسجيل الدخول أو إنشاء حساب بواسطة Google 🚀
         </button>
 
-        <div style="display: flex; align-items: center; text-align: center; margin: 15px 0; color: var(--text-muted); font-size: 12px;">
+        <div style="display: flex; align-items: center; text-align: center; margin: 20px 0; color: var(--text-muted); font-size: 12px;">
             <hr style="flex: 1; border-color: var(--border-color);">
-            <span style="padding: 0 10px;">أو التسجيل بالطريقة التقليدية</span>
+            <span style="padding: 0 10px;">أو البريد الإلكتروني وكلمة المرور</span>
             <hr style="flex: 1; border-color: var(--border-color);">
         </div>
 
-        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <button class="btn-gold" id="tabBtnLogin" onclick="switchAuthMode('login')">تسجيل الدخول</button>
-            <button class="btn-blue" id="tabBtnRegister" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
-        </div>
-
-        <div id="loginFormContainer">
-            <div class="input-group"><label>رقم الهاتف، البريد الإلكتروني أو اسم المستخدم:</label><input type="text" id="loginContactOrName" placeholder="مثال: admin أو user@gmail.com"></div>
-            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
-            <button class="btn-green" onclick="performLogin()">دخول الحساب 🚀</button>
-            <small style="display:block; text-align:center; color:var(--text-muted); margin-top:8px;">للادمن الرئيسي استخدم: admin / 01036</small>
-        </div>
-
-        <div id="registerFormContainer" class="hidden">
-            <div class="input-group"><label>الاسم الكامل:</label><input type="text" id="regName" placeholder="اسم الشركة أو المسؤول"></div>
-            <div class="input-group"><label>رقم الهاتف أو البريد الإلكتروني:</label><input type="text" id="regPhone" placeholder="01012345678 أو email@domain.com"></div>
-            <div class="input-group"><label>نوع الحساب:</label>
-                <select id="regRole">
-                    <option value="شركة / مستورد">شركة تجارية / مستورد (B2B) 🏢</option>
-                    <option value="عميل">عميل فردي (Customer) 🛒</option>
-                    <option value="مدير">مدير النظام (Manager) 🔐</option>
-                </select>
+        <div id="firebaseEmailAuthContainer" style="max-width: 400px; margin: 0 auto;">
+            <div class="input-group"><label>البريد الإلكتروني:</label><input type="email" id="authEmailInput" placeholder="name@domain.com"></div>
+            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="authPasswordInput" placeholder="••••••••"></div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn-green" onclick="window.loginWithEmail()" style="flex: 1;">تسجيل الدخول 🔑</button>
+                <button class="btn-blue" onclick="window.registerWithEmail()" style="flex: 1;">إنشاء حساب جديد ✨</button>
             </div>
-            <div class="input-group"><label>كلمة المرور:</label><input type="password" id="regPassword" placeholder="••••••••"></div>
-            <button class="btn-gold" onclick="performRegister()">تسجيل حساب جديد ✅</button>
         </div>
     </div>
 
     <!-- 2. طلبات عروض الأسعار RFQ -->
     <div id="rfqTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>📋 طلب عروض الأسعار المخصصة (RFQ)</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">أرسل مواصفات التصنيع والكميات الضخمة لتلقي عرض سعر تجاري مخصص.</p>
         <div class="input-group"><label>اسم الشركة / المستورد:</label><input type="text" id="rfqCompanyName" placeholder="اسم الشركة أو العميل"></div>
-        <div class="input-group"><label>وصف المنتج المطلوب / المواصفات الفنية:</label><textarea id="rfqSpecs" placeholder="تفاصيل المقاسات، الأقمشة، الألوان، ودرجات الجودة..."></textarea></div>
+        <div class="input-group"><label>وصف المنتج المطلوب / المواصفات الفنية:</label><textarea id="rfqSpecs" placeholder="التفاصيل..."></textarea></div>
         <div class="input-group"><label>الكمية المطلوبة:</label><input type="text" id="rfqQty" placeholder="5000 قطعة"></div>
         <button class="btn-gold" onclick="submitRFQ()">إرسال طلب عروض الأسعار للإدارة 📤</button>
     </div>
@@ -165,7 +147,7 @@
     <!-- 3. توثيق حسابات الشركات -->
     <div id="b2bVerifyTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🔐 توثيق حسابات الشركات والاعتماد التجاري</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">قم برفع المستندات التجارية للحصول على أسعار الجملة المخفضة وصلاحيات التصدير.</p>
+        <p style="text-align:center; color:var(--text-muted); font-size:13px;">حسابك موثق سحابياً عبر بريدك الإلكتروني المرتبط بـ Firebase.</p>
         <div class="input-group"><label>الاسم التجاري للشركة:</label><input type="text" id="b2bName" placeholder="الاسم الرسمي المسجل"></div>
         <div class="input-group"><label>رقم السجل التجاري:</label><input type="text" id="b2bCR" placeholder="أدخل رقم السجل التجاري"></div>
         <div class="input-group"><label>الرقم الضريبي:</label><input type="text" id="b2bTax" placeholder="الرقم الضريبي الموحد"></div>
@@ -175,7 +157,6 @@
     <!-- 4. مستندات الشحن والحاويات -->
     <div id="shippingDocsTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🌍 إدارة مستندات الشحن والحاويات البحرية</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">متابعة بوالص الشحن الجمركي وشهادات المنشأ للحاويات المصدرة محلياً ودولياً.</p>
         <div class="input-group"><label>رقم بوليصة الشحن (Bill of Lading):</label><input type="text" id="bolQuery" placeholder="BL-GITI-2026-99"></div>
         <button class="btn-gold" onclick="alert('✅ مستندات الشحن مطابقة وجاهزة للتخليص الجمركي.')">استعلام عن مستندات الحاوية 🔍</button>
     </div>
@@ -183,7 +164,6 @@
     <!-- 5. قسم إضافة منتج جديد -->
     <div id="addProductTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>➕ إضافة منتج جديد للمتجر والمستودع</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:13px;">رفع صور أو فيديوهات المنتجات، تحديد السعر، الكمية، والقسم لكي يتم عرضه مباشرة.</p>
         <div class="input-group"><label>اسم المنتج:</label><input type="text" id="newProdName" placeholder="مثال: جاكيت شتوي تصدير فاخر"></div>
         <div class="input-group"><label>السعر (بالجنيه):</label><input type="number" id="newProdPrice" placeholder="500"></div>
         <div class="input-group"><label>الكمية المتاحة بالمخزن:</label><input type="number" id="newProdQty" value="100" min="1"></div>
@@ -193,19 +173,7 @@
                 <option value="تصدير دولي">تصدير دولي 🌍</option>
                 <option value="جملة محلي">جملة محلي 📦</option>
                 <option value="ملابس رجالي">ملابس رجالي 👔</option>
-                <option value="ملابس حريمي">ملابس حريمي 👗</option>
-                <option value="أطفال ومواليد">أطفال ومواليد 🧒</option>
-                <option value="فحم وأخشاب">فحم وأخشاب (صناعي) 🔥</option>
-                <option value="أقمشة ومنسوجات">أقمشة ومنسوجات 🧵</option>
-                <option value="أحذية ومستلزمات جلدية">أحذية ومستلزمات جلدية 👞</option>
-                <option value="إكسسوارات وموضة">إكسسوارات وموضة 💍</option>
-                <option value="مفروشات منزلية">مفروشات منزلية 🛏️</option>
             </select>
-        </div>
-        <div class="input-group">
-            <label>ملف الوسائط (صورة أو فيديو):</label>
-            <input type="file" id="newProdMediaInput" accept="image/*,video/*" onchange="previewNewProductMedia(event)">
-            <div id="newProdMediaPreview" style="margin-top:10px; text-align:center;"></div>
         </div>
         <button class="btn-gold" onclick="saveNewProductToStore()">حفظ ونشر المنتج في المتجر فوراً 🚀</button>
     </div>
@@ -219,13 +187,6 @@
                 <div class="cat-chip" onclick="filterCategory('تصدير دولي', this)">تصدير دولي 🌍</div>
                 <div class="cat-chip" onclick="filterCategory('جملة محلي', this)">جملة محلي 📦</div>
                 <div class="cat-chip" onclick="filterCategory('ملابس رجالي', this)">ملابس رجالي 👔</div>
-                <div class="cat-chip" onclick="filterCategory('ملابس حريمي', this)">ملابس حريمي 👗</div>
-                <div class="cat-chip" onclick="filterCategory('أطفال ومواليد', this)">أطفال 🧒</div>
-                <div class="cat-chip" onclick="filterCategory('فحم وأخشاب', this)">فحم وأخشاب 🔥</div>
-                <div class="cat-chip" onclick="filterCategory('أقمشة ومنسوجات', this)">أقمشة ومنسوجات 🧵</div>
-                <div class="cat-chip" onclick="filterCategory('أحذية ومستلزمات جلدية', this)">أحذية ومستلزمات جلدية 👞</div>
-                <div class="cat-chip" onclick="filterCategory('إكسسوارات وموضة', this)">إكسسوارات وموضة 💍</div>
-                <div class="cat-chip" onclick="filterCategory('مفروشات منزلية', this)">مفروشات منزلية 🛏️</div>
             </div>
         </div>
 
@@ -236,49 +197,13 @@
 
         <div class="card" style="border: 2px solid var(--accent);" id="cartCardSection">
             <h3>🛒 سلة المشتريات وحجز الطلبات الخاصة بك</h3>
-            <div class="categories-grid" style="margin-bottom:10px;">
-                <div class="cat-chip active" onclick="filterCartCategory('all', this)">كل سلة المستخدم</div>
-                <div class="cat-chip" onclick="filterCartCategory('تصدير دولي', this)">تصدير دولي في السلة</div>
-                <div class="cat-chip" onclick="filterCartCategory('جملة محلي', this)">جملة محلي في السلة</div>
-                <div class="cat-chip" onclick="filterCartCategory('ملابس', this)">ملابس وأزياء في السلة</div>
-            </div>
-
             <div id="cartItems">سلتك الخاصة فارغة حالياً. تصفح المنتجات وأضف ما يناسبك!</div>
             <hr style="border-color:var(--border-color)">
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span><b>العملة والمنطقة:</b></span>
-                <select id="currencySelector" onchange="updateCartCurrency()" style="width: 150px; padding: 5px; background: #090d16; color: #fff; border: 1px solid var(--border-color); border-radius: 6px;">
-                    <option value="EGP">جنيه مصري (EGP) 🇪🇬</option>
-                    <option value="USD">دولار أمريكي (USD) 🌍</option>
-                </select>
-            </div>
-
-            <p><b>الإجمالي الكلي لسلتك: </b><span id="cartTotal" style="color:var(--accent); font-size: 18px;">0</span> <span id="currencyUnitSymbol">جنيه</span></p>
-            
-            <div class="input-group" style="margin-top:10px;">
-                <label>اختر طريقة الدفع (محافظ إلكترونية، تحويل أو استلام):</label>
-                <select id="paymentMethodSelect" onchange="toggleWalletInput()">
-                    <option value="فودافون كاش">📱 محفظة فودافون كاش (Vodafone Cash)</option>
-                    <option value="اتصالات كاش">📱 محفظة اتصالات كاش (Etisalat Cash)</option>
-                    <option value="أورانج كاش">📱 محفظة أورانج كاش (Orange Cash)</option>
-                    <option value="إنستاباي InstaPay">⚡ تحويل إنستاباي الفوري (InstaPay)</option>
-                    <option value="الدفع عند الاستلام">💵 الدفع عند الاستلام (Cash on Delivery)</option>
-                    <option value="تحويل بنكي مباشر">🏦 تحويل بنكي مباشر (Wire Transfer)</option>
-                    <option value="اعتماد مستندي L/C">📜 اعتماد مستندي (Letter of Credit)</option>
-                </select>
-            </div>
-
-            <div class="input-group" id="walletPhoneContainer">
-                <label>رقم الهاتف المحول منه (للمحافظ و InstaPay):</label>
-                <input type="text" id="walletSenderPhone" placeholder="مثال: 01012345678">
-            </div>
-
+            <p><b>الإجمالي الكلي لسلتك: </b><span id="cartTotal" style="color:var(--accent); font-size: 18px;">0</span> جنيه</p>
             <button class="btn-green" onclick="checkoutCart()" style="font-size: 15px; padding: 12px;">إتمام الشراء وإصدار الفاتورة الرسمية 🚀</button>
         </div>
     </div>
 
-    <!-- بقية الأقسام (المخزن، التصدير، اللوجستيات، الفواتير، التقارير، الإشعارات، الطلبات، الدعم، الآدمن) -->
     <div id="advancedInvoicesStoreTab" class="card hidden">
         <h2>🧾 إدارة المخزن والمستودعات والأصناف</h2>
         <div id="warehouseItemsList">لا توجد أصناف مسجلة.</div>
@@ -286,16 +211,13 @@
 
     <div id="exportTab" class="card hidden">
         <h2>🌍 إدارة التصدير التجاري والتجارة المحلية</h2>
-        <p style="color:var(--text-muted); font-size:13px; text-align:center;">إعداد شحنات البضائع والملابس للتصدير الدولي والمحلي.</p>
-        <div class="input-group"><label>دولة أو مدينة الوجهة:</label><input type="text" id="exportDestination" placeholder="مثال: القاهرة / السعودية / الإمارات"></div>
-        <div class="input-group"><label>نوع البضاعة:</label><input type="text" id="exportGoodsType" placeholder="ملابس جاهزة / أقمشة / فحم"></div>
-        <div class="input-group"><label>الوزن أو الكمية:</label><input type="text" id="exportWeight" placeholder="5 طن أو 1000 قطعة"></div>
+        <div class="input-group"><label>دولة أو مدينة الوجهة:</label><input type="text" id="exportDestination" placeholder="مثال: القاهرة / السعودية"></div>
         <button class="btn-blue" onclick="alert('✅ تم حفظ طلب التصدير والشحن بنجاح.')">تأكيد طلب الشحن 🚢</button>
     </div>
 
     <div id="logisticsTab" class="card hidden">
         <h2>🚚 تتبع الشحنات واللوجستيات</h2>
-        <div class="input-group"><label>بحث برقم الشحنة أو بوليصة الحاوية:</label><input type="text" id="trackQuery" placeholder="مثال: GITI-LOG-9821"></div>
+        <div class="input-group"><label>بحث برقم الشحنة:</label><input type="text" id="trackQuery" placeholder="مثال: GITI-LOG-9821"></div>
         <button class="btn-gold" onclick="alert('الشحنة قيد التحرك وتتبع خط سيرها بنجاح.')">بحث عن الشحنة 🔍</button>
     </div>
 
@@ -309,11 +231,6 @@
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي الإيرادات</h4><p id="reportTotalRevenue">0 ج.م</p></div>
             <div class="stat-card"><h4>صافي الأرباح التقديرية (25%)</h4><p id="reportNetProfit">0 ج.م</p></div>
-            <div class="stat-card"><h4>متوسط قيمة الفاتورة</h4><p id="reportAvgOrder">0 ج.م</p></div>
-        </div>
-        <div class="card" style="background:#090d16; margin-top:15px;">
-            <h3 style="font-size:15px; color:var(--accent);">📈 تفاصيل الحركات المالية الأخيرة</h3>
-            <div id="financialTransactionsList">لا توجد معاملات مالية مسجلة بعد.</div>
         </div>
     </div>
 
@@ -328,38 +245,6 @@
         <div id="ordersList">لا توجد طلبات مسجلة بعد.</div>
     </div>
 
-    <div id="invoiceModal" class="card hidden" style="border: 2px solid var(--accent);">
-        <h2>🧾 فاتورة المشتريات والبيع الرسمية</h2>
-        <div id="printableInvoice" class="invoice-box">
-            <div class="invoice-header">
-                <div>
-                    <h2 style="margin:0; color:#111;">GITI EXPORT B2B</h2>
-                    <small style="color:#555;">منصة التجارة المحلية والدولية للملابس والمستودعات</small>
-                </div>
-                <div style="text-align: left;">
-                    <b id="invModalId">رقم الفاتورة: #GITI-INV-000</b><br>
-                    <small id="invModalDate">التاريخ: 2026/09/23</small>
-                </div>
-            </div>
-            <p><b>بيانات العميل / الشركة:</b><br>
-               • اسم العميل: <span id="invModalClient">العميل</span><br>
-               • هاتف التواصل: <span id="invModalPhone">الهاتف</span><br>
-               • طريقة الدفع: <span id="invModalPayment" style="color:var(--accent); font-weight:bold;">نقداً</span>
-            </p>
-            <table class="invoice-table">
-                <thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead>
-                <tbody id="invModalItems"></tbody>
-            </table>
-            <h3 style="text-align: left; color:#111;">الإجمالي الكلي: <span id="invModalTotal" style="color:#00a4ef;">0</span></h3>
-        </div>
-        <div style="display: flex; gap: 5px; margin-top: 15px; flex-wrap: wrap;">
-            <button class="btn-green" onclick="downloadInvoiceImage()" style="flex:1;">📷 صورة الفاتورة (PNG)</button>
-            <button class="btn-orange" onclick="downloadInvoiceWord()" style="flex:1;"><i class="fa-solid fa-file-word"></i> تحميل ملف الورد (Word)</button>
-            <button class="btn-purple" onclick="window.print()" style="flex:1;">📄 طباعة PDF</button>
-            <button class="btn-red" onclick="switchTab('storeTab')" style="flex:1;">العودة للمتجر</button>
-        </div>
-    </div>
-
     <div id="supportTab" class="card hidden">
         <h2>💬 الدعم الفني المباشر والمراسلات</h2>
         <div class="chat-box" id="chatMessages"></div>
@@ -371,22 +256,25 @@
 
     <div id="adminDashboardTab" class="card hidden" style="border: 2px solid var(--accent);">
         <h2>🔐 لوحة التحكم الشاملة للآدمن الماستر (Master Admin)</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:12px;">متاحة فقط للمدير الحاصل على صلاحيات الآدمن (كلمة المرور: 01036).</p>
+        <p style="text-align:center; color:var(--accent); font-size:12px;">متاحة حصرياً للمدير المسجل بالبريد (`haretg@gmail.com`).</p>
         <div class="stats-grid">
             <div class="stat-card"><h4>إجمالي المنتجات</h4><p id="statProductsCount">0</p></div>
             <div class="stat-card"><h4>إجمالي الطلبات</h4><p id="statOrdersCount">0</p></div>
-            <div class="stat-card"><h4>إجمالي الفواتير</h4><p id="statInvoicesCount">0</p></div>
-        </div>
-        <div class="card" style="background:#090d16; margin-top:15px;">
-            <h3 style="color:var(--accent); font-size:14px;">👥 إدارة المستخدمين المسجلين</h3>
-            <div id="adminUsersListContainer">لا توجد بيانات مستخدمين إضافية.</div>
         </div>
     </div>
 
-    <!-- تهيئة Firebase Web SDK في النهاية -->
+    <!-- تهيئة Firebase Authentication الحقيقي -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { 
+            getAuth, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyBnY2QBAr1ZpBpE6Leol7blQseR4Qq_AaY",
@@ -399,12 +287,96 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        
-        // مفتاح VAPID للتنبيهات المتاحة في مشروعك
-        window.FCM_VAPID_KEY = "BLgrdsrIjIfgNamGJqUWY5o4vUx5atDpgGQ-aDQSc-p7daXlE7d3r-tDNiP8-xYDwXl10al-LHcL0FGUkcn1Qhs";
-    </script>
+        const auth = getAuth();
+        const googleProvider = new GoogleAuthProvider();
 
+        window.loginWithGoogle = async function() {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                handleAuthSuccess(result.user);
+            } catch (error) {
+                alert('⚠️ خطأ في تسجيل الدخول عبر Google: ' + error.message);
+            }
+        };
+
+        window.loginWithEmail = async function() {
+            const email = document.getElementById('authEmailInput').value.trim();
+            const password = document.getElementById('authPasswordInput').value;
+            if(!email || !password) return alert('الرجاء إدخال البريد وكلمة المرور!');
+            try {
+                const result = await signInWithEmailAndPassword(auth, email, password);
+                handleAuthSuccess(result.user);
+            } catch (error) {
+                alert('⚠️ فشل تسجيل الدخول: ' + error.message);
+            }
+        };
+
+        window.registerWithEmail = async function() {
+            const email = document.getElementById('authEmailInput').value.trim();
+            const password = document.getElementById('authPasswordInput').value;
+            if(!email || !password) return alert('الرجاء إدخال البريد وكلمة المرور!');
+            try {
+                const result = await createUserWithEmailAndPassword(auth, email, password);
+                handleAuthSuccess(result.user);
+                alert('✅ تم إنشاء الحساب وتسجيل الدخول بنجاح!');
+            } catch (error) {
+                alert('⚠️ فشل إنشاء الحساب: ' + error.message);
+            }
+        };
+
+        function handleAuthSuccess(user) {
+            window.currentUser = {
+                name: user.displayName || user.email.split('@')[0],
+                phone: user.email,
+                role: user.email === 'haretg@gmail.com' ? 'مدير' : 'شركة / مستورد',
+                avatar: user.photoURL || 'https://via.placeholder.com/85/000/00a4ef?text=' + encodeURIComponent((user.email || 'U')[0]),
+                cover: ''
+            };
+            localStorage.setItem('giti_export_user', JSON.stringify(window.currentUser));
+            if(typeof window.initPlatformAfterLogin === 'function') {
+                window.initPlatformAfterLogin();
+            }
+            alert('✅ أهلاً بك، ' + window.currentUser.name);
+            switchTab('storeTab');
+        }
+
+        window.toggleAuthModal = function() {
+            if(window.currentUser) {
+                signOut(auth).then(() => {
+                    window.currentUser = null;
+                    localStorage.removeItem('giti_export_user');
+                    window.updateAuthUI();
+                    switchTab('authSection');
+                });
+            } else {
+                switchTab('authSection');
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.currentUser = JSON.parse(localStorage.getItem('giti_export_user')) || {
+                    name: user.displayName || user.email.split('@')[0],
+                    phone: user.email,
+                    role: user.email === 'haretg@gmail.com' ? 'مدير' : 'شركة / مستورد',
+                    avatar: user.photoURL || '',
+                    cover: ''
+                };
+            } else {
+                window.currentUser = null;
+            }
+            if(typeof window.updateAuthUI === 'function') {
+                window.updateAuthUI();
+            }
+        });
+    </script>
     <script src="app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+    </script>
 </body>
 </html>
