@@ -10,8 +10,12 @@ let inventory = JSON.parse(localStorage.getItem('giti_export_inventory')) || [
 let orders = JSON.parse(localStorage.getItem('giti_export_orders')) || [];
 let invoicesArchive = JSON.parse(localStorage.getItem('giti_export_invoices')) || [];
 let chatLogs = JSON.parse(localStorage.getItem('giti_export_chats')) || [
-    { sender: 'admin', role: 'مدير', avatar: '', text: 'أهلاً بك في دعم Giti Export. نحن هنا لمساعدتك في أي استفسار تجاري أو لوجستي.' }
+    { sender: 'admin', role: 'مدير', avatar: '', text: 'أهلاً بك في دعم Giti Export B2B. نحن هنا لمساعدتك في أي استفسار تجاري أو لوجستي.' }
 ];
+let notifications = JSON.parse(localStorage.getItem('giti_export_notifications')) || [
+    { id: 1, text: '🎉 أهلاً بك في منصة Giti Export للتجارة والتصدير الدولي B2B!', date: 'اليوم' }
+];
+let rfqs = JSON.parse(localStorage.getItem('giti_b2b_rfqs')) || [];
 
 let cart = [];
 let currentFilter = 'all';
@@ -26,6 +30,8 @@ window.onload = function() {
     renderOrders();
     renderInvoicesArchive();
     renderChat();
+    renderFinancialReports();
+    renderNotifications();
     updateStats();
 };
 
@@ -87,16 +93,22 @@ function syncData() {
     localStorage.setItem('giti_export_orders', JSON.stringify(orders));
     localStorage.setItem('giti_export_invoices', JSON.stringify(invoicesArchive));
     localStorage.setItem('giti_export_chats', JSON.stringify(chatLogs));
+    localStorage.setItem('giti_export_notifications', JSON.stringify(notifications));
+    localStorage.setItem('giti_b2b_rfqs', JSON.stringify(rfqs));
     if(currentUser) localStorage.setItem('giti_export_user', JSON.stringify(currentUser));
     localStorage.setItem('giti_export_all_users', JSON.stringify(registeredUsers));
     updateStats();
+    renderFinancialReports();
+    renderNotifications();
 }
 
 function switchTab(tabId, btnElement = null) {
-    ['storeTab', 'addProductTab', 'advancedInvoicesStoreTab', 'exportTab', 'logisticsTab', 'invoicesViewerTab', 'ordersTab', 'supportTab', 'adminDashboardTab', 'authSection', 'invoiceModal'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
+    ['storeTab', 'addProductTab', 'advancedInvoicesStoreTab', 'exportTab', 'logisticsTab', 'invoicesViewerTab', 'ordersTab', 'financialReportsTab', 'notificationsTab', 'rfqTab', 'b2bVerifyTab', 'shippingDocsTab', 'supportTab', 'adminDashboardTab', 'authSection', 'invoiceModal'].forEach(id => {
+        let el = document.getElementById(id);
+        if(el) el.classList.add('hidden');
     });
-    document.getElementById(tabId).classList.remove('hidden');
+    let target = document.getElementById(tabId);
+    if(target) target.classList.remove('hidden');
     if(btnElement) {
         document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active-nav'));
         btnElement.classList.add('active-nav');
@@ -143,6 +155,7 @@ function performRegister() {
     currentUser = newUser;
     syncData();
     updateAuthUI();
+    addNotification(`👤 تم إنشاء حساب شركة/عضو جديد بنجاح باسم: ${name}`);
     alert('✅ تم إنشاء الحساب وتسجيل الدخول بنجاح!');
     switchTab('storeTab');
 }
@@ -180,13 +193,13 @@ function updateAuthUI() {
 
         document.getElementById('gpNameDisplay').innerText = currentUser.name;
         document.getElementById('gpContactDisplay').innerText = 'الهاتف: ' + currentUser.phone;
-        document.getElementById('gpRoleBadge').innerText = currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'عضو موثق 🛒';
+        document.getElementById('gpRoleBadge').innerText = currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : (currentUser.role === 'شركة / مستورد' ? 'شركة معتمدة B2B 🏢' : 'عضو موثق 🛒');
 
         if(currentUser.cover) document.getElementById('gpCoverImg').src = currentUser.cover;
         else document.getElementById('gpCoverImg').src = 'https://via.placeholder.com/350x120/0f172a/00a4ef?text=Giti+Export+Cover';
     } else {
         btnTop.innerText = 'تسجيل الدخول'; btnTop.className = 'btn-gold';
-        greet.innerText = 'زائرنا الكريم';
+        greet.innerText = 'زائرنا التجاري';
         topAvatar.style.display = 'none';
     }
 }
@@ -261,6 +274,7 @@ function saveNewProductToStore() {
     syncData();
     renderStore();
     renderWarehouseManagement();
+    addNotification(`📦 تمت إضافة منتج جديد: ${name} (${price} ج.م)`);
 
     document.getElementById('newProdName').value = '';
     document.getElementById('newProdPrice').value = '';
@@ -296,8 +310,8 @@ function renderStore() {
                 <div>
                     ${mediaElement}
                     <b style="font-size: 13px; display:block; margin: 5px 0;">${item.name}</b>
-                    <small style="color:var(--accent); font-weight:bold;">${item.price} ج.م</small><br>
-                    <small style="display:block; color:var(--text-muted);">المتوفر: ${item.qty}</small>
+                    <small style="color:var(--accent); font-weight:bold;">سعر الجملة: ${item.price} ج.م</small><br>
+                    <small style="display:block; color:var(--text-muted);">المتوفر بالمستودع: ${item.qty}</small>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:4px; margin-top:5px;">
                     <button class="btn-blue" style="padding: 5px; font-size: 11px; margin:0;" onclick="addToCart(${item.id})">أضف للسلة 🛒</button>
@@ -309,7 +323,7 @@ function renderStore() {
 }
 
 function shareProduct(name, price) {
-    let shareText = `🚢 منصة Giti Export للتجارة والتصدير الدولي\n📦 تسوق الآن منتجنا المميز: ${name}\n💰 السعر حصرياً: ${price} جنيه\n✨ اطلب الآن عبر المنصة وتواصل معنا مباشرة!`;
+    let shareText = `🚢 منصة Giti Export B2B للتجارة والتصدير الدولي\n📦 تسوق الآن منتج الجملة المميز: ${name}\n💰 السعر التجاري حصرياً: ${price} جنيه\n✨ اطلب الآن عبر المنصة وتواصل معنا مباشرة!`;
     if (navigator.share) {
         navigator.share({ title: name, text: shareText, url: window.location.href }).catch(() => {});
     } else {
@@ -320,10 +334,10 @@ function shareProduct(name, price) {
 
 function addToCart(id) {
     let item = inventory.find(i => i.id === id);
-    if(!item || item.qty <= 0) return alert('عذراً، المنتج نفد من المخزن!');
+    if(!item || item.qty <= 0) return alert('عذراً، المنتج نفد من المستودع!');
     cart.push(item);
     renderCart();
-    alert('✅ تمت إضافة المنتج إلى سلة المشتريات بنجاح');
+    alert('✅ تمت إضافة المنتج إلى سلة طلبات الجملة بنجاح');
 }
 
 function renderCart() {
@@ -344,13 +358,14 @@ function renderCart() {
 
 function checkoutCart() {
     if(!currentUser) {
-        alert('⚠️ يرجى تسجيل الدخول أولاً لإتمام الشراء وإصدار الفاتورة!');
+        alert('⚠️ يرجى تسجيل الدخول أولاً لإتمام طلبات الجملة وإصدار الفاتورة التجارية!');
         switchTab('authSection');
         return;
     }
     if(cart.length === 0) return alert('السلة فارغة!');
 
     let totalVal = parseFloat(document.getElementById('cartTotal').innerText);
+    let paymentMethod = document.getElementById('paymentMethodSelect').value;
     
     cart.forEach(cartItem => {
         let st = inventory.find(i => i.id === cartItem.id);
@@ -358,11 +373,12 @@ function checkoutCart() {
     });
 
     let newOrder = {
-        id: 'GITI-' + Math.floor(1000 + Math.random() * 9000),
+        id: 'B2B-' + Math.floor(1000 + Math.random() * 9000),
         customer: currentUser.name,
         phone: currentUser.phone,
         items: [...cart],
         total: totalVal,
+        payment: paymentMethod,
         date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
     };
 
@@ -377,9 +393,41 @@ function checkoutCart() {
     renderWarehouseManagement();
     renderOrders();
     renderInvoicesArchive();
+    renderFinancialReports();
+    addNotification(`🛒 تم إصدار طلب جملة جديد برقم #${newOrder.id} بقيمة ${totalVal} ج.م عبر (${paymentMethod})`);
 
-    alert('✅ تم إتمام الطلب بنجاح وتم إصدار الفاتورة الفورية!');
+    alert('✅ تم إتمام طلب الجملة بنجاح وتم إصدار الفاتورة التجارية الفورية!');
     openInvoiceModal(newOrder);
+}
+
+function submitRFQ() {
+    let comp = document.getElementById('rfqCompanyName').value.trim();
+    let specs = document.getElementById('rfqSpecs').value.trim();
+    let qty = document.getElementById('rfqQty').value.trim();
+    if(!comp || !specs || !qty) return alert('يرجى ملء كافة تفاصيل طلب عروض الأسعار (RFQ)!');
+    
+    rfqs.push({ comp, specs, qty, date: new Date().toLocaleDateString('ar-EG') });
+    syncData();
+    addNotification(`📋 تم استلام طلب عرض سعر (RFQ) جديد من شركة: ${comp}`);
+    alert('✅ تم إرسال طلب عروض الأسعار بنجاح وسيتم الرد من قسم المبيعات والتصدير خلال 24 ساعة.');
+    document.getElementById('rfqCompanyName').value = '';
+    document.getElementById('rfqSpecs').value = '';
+    document.getElementById('rfqQty').value = '';
+    switchTab('storeTab');
+}
+
+function submitB2BVerification() {
+    let name = document.getElementById('b2bName').value.trim();
+    let cr = document.getElementById('b2bCR').value.trim();
+    let tax = document.getElementById('b2bTax').value.trim();
+    if(!name || !cr || !tax) return alert('يرجى إدخال بيانات السجل التجاري والبطاقة الضريبية بالكامل!');
+    
+    addNotification(`🔐 قدمت شركة (${name}) طلب توثيق تجاري جديد.`);
+    alert('✅ تم تقديم طلب التوثيق بنجاح! سيتم مراجعة المستندات وتفعيل حساب الشركات واعتماد أسعار الجملة قريباً.');
+    document.getElementById('b2bName').value = '';
+    document.getElementById('b2bCR').value = '';
+    document.getElementById('b2bTax').value = '';
+    switchTab('storeTab');
 }
 
 function openInvoiceModal(order) {
@@ -387,6 +435,7 @@ function openInvoiceModal(order) {
     document.getElementById('invModalDate').innerText = 'التاريخ: ' + order.date;
     document.getElementById('invModalClient').innerText = order.customer;
     document.getElementById('invModalPhone').innerText = order.phone;
+    document.getElementById('invModalPayment').innerText = order.payment || 'تحويل بنكي';
     document.getElementById('invModalTotal').innerText = order.total;
 
     let tbody = document.getElementById('invModalItems');
@@ -413,13 +462,14 @@ function downloadInvoiceWord() {
     
     let htmlContent = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-        <head><meta charset='utf-8'><title>Invoice</title></head>
+        <head><meta charset='utf-8'><title>Invoice B2B</title></head>
         <body style="direction: rtl; font-family: 'Segoe UI', Tahoma, sans-serif;">
-            <h1 style="color: #00a4ef; text-align: center;">GITI EXPORT</h1>
-            <h3 style="text-align: center;">فاتورة مشتريات وتصدير رسمية</h3>
+            <h1 style="color: #00a4ef; text-align: center;">GITI EXPORT B2B</h1>
+            <h3 style="text-align: center;">فاتورة تجارية وعقد توريد جملة رسمي</h3>
             <p><b>رقم الفاتورة:</b> #${activeInvoice.id}</p>
             <p><b>التاريخ:</b> ${activeInvoice.date}</p>
-            <p><b>اسم العميل:</b> ${activeInvoice.customer} (${activeInvoice.phone})</p>
+            <p><b>اسم الشركة / العميل:</b> ${activeInvoice.customer} (${activeInvoice.phone})</p>
+            <p><b>طريقة الدفع B2B:</b> ${activeInvoice.payment || 'تحويل بنكي'}</p>
             <table border="1" style="width: 100%; border-collapse: collapse; text-align: right;">
                 <thead>
                     <tr style="background: #0f172a; color: #00a4ef;">
@@ -455,15 +505,14 @@ function renderInvoicesArchive() {
     if(currentUser && currentUser.role !== 'مدير') {
         list = invoicesArchive.filter(i => i.customer === currentUser.name);
     }
-    if(list.length === 0) { container.innerHTML = 'لا توجد فواتير مسجلة في الأرشيف حالياً.'; return; }
+    if(list.length === 0) { container.innerHTML = 'لا توجد فواتير تجارية مسجلة في الأرشيف حالياً.'; return; }
     container.innerHTML = '';
-    list.layer = invoicesArchive; // fallback context
     list.forEach(inv => {
         container.innerHTML += `
             <div class="item-row">
                 <div>
                     <b>فاتورة رقم: #${inv.id}</b> - الإجمالي: <b style="color:var(--accent);">${inv.total} ج.م</b><br>
-                    <small>العميل: ${inv.customer} | التاريخ: ${inv.date}</small>
+                    <small>العميل: ${inv.customer} | التاريخ: ${inv.date} | الدفع: ${inv.payment || 'تحويل بنكي'}</small>
                 </div>
                 <div style="display:flex; gap:5px;">
                     <button class="btn-gold" style="width:auto; padding:5px 8px; font-size:11px;" onclick="openInvoiceModal(invoicesArchive.find(x => x.id === '${inv.id}'))">👁️ مشاهدة</button>
@@ -476,12 +525,12 @@ function renderInvoicesArchive() {
 function renderWarehouseManagement() {
     let container = document.getElementById('warehouseItemsList');
     if(!container) return;
-    if(inventory.length === 0) { container.innerHTML = 'المخزن فارغ.'; return; }
+    if(inventory.length === 0) { container.innerHTML = 'المستودع فارغ.'; return; }
     container.innerHTML = '';
     inventory.forEach(item => {
         container.innerHTML += `
             <div class="item-row">
-                <div><b>${item.name}</b> (${item.category})<br><small>السعر: ${item.price} ج.م | المخزون: <b>${item.qty} قطعة</b></small></div>
+                <div><b>${item.name}</b> (${item.category})<br><small>السعر: ${item.price} ج.م | المخزون المتاح: <b>${item.qty} قطعة</b></small></div>
                 <button class="btn-red" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteWarehouseItem(${item.id})">حذف</button>
             </div>
         `;
@@ -502,19 +551,78 @@ function renderOrders() {
     if(currentUser && currentUser.role !== 'مدير') {
         list = orders.filter(o => o.customer === currentUser.name);
     }
-    if(list.length === 0) { container.innerHTML = 'لا توجد طلبات مسجلة بعد.'; return; }
+    if(list.length === 0) { container.innerHTML = 'لا توجد طلبات جملة مسجلة بعد.'; return; }
     container.innerHTML = '';
     list.forEach(o => {
         container.innerHTML += `
             <div class="item-row">
                 <div>
-                    <b>طلب رقم: ${o.id}</b> - الإجمالي: <b style="color:var(--accent);">${o.total} ج.م</b><br>
-                    <small>العميل: ${o.customer} (${o.phone}) | التاريخ: ${o.date}</small>
+                    <b>طلب جملة: ${o.id}</b> - الإجمالي: <b style="color:var(--accent);">${o.total} ج.م</b><br>
+                    <small>العميل/الشركة: ${o.customer} (${o.phone}) | التاريخ: ${o.date}</small>
                 </div>
                 <button class="btn-gold" style="width:auto; padding:6px 10px; font-size:11px;" onclick="openInvoiceModal(orders.find(x => x.id === '${o.id}'))">🧾 عرض الفاتورة</button>
             </div>
         `;
     });
+}
+
+function renderFinancialReports() {
+    let totalRev = invoicesArchive.reduce((acc, inv) => acc + (inv.total || 0), 0);
+    let netProfit = totalRev * 0.25; 
+    let avgOrder = invoicesArchive.length > 0 ? (totalRev / invoicesArchive.length).toFixed(2) : 0;
+
+    let revEl = document.getElementById('reportTotalRevenue');
+    let profEl = document.getElementById('reportNetProfit');
+    let avgEl = document.getElementById('reportAvgOrder');
+    let txList = document.getElementById('financialTransactionsList');
+
+    if(revEl) revEl.innerText = totalRev + ' ج.م';
+    if(profEl) profEl.innerText = netProfit.toFixed(2) + ' ج.م';
+    if(avgEl) avgEl.innerText = avgOrder + ' ج.م';
+
+    if(txList) {
+        if(invoicesArchive.length === 0) {
+            txList.innerHTML = 'لا توجد معاملات مالية مسجلة بعد.';
+        } else {
+            txList.innerHTML = '';
+            invoicesArchive.slice(-5).reverse().forEach(inv => {
+                txList.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #333; padding:6px 0; font-size:12px;">
+                        <span>🧾 فاتورة B2B #${inv.id} (${inv.customer})</span>
+                        <span style="color:#48bb78; font-weight:bold;">+${inv.total} ج.م</span>
+                    </div>`;
+            });
+        }
+    }
+}
+
+function addNotification(text) {
+    notifications.unshift({ id: Date.now(), text, date: new Date().toLocaleDateString('ar-EG') });
+    syncData();
+}
+
+function renderNotifications() {
+    let container = document.getElementById('notificationsListContainer');
+    let badge = document.getElementById('notifBadge');
+    if(badge) badge.innerText = notifications.length;
+    if(!container) return;
+    if(notifications.length === 0) {
+        container.innerHTML = 'لا توجد إشعارات جديدة.';
+        return;
+    }
+    container.innerHTML = '';
+    notifications.forEach(n => {
+        container.innerHTML += `
+            <div style="background:#090d16; border:1px solid var(--border-color); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px;">
+                <span>🔔 ${n.text}</span><br>
+                <small style="color:var(--text-muted); font-size:10px;">${n.date}</small>
+            </div>`;
+    });
+}
+
+function clearNotifications() {
+    notifications = [];
+    syncData();
 }
 
 function updateStats() {
@@ -529,8 +637,8 @@ function updateStats() {
 function sendChatMessage() {
     let txt = document.getElementById('chatInput').value.trim();
     if(!txt) return;
-    let senderName = currentUser ? currentUser.name : 'زائرنا الكريم';
-    let senderRole = currentUser ? (currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : 'عضو موثق 🛒') : 'زائر';
+    let senderName = currentUser ? currentUser.name : 'زائرنا التجاري';
+    let senderRole = currentUser ? (currentUser.role === 'مدير' ? 'مدير المنصة 🔐' : (currentUser.role === 'شركة / مستورد' ? 'شركة معتمدة B2B 🏢' : 'عضو موثق 🛒')) : 'زائر';
     let senderAvatar = currentUser && currentUser.avatar ? currentUser.avatar : '';
     
     chatLogs.push({ 
